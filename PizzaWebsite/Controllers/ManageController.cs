@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PizzaWebsite.Models.Menu.Pizzas.Ingredients;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,6 +13,11 @@ namespace PizzaWebsite.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        // Manage pizza ingredients
+        public ActionResult ModifyCrust(Crust crust)
+        {
         }
     }
 }
