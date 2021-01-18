@@ -121,9 +121,17 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Menu\Pizzas\Ingredients\Cheese.cs" />
+    <Compile Include="Models\Menu\Pizzas\Ingredients\Crust.cs" />
+    <Compile Include="Models\Menu\Pizzas\Ingredients\CrustFlavor.cs" />
+    <Compile Include="Models\Menu\Pizzas\Ingredients\PizzaIngredient.cs" />
+    <Compile Include="Models\Menu\Pizzas\Ingredients\Sauce.cs" />
+    <Compile Include="Models\Menu\Pizzas\Ingredients\Topping.cs" />
+    <Compile Include="Models\Menu\Pizzas\Ingredients\ToppingType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -178,7 +186,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
+    <Folder Include="Models\Menu\Desserts\" />
+    <Folder Include="Models\Menu\Drinks\" />
+    <Folder Include="Models\Menu\Pasta\" />
+    <Folder Include="Models\Menu\Sides\" />
+    <Folder Include="Models\Menu\Wings\" />
+    <Folder Include="Views\Home\Menu\Pizza\Ingredients\" />
+    <Folder Include="Views\Manage\Menu\Pizza\Ingredients\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
