@@ -128,6 +128,7 @@
     <Compile Include="Models\Menu\Pizzas\Ingredients\Cheese.cs" />
     <Compile Include="Models\Menu\Pizzas\Ingredients\Crust.cs" />
     <Compile Include="Models\Menu\Pizzas\Ingredients\CrustFlavor.cs" />
+    <Compile Include="Models\Menu\Pizzas\Ingredients\IngredientType.cs" />
     <Compile Include="Models\Menu\Pizzas\Ingredients\PizzaIngredient.cs" />
     <Compile Include="Models\Menu\Pizzas\Ingredients\Sauce.cs" />
     <Compile Include="Models\Menu\Pizzas\Ingredients\Topping.cs" />
@@ -184,6 +185,10 @@
     <Content Include="webfonts\fa-solid-900.woff" />
     <Content Include="webfonts\fa-solid-900.woff2" />
     <Content Include="Views\Manage\ModifyCrust.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\ManageMenu.cshtml" />
+    <Content Include="Views\Manage\ManagePizzaMenu.cshtml" />
+    <Content Include="Views\Manage\ManagePizzaIngredients.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -193,7 +198,6 @@
     <Folder Include="Models\Menu\Sides\" />
     <Folder Include="Models\Menu\Wings\" />
     <Folder Include="Views\Home\Menu\Pizza\Ingredients\" />
-    <Folder Include="Views\Manage\Menu\Pizza\Ingredients\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

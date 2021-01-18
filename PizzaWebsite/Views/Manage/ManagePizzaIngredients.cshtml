@@ -1,0 +1,15 @@
+﻿@using PizzaWebsite.Models.Menu.Pizzas.Ingredients
+@model dynamic
+@{
+    ViewBag.Title = "Manage Pizza Ingredients";
+}
+
+<h2>Manage Pizza Ingredients</h2>
+<div>
+    <select class="form-control" id="PizzaIngredient" name="PizzaIngredient">
+        @foreach (IngredientType ingredientType in Model.IngredientTypes)
+        {
+            <option value="@ingredientType.Name">@ingredientType.Name</option>
+        }
+    </select>
+</div>
