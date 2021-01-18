@@ -6,21 +6,21 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Menu.Pizzas.Ingredients
 {
-    public class Crust : PizzaIngredient
+    public class Sauce : PizzaIngredient
     {
         [DataType(DataType.Currency)]
-        [Display(Name = "Small Crust Price")]
+        [Display(Name = "Light Sauce Price")]
         [Required(ErrorMessage = "You must set a price.")]
-        public decimal SmallPrice { get; set; }
+        public decimal LightPrice { get; set; }
 
         [DataType(DataType.Currency)]
-        [Display(Name = "Medium Crust Price")]
+        [Display(Name = "Regular Sauce Price")]
         [Required(ErrorMessage = "You must set a price.")]
-        public decimal MediumPrice { get; set; }
+        public decimal RegularPrice { get; set; }
 
         [DataType(DataType.Currency)]
-        [Display(Name = "Large Crust Price")]
+        [Display(Name = "Extra Sauce Price")]
         [Required(ErrorMessage = "You must set a price.")]
-        public decimal LargePrice { get; set; }
+        public decimal ExtraPrice { get; set; }
     }
 }
