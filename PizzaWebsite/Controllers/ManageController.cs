@@ -1,4 +1,5 @@
-﻿using PizzaWebsite.Models.Menu.Pizzas.Ingredients;
+﻿using PizzaWebsite.Models.Manage;
+using PizzaWebsite.Models.Menu.Pizzas.Ingredients;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -10,42 +11,37 @@ namespace PizzaWebsite.Controllers
 {
     public class ManageController : Controller
     {
-        private List<ToppingType> GetToppingTypes()
+        private IEnumerable<string> GetIngredientTypes()
         {
-            var toppingTypes = new List<ToppingType>();
-
-            toppingTypes.Add(new ToppingType() { Name = "Meats" });
-            toppingTypes.Add(new ToppingType() { Name = "Veggies" });
-
-            return toppingTypes;
-        }
-
-        private List<IngredientType> GetIngredientTypes()
-        {
-            var ingredientTypes = new List<IngredientType>();
-
-            ingredientTypes.Add(new IngredientType() { Name = "Cheese" });
-            ingredientTypes.Add(new IngredientType() { Name = "Crust" });
-            ingredientTypes.Add(new IngredientType() { Name = "Crust Flavor" });
-            ingredientTypes.Add(new IngredientType() { Name = "Sauce" });
-            ingredientTypes.Add(new IngredientType() { Name = "Topping" });
-
-            return ingredientTypes;
-        }
-
-        /*private SelectList GetIngredientTypesSelectList()
-        {
-            var ingredientTypes = GetIngredientTypes();
-            var selectListItems = new List<SelectListItem>();
-
-            foreach (var ingredientType in ingredientTypes)
+            /*return new List<string>()
             {
-                selectListItems.Add(new SelectListItem { Text = ingredientType.Name, Value = ingredientType.Name });
-            }
-            selectListItems[0].Selected = true;
+                "Cheese",
+                "Crust",
+                "Crust Flavor",
+                "Sauce",
+                "Topping"
+            };*/
+            return new List<string>()
+            {
+                "Crust"
+            };
+        }
 
-            return new SelectList(selectListItems, "Value", "Text");
-        }*/
+        private IEnumerable<SelectListItem> GetSelectListItems(IEnumerable<string> elements)
+        {
+            var selectList = new List<SelectListItem>();
+
+            foreach (var element in elements)
+            {
+                selectList.Add(new SelectListItem
+                {
+                    Value = element,
+                    Text = element
+                });
+            }
+
+            return selectList;
+        }
 
         // GET: Manage
         public ActionResult Index()
@@ -65,18 +61,49 @@ namespace PizzaWebsite.Controllers
 
         public ActionResult ManagePizzaIngredients()
         {
-            dynamic model = new ExpandoObject();
-            model.IngredientTypes = GetIngredientTypes();
-
-            // Create drop down list linked to model.IngredientTypes
+            var ingredients = GetIngredientTypes();
+            var model = new ManagePizzaIngredientsModel();
+            model.Ingredients = GetSelectListItems(ingredients);
 
             return View(model);
         }
 
-        // Manage pizza ingredients
+        [HttpPost]
+        public ActionResult AddPizzaIngredient(ManagePizzaIngredientsModel model)
+        {
+            switch (model.SelectedIngredient)
+            {
+                case "Crust":
+                    return View("ModifyCrust", new Crust { IsNewRecord = true });
+            }
+            throw new Exception($"ActionResult needed for {model.SelectedIngredient}.");
+        }
+
         public ActionResult ModifyCrust(Crust crust)
         {
-            return View(crust);
+            return View("ModifyCrust", crust);
+        }
+
+        [HttpPost]
+        public ActionResult AddCrustRecord(Crust crust)
+        {
+            if (ModelState.IsValid)
+            {
+                // Add crust record to database.
+
+                RedirectToAction("ManagePizzaIngredients");
+            }
+            return View("ModifyCrust", crust);
+        }
+
+        [HttpPost]
+        public ActionResult ModifyCrustRecord(Crust crust)
+        {
+            if (ModelState.IsValid)
+            {
+                RedirectToAction("AddCrustRecord", crust);
+            }
+            return View("ModifyCrust", crust);
         }
     }
 }

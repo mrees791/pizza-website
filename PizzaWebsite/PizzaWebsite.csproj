@@ -125,10 +125,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Manage\ManagePizzaIngredientsModel.cs" />
     <Compile Include="Models\Menu\Pizzas\Ingredients\Cheese.cs" />
     <Compile Include="Models\Menu\Pizzas\Ingredients\Crust.cs" />
     <Compile Include="Models\Menu\Pizzas\Ingredients\CrustFlavor.cs" />
-    <Compile Include="Models\Menu\Pizzas\Ingredients\IngredientType.cs" />
     <Compile Include="Models\Menu\Pizzas\Ingredients\PizzaIngredient.cs" />
     <Compile Include="Models\Menu\Pizzas\Ingredients\Sauce.cs" />
     <Compile Include="Models\Menu\Pizzas\Ingredients\Topping.cs" />
@@ -189,6 +189,7 @@
     <Content Include="Views\Manage\ManageMenu.cshtml" />
     <Content Include="Views\Manage\ManagePizzaMenu.cshtml" />
     <Content Include="Views\Manage\ManagePizzaIngredients.cshtml" />
+    <Content Include="Views\Manage\_ModifyCrustPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

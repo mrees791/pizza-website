@@ -1,15 +1,19 @@
 ﻿@using PizzaWebsite.Models.Menu.Pizzas.Ingredients
-@model dynamic
+@using PizzaWebsite.Models.Manage
+@model ManagePizzaIngredientsModel
 @{
     ViewBag.Title = "Manage Pizza Ingredients";
 }
 
 <h2>Manage Pizza Ingredients</h2>
 <div>
-    <select class="form-control" id="PizzaIngredient" name="PizzaIngredient">
-        @foreach (IngredientType ingredientType in Model.IngredientTypes)
-        {
-            <option value="@ingredientType.Name">@ingredientType.Name</option>
-        }
-    </select>
+    @using (Html.BeginForm("AddPizzaIngredient", "Manage", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.DropDownListFor(m => m.SelectedIngredient,
+       Model.Ingredients,
+       null,
+       new { @class = "" })
+        <input type="submit" value="Add" class="btn btn-primary"/>
+    }
 </div>

@@ -27,5 +27,7 @@ namespace PizzaWebsite.Models.Menu.Pizzas.Ingredients
 
         [Display(Name = "Pizza Builder Icon")]
         public string PizzaBuilderIconUrl { get; set; }
+
+        public bool IsNewRecord { get; set; }
     }
 }
