@@ -69,6 +69,7 @@ namespace PizzaWebsite.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AddPizzaIngredient(ManagePizzaIngredientsModel model)
         {
             switch (model.SelectedIngredient)
@@ -85,6 +86,7 @@ namespace PizzaWebsite.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AddCrustRecord(Crust crust)
         {
             if (ModelState.IsValid)
@@ -97,6 +99,7 @@ namespace PizzaWebsite.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ModifyCrustRecord(Crust crust)
         {
             if (ModelState.IsValid)
