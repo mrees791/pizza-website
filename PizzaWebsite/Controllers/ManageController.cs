@@ -93,7 +93,7 @@ namespace PizzaWebsite.Controllers
             {
                 // Add crust record to database.
 
-                RedirectToAction("ManagePizzaIngredients");
+                return RedirectToAction("ManagePizzaIngredients");
             }
             return View("ModifyCrust", crust);
         }
@@ -104,7 +104,7 @@ namespace PizzaWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                RedirectToAction("AddCrustRecord", crust);
+                return RedirectToAction("AddCrustRecord", crust);
             }
             return View("ModifyCrust", crust);
         }
