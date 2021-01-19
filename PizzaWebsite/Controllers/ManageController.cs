@@ -74,7 +74,7 @@ namespace PizzaWebsite.Controllers
             switch (model.SelectedIngredient)
             {
                 case "Crust":
-                    return View("ModifyCrust", new Crust { IsNewRecord = true });
+                    return View("ModifyCrust", new Crust { IsNewRecord = true, AvailableForPurchase = true });
             }
             throw new Exception($"ActionResult needed for {model.SelectedIngredient}.");
         }
