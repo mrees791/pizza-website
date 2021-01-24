@@ -61,5 +61,35 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\tables\user.sql" />
+    <Build Include="dbo\tables\menu_side.sql" />
+    <Build Include="dbo\tables\cart_sauce.sql" />
+    <Build Include="dbo\tables\pizza_category.sql" />
+    <Build Include="dbo\tables\cart_dessert.sql" />
+    <Build Include="dbo\tables\menu_drink.sql" />
+    <Build Include="dbo\tables\cart_wings.sql" />
+    <Build Include="dbo\tables\employee.sql" />
+    <Build Include="dbo\tables\menu_pasta.sql" />
+    <Build Include="dbo\tables\menu_pizza_sauce.sql" />
+    <Build Include="dbo\tables\order.sql" />
+    <Build Include="dbo\tables\menu_wings_sauce.sql" />
+    <Build Include="dbo\tables\employee_location.sql" />
+    <Build Include="dbo\tables\menu_sauce.sql" />
+    <Build Include="dbo\tables\cart_drink.sql" />
+    <Build Include="dbo\tables\pizza.sql" />
+    <Build Include="dbo\tables\store_location.sql" />
+    <Build Include="dbo\tables\user_address.sql" />
+    <Build Include="dbo\tables\menu_pizza_topping.sql" />
+    <Build Include="dbo\tables\pizza_topping.sql" />
+    <Build Include="dbo\tables\cart_pizza.sql" />
+    <Build Include="dbo\tables\cart_dip.sql" />
+    <Build Include="dbo\tables\user_role.sql" />
+    <Build Include="dbo\tables\menu_dessert.sql" />
+    <Build Include="dbo\tables\menu_pizza_crust.sql" />
+    <Build Include="dbo\tables\menu_pizza_cheese.sql" />
+    <Build Include="dbo\tables\menu_dip.sql" />
+    <Build Include="dbo\tables\cart_pasta.sql" />
+    <Build Include="dbo\tables\menu_wings.sql" />
+    <Build Include="dbo\tables\cart.sql" />
+    <Build Include="dbo\tables\menu_pizza_crust_flavor.sql" />
   </ItemGroup>
 </Project>
