@@ -1,4 +1,4 @@
 ﻿CREATE TABLE [dbo].[pizza]
 (
-	[Id] INT NOT NULL PRIMARY KEY
+	[pizza_id] INT NOT NULL PRIMARY KEY
 )
