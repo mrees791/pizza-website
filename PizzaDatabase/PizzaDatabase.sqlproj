@@ -91,5 +91,6 @@
     <Build Include="dbo\tables\menu_wings.sql" />
     <Build Include="dbo\tables\cart.sql" />
     <Build Include="dbo\tables\menu_pizza_crust_flavor.sql" />
+    <Build Include="dbo\tables\cart_side.sql" />
   </ItemGroup>
 </Project>

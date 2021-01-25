@@ -1,4 +1,4 @@
 ﻿CREATE TABLE [dbo].[menu_side]
 (
-	[Id] INT NOT NULL PRIMARY KEY
+	[menu_side_id] INT NOT NULL PRIMARY KEY
 )
