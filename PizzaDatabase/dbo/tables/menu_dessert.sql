@@ -1,4 +1,4 @@
 ﻿CREATE TABLE [dbo].[menu_dessert]
 (
-	[Id] INT NOT NULL PRIMARY KEY
+	[menu_dessert_id] INT NOT NULL PRIMARY KEY
 )
