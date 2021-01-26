@@ -10,14 +10,14 @@ using System.Data.SqlClient;
 
 namespace DataLibrary.DataAccess
 {
-    public class SqlDataAccess
+    public static class SqlDataAccess
     {
-        public string GetConnectiongString(string connectionName = "PizzaDatabase")
+        public static string GetConnectiongString(string connectionName = "PizzaDatabase")
         {
             return ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
         }
 
-        public List<T> LoadData<T>(string sql)
+        public static List<T> LoadData<T>(string sql)
         {
             using (IDbConnection cnn = new SqlConnection(GetConnectiongString()))
             {
@@ -32,7 +32,7 @@ namespace DataLibrary.DataAccess
         /// <param name="sql"></param>
         /// <param name="data"></param>
         /// <returns>Number of rows effected.</returns>
-        public int SaveData<T>(string sql, T data)
+        public static int SaveData<T>(string sql, T data)
         {
             using (IDbConnection cnn = new SqlConnection(GetConnectiongString()))
             {
