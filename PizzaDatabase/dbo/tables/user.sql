@@ -9,5 +9,6 @@
   [phone_number] VARCHAR(10),
   [phone_number_confirmed] BIT NOT NULL,
   [zip_code] VARCHAR(5),
-  PRIMARY KEY ([user_id])
+  PRIMARY KEY ([user_id]),
+  FOREIGN KEY ([current_cart_id]) REFERENCES cart(cart_id)
 );
