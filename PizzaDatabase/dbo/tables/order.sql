@@ -1,4 +1,26 @@
 ﻿CREATE TABLE [dbo].[order]
 (
-	[Id] INT NOT NULL PRIMARY KEY
-)
+  [order_id] INT NOT NULL IDENTITY,
+  [user_id] INT NOT NULL,
+  [store_id] INT NOT NULL,
+  [cart_id] INT NOT NULL,
+  [order_subtotal] DECIMAL(20,2) NOT NULL,
+  [order_tax] DECIMAL(20,2) NOT NULL,
+  [order_total] DECIMAL(20,2) NOT NULL,
+  [order_phase] INT NOT NULL,
+  [order_completed] BIT NOT NULL,
+  [date_of_order] DATETIME NOT NULL,
+  [is_delivery] BIT NOT NULL,
+  [date_of_delivery] DATETIME,
+  [delivery_address_type] VARCHAR(50),
+  [delivery_address_name] VARCHAR(50),
+  [delivery_street_address] VARCHAR(50),
+  [delivery_city] VARCHAR(50),
+  [delivery_state] VARCHAR(50),
+  [delivery_zip_code] VARCHAR(5),
+  [delivery_phone_number] VARCHAR(10),
+  PRIMARY KEY ([order_id]),
+  FOREIGN KEY ([user_id]) REFERENCES [dbo].[user](user_id),
+  FOREIGN KEY ([store_id]) REFERENCES store_location(store_id),
+  FOREIGN KEY ([cart_id]) REFERENCES cart(cart_id)
+);
