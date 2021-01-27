@@ -11,9 +11,14 @@ namespace PizzaWebsite.Models.Menu
     /// </summary>
     public abstract class MenuItemModel
     {
+        public bool IsNewRecord { get; set; }
+
         [Display(Name = "Available For Purchase")]
         public bool AvailableForPurchase { get; set; }
 
-        public bool IsNewRecord { get; set; }
+        public bool HasMenuIcon { get; set; }
+
+        [Display(Name = "Menu Icon")]
+        public string MenuIconUrl { get; set; }
     }
 }

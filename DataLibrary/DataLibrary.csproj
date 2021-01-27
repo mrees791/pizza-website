@@ -68,6 +68,7 @@
     <Compile Include="DataAccess\SqlDataAccess.cs" />
     <Compile Include="Models\Cart\CartModel.cs" />
     <Compile Include="Models\Menu\MenuDipModel.cs" />
+    <Compile Include="Models\Menu\MenuItemModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

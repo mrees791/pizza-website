@@ -1,4 +1,5 @@
 ﻿using DataLibrary.DataAccess;
+using DataLibrary.Models.Cart;
 using DataLibrary.Models.Menu;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,28 @@ namespace DataLibrary.BusinessLogic
 {
     public static class MenuProcessor
     {
-        public static List<MenuDipModel> LoadMenuDipRecords()
+        // Needs tested
+        public static List<CartModel> LoadCarts()
+        {
+            string sql = @"select cart_id as CartId from dbo.cart";
+
+            return SqlDataAccess.LoadData<CartModel>(sql);
+        }
+
+        // Needs tested
+        public static int AddNewCart()
+        {
+            CartModel data = new CartModel
+            {
+
+            };
+
+            string sql = @"insert into dbo.cart;";
+
+            return SqlDataAccess.SaveData(sql, data);
+        }
+
+        public static List<MenuDipModel> LoadMenuDips()
         {
             string sql = @"select menu_dip_id as MenuDipId, available_for_purchase as AvailableForPurchase, name as Name, price as Price, item_details as ItemDetails,
                             has_menu_icon as HasMenuIcon, menu_icon_file as MenuIconFile from dbo.menu_dip;";
@@ -28,7 +50,7 @@ namespace DataLibrary.BusinessLogic
         /// <param name="hasMenuIcon"></param>
         /// <param name="menuIconFile"></param>
         /// <returns>Number of rows affected.</returns>
-        public static int AddNewMenuDipRecord(bool availableForPurchase, string name,
+        public static int AddNewMenuDip(bool availableForPurchase, string name,
             decimal price, string itemDetails, bool hasMenuIcon, string menuIconFile)
         {
             MenuDipModel data = new MenuDipModel

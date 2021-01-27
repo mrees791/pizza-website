@@ -15,11 +15,6 @@ namespace PizzaWebsite.Models.Menu.Pizzas.Ingredients
         [Display(Name = "Description")]
         public string Description { get; set; }
 
-        public bool HasMenuIcon { get; set; }
-
-        [Display(Name = "Menu Icon")]
-        public string MenuIconUrl { get; set; }
-
         public bool HasPizzaBuilderIcon { get; set; }
 
         [Display(Name = "Pizza Builder Icon")]

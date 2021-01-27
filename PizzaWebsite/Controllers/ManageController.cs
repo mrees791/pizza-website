@@ -1,4 +1,5 @@
 ﻿using PizzaWebsite.Models.Manage;
+using PizzaWebsite.Models.Menu;
 using PizzaWebsite.Models.Menu.Pizzas.Ingredients;
 using System;
 using System.Collections.Generic;
@@ -75,19 +76,24 @@ namespace PizzaWebsite.Controllers
             switch (model.SelectedIngredient)
             {
                 case "Crust":
-                    return View("ModifyCrust", new Crust { IsNewRecord = true, AvailableForPurchase = true });
+                    return View("ModifyCrust", new CrustModel { IsNewRecord = true, AvailableForPurchase = true });
             }
             throw new Exception($"ActionResult needed for {model.SelectedIngredient}.");
         }
 
-        public ActionResult ModifyCrust(Crust crust)
+        public ActionResult ModifyCrust(CrustModel crust)
         {
             return View("ModifyCrust", crust);
         }
 
+        /*public ActionResult ModifyDip(MenuDipModel menuDip)
+        {
+
+        }*/
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddCrustRecord(Crust crust)
+        public ActionResult AddCrustRecord(CrustModel crust)
         {
             if (ModelState.IsValid)
             {
@@ -100,7 +106,7 @@ namespace PizzaWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ModifyCrustRecord(Crust crust)
+        public ActionResult ModifyCrustRecord(CrustModel crust)
         {
             if (ModelState.IsValid)
             {
