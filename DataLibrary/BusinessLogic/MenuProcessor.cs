@@ -10,6 +10,14 @@ namespace DataLibrary.BusinessLogic
 {
     public static class MenuProcessor
     {
+        public static List<MenuDipModel> LoadMenuDipRecords()
+        {
+            string sql = @"select menu_dip_id as MenuDipId, available_for_purchase as AvailableForPurchase, name as Name, price as Price, item_details as ItemDetails,
+                            has_menu_icon as HasMenuIcon, menu_icon_file as MenuIconFile from dbo.menu_dip;";
+
+            return SqlDataAccess.LoadData<MenuDipModel>(sql);
+        }
+
         public static int AddNewMenuDipRecord(bool availableForPurchase, string name,
             decimal price, string itemDetails, bool hasMenuIcon, string menuIconFile)
         {
