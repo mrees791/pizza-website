@@ -6,11 +6,8 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Menu.Pizzas.Ingredients
 {
-    public abstract class PizzaIngredientModel
+    public abstract class PizzaIngredientModel : MenuItemModel
     {
-        [Display(Name = "Available For Purchase")]
-        public bool AvailableForPurchase { get; set; }
-
         [Display(Name = "Name")]
         [Required(ErrorMessage = "You must name the ingredient.")]
         public string Name { get; set; }
@@ -27,7 +24,5 @@ namespace PizzaWebsite.Models.Menu.Pizzas.Ingredients
 
         [Display(Name = "Pizza Builder Icon")]
         public string PizzaBuilderIconUrl { get; set; }
-
-        public bool IsNewRecord { get; set; }
     }
 }
