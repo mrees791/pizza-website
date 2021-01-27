@@ -53,6 +53,7 @@ TestResults/
 *.log
 *.sqlite
 *.jfm
+*.dbmdl
 # OS generated files #
 ######################
 .DS_Store?
