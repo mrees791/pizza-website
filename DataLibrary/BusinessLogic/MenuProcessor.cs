@@ -10,7 +10,7 @@ namespace DataLibrary.BusinessLogic
 {
     public static class MenuProcessor
     {
-        public static int CreateMenuDip(bool availableForPurchase, string name,
+        public static int AddNewMenuDipRecord(bool availableForPurchase, string name,
             decimal price, string itemDetails, bool hasMenuIcon, string menuIconFile)
         {
             MenuDipModel data = new MenuDipModel
