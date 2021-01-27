@@ -31,7 +31,7 @@ namespace DataLibrary.DataAccess
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <param name="data"></param>
-        /// <returns>Number of rows effected.</returns>
+        /// <returns>Number of rows affected.</returns>
         public static int SaveData<T>(string sql, T data)
         {
             using (IDbConnection cnn = new SqlConnection(GetConnectiongString()))

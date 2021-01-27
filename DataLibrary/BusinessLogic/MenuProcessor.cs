@@ -18,6 +18,16 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<MenuDipModel>(sql);
         }
 
+        /// <summary>
+        /// Adds a new record to the menu_dip table.
+        /// </summary>
+        /// <param name="availableForPurchase"></param>
+        /// <param name="name"></param>
+        /// <param name="price"></param>
+        /// <param name="itemDetails"></param>
+        /// <param name="hasMenuIcon"></param>
+        /// <param name="menuIconFile"></param>
+        /// <returns>Number of rows affected.</returns>
         public static int AddNewMenuDipRecord(bool availableForPurchase, string name,
             decimal price, string itemDetails, bool hasMenuIcon, string menuIconFile)
         {
