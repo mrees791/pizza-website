@@ -6,7 +6,7 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Menu.Pizzas.Ingredients
 {
-    public class Crust : PizzaIngredient
+    public class CrustModel : PizzaIngredientModel
     {
         [DataType(DataType.Currency)]
         [Display(Name = "Small Crust Price")]

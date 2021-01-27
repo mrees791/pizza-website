@@ -5,7 +5,7 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Menu.Pizzas.Ingredients
 {
-    public class CrustFlavor : PizzaIngredient
+    public class CrustFlavor : PizzaIngredientModel
     {
     }
 }

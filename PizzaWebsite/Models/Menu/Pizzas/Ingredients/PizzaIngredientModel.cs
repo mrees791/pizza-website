@@ -6,7 +6,7 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Menu.Pizzas.Ingredients
 {
-    public abstract class PizzaIngredient
+    public abstract class PizzaIngredientModel
     {
         [Display(Name = "Available For Purchase")]
         public bool AvailableForPurchase { get; set; }
