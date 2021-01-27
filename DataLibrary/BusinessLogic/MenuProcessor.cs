@@ -11,27 +11,6 @@ namespace DataLibrary.BusinessLogic
 {
     public static class MenuProcessor
     {
-        // Needs tested
-        public static List<CartModel> LoadCarts()
-        {
-            string sql = @"select cart_id as CartId from dbo.cart";
-
-            return SqlDataAccess.LoadData<CartModel>(sql);
-        }
-
-        // Needs tested
-        public static int AddNewCart()
-        {
-            CartModel data = new CartModel
-            {
-
-            };
-
-            string sql = @"insert into dbo.cart;";
-
-            return SqlDataAccess.SaveData(sql, data);
-        }
-
         public static List<MenuDipModel> LoadMenuDips()
         {
             string sql = @"select menu_dip_id as MenuDipId, available_for_purchase as AvailableForPurchase, name as Name, price as Price, item_details as ItemDetails,
