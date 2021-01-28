@@ -1,4 +1,9 @@
 ﻿CREATE TABLE [dbo].[CartDip]
 (
-	[Id] INT NOT NULL PRIMARY KEY
-)
+  [Id] INT NOT NULL IDENTITY,
+  [CartId] INT NOT NULL,
+  [MenuDipId] INT NOT NULL,
+  [PricePerItem] DECIMAL(20,2) NOT NULL,
+  [Quantity] INT NOT NULL,
+  PRIMARY KEY ([Id])
+);
