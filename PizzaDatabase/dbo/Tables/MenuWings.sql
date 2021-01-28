@@ -1,0 +1,4 @@
+﻿CREATE TABLE [dbo].[MenuWings]
+(
+	[Id] INT NOT NULL PRIMARY KEY
+)

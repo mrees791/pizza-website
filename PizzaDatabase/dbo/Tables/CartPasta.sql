@@ -1,0 +1,4 @@
+﻿CREATE TABLE [dbo].[CartPasta]
+(
+	[Id] INT NOT NULL PRIMARY KEY
+)

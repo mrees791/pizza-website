@@ -1,0 +1,4 @@
+﻿CREATE TABLE [dbo].[CartSauce]
+(
+	[Id] INT NOT NULL PRIMARY KEY
+)

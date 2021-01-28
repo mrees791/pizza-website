@@ -1,0 +1,4 @@
+﻿CREATE TABLE [dbo].[CartWings]
+(
+	[Id] INT NOT NULL PRIMARY KEY
+)
