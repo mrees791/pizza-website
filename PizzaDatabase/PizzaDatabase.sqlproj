@@ -92,5 +92,6 @@
     <Build Include="dbo\Tables\StoreLocation.sql" />
     <Build Include="dbo\Tables\User.sql" />
     <Build Include="dbo\Tables\UserRole.sql" />
+    <Build Include="dbo\Tables\DeliveryInfo.sql" />
   </ItemGroup>
 </Project>
