@@ -90,7 +90,6 @@ namespace DataLibrary.BusinessLogic
         }
 
         public static int AddMenuWings(
-            int id,
             bool availableForPurchase,
             string name,
             decimal price6Piece,
