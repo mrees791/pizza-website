@@ -4,5 +4,7 @@
   [PizzaId] INT NOT NULL,
   [ToppingHalf] VARCHAR(50) NOT NULL,
   [MenuPizzaToppingId] INT NOT NULL,
-  PRIMARY KEY ([Id])
+  PRIMARY KEY ([Id]),
+  FOREIGN KEY ([PizzaId]) REFERENCES Pizza(Id),
+  FOREIGN KEY ([MenuPizzaToppingId]) REFERENCES MenuPizzaTopping(Id)
 );

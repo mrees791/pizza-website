@@ -6,5 +6,6 @@
   [AvailableForPurchase] BIT NOT NULL,
   [PizzaName] VARCHAR(100) NOT NULL,
   [Description] VARCHAR(512) NOT NULL,
-  PRIMARY KEY ([Id])
+  PRIMARY KEY ([Id]),
+  FOREIGN KEY ([PizzaId]) REFERENCES Pizza(Id)
 );

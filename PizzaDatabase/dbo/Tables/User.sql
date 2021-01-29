@@ -9,5 +9,6 @@
   [PhoneNumber] VARCHAR(10),
   [PhoneNumberConfirmed] BIT NOT NULL,
   [ZipCode] VARCHAR(5),
-  PRIMARY KEY ([Id])
+  PRIMARY KEY ([Id]),
+  FOREIGN KEY ([CurrentCartId]) REFERENCES Cart(Id)
 );

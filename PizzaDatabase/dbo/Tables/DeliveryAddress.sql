@@ -9,5 +9,6 @@
   [State] VARCHAR(2) NOT NULL,
   [ZipCode] VARCHAR(5) NOT NULL,
   [PhoneNumber] VARCHAR(10) NOT NULL,
-  PRIMARY KEY ([Id])
+  PRIMARY KEY ([Id]),
+  FOREIGN KEY ([UserId]) REFERENCES [dbo].[User](Id)
 );

@@ -8,5 +8,9 @@
   [MenuPizzaCheeseId] INT NOT NULL,
   [CheeseAmount] VARCHAR(50) NOT NULL,
   [MenuPizzaCrustFlavorId] INT NOT NULL,
-  PRIMARY KEY ([Id])
+  PRIMARY KEY ([Id]),
+  FOREIGN KEY ([MenuPizzaCrustId]) REFERENCES MenuPizzaCrust(Id),
+  FOREIGN KEY ([MenuPizzaSauceId]) REFERENCES MenuPizzaSauce(Id),
+  FOREIGN KEY ([MenuPizzaCheeseId]) REFERENCES MenuPizzaCheese(Id),
+  FOREIGN KEY ([MenuPizzaCrustFlavorId]) REFERENCES MenuPizzaCrustFlavor(Id)
 );
