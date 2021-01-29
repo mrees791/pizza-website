@@ -15,7 +15,7 @@ namespace DataLibrary.BusinessLogic
     {
         public static List<MenuDrinkModel> LoadMenuDrinks()
         {
-            string sql = @"select Id, AvailableForPurchase, Name, AvailableIn20Oz, AvailableIn2Liter, AvailableIn2Pack12Oz, AvailableIn6Pack12Oz, Price20Oz, Price2Liter, Price2Pack12Oz, Price6Pack12Oz, Description, HasMenuIcon, MenuIconFile from dbo.MenuDrinks;";
+            string sql = @"select Id, AvailableForPurchase, Name, AvailableIn20Oz, AvailableIn2Liter, AvailableIn2Pack12Oz, AvailableIn6Pack12Oz, Price20Oz, Price2Liter, Price2Pack12Oz, Price6Pack12Oz, Description, HasMenuIcon, MenuIconFile from dbo.MenuDrink;";
 
             return SqlDataAccess.LoadData<MenuDrinkModel>(sql);
         }
@@ -101,7 +101,7 @@ namespace DataLibrary.BusinessLogic
 
         public static List<MenuDipModel> LoadMenuDips()
         {
-            string sql = @"select Id, AvailableForPurchase, Name, HasMenuIcon, MenuIconFile, Price, ItemDetails from dbo.MenuDips";
+            string sql = @"select Id, AvailableForPurchase, Name, HasMenuIcon, MenuIconFile, Price, ItemDetails from dbo.MenuDip";
 
             return SqlDataAccess.LoadData<MenuDipModel>(sql);
         }
