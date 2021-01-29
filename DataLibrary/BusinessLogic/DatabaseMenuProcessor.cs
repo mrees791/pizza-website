@@ -13,6 +13,64 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabaseMenuProcessor
     {
+        public static List<MenuSauceModel> LoadMenuSauces()
+        {
+            string sql = @"select Id, AvailableForPurchase, Name, Price, Description, ItemDetails, HasMenuIcon, MenuIconFile from dbo.MenuSauce;";
+
+            return SqlDataAccess.LoadData<MenuSauceModel>(sql);
+        }
+
+        public static int UpdateMenuSauce(
+            int id,
+            bool availableForPurchase,
+            string name,
+            decimal price,
+            string description,
+            string itemDetails,
+            bool hasMenuIcon,
+            string menuIconFile)
+        {
+            MenuSauceModel data = LoadMenuSauces().Where(i => i.Id == id).First();
+
+            data.AvailableForPurchase = availableForPurchase;
+            data.Name = name;
+            data.Price = price;
+            data.Description = description;
+            data.ItemDetails = itemDetails;
+            data.HasMenuIcon = hasMenuIcon;
+            data.MenuIconFile = menuIconFile;
+
+            string sql = @"update dbo.MenuSauce set AvailableForPurchase = @AvailableForPurchase, Name = @Name, Price = @Price, Description = @Description, ItemDetails = @ItemDetails,
+                           HasMenuIcon = @HasMenuIcon, MenuIconFile = @MenuIconFile where Id = @Id;";
+
+            return SqlDataAccess.UpdateRecord(sql, data);
+        }
+
+        public static int AddMenuSauce(
+            bool availableForPurchase,
+            string name,
+            decimal price,
+            string description,
+            string itemDetails,
+            bool hasMenuIcon,
+            string menuIconFile)
+        {
+            MenuSauceModel data = new MenuSauceModel();
+
+            data.AvailableForPurchase = availableForPurchase;
+            data.Name = name;
+            data.Price = price;
+            data.Description = description;
+            data.ItemDetails = itemDetails;
+            data.HasMenuIcon = hasMenuIcon;
+            data.MenuIconFile = menuIconFile;
+
+            string sql = @"insert into dbo.MenuSauce (AvailableForPurchase, Name, Price, Description, ItemDetails, HasMenuIcon, MenuIconFile) output Inserted.Id
+                           values (@AvailableForPurchase, @Name, @Price, @Description, @ItemDetails, @HasMenuIcon, @MenuIconFile);";
+
+            return SqlDataAccess.SaveNewRecord(sql, data);
+        }
+
         public static List<MenuPastaModel> LoadMenuPastas()
         {
             string sql = @"select Id, AvailableForPurchase, Name, Price, Description, ItemDetails, HasMenuIcon, MenuIconFile from dbo.MenuPasta;";
