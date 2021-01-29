@@ -13,6 +13,47 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabaseMenuProcessor
     {
+        public static List<MenuWingsSauceModel> LoadMenuWingsSauces()
+        {
+            string sql = @"select Id, AvailableForPurchase, Name, Description from dbo.MenuWingsSauce;";
+
+            return SqlDataAccess.LoadData<MenuWingsSauceModel>(sql);
+        }
+
+        public static int UpdateMenuWingsSauce(
+            int id,
+            bool availableForPurchase,
+            string name,
+            string description)
+        {
+            MenuWingsSauceModel data = LoadMenuWingsSauces().Where(i => i.Id == id).First();
+
+            data.AvailableForPurchase = availableForPurchase;
+            data.Name = name;
+            data.Description = description;
+
+            string sql = @"update dbo.MenuWingsSauce set AvailableForPurchase = @AvailableForPurchase, Name = @Name, Description = @Description where Id = @Id;";
+
+            return SqlDataAccess.UpdateRecord(sql, data);
+        }
+
+        public static int AddMenuWingsSauce(
+            bool availableForPurchase,
+            string name,
+            string description)
+        {
+            MenuWingsSauceModel data = new MenuWingsSauceModel();
+
+            data.AvailableForPurchase = availableForPurchase;
+            data.Name = name;
+            data.Description = description;
+
+            string sql = @"insert into dbo.MenuWingsSauce (AvailableForPurchase, Name, Description) output Inserted.Id
+                           values (@AvailableForPurchase, @Name, @Description);";
+
+            return SqlDataAccess.SaveNewRecord(sql, data);
+        }
+
         public static List<MenuWingsModel> LoadMenuWings()
         {
             string sql = @"select Id, AvailableForPurchase, Name, Price6Piece, Price12Piece, Price18Piece, Description, HasMenuIcon, MenuIconFile from dbo.MenuWings;";
