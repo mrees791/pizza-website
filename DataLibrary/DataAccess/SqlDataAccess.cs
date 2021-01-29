@@ -26,17 +26,18 @@ namespace DataLibrary.DataAccess
         }
 
         /// <summary>
-        /// 
+        /// Adds a new record using an SQL insert query and returns the ID of the newly created record.
+        /// The insert query must include "output Inserted.Id" in order to return the newly created ID.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <param name="data"></param>
-        /// <returns>Number of rows affected.</returns>
+        /// <returns>Id of newly created record.</returns>
         public static int SaveData<T>(string sql, T data)
         {
             using (IDbConnection cnn = new SqlConnection(GetConnectiongString()))
             {
-                return cnn.Execute(sql, data);
+                return cnn.Query<int>(sql, data).Single();
             }
         }
     }
