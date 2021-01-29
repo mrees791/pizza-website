@@ -39,18 +39,7 @@ namespace DataLibrary.BusinessLogic
                 string sql = @"insert into dbo.MenuDessert (AvailableForPurchase, Name, HasMenuIcon, MenuIconFile, Price, Description, ItemDetails) output Inserted.Id values (@AvailableForPurchase, @Name, @HasMenuIcon, @MenuIconFile, @Price, @Description, @ItemDetails);";
 
                 return SqlDataAccess.SaveData(sql, data);
-
-                //var id = cnn.Query<int>(sql, data).Single();
-
-                //return id;
             }
-
-            //return SqlDataAccess.SaveData(sql, data);
         }
-
-        /*public static List<MenuDessertModel> LoadMenuDesserts()
-        {
-
-        }*/
     }
 }
