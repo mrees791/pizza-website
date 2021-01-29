@@ -74,6 +74,12 @@
     <Compile Include="Models\Menu\MenuSideModel.cs" />
     <Compile Include="Models\Menu\MenuWingsModel.cs" />
     <Compile Include="Models\Menu\MenuWingsSauceModel.cs" />
+    <Compile Include="Models\Menu\Pizza\MenuPizzaCheeseModel.cs" />
+    <Compile Include="Models\Menu\Pizza\MenuPizzaCrustFlavorModel.cs" />
+    <Compile Include="Models\Menu\Pizza\MenuPizzaCrustModel.cs" />
+    <Compile Include="Models\Menu\Pizza\MenuPizzaItemModel.cs" />
+    <Compile Include="Models\Menu\Pizza\MenuPizzaSauceModel.cs" />
+    <Compile Include="Models\Menu\Pizza\MenuPizzaToppingModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -81,7 +87,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BusinessLogic\" />
-    <Folder Include="Models\Menu\Pizza\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
