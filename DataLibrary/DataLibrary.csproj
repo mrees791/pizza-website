@@ -65,6 +65,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\SqlDataAccess.cs" />
+    <Compile Include="Models\Menu\MenuDessertModel.cs" />
+    <Compile Include="Models\Menu\MenuDipModel.cs" />
+    <Compile Include="Models\Menu\MenuDrinkModel.cs" />
+    <Compile Include="Models\Menu\MenuItemModel.cs" />
+    <Compile Include="Models\Menu\MenuPastaModel.cs" />
+    <Compile Include="Models\Menu\MenuSauceModel.cs" />
+    <Compile Include="Models\Menu\MenuSideModel.cs" />
+    <Compile Include="Models\Menu\MenuWingsModel.cs" />
+    <Compile Include="Models\Menu\MenuWingsSauceModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -72,7 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BusinessLogic\" />
-    <Folder Include="Models\" />
+    <Folder Include="Models\Menu\Pizza\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
