@@ -13,6 +13,10 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabaseMenuProcessor
     {
+        /// <summary>
+        /// Loads all menu wings sauce records.
+        /// </summary>
+        /// <returns>List of MenuWingsSauceModels from the database.</returns>
         public static List<MenuWingsSauceModel> LoadMenuWingsSauces()
         {
             string sql = @"select Id, AvailableForPurchase, Name, Description from dbo.MenuWingsSauce;";
@@ -20,6 +24,14 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<MenuWingsSauceModel>(sql);
         }
 
+        /// <summary>
+        /// Updates a menu wings sauce record.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="availableForPurchase"></param>
+        /// <param name="name"></param>
+        /// <param name="description"></param>
+        /// <returns>Rows affected.</returns>
         public static int UpdateMenuWingsSauce(
             int id,
             bool availableForPurchase,
@@ -37,6 +49,13 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.UpdateRecord(sql, data);
         }
 
+        /// <summary>
+        /// Adds a new menu wings sauce record.
+        /// </summary>
+        /// <param name="availableForPurchase"></param>
+        /// <param name="name"></param>
+        /// <param name="description"></param>
+        /// <returns>ID of the newly added menu wings sauce.</returns>
         public static int AddMenuWingsSauce(
             bool availableForPurchase,
             string name,
@@ -54,6 +73,10 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveNewRecord(sql, data);
         }
 
+        /// <summary>
+        /// Loads all menu menu wings records.
+        /// </summary>
+        /// <returns>List of MenuWingsModels from the database.</returns>
         public static List<MenuWingsModel> LoadMenuWings()
         {
             string sql = @"select Id, AvailableForPurchase, Name, Price6Piece, Price12Piece, Price18Piece, Description, HasMenuIcon, MenuIconFile from dbo.MenuWings;";
@@ -61,6 +84,19 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<MenuWingsModel>(sql);
         }
 
+        /// <summary>
+        /// Updates a menu wings record.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="availableForPurchase"></param>
+        /// <param name="name"></param>
+        /// <param name="price6Piece"></param>
+        /// <param name="price12Piece"></param>
+        /// <param name="price18Piece"></param>
+        /// <param name="description"></param>
+        /// <param name="hasMenuIcon"></param>
+        /// <param name="menuIconFile"></param>
+        /// <returns>Rows affected.</returns>
         public static int UpdateMenuWings(
             int id,
             bool availableForPurchase,
@@ -89,6 +125,18 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.UpdateRecord(sql, data);
         }
 
+        /// <summary>
+        /// Adds a new menu wings record.
+        /// </summary>
+        /// <param name="availableForPurchase"></param>
+        /// <param name="name"></param>
+        /// <param name="price6Piece"></param>
+        /// <param name="price12Piece"></param>
+        /// <param name="price18Piece"></param>
+        /// <param name="description"></param>
+        /// <param name="hasMenuIcon"></param>
+        /// <param name="menuIconFile"></param>
+        /// <returns>ID of the newly added menu wings.</returns>
         public static int AddMenuWings(
             bool availableForPurchase,
             string name,
@@ -116,6 +164,10 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveNewRecord(sql, data);
         }
 
+        /// <summary>
+        /// Loads all menu side records.
+        /// </summary>
+        /// <returns>List of MenuSideModels from the database.</returns>
         public static List<MenuSideModel> LoadMenuSides()
         {
             string sql = @"select Id, AvailableForPurchase, Name, Price, Description, ItemDetails, HasMenuIcon, MenuIconFile from dbo.MenuSide;";
@@ -123,6 +175,18 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<MenuSideModel>(sql);
         }
 
+        /// <summary>
+        /// Updates a menu side record.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="availableForPurchase"></param>
+        /// <param name="name"></param>
+        /// <param name="price"></param>
+        /// <param name="description"></param>
+        /// <param name="itemDetails"></param>
+        /// <param name="hasMenuIcon"></param>
+        /// <param name="menuIconFile"></param>
+        /// <returns>Rows affected.</returns>
         public static int UpdateMenuSide(
             int id,
             bool availableForPurchase,
@@ -149,6 +213,17 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.UpdateRecord(sql, data);
         }
 
+        /// <summary>
+        /// Adds a new menu side record.
+        /// </summary>
+        /// <param name="availableForPurchase"></param>
+        /// <param name="name"></param>
+        /// <param name="price"></param>
+        /// <param name="description"></param>
+        /// <param name="itemDetails"></param>
+        /// <param name="hasMenuIcon"></param>
+        /// <param name="menuIconFile"></param>
+        /// <returns>ID of the newly added menu side.</returns>
         public static int AddMenuSide(
             bool availableForPurchase,
             string name,
@@ -174,6 +249,10 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveNewRecord(sql, data);
         }
 
+        /// <summary>
+        /// Loads all menu sauce records.
+        /// </summary>
+        /// <returns>List of MenuSauceModels from the database.</returns>
         public static List<MenuSauceModel> LoadMenuSauces()
         {
             string sql = @"select Id, AvailableForPurchase, Name, Price, Description, ItemDetails, HasMenuIcon, MenuIconFile from dbo.MenuSauce;";
@@ -181,6 +260,18 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<MenuSauceModel>(sql);
         }
 
+        /// <summary>
+        /// Updates a menu sauce record.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="availableForPurchase"></param>
+        /// <param name="name"></param>
+        /// <param name="price"></param>
+        /// <param name="description"></param>
+        /// <param name="itemDetails"></param>
+        /// <param name="hasMenuIcon"></param>
+        /// <param name="menuIconFile"></param>
+        /// <returns>Rows affected.</returns>
         public static int UpdateMenuSauce(
             int id,
             bool availableForPurchase,
@@ -207,6 +298,17 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.UpdateRecord(sql, data);
         }
 
+        /// <summary>
+        /// Adds a new menu sauce record.
+        /// </summary>
+        /// <param name="availableForPurchase"></param>
+        /// <param name="name"></param>
+        /// <param name="price"></param>
+        /// <param name="description"></param>
+        /// <param name="itemDetails"></param>
+        /// <param name="hasMenuIcon"></param>
+        /// <param name="menuIconFile"></param>
+        /// <returns>ID of the newly added menu sauce.</returns>
         public static int AddMenuSauce(
             bool availableForPurchase,
             string name,
@@ -232,6 +334,10 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveNewRecord(sql, data);
         }
 
+        /// <summary>
+        /// Loads all menu pasta records.
+        /// </summary>
+        /// <returns>List of MenuPastaModels from the database.</returns>
         public static List<MenuPastaModel> LoadMenuPastas()
         {
             string sql = @"select Id, AvailableForPurchase, Name, Price, Description, ItemDetails, HasMenuIcon, MenuIconFile from dbo.MenuPasta;";
@@ -239,6 +345,18 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<MenuPastaModel>(sql);
         }
 
+        /// <summary>
+        /// Updates a menu pasta record.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="availableForPurchase"></param>
+        /// <param name="name"></param>
+        /// <param name="price"></param>
+        /// <param name="description"></param>
+        /// <param name="itemDetails"></param>
+        /// <param name="hasMenuIcon"></param>
+        /// <param name="menuIconFile"></param>
+        /// <returns>Rows affected.</returns>
         public static int UpdateMenuPasta(
             int id,
             bool availableForPurchase,
@@ -265,6 +383,17 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.UpdateRecord(sql, data);
         }
 
+        /// <summary>
+        /// Adds a new menu pasta record.
+        /// </summary>
+        /// <param name="availableForPurchase"></param>
+        /// <param name="name"></param>
+        /// <param name="price"></param>
+        /// <param name="description"></param>
+        /// <param name="itemDetails"></param>
+        /// <param name="hasMenuIcon"></param>
+        /// <param name="menuIconFile"></param>
+        /// <returns>ID of the newly added menu pasta.</returns>
         public static int AddMenuPasta(
             bool availableForPurchase,
             string name,
@@ -290,6 +419,10 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveNewRecord(sql, data);
         }
 
+        /// <summary>
+        /// Loads all menu drink records.
+        /// </summary>
+        /// <returns>List of MenuDrinkModels from the database.</returns>
         public static List<MenuDrinkModel> LoadMenuDrinks()
         {
             string sql = @"select Id, AvailableForPurchase, Name, AvailableIn20Oz, AvailableIn2Liter, AvailableIn2Pack12Oz, AvailableIn6Pack12Oz, Price20Oz, Price2Liter, Price2Pack12Oz, Price6Pack12Oz, Description, HasMenuIcon, MenuIconFile from dbo.MenuDrink;";
@@ -297,6 +430,24 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<MenuDrinkModel>(sql);
         }
 
+        /// <summary>
+        /// Updates a menu drink record.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="availableForPurchase"></param>
+        /// <param name="name"></param>
+        /// <param name="availableIn20Oz"></param>
+        /// <param name="availableIn2Liter"></param>
+        /// <param name="availableIn2Pack12Oz"></param>
+        /// <param name="availableIn6Pack12Oz"></param>
+        /// <param name="price20Oz"></param>
+        /// <param name="price2Liter"></param>
+        /// <param name="price2Pack12Oz"></param>
+        /// <param name="price6Pack12Oz"></param>
+        /// <param name="description"></param>
+        /// <param name="hasMenuIcon"></param>
+        /// <param name="menuIconFile"></param>
+        /// <returns>Rows affected.</returns>
         public static int UpdateMenuDrink(
             int id,
             bool availableForPurchase,
@@ -337,6 +488,23 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.UpdateRecord(sql, data);
         }
 
+        /// <summary>
+        /// Adds a new menu drink record.
+        /// </summary>
+        /// <param name="availableForPurchase"></param>
+        /// <param name="name"></param>
+        /// <param name="availableIn20Oz"></param>
+        /// <param name="availableIn2Liter"></param>
+        /// <param name="availableIn2Pack12Oz"></param>
+        /// <param name="availableIn6Pack12Oz"></param>
+        /// <param name="price20Oz"></param>
+        /// <param name="price2Liter"></param>
+        /// <param name="price2Pack12Oz"></param>
+        /// <param name="price6Pack12Oz"></param>
+        /// <param name="description"></param>
+        /// <param name="hasMenuIcon"></param>
+        /// <param name="menuIconFile"></param>
+        /// <returns>ID of the newly added menu drink.</returns>
         public static int AddMenuDrink(
             bool availableForPurchase,
             string name,
@@ -376,6 +544,10 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveNewRecord(sql, data);
         }
 
+        /// <summary>
+        /// Loads all menu dip records.
+        /// </summary>
+        /// <returns>List of MenuDipModels from the database.</returns>
         public static List<MenuDipModel> LoadMenuDips()
         {
             string sql = @"select Id, AvailableForPurchase, Name, HasMenuIcon, MenuIconFile, Price, ItemDetails from dbo.MenuDip";
@@ -383,6 +555,17 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<MenuDipModel>(sql);
         }
 
+        /// <summary>
+        /// Updates a menu dip record.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="availableForPurchase"></param>
+        /// <param name="name"></param>
+        /// <param name="price"></param>
+        /// <param name="itemDetails"></param>
+        /// <param name="hasMenuIcon"></param>
+        /// <param name="menuIconFile"></param>
+        /// <returns>Rows affected.</returns>
         public static int UpdateMenuDip(
             int id,
             bool availableForPurchase,
@@ -406,6 +589,16 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.UpdateRecord(sql, data);
         }
 
+        /// <summary>
+        /// Adds a new menu dip record.
+        /// </summary>
+        /// <param name="availableForPurchase"></param>
+        /// <param name="name"></param>
+        /// <param name="price"></param>
+        /// <param name="itemDetails"></param>
+        /// <param name="hasMenuIcon"></param>
+        /// <param name="menuIconFile"></param>
+        /// <returns>ID of the newly added menu dip.</returns>
         public static int AddMenuDip(
             bool availableForPurchase,
             string name,
