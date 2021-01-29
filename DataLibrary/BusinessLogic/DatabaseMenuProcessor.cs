@@ -13,6 +13,69 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabaseMenuProcessor
     {
+        public static List<MenuWingsModel> LoadMenuWings()
+        {
+            string sql = @"select Id, AvailableForPurchase, Name, Price6Piece, Price12Piece, Price18Piece, Description, HasMenuIcon, MenuIconFile from dbo.MenuWings;";
+
+            return SqlDataAccess.LoadData<MenuWingsModel>(sql);
+        }
+
+        public static int UpdateMenuWings(
+            int id,
+            bool availableForPurchase,
+            string name,
+            decimal price6Piece,
+            decimal price12Piece,
+            decimal price18Piece,
+            string description,
+            bool hasMenuIcon,
+            string menuIconFile)
+        {
+            MenuWingsModel data = LoadMenuWings().Where(i => i.Id == id).First();
+
+            data.AvailableForPurchase = availableForPurchase;
+            data.Name = name;
+            data.Price6Piece = price6Piece;
+            data.Price12Piece = price12Piece;
+            data.Price18Piece = price18Piece;
+            data.Description = description;
+            data.HasMenuIcon = hasMenuIcon;
+            data.MenuIconFile = menuIconFile;
+
+            string sql = @"update dbo.MenuWings set AvailableForPurchase = @AvailableForPurchase, Name = @Name, Price6Piece = @Price6Piece, Price12Piece = @Price12Piece,
+                           Price18Piece = @Price18Piece, Description = @Description, HasMenuIcon = @HasMenuIcon, MenuIconFile = @MenuIconFile where Id = @Id;";
+
+            return SqlDataAccess.UpdateRecord(sql, data);
+        }
+
+        public static int AddMenuWings(
+            int id,
+            bool availableForPurchase,
+            string name,
+            decimal price6Piece,
+            decimal price12Piece,
+            decimal price18Piece,
+            string description,
+            bool hasMenuIcon,
+            string menuIconFile)
+        {
+            MenuWingsModel data = new MenuWingsModel();
+
+            data.AvailableForPurchase = availableForPurchase;
+            data.Name = name;
+            data.Price6Piece = price6Piece;
+            data.Price12Piece = price12Piece;
+            data.Price18Piece = price18Piece;
+            data.Description = description;
+            data.HasMenuIcon = hasMenuIcon;
+            data.MenuIconFile = menuIconFile;
+
+            string sql = @"insert into dbo.MenuWings (AvailableForPurchase, Name, Price6Piece, Price12Piece, Price18Piece, Description, HasMenuIcon, MenuIconFile) output Inserted.Id
+                           values (@AvailableForPurchase, @Name, @Price6Piece, @Price12Piece, @Price18Piece, @Description, @HasMenuIcon, @MenuIconFile);";
+
+            return SqlDataAccess.SaveNewRecord(sql, data);
+        }
+
         public static List<MenuSideModel> LoadMenuSides()
         {
             string sql = @"select Id, AvailableForPurchase, Name, Price, Description, ItemDetails, HasMenuIcon, MenuIconFile from dbo.MenuSide;";
