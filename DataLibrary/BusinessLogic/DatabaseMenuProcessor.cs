@@ -431,7 +431,7 @@ namespace DataLibrary.BusinessLogic
         /// <summary>
         /// Loads all menu dessert records.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of MenuDessertModels from the database.</returns>
         public static List<MenuDessertModel> LoadMenuDesserts()
         {
             string sql = @"select Id, AvailableForPurchase, Name, HasMenuIcon, MenuIconFile, Price, Description, ItemDetails from dbo.MenuDessert;";
