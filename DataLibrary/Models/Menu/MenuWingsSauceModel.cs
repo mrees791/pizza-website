@@ -9,5 +9,11 @@ namespace DataLibrary.Models.Menu
     public class MenuWingsSauceModel : MenuItemModel
     {
         public string Description { get; set; }
+
+        public MenuWingsSauceModel(int id, bool availableForPurchase, string name, string description) :
+            base(id, availableForPurchase, name)
+        {
+            Description = description;
+        }
     }
 }

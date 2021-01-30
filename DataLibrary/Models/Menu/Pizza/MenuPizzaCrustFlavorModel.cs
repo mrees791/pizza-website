@@ -8,5 +8,10 @@ namespace DataLibrary.Models.Menu.Pizza
 {
     public class MenuPizzaCrustFlavorModel : MenuPizzaItemModel
     {
+        public MenuPizzaCrustFlavorModel(int id, bool availableForPurchase, string name, bool hasMenuIcon, string menuIconFile,
+            bool hasPizzaBuilderImage, string pizzaBuilderImageFile, string description) :
+            base(id, availableForPurchase, name, hasMenuIcon, menuIconFile, hasPizzaBuilderImage, pizzaBuilderImageFile, description)
+        {
+        }
     }
 }

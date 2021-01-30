@@ -30,19 +30,8 @@ namespace DataLibrary.BusinessLogic
             bool hasPizzaBuilderImage,
             string pizzaBuilderImageFile)
         {
-            MenuPizzaCrustModel data = new MenuPizzaCrustModel();
-
-            data.Id = id;
-            data.AvailableForPurchase = availableForPurchase;
-            data.Name = name;
-            data.PriceSmall = priceSmall;
-            data.PriceMedium = priceMedium;
-            data.PriceLarge = priceLarge;
-            data.Description = description;
-            data.HasMenuIcon = hasMenuIcon;
-            data.MenuIconFile = menuIconFile;
-            data.HasPizzaBuilderImage = hasPizzaBuilderImage;
-            data.PizzaBuilderImageFile = pizzaBuilderImageFile;
+            MenuPizzaCrustModel data = new MenuPizzaCrustModel(id, availableForPurchase, name, hasMenuIcon, menuIconFile, hasPizzaBuilderImage, pizzaBuilderImageFile, description,
+                priceSmall, priceMedium, priceLarge);
 
             string sql = @"update dbo.MenuPizzaCrust set AvailableForPurchase = @AvailableForPurchase, Name = @Name, PriceSmall = @PriceSmall, PriceMedium = @PriceMedium, PriceLarge = @PriceLarge,
                            Description = @Description, HasMenuIcon = @HasMenuIcon, MenuIconFile = @MenuIconFile, HasPizzaBuilderImage = @HasPizzaBuilderImage, PizzaBuilderImageFile = @PizzaBuilderImageFile where Id = @Id;";
@@ -62,18 +51,8 @@ namespace DataLibrary.BusinessLogic
             bool hasPizzaBuilderImage,
             string pizzaBuilderImageFile)
         {
-            MenuPizzaCrustModel data = new MenuPizzaCrustModel();
-
-            data.AvailableForPurchase = availableForPurchase;
-            data.Name = name;
-            data.PriceSmall = priceSmall;
-            data.PriceMedium = priceMedium;
-            data.PriceLarge = priceLarge;
-            data.Description = description;
-            data.HasMenuIcon = hasMenuIcon;
-            data.MenuIconFile = menuIconFile;
-            data.HasPizzaBuilderImage = hasPizzaBuilderImage;
-            data.PizzaBuilderImageFile = pizzaBuilderImageFile;
+            MenuPizzaCrustModel data = new MenuPizzaCrustModel(0, availableForPurchase, name, hasMenuIcon, menuIconFile, hasPizzaBuilderImage, pizzaBuilderImageFile, description,
+                priceSmall, priceMedium, priceLarge);
 
             string sql = @"insert into dbo.MenuPizzaCrust (AvailableForPurchase, Name, PriceSmall, PriceMedium, PriceLarge, Description, HasMenuIcon, MenuIconFile, HasPizzaBuilderImage, PizzaBuilderImageFile)
                            output Inserted.Id values (@AvailableForPurchase, @Name, @PriceSmall, @PriceMedium, @PriceLarge, @Description, @HasMenuIcon, @MenuIconFile, @HasPizzaBuilderImage, @PizzaBuilderImageFile);";
@@ -101,19 +80,8 @@ namespace DataLibrary.BusinessLogic
             bool hasPizzaBuilderImage,
             string pizzaBuilderImageFile)
         {
-            MenuPizzaCheeseModel data = new MenuPizzaCheeseModel();
-
-            data.Id = id;
-            data.AvailableForPurchase = availableForPurchase;
-            data.Name = name;
-            data.PriceLight = priceLight;
-            data.PriceRegular = priceRegular;
-            data.PriceExtra = priceExtra;
-            data.Description = description;
-            data.HasMenuIcon = hasMenuIcon;
-            data.MenuIconFile = menuIconFile;
-            data.HasPizzaBuilderImage = hasPizzaBuilderImage;
-            data.PizzaBuilderImageFile = pizzaBuilderImageFile;
+            MenuPizzaCheeseModel data = new MenuPizzaCheeseModel(id, availableForPurchase, name, hasMenuIcon, menuIconFile, hasPizzaBuilderImage, pizzaBuilderImageFile, description,
+                priceLight, priceRegular, priceExtra);
 
             string sql = @"update dbo.MenuPizzaCheese set AvailableForPurchase = @AvailableForPurchase, Name = @Name, PriceLight = @PriceLight, PriceRegular = @PriceRegular, PriceExtra = @PriceExtra,
                            Description = @Description, HasMenuIcon = @HasMenuIcon, MenuIconFile = @MenuIconFile, HasPizzaBuilderImage = @HasPizzaBuilderImage, PizzaBuilderImageFile = @PizzaBuilderImageFile where Id = @Id;";
@@ -133,18 +101,8 @@ namespace DataLibrary.BusinessLogic
             bool hasPizzaBuilderImage,
             string pizzaBuilderImageFile)
         {
-            MenuPizzaCheeseModel data = new MenuPizzaCheeseModel();
-
-            data.AvailableForPurchase = availableForPurchase;
-            data.Name = name;
-            data.PriceLight = priceLight;
-            data.PriceRegular = priceRegular;
-            data.PriceExtra = priceExtra;
-            data.Description = description;
-            data.HasMenuIcon = hasMenuIcon;
-            data.MenuIconFile = menuIconFile;
-            data.HasPizzaBuilderImage = hasPizzaBuilderImage;
-            data.PizzaBuilderImageFile = pizzaBuilderImageFile;
+            MenuPizzaCheeseModel data = new MenuPizzaCheeseModel(0, availableForPurchase, name, hasMenuIcon, menuIconFile, hasPizzaBuilderImage, pizzaBuilderImageFile, description,
+                priceLight, priceRegular, priceExtra);
 
             string sql = @"insert into dbo.MenuPizzaCheese (AvailableForPurchase, Name, PriceLight, PriceRegular, PriceExtra, Description, HasMenuIcon, MenuIconFile, HasPizzaBuilderImage, PizzaBuilderImageFile)
                            output Inserted.Id values (@AvailableForPurchase, @Name, @PriceLight, @PriceRegular, @PriceExtra, @Description, @HasMenuIcon, @MenuIconFile, @HasPizzaBuilderImage, @PizzaBuilderImageFile);";

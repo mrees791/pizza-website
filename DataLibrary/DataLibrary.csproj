@@ -71,6 +71,7 @@
     <Compile Include="Models\Menu\MenuDipModel.cs" />
     <Compile Include="Models\Menu\MenuDrinkModel.cs" />
     <Compile Include="Models\Menu\MenuItemModel.cs" />
+    <Compile Include="Models\Menu\MenuItemWithIconModel.cs" />
     <Compile Include="Models\Menu\MenuPastaModel.cs" />
     <Compile Include="Models\Menu\MenuSauceModel.cs" />
     <Compile Include="Models\Menu\MenuSideModel.cs" />
