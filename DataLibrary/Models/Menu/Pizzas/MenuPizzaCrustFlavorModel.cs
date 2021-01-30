@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLibrary.Models.Menu
+namespace DataLibrary.Models.Menu.Pizzas
 {
-    public class MenuWingsSauceModel : MenuItemModel
+    public class MenuPizzaCrustFlavorModel : MenuPizzaItemModel
     {
-        public string Description { get; set; }
     }
 }

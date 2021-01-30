@@ -10,11 +10,5 @@ namespace DataLibrary.Models.Menu
     {
         public bool HasMenuIcon { get; set; }
         public string MenuIconFile { get; set; }
-
-        public MenuItemWithIconModel(int id, bool availableForPurchase, string name, bool hasMenuIcon, string menuIconFile) : base(id, availableForPurchase, name)
-        {
-            HasMenuIcon = hasMenuIcon;
-            MenuIconFile = menuIconFile;
-        }
     }
 }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
+using DataLibrary.Models.Factories;
 
 namespace DataLibrary.BusinessLogic
 {
@@ -41,7 +42,7 @@ namespace DataLibrary.BusinessLogic
             string name,
             string description)
         {
-            MenuWingsSauceModel data = new MenuWingsSauceModel(id, availableForPurchase, name, description);
+            MenuWingsSauceModel data = MenuFactory.CreateMenuWingsSauce(id, availableForPurchase, name, description);
 
             string sql = @"update dbo.MenuWingsSauce set AvailableForPurchase = @AvailableForPurchase, Name = @Name, Description = @Description where Id = @Id;";
 
@@ -60,7 +61,7 @@ namespace DataLibrary.BusinessLogic
             string name,
             string description)
         {
-            MenuWingsSauceModel data = new MenuWingsSauceModel(0, availableForPurchase, name, description);
+            MenuWingsSauceModel data = MenuFactory.CreateMenuWingsSauce(0, availableForPurchase, name, description);
 
             string sql = @"insert into dbo.MenuWingsSauce (AvailableForPurchase, Name, Description) output Inserted.Id
                            values (@AvailableForPurchase, @Name, @Description);";
@@ -103,7 +104,7 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuWingsModel data = new MenuWingsModel(id, availableForPurchase, name, hasMenuIcon, menuIconFile, price6Piece, price12Piece, price18Piece, description);
+            MenuWingsModel data = MenuFactory.CreateMenuWings(id, availableForPurchase, name, price6Piece, price12Piece, price18Piece, description, hasMenuIcon, menuIconFile);
 
             string sql = @"update dbo.MenuWings set AvailableForPurchase = @AvailableForPurchase, Name = @Name, Price6Piece = @Price6Piece, Price12Piece = @Price12Piece,
                            Price18Piece = @Price18Piece, Description = @Description, HasMenuIcon = @HasMenuIcon, MenuIconFile = @MenuIconFile where Id = @Id;";
@@ -133,7 +134,7 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuWingsModel data = new MenuWingsModel(0, availableForPurchase, name, hasMenuIcon, menuIconFile, price6Piece, price12Piece, price18Piece, description);
+            MenuWingsModel data = MenuFactory.CreateMenuWings(0, availableForPurchase, name, price6Piece, price12Piece, price18Piece, description, hasMenuIcon, menuIconFile);
 
             string sql = @"insert into dbo.MenuWings (AvailableForPurchase, Name, Price6Piece, Price12Piece, Price18Piece, Description, HasMenuIcon, MenuIconFile) output Inserted.Id
                            values (@AvailableForPurchase, @Name, @Price6Piece, @Price12Piece, @Price18Piece, @Description, @HasMenuIcon, @MenuIconFile);";
@@ -174,7 +175,7 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuSideModel data = new MenuSideModel(id, availableForPurchase, name, hasMenuIcon, menuIconFile, price, description, itemDetails);
+            MenuSideModel data = MenuFactory.CreateMenuSide(id, availableForPurchase, name, price, description, itemDetails, hasMenuIcon, menuIconFile);
 
             string sql = @"update dbo.MenuSide set AvailableForPurchase = @AvailableForPurchase, Name = @Name, Price = @Price, Description = @Description, ItemDetails = @ItemDetails,
                            HasMenuIcon = @HasMenuIcon, MenuIconFile = @MenuIconFile where Id = @Id;";
@@ -202,7 +203,7 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuSideModel data = new MenuSideModel(0, availableForPurchase, name, hasMenuIcon, menuIconFile, price, description, itemDetails);
+            MenuSideModel data = MenuFactory.CreateMenuSide(0, availableForPurchase, name, price, description, itemDetails, hasMenuIcon, menuIconFile);
 
             string sql = @"insert into dbo.MenuSide (AvailableForPurchase, Name, Price, Description, ItemDetails, HasMenuIcon, MenuIconFile) output Inserted.Id
                            values (@AvailableForPurchase, @Name, @Price, @Description, @ItemDetails, @HasMenuIcon, @MenuIconFile);";
@@ -243,7 +244,7 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuSauceModel data = new MenuSauceModel(id, availableForPurchase, name, hasMenuIcon, menuIconFile, price, description, itemDetails);
+            MenuSauceModel data = MenuFactory.CreateMenuSauce(id, availableForPurchase, name, price, description, itemDetails, hasMenuIcon, menuIconFile);
 
             string sql = @"update dbo.MenuSauce set AvailableForPurchase = @AvailableForPurchase, Name = @Name, Price = @Price, Description = @Description, ItemDetails = @ItemDetails,
                            HasMenuIcon = @HasMenuIcon, MenuIconFile = @MenuIconFile where Id = @Id;";
@@ -271,7 +272,7 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuSauceModel data = new MenuSauceModel(0, availableForPurchase, name, hasMenuIcon, menuIconFile, price, description, itemDetails);
+            MenuSauceModel data = MenuFactory.CreateMenuSauce(0, availableForPurchase, name, price, description, itemDetails, hasMenuIcon, menuIconFile);
 
             string sql = @"insert into dbo.MenuSauce (AvailableForPurchase, Name, Price, Description, ItemDetails, HasMenuIcon, MenuIconFile) output Inserted.Id
                            values (@AvailableForPurchase, @Name, @Price, @Description, @ItemDetails, @HasMenuIcon, @MenuIconFile);";
@@ -312,7 +313,7 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuPastaModel data = new MenuPastaModel(id, availableForPurchase, name, hasMenuIcon, menuIconFile, price, description, itemDetails);
+            MenuPastaModel data = MenuFactory.CreateMenuPasta(id, availableForPurchase, name, price, description, itemDetails, hasMenuIcon, menuIconFile);
 
             string sql = @"update dbo.MenuPasta set AvailableForPurchase = @AvailableForPurchase, Name = @Name, Price = @Price, Description = @Description, ItemDetails = @ItemDetails,
                            HasMenuIcon = @HasMenuIcon, MenuIconFile = @MenuIconFile where Id = @Id;";
@@ -340,7 +341,7 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuPastaModel data = new MenuPastaModel(0, availableForPurchase, name, hasMenuIcon, menuIconFile, price, description, itemDetails);
+            MenuPastaModel data = MenuFactory.CreateMenuPasta(0, availableForPurchase, name, price, description, itemDetails, hasMenuIcon, menuIconFile);
 
             string sql = @"insert into dbo.MenuPasta (AvailableForPurchase, Name, Price, Description, ItemDetails, HasMenuIcon, MenuIconFile) output Inserted.Id
                            values (@AvailableForPurchase, @Name, @Price, @Description, @ItemDetails, @HasMenuIcon, @MenuIconFile);";
@@ -393,8 +394,8 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuDrinkModel data = new MenuDrinkModel(id, availableForPurchase, name, hasMenuIcon, menuIconFile, availableIn20Oz, availableIn2Liter, availableIn2Pack12Oz, availableIn6Pack12Oz,
-                price20Oz, price2Liter, price2Pack12Oz, price6Pack12Oz, description);
+            MenuDrinkModel data = MenuFactory.CreateMenuDrink(id, availableForPurchase, name, availableIn20Oz, availableIn2Liter, availableIn2Pack12Oz, availableIn6Pack12Oz,
+                price20Oz, price2Liter, price2Pack12Oz, price6Pack12Oz, description, hasMenuIcon, menuIconFile);
 
             string sql = @"update dbo.MenuDrink set AvailableForPurchase = @AvailableForPurchase, Name = @Name, AvailableIn20Oz = @AvailableIn20Oz, AvailableIn2Liter = @AvailableIn2Liter,
                            AvailableIn2Pack12Oz = @AvailableIn2Pack12Oz, AvailableIn6Pack12Oz = @AvailableIn6Pack12Oz,
@@ -436,8 +437,8 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuDrinkModel data = new MenuDrinkModel(0, availableForPurchase, name, hasMenuIcon, menuIconFile, availableIn20Oz, availableIn2Liter, availableIn2Pack12Oz, availableIn6Pack12Oz,
-                price20Oz, price2Liter, price2Pack12Oz, price6Pack12Oz, description);
+            MenuDrinkModel data = MenuFactory.CreateMenuDrink(0, availableForPurchase, name, availableIn20Oz, availableIn2Liter, availableIn2Pack12Oz, availableIn6Pack12Oz,
+                price20Oz, price2Liter, price2Pack12Oz, price6Pack12Oz, description, hasMenuIcon, menuIconFile);
 
             string sql = @"insert into dbo.MenuDrink (AvailableForPurchase, Name, AvailableIn20Oz, AvailableIn2Liter, AvailableIn2Pack12Oz, AvailableIn6Pack12Oz,
                            Price20Oz, Price2Liter, Price2Pack12Oz, Price6Pack12Oz, Description, HasMenuIcon, MenuIconFile) output Inserted.Id
@@ -478,7 +479,7 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuDipModel data = new MenuDipModel(id, availableForPurchase, name, hasMenuIcon, menuIconFile, price, itemDetails);
+            MenuDipModel data = MenuFactory.CreateMenuDip(id, availableForPurchase, name, price, itemDetails, hasMenuIcon, menuIconFile);
 
             string sql = @"update dbo.MenuDip set AvailableForPurchase = @AvailableForPurchase, Name = @Name, HasMenuIcon = @HasMenuIcon, MenuIconFile = @MenuIconFile, Price = @Price, ItemDetails = @ItemDetails where Id = @Id;";
 
@@ -503,7 +504,7 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuDipModel data = new MenuDipModel(0, availableForPurchase, name, hasMenuIcon, menuIconFile, price, itemDetails);
+            MenuDipModel data = MenuFactory.CreateMenuDip(0, availableForPurchase, name, price, itemDetails, hasMenuIcon, menuIconFile);
 
             string sql = @"insert into dbo.MenuDip (AvailableForPurchase, Name, HasMenuIcon, MenuIconFile, Price, ItemDetails) output Inserted.Id values (@AvailableForPurchase, @Name, @HasMenuIcon, @MenuIconFile, @Price, @ItemDetails);";
 
@@ -543,7 +544,7 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuDessertModel data = new MenuDessertModel(id, availableForPurchase, name, hasMenuIcon, menuIconFile, price, description, itemDetails);
+            MenuDessertModel data = MenuFactory.CreateMenuDessert(id, availableForPurchase, name, price, description, itemDetails, hasMenuIcon, menuIconFile);
 
             string sql = @"update dbo.MenuDessert set AvailableForPurchase = @AvailableForPurchase, Name = @Name, HasMenuIcon = @HasMenuIcon, MenuIconFile = @MenuIconFile, Price = @Price, Description = @Description, ItemDetails = @ItemDetails where Id = @Id;";
 
@@ -570,7 +571,7 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuDessertModel data = new MenuDessertModel(0, availableForPurchase, name, hasMenuIcon, menuIconFile, price, description, itemDetails);
+            MenuDessertModel data = MenuFactory.CreateMenuDessert(0, availableForPurchase, name, price, description, itemDetails, hasMenuIcon, menuIconFile);
 
             string sql = @"insert into dbo.MenuDessert (AvailableForPurchase, Name, HasMenuIcon, MenuIconFile, Price, Description, ItemDetails) output Inserted.Id values (@AvailableForPurchase, @Name, @HasMenuIcon, @MenuIconFile, @Price, @Description, @ItemDetails);";
 
