@@ -10,6 +10,77 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabaseMenuPizzaProcessor
     {
+        public static List<MenuPizzaCrustModel> LoadMenuPizzaCrusts()
+        {
+            string sql = @"select Id, AvailableForPurchase, Name, PriceSmall, PriceMedium, PriceLarge, Description, HasMenuIcon, MenuIconFile, HasPizzaBuilderImage, PizzaBuilderImageFile from dbo.MenuPizzaCrust;";
+
+            return SqlDataAccess.LoadData<MenuPizzaCrustModel>(sql);
+        }
+
+        public static int UpdateMenuPizzaCrust(
+            int id,
+            bool availableForPurchase,
+            string name,
+            decimal priceSmall,
+            decimal priceMedium,
+            decimal priceLarge,
+            string description,
+            bool hasMenuIcon,
+            string menuIconFile,
+            bool hasPizzaBuilderImage,
+            string pizzaBuilderImageFile)
+        {
+            MenuPizzaCrustModel data = new MenuPizzaCrustModel();
+
+            data.Id = id;
+            data.AvailableForPurchase = availableForPurchase;
+            data.Name = name;
+            data.PriceSmall = priceSmall;
+            data.PriceMedium = priceMedium;
+            data.PriceLarge = priceLarge;
+            data.Description = description;
+            data.HasMenuIcon = hasMenuIcon;
+            data.MenuIconFile = menuIconFile;
+            data.HasPizzaBuilderImage = hasPizzaBuilderImage;
+            data.PizzaBuilderImageFile = pizzaBuilderImageFile;
+
+            string sql = @"update dbo.MenuPizzaCrust set AvailableForPurchase = @AvailableForPurchase, Name = @Name, PriceSmall = @PriceSmall, PriceMedium = @PriceMedium, PriceLarge = @PriceLarge,
+                           Description = @Description, HasMenuIcon = @HasMenuIcon, MenuIconFile = @MenuIconFile, HasPizzaBuilderImage = @HasPizzaBuilderImage, PizzaBuilderImageFile = @PizzaBuilderImageFile where Id = @Id;";
+
+            return SqlDataAccess.UpdateRecord(sql, data);
+        }
+
+        public static int AddMenuPizzaCrust(
+            bool availableForPurchase,
+            string name,
+            decimal priceSmall,
+            decimal priceMedium,
+            decimal priceLarge,
+            string description,
+            bool hasMenuIcon,
+            string menuIconFile,
+            bool hasPizzaBuilderImage,
+            string pizzaBuilderImageFile)
+        {
+            MenuPizzaCrustModel data = new MenuPizzaCrustModel();
+
+            data.AvailableForPurchase = availableForPurchase;
+            data.Name = name;
+            data.PriceSmall = priceSmall;
+            data.PriceMedium = priceMedium;
+            data.PriceLarge = priceLarge;
+            data.Description = description;
+            data.HasMenuIcon = hasMenuIcon;
+            data.MenuIconFile = menuIconFile;
+            data.HasPizzaBuilderImage = hasPizzaBuilderImage;
+            data.PizzaBuilderImageFile = pizzaBuilderImageFile;
+
+            string sql = @"insert into dbo.MenuPizzaCrust (AvailableForPurchase, Name, PriceSmall, PriceMedium, PriceLarge, Description, HasMenuIcon, MenuIconFile, HasPizzaBuilderImage, PizzaBuilderImageFile)
+                           output Inserted.Id values (@AvailableForPurchase, @Name, @PriceSmall, @PriceMedium, @PriceLarge, @Description, @HasMenuIcon, @MenuIconFile, @HasPizzaBuilderImage, @PizzaBuilderImageFile);";
+
+            return SqlDataAccess.SaveNewRecord(sql, data);
+        }
+
         public static List<MenuPizzaCheeseModel> LoadMenuPizzaCheeses()
         {
             string sql = @"select Id, AvailableForPurchase, Name, PriceLight, PriceRegular, PriceExtra, Description, HasMenuIcon, MenuIconFile, HasPizzaBuilderImage, PizzaBuilderImageFile from dbo.MenuPizzaCheese;";
