@@ -10,6 +10,48 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabaseMenuPizzaProcessor
     {
+        public static List<MenuPizzaCrustFlavorModel> LoadMenuPizzaCrustFlavors()
+        {
+            string sql = @"select Id, AvailableForPurchase, Name, Description, HasMenuIcon, MenuIconFile, HasPizzaBuilderImage, PizzaBuilderImageFile from dbo.MenuPizzaCrustFlavor;";
+
+            return SqlDataAccess.LoadData<MenuPizzaCrustFlavorModel>(sql);
+        }
+
+        public static int UpdateMenuPizzaCrustFlavor(
+            int id,
+            bool availableForPurchase,
+            string name,
+            string description,
+            bool hasMenuIcon,
+            string menuIconFile,
+            bool hasPizzaBuilderImage,
+            string pizzaBuilderImageFile)
+        {
+            MenuPizzaCrustFlavorModel data = new MenuPizzaCrustFlavorModel(id, availableForPurchase, name, hasMenuIcon, menuIconFile, hasPizzaBuilderImage, pizzaBuilderImageFile, description);
+
+            string sql = @"update dbo.MenuPizzaCrustFlavor set AvailableForPurchase = @AvailableForPurchase, Name = @Name, HasMenuIcon = @HasMenuIcon,
+                           MenuIconFile = @MenuIconFile, HasPizzaBuilderImage = @HasPizzaBuilderImage, PizzaBuilderImageFile = @PizzaBuilderImageFile, Description = @Description where Id = @Id;";
+
+            return SqlDataAccess.UpdateRecord(sql, data);
+        }
+
+        public static int AddMenuPizzaCrustFlavor(
+            bool availableForPurchase,
+            string name,
+            string description,
+            bool hasMenuIcon,
+            string menuIconFile,
+            bool hasPizzaBuilderImage,
+            string pizzaBuilderImageFile)
+        {
+            MenuPizzaCrustFlavorModel data = new MenuPizzaCrustFlavorModel(0, availableForPurchase, name, hasMenuIcon, menuIconFile, hasPizzaBuilderImage, pizzaBuilderImageFile, description);
+
+            string sql = @"insert into dbo.MenuPizzaCrustFlavor (AvailableForPurchase, Name, HasMenuIcon, MenuIconFile, HasPizzaBuilderImage, PizzaBuilderImageFile, Description)
+                           output Inserted.Id values (@AvailableForPurchase, @Name, @HasMenuIcon, @MenuIconFile, @HasPizzaBuilderImage, @PizzaBuilderImageFile, @Description);";
+
+            return SqlDataAccess.SaveNewRecord(sql, data);
+        }
+
         public static List<MenuPizzaCrustModel> LoadMenuPizzaCrusts()
         {
             string sql = @"select Id, AvailableForPurchase, Name, PriceSmall, PriceMedium, PriceLarge, Description, HasMenuIcon, MenuIconFile, HasPizzaBuilderImage, PizzaBuilderImageFile from dbo.MenuPizzaCrust;";
