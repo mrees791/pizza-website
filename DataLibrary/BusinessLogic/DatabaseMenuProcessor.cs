@@ -11,6 +11,9 @@ using System.Data.SqlClient;
 
 namespace DataLibrary.BusinessLogic
 {
+    /// <summary>
+    /// Provides database access methods for menu item tables.
+    /// </summary>
     public static class DatabaseMenuProcessor
     {
         /// <summary>
