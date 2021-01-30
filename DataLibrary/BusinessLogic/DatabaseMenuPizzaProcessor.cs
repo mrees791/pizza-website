@@ -49,5 +49,36 @@ namespace DataLibrary.BusinessLogic
 
             return SqlDataAccess.UpdateRecord(sql, data);
         }
+
+        public static int AddMenuPizzaCheese(
+            bool availableForPurchase,
+            string name,
+            decimal priceLight,
+            decimal priceRegular,
+            decimal priceExtra,
+            string description,
+            bool hasMenuIcon,
+            string menuIconFile,
+            bool hasPizzaBuilderImage,
+            string pizzaBuilderImageFile)
+        {
+            MenuPizzaCheeseModel data = new MenuPizzaCheeseModel();
+
+            data.AvailableForPurchase = availableForPurchase;
+            data.Name = name;
+            data.PriceLight = priceLight;
+            data.PriceRegular = priceRegular;
+            data.PriceExtra = priceExtra;
+            data.Description = description;
+            data.HasMenuIcon = hasMenuIcon;
+            data.MenuIconFile = menuIconFile;
+            data.HasPizzaBuilderImage = hasPizzaBuilderImage;
+            data.PizzaBuilderImageFile = pizzaBuilderImageFile;
+
+            string sql = @"insert into dbo.MenuPizzaCheese (AvailableForPurchase, Name, PriceLight, PriceRegular, PriceExtra, Description, HasMenuIcon, MenuIconFile, HasPizzaBuilderImage, PizzaBuilderImageFile)
+                           output Inserted.Id values (@AvailableForPurchase, @Name, @PriceLight, @PriceRegular, @PriceExtra, @Description, @HasMenuIcon, @MenuIconFile, @HasPizzaBuilderImage, @PizzaBuilderImageFile);";
+
+            return SqlDataAccess.SaveNewRecord(sql, data);
+        }
     }
 }
