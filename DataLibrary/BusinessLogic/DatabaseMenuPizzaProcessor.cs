@@ -13,7 +13,7 @@ namespace DataLibrary.BusinessLogic
         public static List<MenuPizzaSauceModel> LoadMenuPizzaSaucees()
         {
             string sql = @"select Id, AvailableForPurchase, Name, PriceLight, PriceRegular, PriceExtra,
-                           Description, HasMenuIcon, MenuIconFile, HasPizzaBuilderImage, PizzaBuilderImageFile from dbo.MenuPizzaSauceFlavor;";
+                           Description, HasMenuIcon, MenuIconFile, HasPizzaBuilderImage, PizzaBuilderImageFile from dbo.MenuPizzaSauce;";
 
             return SqlDataAccess.LoadData<MenuPizzaSauceModel>(sql);
         }
