@@ -41,8 +41,9 @@ namespace DataLibrary.BusinessLogic
             string name,
             string description)
         {
-            MenuWingsSauceModel data = LoadMenuWingsSauces().Where(i => i.Id == id).First();
+            MenuWingsSauceModel data = new MenuWingsSauceModel();
 
+            data.Id = id;
             data.AvailableForPurchase = availableForPurchase;
             data.Name = name;
             data.Description = description;
@@ -111,8 +112,9 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuWingsModel data = LoadMenuWings().Where(i => i.Id == id).First();
+            MenuWingsModel data = new MenuWingsModel();
 
+            data.Id = id;
             data.AvailableForPurchase = availableForPurchase;
             data.Name = name;
             data.Price6Piece = price6Piece;
@@ -200,8 +202,9 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuSideModel data = LoadMenuSides().Where(i => i.Id == id).First();
+            MenuSideModel data = new MenuSideModel();
 
+            data.Id = id;
             data.AvailableForPurchase = availableForPurchase;
             data.Name = name;
             data.Price = price;
@@ -285,8 +288,9 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuSauceModel data = LoadMenuSauces().Where(i => i.Id == id).First();
+            MenuSauceModel data = new MenuSauceModel();
 
+            data.Id = id;
             data.AvailableForPurchase = availableForPurchase;
             data.Name = name;
             data.Price = price;
@@ -370,8 +374,9 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuPastaModel data = LoadMenuPastas().Where(i => i.Id == id).First();
+            MenuPastaModel data = new MenuPastaModel();
 
+            data.Id = id;
             data.AvailableForPurchase = availableForPurchase;
             data.Name = name;
             data.Price = price;
@@ -467,8 +472,9 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuDrinkModel data = LoadMenuDrinks().Where(i => i.Id == id).First();
+            MenuDrinkModel data = new MenuDrinkModel();
 
+            data.Id = id;
             data.AvailableForPurchase = availableForPurchase;
             data.Name = name;
             data.AvailableIn20Oz = availableIn20Oz;
@@ -578,8 +584,9 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuDipModel data = LoadMenuDips().Where(i => i.Id == id).First();
+            MenuDipModel data = new MenuDipModel();
 
+            data.Id = id;
             data.AvailableForPurchase = availableForPurchase;
             data.Name = name;
             data.Price = price;
@@ -657,8 +664,9 @@ namespace DataLibrary.BusinessLogic
             bool hasMenuIcon,
             string menuIconFile)
         {
-            MenuDessertModel data = LoadMenuDesserts().Where(i => i.Id == id).First();
+            MenuDessertModel data = new MenuDessertModel();
 
+            data.Id = id;
             data.AvailableForPurchase = availableForPurchase;
             data.Name = name;
             data.Price = price;
