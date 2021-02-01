@@ -23,7 +23,7 @@ namespace DataLibrary.BusinessLogic
 
         private static int AddPizzaTopping(IDbConnection connection, IDbTransaction transaction, PizzaToppingModel toppingModel, PizzaModel pizzaModel)
         {
-            string insertSql = $"insert into dbo.PizzaTopping (PizzaId, ToppingHalf, MenuPizzaToppingId) output Inserted.Id values (@PizzaId, @ToppingHalf, @MenuPizzaToppingId);";
+            string insertSql = $"insert into dbo.PizzaTopping (PizzaId, ToppingHalf, ToppingAmount, MenuPizzaToppingId) output Inserted.Id values (@PizzaId, @ToppingHalf, @ToppingAmount, @MenuPizzaToppingId);";
 
             toppingModel.Id = connection.Query<int>(
                 insertSql,
@@ -31,6 +31,7 @@ namespace DataLibrary.BusinessLogic
                 {
                     PizzaId = pizzaModel.Id,
                     ToppingHalf = toppingModel.ToppingHalf,
+                    ToppingAmount = toppingModel.ToppingAmount,
                     MenuPizzaToppingId = toppingModel.MenuPizzaTopping.Id
                 },
                 transaction).Single();
@@ -38,18 +39,65 @@ namespace DataLibrary.BusinessLogic
             return toppingModel.Id;
         }
 
-        private static List<PizzaToppingModel> LoadPizzaToppings()
+        public static List<PizzaToppingModel> LoadPizzaToppings()
         {
-            string sql = @"select Id, PizzaId, ToppingHalf, MenuPizzaToppingId from dbo.PizzaTopping;";
+            string sql = @"select Id, PizzaId, ToppingHalf, ToppingAmount, MenuPizzaToppingId from dbo.PizzaTopping;";
+            List<PizzaToppingModel> pizzaToppingList = new List<PizzaToppingModel>();
+            List<MenuPizzaToppingModel> menuPizzaToppings = DatabaseMenuPizzaProcessor.LoadMenuPizzaToppings();
 
-            return SqlDataAccess.LoadData<PizzaToppingModel>(sql);
+            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
+            {
+                List<dynamic> queryList = connection.Query<dynamic>(sql).ToList();
+
+                foreach (var item in queryList)
+                {
+                    pizzaToppingList.Add(new PizzaToppingModel()
+                    {
+                        Id = item.Id,
+                        ToppingHalf = item.ToppingHalf,
+                        ToppingAmount = item.ToppingAmount,
+                        MenuPizzaTopping = menuPizzaToppings.Where(t => t.Id == item.MenuPizzaToppingId).First(),
+                        PizzaId = item.PizzaId
+                    });
+                }
+            }
+
+            return pizzaToppingList;
         }
 
         public static List<PizzaModel> LoadPizzas()
         {
             string sql = @"select Id, Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId from dbo.Pizza;";
 
-            return SqlDataAccess.LoadData<PizzaModel>(sql);
+            var pizzaList = new List<PizzaModel>();
+            List<PizzaToppingModel> pizzaToppingList = LoadPizzaToppings();
+            List<MenuPizzaCheeseModel> menuPizzaCheeseList = DatabaseMenuPizzaProcessor.LoadMenuPizzaCheeses();
+            List<MenuPizzaCrustModel> menuPizzaCrustList = DatabaseMenuPizzaProcessor.LoadMenuPizzaCrusts();
+            List<MenuPizzaCrustFlavorModel> menuPizzaCrustFlavorList = DatabaseMenuPizzaProcessor.LoadMenuPizzaCrustFlavors();
+            List<MenuPizzaSauceModel> menuPizzaSauceList = DatabaseMenuPizzaProcessor.LoadMenuPizzaSauces();
+
+            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
+            {
+                List<dynamic> queryList = connection.Query<dynamic>(sql).ToList();
+
+                foreach (var item in queryList)
+                {
+                    pizzaList.Add(new PizzaModel()
+                    {
+                        Id = item.Id,
+                        CheeseAmount = item.CheeseAmount,
+                        SauceAmount = item.SauceAmount,
+                        Size = item.Size,
+                        PizzaToppings = pizzaToppingList.Where(t => t.PizzaId == item.Id).ToList(),
+                        MenuPizzaCheese = menuPizzaCheeseList.Where(c => c.Id == item.MenuPizzaCheeseId).First(),
+                        MenuPizzaCrust = menuPizzaCrustList.Where(c => c.Id == item.MenuPizzaCrustId).First(),
+                        MenuPizzaCrustFlavor = menuPizzaCrustFlavorList.Where(c => c.Id == item.MenuPizzaCrustFlavorId).First(),
+                        MenuPizzaSauce = menuPizzaSauceList.Where(s => s.Id == item.MenuPizzaSauceId).First()
+                    });
+                }
+            }
+
+            return pizzaList;
         }
 
         public static int UpdatePizza(PizzaModel pizzaModel)
