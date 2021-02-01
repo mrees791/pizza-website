@@ -66,5 +66,10 @@ namespace DataLibrary.DataAccess
         {
             return connection.Query<int>(sql, data, transaction).Single();
         }
+
+        public static int DeleteRecord<T>(IDbConnection connection, IDbTransaction transaction, string sql, T data)
+        {
+            return connection.Execute(sql, data, transaction);
+        }
     }
 }
