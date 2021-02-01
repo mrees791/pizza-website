@@ -17,5 +17,11 @@ namespace DataLibrary.Models.Pizzas
         public MenuPizzaCheeseModel MenuPizzaCheese { get; set; }
         public string CheeseAmount { get; set; }
         public MenuPizzaCrustFlavorModel MenuPizzaCrustFlavor { get; set; }
+        public List<PizzaToppingModel> PizzaToppings { get; set; }
+
+        public PizzaModel()
+        {
+            PizzaToppings = new List<PizzaToppingModel>();
+        }
     }
 }

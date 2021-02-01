@@ -1,4 +1,5 @@
-﻿using DataLibrary.DataAccess;
+﻿using Dapper;
+using DataLibrary.DataAccess;
 using DataLibrary.Models.Menu.Pizzas;
 using DataLibrary.Models.Pizzas;
 using System;
@@ -13,82 +14,45 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabasePizzaProcessor
     {
-        private static int AddPizzaTopping(PizzaToppingModel databaseModel)
+        private static int AddPizzaTopping(IDbConnection connection, IDbTransaction transaction, PizzaToppingModel toppingModel, PizzaModel pizzaModel)
         {
-            string sql = @"insert into dbo.PizzaTopping (PizzaId, ToppingHalf, MenuPizzaToppingId) output Inserted.Id
-                           values (@PizzaId, @ToppingHalf, @MenuPizzaToppingId);";
+            string sql = $"insert into dbo.PizzaTopping (PizzaId, ToppingHalf, MenuPizzaToppingId) output Inserted.Id values ({pizzaModel.Id}, @ToppingHalf, {toppingModel.MenuPizzaTopping.Id});";
 
-            return SqlDataAccess.SaveNewRecord(sql, databaseModel);
+            return SqlDataAccess.SaveNewRecord(connection, transaction, sql, toppingModel);
         }
 
-        /*public static int AddPizza(
-            string size,
-            MenuPizzaCrustModel menuPizzaCrust,
-            MenuPizzaSauceModel menuPizzaSauce,
-            string sauceAmount,
-            MenuPizzaCheeseModel menuPizzaCheese,
-            string cheeseAmount,
-            MenuPizzaCrustFlavorModel menuPizzaCrustFlavor,
-            List<PizzaToppingModel> pizzaToppings)*/
-        /*public static int AddPizza(
-            string size,
-            int menuPizzaCrustId,
-            int menuPizzaSauceId,
-            string sauceAmount,
-            int menuPizzaCheeseId,
-            string cheeseAmount,
-            int menuPizzaCrustFlavorId,
-            List<PizzaToppingModel> pizzaToppings)
+        public static int AddPizza(PizzaModel pizzaModel)
         {
+            string pizzaSql = $"insert into dbo.Pizza (Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId) output Inserted.Id values (@Size, {pizzaModel.MenuPizzaCrust.Id}, {pizzaModel.MenuPizzaSauce.Id}, @SauceAmount, {pizzaModel.MenuPizzaCheese.Id}, @CheeseAmount, {pizzaModel.MenuPizzaCrustFlavor.Id});";
 
-            /*PizzaModel data = PizzaFactory.CreatePizza(0, size, menuPizzaCrust, menuPizzaSauce, sauceAmount, menuPizzaCheese, cheeseAmount, menuPizzaCrustFlavor);
-
-            // WILL REQUIRE TRANSACTION
-
-            // INSERT NEW PIZZA RECORD
-            // INSERT PIZZA TOPPINGS RECORDS
-
-            string sql = @"insert into dbo.Pizza (AvailableForPurchase, Name, Description) output Inserted.Id
-                           values (@AvailableForPurchase, @Name, @Description);";
-
-
-            using (IDbConnection cnn = new SqlConnection(SqlDataAccess.GetConnectiongString()))
+            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
-                cnn.Open();
+                connection.Open();
 
-                using (var transaction = cnn.BeginTransaction())
+                using (var transaction = connection.BeginTransaction())
                 {
                     try
                     {
+                        // Save pizza record
+                        pizzaModel.Id = SqlDataAccess.SaveNewRecord(connection, transaction, pizzaSql, pizzaModel);
 
+                        // Save pizza topping records
+                        foreach (var pizzaTopping in pizzaModel.PizzaToppings)
+                        {
+                            AddPizzaTopping(connection, transaction, pizzaTopping, pizzaModel);
+                        }
+
+                        transaction.Commit();
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-
                         throw;
                     }
                 }
 
-                //return cnn.Query<T>(sql).ToList();
+                return pizzaModel.Id;
             }
-
-            // Insert 
-            string sql = @"insert into dbo.MenuWingsSauce (AvailableForPurchase, Name, Description) output Inserted.Id
-                           values (@AvailableForPurchase, @Name, @Description);";
-
-            //return SqlDataAccess.SaveNewRecord(sql, data);
-
-            throw new NotImplementedException();
-    }*/
-
-        public static int UpdatePizza()
-        {
-            // WILL REQUIRE MULTIPLE QUERIES (TRANSACTION NEEDED)
-
-            // Remove previous pizza toppings.
-
-            throw new NotImplementedException();
         }
     }
 }

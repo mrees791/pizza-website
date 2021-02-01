@@ -10,7 +10,6 @@ namespace DataLibrary.Models.Pizzas
     public class PizzaToppingModel
     {
         public int Id { get; set; }
-        public PizzaModel Pizza { get; set; }
         public string ToppingHalf { get; set; }
         public MenuPizzaToppingModel MenuPizzaTopping { get; set; }
     }
