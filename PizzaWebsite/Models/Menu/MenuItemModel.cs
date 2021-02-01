@@ -13,12 +13,13 @@ namespace PizzaWebsite.Models.Menu
     {
         public bool IsNewRecord { get; set; }
 
+        public int Id { get; set; }
+
+        [Display(Name = "Name")]
+        [Required]
+        public string Name { get; set; }
+
         [Display(Name = "Available For Purchase")]
         public bool AvailableForPurchase { get; set; }
-
-        public bool HasMenuIcon { get; set; }
-
-        [Display(Name = "Menu Icon")]
-        public string MenuIconUrl { get; set; }
     }
 }

@@ -126,8 +126,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Manage\ManagePizzaIngredientsModel.cs" />
+    <Compile Include="Models\MenuItemWithIconModel.cs" />
     <Compile Include="Models\Menu\MenuDipModel.cs" />
     <Compile Include="Models\Menu\MenuItemModel.cs" />
+    <Compile Include="Models\Menu\MenuWingsSauceModel.cs" />
     <Compile Include="Models\Menu\Pizzas\Ingredients\CheeseModel.cs" />
     <Compile Include="Models\Menu\Pizzas\Ingredients\CrustModel.cs" />
     <Compile Include="Models\Menu\Pizzas\Ingredients\CrustFlavor.cs" />

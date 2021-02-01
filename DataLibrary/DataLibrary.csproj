@@ -66,9 +66,15 @@
   <ItemGroup>
     <Compile Include="BusinessLogic\DatabaseMenuPizzaProcessor.cs" />
     <Compile Include="BusinessLogic\DatabaseMenuProcessor.cs" />
+    <Compile Include="BusinessLogic\DatabasePizzaProcessor.cs" />
     <Compile Include="DataAccess\SqlDataAccess.cs" />
-    <Compile Include="Models\Factories\MenuFactory.cs" />
-    <Compile Include="Models\Factories\MenuPizzaFactory.cs" />
+    <Compile Include="Models\Carts\CartDessertModel.cs" />
+    <Compile Include="Models\Carts\CartDipModel.cs" />
+    <Compile Include="Models\Carts\CartDrinkModel.cs" />
+    <Compile Include="Models\Carts\CartItemModel.cs" />
+    <Compile Include="Models\Carts\CartModel.cs" />
+    <Compile Include="Models\Carts\CartPastaModel.cs" />
+    <Compile Include="Models\Carts\CartPizzaModel.cs" />
     <Compile Include="Models\Menu\MenuDessertModel.cs" />
     <Compile Include="Models\Menu\MenuDipModel.cs" />
     <Compile Include="Models\Menu\MenuDrinkModel.cs" />
@@ -85,6 +91,9 @@
     <Compile Include="Models\Menu\Pizzas\MenuPizzaItemModel.cs" />
     <Compile Include="Models\Menu\Pizzas\MenuPizzaSauceModel.cs" />
     <Compile Include="Models\Menu\Pizzas\MenuPizzaToppingModel.cs" />
+    <Compile Include="Models\Pizzas\PizzaCategoryModel.cs" />
+    <Compile Include="Models\Pizzas\PizzaModel.cs" />
+    <Compile Include="Models\Pizzas\PizzaToppingModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
