@@ -85,7 +85,7 @@ namespace DataLibrary.BusinessLogic
                             },
                             transaction).Single();
 
-                        // Add pizza topping records
+                        // Save pizza topping records
                         foreach (var pizzaTopping in pizzaModel.PizzaToppings)
                         {
                             AddPizzaTopping(connection, transaction, pizzaTopping, pizzaModel);
