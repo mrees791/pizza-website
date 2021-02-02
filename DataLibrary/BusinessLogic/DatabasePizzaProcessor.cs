@@ -32,8 +32,6 @@ namespace DataLibrary.BusinessLogic
 
         public static void DeletePizza(PizzaModel pizzaModel)
         {
-            string deletePizzaSql = $"delete from dbo.Pizza where Id = @Id;";
-
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
                 connection.Open();
@@ -204,6 +202,7 @@ namespace DataLibrary.BusinessLogic
             string pizzaSql = @"insert into dbo.Pizza (Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId) output Inserted.Id
                                 values (@Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId);";
 
+            // Save pizza record
             pizzaModel.Id = SqlDataAccess.SaveNewRecord(pizzaSql,
                 new
                 {
