@@ -134,11 +134,45 @@ namespace DataLibrary.BusinessLogic
             return pizzaList;
         }
 
-        public static void UpdatePizza(PizzaModel pizzaModel)
+        public static int UpdatePizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
         {
             string pizzaSql = @"update dbo.Pizza set Size = @Size, MenuPizzaCrustId = @MenuPizzaCrustId, MenuPizzaSauceId = @MenuPizzaSauceId, 
                                 SauceAmount = @SauceAmount, MenuPizzaCheeseId = @MenuPizzaCheeseId, CheeseAmount = @CheeseAmount, MenuPizzaCrustFlavorId = @MenuPizzaCrustFlavorId where Id = @Id;";
 
+            // Delete previous pizza topping records
+            DeletePizzaToppings(connection, transaction, pizzaModel);
+
+            // Update pizza record
+            int rowsAffectedPizza = SqlDataAccess.UpdateRecord(pizzaSql,
+                new
+                {
+                    Id = pizzaModel.Id,
+                    Size = pizzaModel.Size,
+                    MenuPizzaCrustId = pizzaModel.MenuPizzaCrust.Id,
+                    MenuPizzaSauceId = pizzaModel.MenuPizzaSauce.Id,
+                    SauceAmount = pizzaModel.SauceAmount,
+                    MenuPizzaCheeseId = pizzaModel.MenuPizzaCheese.Id,
+                    CheeseAmount = pizzaModel.CheeseAmount,
+                    MenuPizzaCrustFlavorId = pizzaModel.MenuPizzaCrustFlavor.Id
+                },
+                connection, transaction);
+
+            if (rowsAffectedPizza == 0)
+            {
+                throw new Exception($"Unable to update pizza with ID: {pizzaModel.Id}");
+            }
+
+            // Save new pizza topping records
+            foreach (var pizzaTopping in pizzaModel.PizzaToppings)
+            {
+                AddPizzaTopping(pizzaTopping, pizzaModel, connection, transaction);
+            }
+
+            return rowsAffectedPizza;
+        }
+
+        public static void UpdatePizza(PizzaModel pizzaModel)
+        {
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
                 connection.Open();
@@ -147,36 +181,7 @@ namespace DataLibrary.BusinessLogic
                 {
                     try
                     {
-                        // Delete previous pizza topping records
-                        DeletePizzaToppings(connection, transaction, pizzaModel);
-
-                        // Update pizza record
-                        int rowsAffectedPizza = connection.Execute(
-                            pizzaSql,
-                            new
-                            {
-                                Id = pizzaModel.Id,
-                                Size = pizzaModel.Size,
-                                MenuPizzaCrustId = pizzaModel.MenuPizzaCrust.Id,
-                                MenuPizzaSauceId = pizzaModel.MenuPizzaSauce.Id,
-                                SauceAmount = pizzaModel.SauceAmount,
-                                MenuPizzaCheeseId = pizzaModel.MenuPizzaCheese.Id,
-                                CheeseAmount = pizzaModel.CheeseAmount,
-                                MenuPizzaCrustFlavorId = pizzaModel.MenuPizzaCrustFlavor.Id
-                            },
-                            transaction);
-
-                        if (rowsAffectedPizza == 0)
-                        {
-                            throw new Exception($"Unable to update pizza with ID: {pizzaModel.Id}");
-                        }
-
-                        // Save new pizza topping records
-                        foreach (var pizzaTopping in pizzaModel.PizzaToppings)
-                        {
-                            AddPizzaTopping(pizzaTopping, pizzaModel, connection, transaction);
-                        }
-
+                        UpdatePizza(pizzaModel, connection, transaction);
                         transaction.Commit();
                     }
                     catch (Exception ex)

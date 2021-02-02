@@ -46,7 +46,7 @@ namespace DataLibrary.DataAccess
             }
         }
 
-        public static int UpdateRecord(IDbConnection connection, IDbTransaction transaction, string sql, object data)
+        public static int UpdateRecord(string sql, object data, IDbConnection connection, IDbTransaction transaction)
         {
             return connection.Execute(sql, data, transaction);
         }
