@@ -14,12 +14,11 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabasePizzaProcessor
     {
-        /*private static int DeletePizzaTopping(IDbConnection connection, IDbTransaction transaction, PizzaToppingModel pizzaToppingModel)
-        {
-            string sql = $"delete from dbo.PizzaTopping where Id = @Id";
+        // AddPizzaCategory
+        // LoadPizzaCategories
+        // DeletePizzaCategory
 
-            return SqlDataAccess.DeleteRecord(connection, transaction, sql, pizzaToppingModel);
-        }*/
+
 
         private static int DeletePizzaToppings(IDbConnection connection, IDbTransaction transaction, PizzaModel pizzaModel)
         {

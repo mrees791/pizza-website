@@ -1,12 +1,13 @@
-﻿using System;
+﻿using DataLibrary.Models.Pizzas;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLibrary.Models.Pizzas
+namespace DataLibrary.Models.Menu.Pizzas
 {
-    public class PizzaCategoryModel
+    public class MenuPizzaCategoryModel
     {
         public int Id { get; set; }
         public PizzaModel Pizza { get; set; }

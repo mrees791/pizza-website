@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[PizzaCategory]
+﻿CREATE TABLE [dbo].[MenuPizzaCategory]
 (
   [Id] INT NOT NULL IDENTITY,
   [PizzaId] INT NOT NULL,

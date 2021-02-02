@@ -87,7 +87,7 @@
     <Build Include="dbo\Tables\MenuWings.sql" />
     <Build Include="dbo\Tables\MenuWingsSauce.sql" />
     <Build Include="dbo\Tables\Pizza.sql" />
-    <Build Include="dbo\Tables\PizzaCategory.sql" />
+    <Build Include="dbo\Tables\MenuPizzaCategory.sql" />
     <Build Include="dbo\Tables\PizzaTopping.sql" />
     <Build Include="dbo\Tables\StoreLocation.sql" />
     <Build Include="dbo\Tables\User.sql" />
