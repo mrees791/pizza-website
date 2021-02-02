@@ -16,7 +16,49 @@ namespace DataLibrary.BusinessLogic
     {
         public static int UpdateMenuPizzaCategory(MenuPizzaCategoryModel menuPizzaCategoryModel)
         {
-            throw new NotImplementedException();
+            string updateSql = @"update dbo.MenuPizzaCategory set CategoryName = @CategoryName, AvailableForPurchase = @AvailableForPurchase, PizzaName = @PizzaName, Description = @Description where Id = @Id;";
+
+            // Within a transaction
+            int menuPizzaCategoryRowsUpdated = 0;
+
+            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
+            {
+                connection.Open();
+
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Update pizza record
+                        int pizzaRecordsUpdated = DatabasePizzaProcessor.UpdatePizza(menuPizzaCategoryModel.Pizza, connection, transaction);
+                        // Update menu pizza category record
+                        menuPizzaCategoryRowsUpdated = SqlDataAccess.UpdateRecord(updateSql,
+                            new
+                            {
+                                Id = menuPizzaCategoryModel.Id,
+                                CategoryName = menuPizzaCategoryModel.CategoryName,
+                                AvailableForPurchase = menuPizzaCategoryModel.AvailableForPurchase,
+                                PizzaName = menuPizzaCategoryModel.PizzaName,
+                                Description = menuPizzaCategoryModel.Description
+                            },
+                            connection, transaction);
+
+                        if (menuPizzaCategoryRowsUpdated == 0)
+                        {
+                            throw new Exception($"Unable to update menu pizza category. ID: {menuPizzaCategoryModel.Id}");
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+
+            return menuPizzaCategoryRowsUpdated;
         }
 
         public static List<MenuPizzaCategoryModel> LoadMenuPizzaCategories()
