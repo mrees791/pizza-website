@@ -50,7 +50,7 @@ namespace DataLibrary.BusinessLogic
         public static int DeleteMenuPizzaCategory(MenuPizzaCategoryModel menuPizzaCategoryModel)
         {
             int menuPizzaCategorieRowsDeleted = 0;
-            string deleteSql = @"delete from dbo.Pizza where Id = @Id;";
+            string deleteSql = @"delete from dbo.MenuPizzaCategory where Id = @Id;";
 
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
@@ -60,6 +60,9 @@ namespace DataLibrary.BusinessLogic
                 {
                     try
                     {
+                        // Delete menu pizza category record
+                        menuPizzaCategorieRowsDeleted = SqlDataAccess.DeleteRecord(deleteSql, menuPizzaCategoryModel, connection, transaction);
+
                         // Delete pizza record
                         int pizzaRecordsDeleted = DatabasePizzaProcessor.DeletePizza(menuPizzaCategoryModel.Pizza, connection, transaction);
 
@@ -67,9 +70,6 @@ namespace DataLibrary.BusinessLogic
                         {
                             throw new Exception($"Unable to delete pizza record. Pizza ID: {menuPizzaCategoryModel.Pizza.Id}");
                         }
-
-                        // Delete menu pizza category record
-                        menuPizzaCategorieRowsDeleted = SqlDataAccess.DeleteRecord(deleteSql, menuPizzaCategoryModel, connection, transaction);
 
                         transaction.Commit();
                     }
