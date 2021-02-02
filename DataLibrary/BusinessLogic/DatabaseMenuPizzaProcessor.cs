@@ -10,9 +10,25 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabaseMenuPizzaProcessor
     {
-        // AddPizzaCategory
-        // LoadPizzaCategories
-        // DeletePizzaCategory
+        public static List<MenuPizzaCategoryModel> LoadMenuPizzaCategories()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static int UpdateMenuPizzaCategory(MenuPizzaCategoryModel menuPizzaCategoryModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static int AddMenuPizzaCategory(MenuPizzaCategoryModel menuPizzaCategoryModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static int DeleteMenuPizzaCategory(MenuPizzaCategoryModel menuPizzaCategoryModel)
+        {
+            throw new NotImplementedException();
+        }
 
         public static List<MenuPizzaToppingModel> LoadMenuPizzaToppings()
         {
