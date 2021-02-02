@@ -197,7 +197,12 @@ namespace DataLibrary.BusinessLogic
                         // Save pizza topping records
                         foreach (var pizzaTopping in pizzaModel.PizzaToppings)
                         {
-                            AddPizzaTopping(connection, transaction, pizzaTopping, pizzaModel);
+                            int rowsAffectedTopping = AddPizzaTopping(connection, transaction, pizzaTopping, pizzaModel);
+
+                            if (rowsAffectedTopping == 0)
+                            {
+                                throw new Exception($"Unable to add pizza topping record: Pizza ID: {pizzaModel.Id}, Pizza Topping Type ID: {pizzaTopping.MenuPizzaTopping.Id}, Pizza Topping Name: {pizzaTopping.MenuPizzaTopping.Name}");
+                            }
                         }
 
                         transaction.Commit();
