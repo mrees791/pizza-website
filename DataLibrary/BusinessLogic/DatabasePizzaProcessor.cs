@@ -56,7 +56,7 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.DeleteRecord(sql, pizzaModel, connection, transaction);
         }
 
-        private static int AddPizzaTopping(IDbConnection connection, IDbTransaction transaction, PizzaToppingModel toppingModel, PizzaModel pizzaModel)
+        private static int AddPizzaTopping(PizzaToppingModel toppingModel, PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
         {
             string insertSql = $"insert into dbo.PizzaTopping (PizzaId, ToppingHalf, ToppingAmount, MenuPizzaToppingId) output Inserted.Id values (@PizzaId, @ToppingHalf, @ToppingAmount, @MenuPizzaToppingId);";
 
@@ -174,12 +174,7 @@ namespace DataLibrary.BusinessLogic
                         // Save new pizza topping records
                         foreach (var pizzaTopping in pizzaModel.PizzaToppings)
                         {
-                            int rowsAffectedTopping = AddPizzaTopping(connection, transaction, pizzaTopping, pizzaModel);
-
-                            if (rowsAffectedTopping == 0)
-                            {
-                                throw new Exception($"Unable to add pizza topping record: Pizza ID: {pizzaModel.Id}, Pizza Topping Type ID: {pizzaTopping.MenuPizzaTopping.Id}, Pizza Topping Name: {pizzaTopping.MenuPizzaTopping.Name}");
-                            }
+                            AddPizzaTopping(pizzaTopping, pizzaModel, connection, transaction);
                         }
 
                         transaction.Commit();
@@ -193,6 +188,33 @@ namespace DataLibrary.BusinessLogic
             }
         }
 
+        public static int AddPizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
+        {
+            string pizzaSql = @"insert into dbo.Pizza (Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId) output Inserted.Id
+                                values (@Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId);";
+
+            pizzaModel.Id = SqlDataAccess.SaveNewRecord(pizzaSql,
+                new
+                {
+                    Size = pizzaModel.Size,
+                    MenuPizzaCrustId = pizzaModel.MenuPizzaCrust.Id,
+                    MenuPizzaSauceId = pizzaModel.MenuPizzaSauce.Id,
+                    SauceAmount = pizzaModel.SauceAmount,
+                    MenuPizzaCheeseId = pizzaModel.MenuPizzaCheese.Id,
+                    CheeseAmount = pizzaModel.CheeseAmount,
+                    MenuPizzaCrustFlavorId = pizzaModel.MenuPizzaCrust.Id
+                },
+                connection, transaction);
+
+            // Save pizza topping records
+            foreach (var pizzaTopping in pizzaModel.PizzaToppings)
+            {
+                AddPizzaTopping(pizzaTopping, pizzaModel, connection, transaction);
+            }
+
+            return pizzaModel.Id;
+        }
+
         /// <summary>
         /// Adds a new pizza record and pizza topping records.
         /// </summary>
@@ -200,9 +222,6 @@ namespace DataLibrary.BusinessLogic
         /// <returns>ID of newly added pizza.</returns>
         public static int AddPizza(PizzaModel pizzaModel)
         {
-            string pizzaSql = @"insert into dbo.Pizza (Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId) output Inserted.Id
-                                values (@Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId);";
-
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
                 connection.Open();
@@ -211,30 +230,7 @@ namespace DataLibrary.BusinessLogic
                 {
                     try
                     {
-                        pizzaModel.Id = SqlDataAccess.SaveNewRecord(pizzaSql,
-                            new
-                            {
-                                Size = pizzaModel.Size,
-                                MenuPizzaCrustId = pizzaModel.MenuPizzaCrust.Id,
-                                MenuPizzaSauceId = pizzaModel.MenuPizzaSauce.Id,
-                                SauceAmount = pizzaModel.SauceAmount,
-                                MenuPizzaCheeseId = pizzaModel.MenuPizzaCheese.Id,
-                                CheeseAmount = pizzaModel.CheeseAmount,
-                                MenuPizzaCrustFlavorId = pizzaModel.MenuPizzaCrust.Id
-                            },
-                            connection, transaction);
-
-                        // Save pizza topping records
-                        foreach (var pizzaTopping in pizzaModel.PizzaToppings)
-                        {
-                            int rowsAffectedTopping = AddPizzaTopping(connection, transaction, pizzaTopping, pizzaModel);
-
-                            if (rowsAffectedTopping == 0)
-                            {
-                                throw new Exception($"Unable to add pizza topping record: Pizza ID: {pizzaModel.Id}, Pizza Topping Type ID: {pizzaTopping.MenuPizzaTopping.Id}, Pizza Topping Name: {pizzaTopping.MenuPizzaTopping.Name}");
-                            }
-                        }
-
+                        pizzaModel.Id = AddPizza(pizzaModel, connection, transaction);
                         transaction.Commit();
                     }
                     catch (Exception ex)
@@ -243,9 +239,9 @@ namespace DataLibrary.BusinessLogic
                         throw;
                     }
                 }
-
-                return pizzaModel.Id;
             }
+
+            return pizzaModel.Id;
         }
     }
 }
