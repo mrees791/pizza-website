@@ -102,6 +102,12 @@ namespace DataLibrary.BusinessLogic
 
         public static int UpdatePizza(PizzaModel pizzaModel)
         {
+            // Executed in a transaction
+
+            // Remove old pizza topping records
+            // Update pizza record
+            // Add new pizza topping records
+
             throw new NotImplementedException();
         }
 
