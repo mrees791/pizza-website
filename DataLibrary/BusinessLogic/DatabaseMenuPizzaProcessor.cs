@@ -10,6 +10,10 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabaseMenuPizzaProcessor
     {
+        // AddPizzaCategory
+        // LoadPizzaCategories
+        // DeletePizzaCategory
+
         public static List<MenuPizzaToppingModel> LoadMenuPizzaToppings()
         {
             string sql = @"select Id, AvailableForPurchase, Name, PriceLight, PriceRegular, PriceExtra,

@@ -85,13 +85,13 @@
     <Compile Include="Models\Menu\MenuSideModel.cs" />
     <Compile Include="Models\Menu\MenuWingsModel.cs" />
     <Compile Include="Models\Menu\MenuWingsSauceModel.cs" />
+    <Compile Include="Models\Menu\Pizzas\MenuPizzaCategoryModel.cs" />
     <Compile Include="Models\Menu\Pizzas\MenuPizzaCheeseModel.cs" />
     <Compile Include="Models\Menu\Pizzas\MenuPizzaCrustFlavorModel.cs" />
     <Compile Include="Models\Menu\Pizzas\MenuPizzaCrustModel.cs" />
     <Compile Include="Models\Menu\Pizzas\MenuPizzaItemModel.cs" />
     <Compile Include="Models\Menu\Pizzas\MenuPizzaSauceModel.cs" />
     <Compile Include="Models\Menu\Pizzas\MenuPizzaToppingModel.cs" />
-    <Compile Include="Models\Pizzas\PizzaCategoryModel.cs" />
     <Compile Include="Models\Pizzas\PizzaModel.cs" />
     <Compile Include="Models\Pizzas\PizzaToppingModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
