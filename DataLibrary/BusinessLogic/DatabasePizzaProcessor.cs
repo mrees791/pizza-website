@@ -14,9 +14,25 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabasePizzaProcessor
     {
+        public static void DeletePizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
+        {
+            string deletePizzaSql = $"delete from dbo.Pizza where Id = @Id;";
+
+            // Delete pizza topping records
+            DeletePizzaToppings(pizzaModel, connection, transaction);
+
+            // Delete pizza record
+            int rowsDeletedPizza = SqlDataAccess.DeleteRecord(deletePizzaSql, pizzaModel, connection, transaction);
+
+            if (rowsDeletedPizza == 0)
+            {
+                throw new Exception($"Unable to delete pizza with ID: {pizzaModel.Id}");
+            }
+        }
+
         public static void DeletePizza(PizzaModel pizzaModel)
         {
-            string deletePizzaSql = $"delete from dbo.Pizza where Id = @Id";
+            string deletePizzaSql = $"delete from dbo.Pizza where Id = @Id;";
 
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
@@ -26,17 +42,7 @@ namespace DataLibrary.BusinessLogic
                 {
                     try
                     {
-                        // Delete pizza topping records
-                        DeletePizzaToppings(connection, transaction, pizzaModel);
-
-                        // Delete pizza record
-                        int rowsDeletedPizza = SqlDataAccess.DeleteRecord(deletePizzaSql, pizzaModel, connection, transaction);
-
-                        if (rowsDeletedPizza == 0)
-                        {
-                            throw new Exception($"Unable to delete pizza with ID: {pizzaModel.Id}");
-                        }
-
+                        DeletePizza(pizzaModel, connection, transaction);
                         transaction.Commit();
                     }
                     catch (Exception ex)
@@ -49,7 +55,7 @@ namespace DataLibrary.BusinessLogic
         }
 
 
-        private static int DeletePizzaToppings(IDbConnection connection, IDbTransaction transaction, PizzaModel pizzaModel)
+        private static int DeletePizzaToppings(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
         {
             string sql = $"delete from dbo.PizzaTopping where PizzaTopping.PizzaId = @Id;";
 
@@ -140,7 +146,7 @@ namespace DataLibrary.BusinessLogic
                                 SauceAmount = @SauceAmount, MenuPizzaCheeseId = @MenuPizzaCheeseId, CheeseAmount = @CheeseAmount, MenuPizzaCrustFlavorId = @MenuPizzaCrustFlavorId where Id = @Id;";
 
             // Delete previous pizza topping records
-            DeletePizzaToppings(connection, transaction, pizzaModel);
+            DeletePizzaToppings(pizzaModel, connection, transaction);
 
             // Update pizza record
             int rowsAffectedPizza = SqlDataAccess.UpdateRecord(pizzaSql,
