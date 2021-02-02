@@ -212,7 +212,7 @@ namespace DataLibrary.BusinessLogic
                     SauceAmount = pizzaModel.SauceAmount,
                     MenuPizzaCheeseId = pizzaModel.MenuPizzaCheese.Id,
                     CheeseAmount = pizzaModel.CheeseAmount,
-                    MenuPizzaCrustFlavorId = pizzaModel.MenuPizzaCrust.Id
+                    MenuPizzaCrustFlavorId = pizzaModel.MenuPizzaCrustFlavor.Id
                 },
                 connection, transaction);
 

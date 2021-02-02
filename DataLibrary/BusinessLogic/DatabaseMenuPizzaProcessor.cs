@@ -30,43 +30,43 @@ namespace DataLibrary.BusinessLogic
 
         public static int AddMenuPizzaCategory(MenuPizzaCategoryModel menuPizzaCategoryModel)
         {
-            // Add pizza record
-            /*int pizzaRowsAdded = DatabasePizzaProcessor.AddPizza(menuPizzaCategoryModel.Pizza);
-
-            if (pizzaRowsAdded == 0)
-            {
-                throw new Exception($"Unable to add pizza for menu pizza category.");
-            }
-
-            // Add menu pizza category record
             string insertSql = @"insert into dbo.MenuPizzaCategory (PizzaId, CategoryName, AvailableForPurchase, PizzaName, Description)
                            output Inserted.Id values (@PizzaId, @CategoryName, @AvailableForPurchase, @PizzaName, @Description);";
 
-            try
+            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
-                using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
+                connection.Open();
+
+                using (var transaction = connection.BeginTransaction())
                 {
-                    menuPizzaCategoryModel.Id = SqlDataAccess.SaveNewRecord(insertSql,
-                        new
-                        {
-                            PizzaId = menuPizzaCategoryModel.Pizza.Id,
-                            CategoryName = menuPizzaCategoryModel.PizzaCategoryName,
-                            AvailableForPurchase = menuPizzaCategoryModel.AvailableForPurchase,
-                            PizzaName = menuPizzaCategoryModel.PizzaName,
-                            Description = menuPizzaCategoryModel.Description
-                        },
-                        connection);
+                    try
+                    {
+                        // Add pizza record
+                        DatabasePizzaProcessor.AddPizza(menuPizzaCategoryModel.Pizza, connection, transaction);
+
+                        // Add menu pizza category record
+                        menuPizzaCategoryModel.Id = SqlDataAccess.SaveNewRecord(insertSql,
+                            new
+                            {
+                                PizzaId = menuPizzaCategoryModel.Pizza.Id,
+                                CategoryName = menuPizzaCategoryModel.PizzaCategoryName,
+                                AvailableForPurchase = menuPizzaCategoryModel.AvailableForPurchase,
+                                PizzaName = menuPizzaCategoryModel.PizzaName,
+                                Description = menuPizzaCategoryModel.Description
+                            },
+                            connection, transaction);
+
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
                 }
             }
-            catch (Exception ex)
-            {
-                // Rollback changes
-                DatabasePizzaProcessor.DeletePizza(menuPizzaCategoryModel.Pizza);
-                throw;
-            }
 
-            return menuPizzaCategoryModel.Id;*/
-            throw new NotImplementedException();
+            return menuPizzaCategoryModel.Id;
         }
 
         public static List<MenuPizzaToppingModel> LoadMenuPizzaToppings()
