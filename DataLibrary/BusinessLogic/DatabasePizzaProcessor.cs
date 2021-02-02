@@ -16,7 +16,7 @@ namespace DataLibrary.BusinessLogic
     {
         internal static void DeletePizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
         {
-            string deletePizzaSql = $"delete from dbo.Pizza where Id = @Id;";
+            string deletePizzaSql = "delete from dbo.Pizza where Id = @Id;";
 
             // Delete pizza topping records
             DeletePizzaToppings(pizzaModel, connection, transaction);
@@ -55,14 +55,14 @@ namespace DataLibrary.BusinessLogic
 
         private static int DeletePizzaToppings(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
         {
-            string sql = $"delete from dbo.PizzaTopping where PizzaTopping.PizzaId = @Id;";
+            string sql = "delete from dbo.PizzaTopping where PizzaTopping.PizzaId = @Id;";
 
             return SqlDataAccess.DeleteRecord(sql, pizzaModel, connection, transaction);
         }
 
         private static int AddPizzaTopping(PizzaToppingModel toppingModel, PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
         {
-            string insertSql = $"insert into dbo.PizzaTopping (PizzaId, ToppingHalf, ToppingAmount, MenuPizzaToppingId) output Inserted.Id values (@PizzaId, @ToppingHalf, @ToppingAmount, @MenuPizzaToppingId);";
+            string insertSql = "insert into dbo.PizzaTopping (PizzaId, ToppingHalf, ToppingAmount, MenuPizzaToppingId) output Inserted.Id values (@PizzaId, @ToppingHalf, @ToppingAmount, @MenuPizzaToppingId);";
 
             toppingModel.Id = SqlDataAccess.SaveNewRecord(insertSql,
                 new

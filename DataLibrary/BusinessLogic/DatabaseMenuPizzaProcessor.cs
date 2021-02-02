@@ -25,7 +25,6 @@ namespace DataLibrary.BusinessLogic
 
         public static int DeleteMenuPizzaCategory(MenuPizzaCategoryModel menuPizzaCategoryModel)
         {
-            throw new NotImplementedException();
         }
 
         public static int AddMenuPizzaCategory(MenuPizzaCategoryModel menuPizzaCategoryModel)
