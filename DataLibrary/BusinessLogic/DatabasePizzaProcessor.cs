@@ -14,11 +14,18 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabasePizzaProcessor
     {
-        private static int DeletePizzaTopping(IDbConnection connection, IDbTransaction transaction, PizzaToppingModel pizzaToppingModel)
+        /*private static int DeletePizzaTopping(IDbConnection connection, IDbTransaction transaction, PizzaToppingModel pizzaToppingModel)
         {
             string sql = $"delete from dbo.PizzaTopping where Id = @Id";
 
             return SqlDataAccess.DeleteRecord(connection, transaction, sql, pizzaToppingModel);
+        }*/
+
+        private static int DeletePizzaToppings(IDbConnection connection, IDbTransaction transaction, PizzaModel pizzaModel)
+        {
+            string sql = $"delete from dbo.PizzaTopping where PizzaTopping.PizzaId = @Id";
+
+            return SqlDataAccess.DeleteRecord(connection, transaction, sql, pizzaModel);
         }
 
         private static int AddPizzaTopping(IDbConnection connection, IDbTransaction transaction, PizzaToppingModel toppingModel, PizzaModel pizzaModel)
@@ -100,15 +107,55 @@ namespace DataLibrary.BusinessLogic
             return pizzaList;
         }
 
-        public static int UpdatePizza(PizzaModel pizzaModel)
+        public static bool UpdatePizza(PizzaModel pizzaModel)
         {
-            // Executed in a transaction
+            string pizzaSql = @"update dbo.Pizza set Size = @Size, MenuPizzaCrustId = @MenuPizzaCrustId, MenuPizzaSauceId = @MenuPizzaSauceId, 
+                                SauceAmount = @SauceAmount, MenuPizzaCheeseId = @MenuPizzaCheeseId, CheeseAmount = @CheeseAmount, MenuPizzaCrustFlavorId = @MenuPizzaCrustFlavorId where Id = @Id;";
 
-            // Remove old pizza topping records
-            // Update pizza record
-            // Add new pizza topping records
+            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
+            {
+                connection.Open();
 
-            throw new NotImplementedException();
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Delete previous pizza topping records
+                        DeletePizzaToppings(connection, transaction, pizzaModel);
+
+                        // Update pizza record
+                        connection.Execute(
+                            pizzaSql,
+                            new
+                            {
+                                Id = pizzaModel.Id,
+                                Size = pizzaModel.Size,
+                                MenuPizzaCrustId = pizzaModel.MenuPizzaCrust.Id,
+                                MenuPizzaSauceId = pizzaModel.MenuPizzaSauce.Id,
+                                SauceAmount = pizzaModel.SauceAmount,
+                                MenuPizzaCheeseId = pizzaModel.MenuPizzaCheese.Id,
+                                CheeseAmount = pizzaModel.CheeseAmount,
+                                MenuPizzaCrustFlavorId = pizzaModel.MenuPizzaCrustFlavor.Id
+                            },
+                            transaction);
+
+                        // Save pizza topping records
+                        foreach (var pizzaTopping in pizzaModel.PizzaToppings)
+                        {
+                            AddPizzaTopping(connection, transaction, pizzaTopping, pizzaModel);
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+
+            return true;
         }
 
         public static int AddPizza(PizzaModel pizzaModel)
