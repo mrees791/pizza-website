@@ -28,11 +28,6 @@ namespace DataLibrary.BusinessLogic
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Adds a new menu pizza category.
-        /// </summary>
-        /// <param name="menuPizzaCategoryModel"></param>
-        /// <returns>ID of newly created menu pizza category.</returns>
         public static int AddMenuPizzaCategory(MenuPizzaCategoryModel menuPizzaCategoryModel)
         {
             // Add pizza record

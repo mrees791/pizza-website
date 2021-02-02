@@ -14,7 +14,7 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabasePizzaProcessor
     {
-        public static void DeletePizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
+        internal static void DeletePizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
         {
             string deletePizzaSql = $"delete from dbo.Pizza where Id = @Id;";
 
@@ -140,7 +140,7 @@ namespace DataLibrary.BusinessLogic
             return pizzaList;
         }
 
-        public static int UpdatePizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
+        internal static int UpdatePizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
         {
             string pizzaSql = @"update dbo.Pizza set Size = @Size, MenuPizzaCrustId = @MenuPizzaCrustId, MenuPizzaSauceId = @MenuPizzaSauceId, 
                                 SauceAmount = @SauceAmount, MenuPizzaCheeseId = @MenuPizzaCheeseId, CheeseAmount = @CheeseAmount, MenuPizzaCrustFlavorId = @MenuPizzaCrustFlavorId where Id = @Id;";
@@ -199,7 +199,7 @@ namespace DataLibrary.BusinessLogic
             }
         }
 
-        public static int AddPizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
+        internal static int AddPizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
         {
             string pizzaSql = @"insert into dbo.Pizza (Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId) output Inserted.Id
                                 values (@Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId);";
