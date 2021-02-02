@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using DataLibrary.DataAccess;
 using DataLibrary.Models.Menu.Pizzas;
+using DataLibrary.Models.Pizzas;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,18 +14,73 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabaseMenuPizzaProcessor
     {
-        public static List<MenuPizzaCategoryModel> LoadMenuPizzaCategories()
-        {
-            throw new NotImplementedException();
-        }
-
         public static int UpdateMenuPizzaCategory(MenuPizzaCategoryModel menuPizzaCategoryModel)
         {
             throw new NotImplementedException();
         }
 
+        public static List<MenuPizzaCategoryModel> LoadMenuPizzaCategories()
+        {
+            List<MenuPizzaCategoryModel> menuPizzaCategories = new List<MenuPizzaCategoryModel>();
+            List<PizzaModel> pizzaList = DatabasePizzaProcessor.LoadPizzas();
+
+            string sql = @"select Id, PizzaId, CategoryName, AvailableForPurchase, PizzaName, Description from dbo.MenuPizzaCategory;";
+
+            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
+            {
+                List<dynamic> queryList = connection.Query<dynamic>(sql).ToList();
+
+                foreach (var item in queryList)
+                {
+                    menuPizzaCategories.Add(new MenuPizzaCategoryModel()
+                    {
+                        Id = item.Id,
+                        AvailableForPurchase = item.AvailableForPurchase,
+                        Description = item.Description,
+                        CategoryName = item.CategoryName,
+                        PizzaName = item.PizzaName,
+                        Pizza = pizzaList.Where(p => p.Id == item.PizzaId).First()
+                    });
+                }
+            }
+
+            return menuPizzaCategories;
+        }
+
         public static int DeleteMenuPizzaCategory(MenuPizzaCategoryModel menuPizzaCategoryModel)
         {
+            int menuPizzaCategorieRowsDeleted = 0;
+            string deleteSql = @"delete from dbo.Pizza where Id = @Id;";
+
+            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
+            {
+                connection.Open();
+
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Delete pizza record
+                        int pizzaRecordsDeleted = DatabasePizzaProcessor.DeletePizza(menuPizzaCategoryModel.Pizza, connection, transaction);
+
+                        if (pizzaRecordsDeleted == 0)
+                        {
+                            throw new Exception($"Unable to delete pizza record. Pizza ID: {menuPizzaCategoryModel.Pizza.Id}");
+                        }
+
+                        // Delete menu pizza category record
+                        menuPizzaCategorieRowsDeleted = SqlDataAccess.DeleteRecord(deleteSql, menuPizzaCategoryModel, connection, transaction);
+
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+            return menuPizzaCategorieRowsDeleted;
         }
 
         public static int AddMenuPizzaCategory(MenuPizzaCategoryModel menuPizzaCategoryModel)
@@ -48,7 +104,7 @@ namespace DataLibrary.BusinessLogic
                             new
                             {
                                 PizzaId = menuPizzaCategoryModel.Pizza.Id,
-                                CategoryName = menuPizzaCategoryModel.PizzaCategoryName,
+                                CategoryName = menuPizzaCategoryModel.CategoryName,
                                 AvailableForPurchase = menuPizzaCategoryModel.AvailableForPurchase,
                                 PizzaName = menuPizzaCategoryModel.PizzaName,
                                 Description = menuPizzaCategoryModel.Description

@@ -14,7 +14,7 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabasePizzaProcessor
     {
-        internal static void DeletePizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
+        internal static int DeletePizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
         {
             string deletePizzaSql = "delete from dbo.Pizza where Id = @Id;";
 
@@ -22,16 +22,20 @@ namespace DataLibrary.BusinessLogic
             DeletePizzaToppings(pizzaModel, connection, transaction);
 
             // Delete pizza record
-            int rowsDeletedPizza = SqlDataAccess.DeleteRecord(deletePizzaSql, pizzaModel, connection, transaction);
+            int pizzaRowsDeleted = SqlDataAccess.DeleteRecord(deletePizzaSql, pizzaModel, connection, transaction);
 
-            if (rowsDeletedPizza == 0)
+            if (pizzaRowsDeleted == 0)
             {
                 throw new Exception($"Unable to delete pizza with ID: {pizzaModel.Id}");
             }
+
+            return pizzaRowsDeleted;
         }
 
-        public static void DeletePizza(PizzaModel pizzaModel)
+        public static int DeletePizza(PizzaModel pizzaModel)
         {
+            int pizzaRowsDeleted = 0;
+
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
                 connection.Open();
@@ -40,7 +44,7 @@ namespace DataLibrary.BusinessLogic
                 {
                     try
                     {
-                        DeletePizza(pizzaModel, connection, transaction);
+                        pizzaRowsDeleted = DeletePizza(pizzaModel, connection, transaction);
                         transaction.Commit();
                     }
                     catch (Exception ex)
@@ -50,6 +54,8 @@ namespace DataLibrary.BusinessLogic
                     }
                 }
             }
+
+            return pizzaRowsDeleted;
         }
 
 
