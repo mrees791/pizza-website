@@ -107,7 +107,7 @@ namespace DataLibrary.BusinessLogic
             return pizzaList;
         }
 
-        public static bool UpdatePizza(PizzaModel pizzaModel)
+        public static void UpdatePizza(PizzaModel pizzaModel)
         {
             string pizzaSql = @"update dbo.Pizza set Size = @Size, MenuPizzaCrustId = @MenuPizzaCrustId, MenuPizzaSauceId = @MenuPizzaSauceId, 
                                 SauceAmount = @SauceAmount, MenuPizzaCheeseId = @MenuPizzaCheeseId, CheeseAmount = @CheeseAmount, MenuPizzaCrustFlavorId = @MenuPizzaCrustFlavorId where Id = @Id;";
@@ -139,7 +139,7 @@ namespace DataLibrary.BusinessLogic
                             },
                             transaction);
 
-                        // Save pizza topping records
+                        // Save new pizza topping records
                         foreach (var pizzaTopping in pizzaModel.PizzaToppings)
                         {
                             AddPizzaTopping(connection, transaction, pizzaTopping, pizzaModel);
@@ -154,8 +154,6 @@ namespace DataLibrary.BusinessLogic
                     }
                 }
             }
-
-            return true;
         }
 
         public static int AddPizza(PizzaModel pizzaModel)
