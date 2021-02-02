@@ -240,7 +240,7 @@ namespace DataLibrary.BusinessLogic
                 {
                     try
                     {
-                        pizzaModel.Id = AddPizza(pizzaModel, connection, transaction);
+                        AddPizza(pizzaModel, connection, transaction);
                         transaction.Commit();
                     }
                     catch (Exception ex)
