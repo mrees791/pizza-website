@@ -1,6 +1,7 @@
 ﻿using DataLibrary.DataAccess;
 using DataLibrary.Models.Carts;
 using DataLibrary.Models.Menu;
+using DataLibrary.Models.Pizzas;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,12 +13,23 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabaseCartProcessor
     {
-        internal static int AddPizzaToCart(int cartId, IDbConnection connection, IDbTransaction transaction)
+        internal static int AddPizzaToCart(int cartId, PizzaModel pizzaModel, int quantity, IDbConnection connection, IDbTransaction transaction)
         {
-            throw new NotImplementedException();
-            //string insertSql = @"insert into dbo.CartPizza (CartId, PizzaId, PricePerItem, Quantity) output Inserted.Id values(@CartId, @MenuDessertId, @PricePerItem, @Quantity);";
+            string insertSql = @"insert into dbo.CartPizza (CartId, PizzaId, PricePerItem, Quantity) output Inserted.Id values(@CartId, @MenuDessertId, @PricePerItem, @Quantity);";
 
-            // Tra
+            // Save pizza record
+            int newPizzaId = DatabasePizzaProcessor.AddPizza(pizzaModel, connection, transaction);
+
+            // Save cart pizza record
+            return SqlDataAccess.SaveNewRecord(insertSql,
+                new
+                {
+                    CartId = cartId,
+                    PizzaId = newPizzaId,
+                    PricePerItem = pizzaModel.GetPrice(),
+                    Quantity = quantity
+                }
+                , connection, transaction);
         }
 
         internal static int AddDessertToCart(int cartId, int quantity, MenuDessertModel menuDessert, IDbConnection connection, IDbTransaction transaction)
