@@ -31,6 +31,14 @@ namespace DataLibrary.DataAccess
             }
         }
 
+        public static T LoadSingleRecord<T>(string selectSql, object parameters)
+        {
+            using (IDbConnection connection = new SqlConnection(GetConnectiongString()))
+            {
+                return connection.Query<T>(selectSql, parameters).FirstOrDefault();
+            }
+        }
+
         /// <summary>
         /// Updates a record using an updated model.
         /// </summary>

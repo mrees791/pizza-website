@@ -12,23 +12,15 @@ namespace DataLibrary.Models.Users
     {
         public int Id { get; set; }
         public string PasswordHash { get; set; }
-        public CartModel CurrentCart { get; set; }
+        public int CurrentCartId { get; set; }
         public string Email { get; set; }
         public bool IsBanned { get; set; }
         public bool EmailConfirmed { get; set; }
         public string PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
         public string ZipCode { get; set; }
-        public List<DeliveryAddressModel> DeliveryAddresses { get; set; }
+        /*public List<DeliveryAddressModel> DeliveryAddresses { get; set; }
         public List<UserRoleModel> UserRoles { get; set; }
-        public List<CustomerOrderModel> CustomerOrders { get; set; }
-
-        public UserModel()
-        {
-            CurrentCart = new CartModel();
-            DeliveryAddresses = new List<DeliveryAddressModel>();
-            UserRoles = new List<UserRoleModel>();
-            CustomerOrders = new List<CustomerOrderModel>();
-        }
+        public List<CustomerOrderModel> CustomerOrders { get; set; }*/
     }
 }

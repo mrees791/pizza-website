@@ -16,17 +16,17 @@ namespace DataLibrary.BusinessLogic
     {
         public static UserModel SignInUser(string email, string passwordHash)
         {
-            string selectSql = @"select TOP 1 (CurrentCartId, Email, PasswordHash, IsBanned, EmailConfirmed, PhoneNumber, PhoneNumberConfirmed, ZipCode)
-                                 from [dbo].[user] where Email=@Email and PasswordHash=@PasswordHash;";
+            string selectSql = @"select TOP 1 Id, CurrentCartId, Email, PasswordHash, IsBanned, EmailConfirmed, PhoneNumber, PhoneNumberConfirmed, ZipCode
+                                 from [dbo].[user] where Email=@Email and PasswordHash=@PasswordHash order by Id asc;";
 
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
-                return connection.Query<UserModel>(selectSql,
+                return SqlDataAccess.LoadSingleRecord<UserModel>(selectSql,
                     new
                     {
                         Email = email,
                         PasswordHash = passwordHash
-                    }).FirstOrDefault();
+                    });
             }
         }
 
