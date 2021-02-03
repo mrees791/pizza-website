@@ -59,7 +59,7 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveNewRecord(insertSql, queryParameters, connection, transaction);
         }
 
-        internal static int AddDessertToCart(int cartId, int quantity, MenuDessertModel menuDessert, IDbConnection connection, IDbTransaction transaction)
+        internal static int AddDessertToCart(int cartId, MenuDessertModel menuDessert, int quantity, IDbConnection connection, IDbTransaction transaction)
         {
             string insertSql = @"insert into dbo.CartDessert (CartId, MenuDessertId, PricePerItem, Quantity)
                                  output Inserted.Id values(@CartId, @MenuDessertId, @PricePerItem, @Quantity);";
@@ -73,6 +73,24 @@ namespace DataLibrary.BusinessLogic
             };
 
             // Save cart dessert record
+            return SqlDataAccess.SaveNewRecord(insertSql, queryParameters, connection, transaction);
+        }
+
+        internal static int AddDrinkToCart(int cartId, MenuDrinkModel menuDrink, decimal pricePerItem, string size, int quantity, IDbConnection connection, IDbTransaction transaction)
+        {
+            string insertSql = @"insert into dbo.CartDrink (CartId, MenuDrinkId, PricePerItem, Size, Quantity)
+                                 output Inserted.Id values(@CartId, @MenuDrinkId, @PricePerItem, @Size, @Quantity);";
+
+            object queryParameters = new
+            {
+                CartId = cartId,
+                MenuDrinkId = menuDrink.Id,
+                PricePerItem = pricePerItem,
+                Size = size,
+                Quantity = quantity
+            };
+
+            // Save cart drink record
             return SqlDataAccess.SaveNewRecord(insertSql, queryParameters, connection, transaction);
         }
 
