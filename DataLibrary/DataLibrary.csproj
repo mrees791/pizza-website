@@ -77,7 +77,7 @@
     <Compile Include="Models\Carts\CartPizzaModel.cs" />
     <Compile Include="Models\Carts\CartSauceModel.cs" />
     <Compile Include="Models\Carts\CartSideModel.cs" />
-    <Compile Include="Models\CartWingsModel.cs" />
+    <Compile Include="Models\Carts\CartWingsModel.cs" />
     <Compile Include="Models\Menu\MenuDessertModel.cs" />
     <Compile Include="Models\Menu\MenuDipModel.cs" />
     <Compile Include="Models\Menu\MenuDrinkModel.cs" />
