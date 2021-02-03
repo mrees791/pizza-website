@@ -66,14 +66,14 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.DeleteRecord(sql, pizzaModel, connection, transaction);
         }
 
-        private static int AddPizzaTopping(PizzaToppingModel toppingModel, PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
+        private static int AddPizzaTopping(PizzaToppingModel toppingModel, IDbConnection connection, IDbTransaction transaction)
         {
             string insertSql = "insert into dbo.PizzaTopping (PizzaId, ToppingHalf, ToppingAmount, MenuPizzaToppingId) output Inserted.Id values (@PizzaId, @ToppingHalf, @ToppingAmount, @MenuPizzaToppingId);";
 
             toppingModel.Id = SqlDataAccess.SaveNewRecord(insertSql,
                 new
                 {
-                    PizzaId = pizzaModel.Id,
+                    PizzaId = toppingModel.PizzaId,
                     ToppingHalf = toppingModel.ToppingHalf,
                     ToppingAmount = toppingModel.ToppingAmount,
                     MenuPizzaToppingId = toppingModel.MenuPizzaTopping.Id
@@ -175,7 +175,8 @@ namespace DataLibrary.BusinessLogic
             // Save new pizza topping records
             foreach (var pizzaTopping in pizzaModel.PizzaToppings)
             {
-                pizzaTopping.Id = AddPizzaTopping(pizzaTopping, pizzaModel, connection, transaction);
+                pizzaTopping.PizzaId = pizzaModel.Id;
+                pizzaTopping.Id = AddPizzaTopping(pizzaTopping, connection, transaction);
             }
 
             return rowsAffectedPizza;
@@ -230,7 +231,7 @@ namespace DataLibrary.BusinessLogic
             foreach (var pizzaTopping in pizzaModel.PizzaToppings)
             {
                 pizzaTopping.PizzaId = pizzaModel.Id;
-                pizzaTopping.Id = AddPizzaTopping(pizzaTopping, pizzaModel, connection, transaction);
+                pizzaTopping.Id = AddPizzaTopping(pizzaTopping, connection, transaction);
             }
 
             return pizzaModel.Id;
