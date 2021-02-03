@@ -212,23 +212,24 @@ namespace DataLibrary.BusinessLogic
             string pizzaSql = @"insert into dbo.Pizza (Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId) output Inserted.Id
                                 values (@Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId);";
 
+            object queryParameters = new
+            {
+                Size = pizzaModel.Size,
+                MenuPizzaCrustId = pizzaModel.MenuPizzaCrust.Id,
+                MenuPizzaSauceId = pizzaModel.MenuPizzaSauce.Id,
+                SauceAmount = pizzaModel.SauceAmount,
+                MenuPizzaCheeseId = pizzaModel.MenuPizzaCheese.Id,
+                CheeseAmount = pizzaModel.CheeseAmount,
+                MenuPizzaCrustFlavorId = pizzaModel.MenuPizzaCrustFlavor.Id
+            };
+
             // Save pizza record
-            pizzaModel.Id = SqlDataAccess.SaveNewRecord(pizzaSql,
-                new
-                {
-                    Size = pizzaModel.Size,
-                    MenuPizzaCrustId = pizzaModel.MenuPizzaCrust.Id,
-                    MenuPizzaSauceId = pizzaModel.MenuPizzaSauce.Id,
-                    SauceAmount = pizzaModel.SauceAmount,
-                    MenuPizzaCheeseId = pizzaModel.MenuPizzaCheese.Id,
-                    CheeseAmount = pizzaModel.CheeseAmount,
-                    MenuPizzaCrustFlavorId = pizzaModel.MenuPizzaCrustFlavor.Id
-                },
-                connection, transaction);
+            pizzaModel.Id = SqlDataAccess.SaveNewRecord(pizzaSql, queryParameters, connection, transaction);
 
             // Save pizza topping records
             foreach (var pizzaTopping in pizzaModel.PizzaToppings)
             {
+                pizzaTopping.PizzaId = pizzaModel.Id;
                 pizzaTopping.Id = AddPizzaTopping(pizzaTopping, pizzaModel, connection, transaction);
             }
 
