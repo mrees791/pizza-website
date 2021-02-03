@@ -47,16 +47,16 @@ namespace DataLibrary.BusinessLogic
             // Save pizza record
             pizzaModel.Id = DatabasePizzaProcessor.AddPizza(pizzaModel, connection, transaction);
 
+            object queryParameters = new 
+            {
+                CartId = cartId,
+                PizzaId = pizzaModel.Id,
+                PricePerItem = pizzaModel.GetPrice(),
+                Quantity = quantity
+            };
+
             // Save cart pizza record
-            return SqlDataAccess.SaveNewRecord(insertSql,
-                new
-                {
-                    CartId = cartId,
-                    PizzaId = pizzaModel.Id,
-                    PricePerItem = pizzaModel.GetPrice(),
-                    Quantity = quantity
-                }
-                , connection, transaction);
+            return SqlDataAccess.SaveNewRecord(insertSql, queryParameters, connection, transaction);
         }
 
         internal static int AddDessertToCart(int cartId, int quantity, MenuDessertModel menuDessert, IDbConnection connection, IDbTransaction transaction)
@@ -64,16 +64,16 @@ namespace DataLibrary.BusinessLogic
             string insertSql = @"insert into dbo.CartDessert (CartId, MenuDessertId, PricePerItem, Quantity)
                                  output Inserted.Id values(@CartId, @MenuDessertId, @PricePerItem, @Quantity);";
 
+            object queryParameters = new
+            {
+                CartId = cartId,
+                MenuDessertId = menuDessert.Id,
+                PricePerItem = menuDessert.Price,
+                Quantity = quantity
+            };
+
             // Save cart dessert record
-            return SqlDataAccess.SaveNewRecord(insertSql,
-                new
-                {
-                    CartId = cartId,
-                    MenuDessertId = menuDessert.Id,
-                    PricePerItem = menuDessert.Price,
-                    Quantity = quantity
-                }
-                , connection, transaction);
+            return SqlDataAccess.SaveNewRecord(insertSql, queryParameters, connection, transaction);
         }
 
         internal static int AddNewCart(IDbConnection connection, IDbTransaction transaction)
