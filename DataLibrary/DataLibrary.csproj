@@ -68,6 +68,14 @@
     <Compile Include="BusinessLogic\DatabaseMenuProcessor.cs" />
     <Compile Include="BusinessLogic\DatabasePizzaProcessor.cs" />
     <Compile Include="DataAccess\SqlDataAccess.cs" />
+    <Compile Include="Models\CustomerOrders\CustomerOrderModel.cs" />
+    <Compile Include="Models\CustomerOrders\DeliveryInfoModel.cs" />
+    <Compile Include="Models\Employees\EmployeeLocationModel.cs" />
+    <Compile Include="Models\Employees\EmployeeModel.cs" />
+    <Compile Include="Models\Stores\StoreLocationModel.cs" />
+    <Compile Include="Models\Users\DeliveryAddressModel.cs" />
+    <Compile Include="Models\Users\UserModel.cs" />
+    <Compile Include="Models\Users\UserRoleModel.cs" />
     <Compile Include="Models\Carts\CartDessertModel.cs" />
     <Compile Include="Models\Carts\CartDipModel.cs" />
     <Compile Include="Models\Carts\CartDrinkModel.cs" />
