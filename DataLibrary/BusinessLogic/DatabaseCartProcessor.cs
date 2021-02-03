@@ -42,7 +42,7 @@ namespace DataLibrary.BusinessLogic
 
         internal static int AddPizzaToCart(int cartId, PizzaModel pizzaModel, int quantity, IDbConnection connection, IDbTransaction transaction)
         {
-            string insertSql = @"insert into dbo.CartPizza (CartId, PizzaId, PricePerItem, Quantity) output Inserted.Id values(@CartId, @MenuDessertId, @PricePerItem, @Quantity);";
+            string insertSql = @"insert into dbo.CartPizza (CartId, PizzaId, PricePerItem, Quantity) output Inserted.Id values(@CartId, @PizzaId, @PricePerItem, @Quantity);";
 
             // Save pizza record
             pizzaModel.Id = DatabasePizzaProcessor.AddPizza(pizzaModel, connection, transaction);
