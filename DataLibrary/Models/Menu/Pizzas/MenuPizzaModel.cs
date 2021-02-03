@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Menu.Pizzas
 {
-    public class MenuPizzaCategoryModel
+    public class MenuPizzaModel
     {
         public int Id { get; set; }
         public PizzaModel Pizza { get; set; }

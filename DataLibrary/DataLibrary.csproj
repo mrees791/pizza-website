@@ -75,6 +75,9 @@
     <Compile Include="Models\Carts\CartModel.cs" />
     <Compile Include="Models\Carts\CartPastaModel.cs" />
     <Compile Include="Models\Carts\CartPizzaModel.cs" />
+    <Compile Include="Models\Carts\CartSauceModel.cs" />
+    <Compile Include="Models\Carts\CartSideModel.cs" />
+    <Compile Include="Models\CartWingsModel.cs" />
     <Compile Include="Models\Menu\MenuDessertModel.cs" />
     <Compile Include="Models\Menu\MenuDipModel.cs" />
     <Compile Include="Models\Menu\MenuDrinkModel.cs" />
@@ -85,7 +88,7 @@
     <Compile Include="Models\Menu\MenuSideModel.cs" />
     <Compile Include="Models\Menu\MenuWingsModel.cs" />
     <Compile Include="Models\Menu\MenuWingsSauceModel.cs" />
-    <Compile Include="Models\Menu\Pizzas\MenuPizzaCategoryModel.cs" />
+    <Compile Include="Models\Menu\Pizzas\MenuPizzaModel.cs" />
     <Compile Include="Models\Menu\Pizzas\MenuPizzaCheeseModel.cs" />
     <Compile Include="Models\Menu\Pizzas\MenuPizzaCrustFlavorModel.cs" />
     <Compile Include="Models\Menu\Pizzas\MenuPizzaCrustModel.cs" />

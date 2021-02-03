@@ -1,4 +1,4 @@
-﻿using DataLibrary.Models.Pizzas;
+﻿using DataLibrary.Models.Menu;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Carts
 {
-    public class CartPizzaModel : CartItemModel
+    public class CartSideModel : CartItemModel
     {
-        public PizzaModel Pizza { get; set; }
+        public MenuSideModel MenuSide { get; set; }
     }
 }
