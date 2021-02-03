@@ -19,7 +19,7 @@ namespace DataLibrary.BusinessLogic
             string deletePizzaSql = "delete from dbo.Pizza where Id = @Id;";
 
             // Delete pizza topping records
-            DeletePizzaToppings(pizzaModel, connection, transaction);
+            int pizzaToppingRowsDeleted = DeletePizzaToppings(pizzaModel, connection, transaction);
 
             // Delete pizza record
             int pizzaRowsDeleted = SqlDataAccess.DeleteRecord(deletePizzaSql, pizzaModel, connection, transaction);
@@ -150,7 +150,7 @@ namespace DataLibrary.BusinessLogic
                                 SauceAmount = @SauceAmount, MenuPizzaCheeseId = @MenuPizzaCheeseId, CheeseAmount = @CheeseAmount, MenuPizzaCrustFlavorId = @MenuPizzaCrustFlavorId where Id = @Id;";
 
             // Delete previous pizza topping records
-            DeletePizzaToppings(pizzaModel, connection, transaction);
+            int pizzaToppingRowsDeleted = DeletePizzaToppings(pizzaModel, connection, transaction);
 
             // Update pizza record
             int rowsAffectedPizza = SqlDataAccess.UpdateRecord(pizzaSql,
@@ -181,8 +181,10 @@ namespace DataLibrary.BusinessLogic
             return rowsAffectedPizza;
         }
 
-        public static void UpdatePizza(PizzaModel pizzaModel)
+        public static int UpdatePizza(PizzaModel pizzaModel)
         {
+            int pizzaRowsUpdated = 0;
+
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
                 connection.Open();
@@ -191,7 +193,7 @@ namespace DataLibrary.BusinessLogic
                 {
                     try
                     {
-                        UpdatePizza(pizzaModel, connection, transaction);
+                        pizzaRowsUpdated = UpdatePizza(pizzaModel, connection, transaction);
                         transaction.Commit();
                     }
                     catch (Exception ex)
@@ -201,6 +203,8 @@ namespace DataLibrary.BusinessLogic
                     }
                 }
             }
+
+            return pizzaRowsUpdated;
         }
 
         internal static int AddPizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)

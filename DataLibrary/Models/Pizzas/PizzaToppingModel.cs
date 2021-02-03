@@ -14,5 +14,33 @@ namespace DataLibrary.Models.Pizzas
         public string ToppingAmount { get; set; }
         public MenuPizzaToppingModel MenuPizzaTopping { get; set; }
         public int PizzaId { get; set; }
+
+        public decimal GetPrice()
+        {
+            decimal total = 0.0m;
+
+            switch (ToppingAmount)
+            {
+                case "Light":
+                    total += MenuPizzaTopping.PriceLight;
+                    break;
+                case "Regular":
+                    total += MenuPizzaTopping.PriceRegular;
+                    break;
+                case "Extra":
+                    total += MenuPizzaTopping.PriceExtra;
+                    break;
+            }
+
+            switch (ToppingHalf)
+            {
+                case "Left":
+                case "Right":
+                    total /= 2.0m;
+                    break;
+            }
+
+            return total;
+        }
     }
 }

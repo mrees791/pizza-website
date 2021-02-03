@@ -44,17 +44,14 @@ namespace DataLibrary.BusinessLogic
             string insertUserSql = @"insert into [dbo].[User] (CurrentCartId, Email, PasswordHash, IsBanned, EmailConfirmed, PhoneNumber, PhoneNumberConfirmed, ZipCode)
                                  output Inserted.Id values (@CurrentCartId, @Email, @PasswordHash, @IsBanned, @EmailConfirmed, @PhoneNumber, @PhoneNumberConfirmed, @ZipCode);";
 
-
-            CartModel newCart = new CartModel();
-
             // Add new cart record
-            newCart.Id = DatabaseCartProcessor.AddNewCart(newCart, connection, transaction);
+            int newCartId = DatabaseCartProcessor.AddNewCart(connection, transaction);
 
             // Add new user record
             int userId = SqlDataAccess.SaveNewRecord(insertUserSql,
                 new
                 {
-                    CurrentCartId = newCart.Id,
+                    CurrentCartId = newCartId,
                     Email = email,
                     PasswordHash = passwordHash,
                     IsBanned = false,
