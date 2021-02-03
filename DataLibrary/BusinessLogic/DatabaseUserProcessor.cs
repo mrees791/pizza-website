@@ -19,15 +19,14 @@ namespace DataLibrary.BusinessLogic
             string selectSql = @"select TOP 1 Id, CurrentCartId, Email, PasswordHash, IsBanned, EmailConfirmed, PhoneNumber, PhoneNumberConfirmed, ZipCode
                                  from [dbo].[user] where Email=@Email and PasswordHash=@PasswordHash order by Id asc;";
 
-            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
-            {
-                return SqlDataAccess.LoadSingleRecord<UserModel>(selectSql,
-                    new
-                    {
-                        Email = email,
-                        PasswordHash = passwordHash
-                    });
-            }
+            var queryParameters =
+                new
+                {
+                    Email = email,
+                    PasswordHash = passwordHash
+                };
+
+            return SqlDataAccess.LoadSingleRecord<UserModel>(selectSql, queryParameters);
         }
 
         public static int AddNewUser(string email, string passwordHash, string phoneNumber, string zipCode)
