@@ -41,7 +41,7 @@ namespace DataLibrary.BusinessLogic
         {
             string insertSql = @"insert into dbo.Cart output Inserted.Id default values;";
 
-            // Save user role record
+            // Save new cart record
             return SqlDataAccess.SaveNewRecord(insertSql, new { }, connection, transaction);
         }
     }
