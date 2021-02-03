@@ -1,4 +1,5 @@
-﻿using DataLibrary.DataAccess;
+﻿using Dapper;
+using DataLibrary.DataAccess;
 using DataLibrary.Models.Carts;
 using DataLibrary.Models.Users;
 using System;
@@ -13,6 +14,22 @@ namespace DataLibrary.BusinessLogic
 {
     public static class DatabaseUserProcessor
     {
+        public static UserModel SignInUser(string email, string passwordHash)
+        {
+            string selectSql = @"select TOP 1 (CurrentCartId, Email, PasswordHash, IsBanned, EmailConfirmed, PhoneNumber, PhoneNumberConfirmed, ZipCode)
+                                 from [dbo].[user] where Email=@Email and PasswordHash=@PasswordHash;";
+
+            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
+            {
+                return connection.Query<UserModel>(selectSql,
+                    new
+                    {
+                        Email = email,
+                        PasswordHash = passwordHash
+                    }).FirstOrDefault();
+            }
+        }
+
         public static int AddNewUser(string email, string passwordHash, string phoneNumber, string zipCode)
         {
             int userId = 0;
