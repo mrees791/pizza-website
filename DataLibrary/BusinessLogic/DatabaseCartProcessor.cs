@@ -169,8 +169,8 @@ namespace DataLibrary.BusinessLogic
 
         internal static int AddPastaToCart(int cartId, MenuPastaModel menuPasta, int quantity, IDbConnection connection, IDbTransaction transaction)
         {
-            string insertSql = @"insert into dbo.CartPasta (CartIt, MenuPastaId, PricePerItem, Quantity)
-                                 output Inserted.Id values(@CartIt, @MenuPastaId, @PricePerItem, @Quantity);";
+            string insertSql = @"insert into dbo.CartPasta (CartId, MenuPastaId, PricePerItem, Quantity)
+                                 output Inserted.Id values(@CartId, @MenuPastaId, @PricePerItem, @Quantity);";
 
             object queryParameters = new
             {
@@ -181,6 +181,40 @@ namespace DataLibrary.BusinessLogic
             };
 
             // Save cart pasta record
+            return SqlDataAccess.SaveNewRecord(insertSql, queryParameters, connection, transaction);
+        }
+
+        internal static int AddSideToCart(int cartId, MenuSideModel menuSide, int quantity, IDbConnection connection, IDbTransaction transaction)
+        {
+            string insertSql = @"insert into dbo.CartSide (CartId, MenuSideId, PricePerItem, Quantity)
+                                 output Inserted.Id values(@CartId, MenuSideId, PricePerItem, Quantity);";
+
+            object queryParameters = new
+            {
+                CartId = cartId,
+                MenuSideId = menuSide.Id,
+                PricePerItem = menuSide.Price,
+                Quantity = quantity
+            };
+
+            // Save cart side record
+            return SqlDataAccess.SaveNewRecord(insertSql, queryParameters, connection, transaction);
+        }
+
+        internal static int AddSauceToCart(int cartId, MenuSauceModel menuSauce, int quantity, IDbConnection connection, IDbTransaction transaction)
+        {
+            string insertSql = @"insert into dbo.CartSauce (CartId, MenuSauceId, PricePerItem, Quantity)
+                                 output Inserted.Id values(@CartId, MenuSauceId, PricePerItem, Quantity);";
+
+            object queryParameters = new
+            {
+                CartId = cartId,
+                MenuSauceId = menuSauce.Id,
+                PricePerItem = menuSauce.Price,
+                Quantity = quantity
+            };
+
+            // Save cart sauce record
             return SqlDataAccess.SaveNewRecord(insertSql, queryParameters, connection, transaction);
         }
 
