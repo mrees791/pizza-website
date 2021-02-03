@@ -22,5 +22,13 @@ namespace DataLibrary.Models.Users
         public List<DeliveryAddressModel> DeliveryAddresses { get; set; }
         public List<UserRoleModel> UserRoles { get; set; }
         public List<CustomerOrderModel> CustomerOrders { get; set; }
+
+        public UserModel()
+        {
+            CurrentCart = new CartModel();
+            DeliveryAddresses = new List<DeliveryAddressModel>();
+            UserRoles = new List<UserRoleModel>();
+            CustomerOrders = new List<CustomerOrderModel>();
+        }
     }
 }

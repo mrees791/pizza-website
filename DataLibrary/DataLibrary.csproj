@@ -64,9 +64,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\DatabaseCartProcessor.cs" />
     <Compile Include="BusinessLogic\DatabaseMenuPizzaProcessor.cs" />
     <Compile Include="BusinessLogic\DatabaseMenuProcessor.cs" />
     <Compile Include="BusinessLogic\DatabasePizzaProcessor.cs" />
+    <Compile Include="BusinessLogic\DatabaseUserProcessor.cs" />
     <Compile Include="DataAccess\SqlDataAccess.cs" />
     <Compile Include="Models\CustomerOrders\CustomerOrderModel.cs" />
     <Compile Include="Models\CustomerOrders\DeliveryInfoModel.cs" />

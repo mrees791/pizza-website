@@ -9,7 +9,7 @@ namespace DataLibrary.Models.Users
     public class UserRoleModel
     {
         public int Id { get; set; }
-        public UserModel User { get; set; }
-        public string RoleName { get; set; }
+        public int UserId { get; set; }
+        public string Name { get; set; }
     }
 }

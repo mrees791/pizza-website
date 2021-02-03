@@ -175,7 +175,7 @@ namespace DataLibrary.BusinessLogic
             // Save new pizza topping records
             foreach (var pizzaTopping in pizzaModel.PizzaToppings)
             {
-                AddPizzaTopping(pizzaTopping, pizzaModel, connection, transaction);
+                pizzaTopping.Id = AddPizzaTopping(pizzaTopping, pizzaModel, connection, transaction);
             }
 
             return rowsAffectedPizza;
@@ -225,7 +225,7 @@ namespace DataLibrary.BusinessLogic
             // Save pizza topping records
             foreach (var pizzaTopping in pizzaModel.PizzaToppings)
             {
-                AddPizzaTopping(pizzaTopping, pizzaModel, connection, transaction);
+                pizzaTopping.Id = AddPizzaTopping(pizzaTopping, pizzaModel, connection, transaction);
             }
 
             return pizzaModel.Id;
@@ -246,7 +246,7 @@ namespace DataLibrary.BusinessLogic
                 {
                     try
                     {
-                        AddPizza(pizzaModel, connection, transaction);
+                        pizzaModel.Id = AddPizza(pizzaModel, connection, transaction);
                         transaction.Commit();
                     }
                     catch (Exception ex)

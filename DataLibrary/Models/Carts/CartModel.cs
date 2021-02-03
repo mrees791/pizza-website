@@ -17,5 +17,16 @@ namespace DataLibrary.Models.Carts
         public List<CartSauceModel> CartSauces { get; set; }
         public List<CartSideModel> CartSides { get; set; }
         public List<CartWingsModel> CartWings { get; set; }
+
+        public CartModel()
+        {
+            CartDesserts = new List<CartDessertModel>();
+            CartDips = new List<CartDipModel>();
+            CartDrinks = new List<CartDrinkModel>();
+            CartPastas = new List<CartPastaModel>();
+            CartSauces = new List<CartSauceModel>();
+            CartSides = new List<CartSideModel>();
+            CartWings = new List<CartWingsModel>();
+        }
     }
 }
