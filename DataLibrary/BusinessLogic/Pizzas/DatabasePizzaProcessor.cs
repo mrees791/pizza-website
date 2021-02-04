@@ -86,13 +86,13 @@ namespace DataLibrary.BusinessLogic.Pizzas
 
         public static List<PizzaToppingModel> LoadPizzaToppings()
         {
-            string sql = @"select Id, PizzaId, ToppingHalf, ToppingAmount, MenuPizzaToppingId from dbo.PizzaTopping;";
             List<PizzaToppingModel> pizzaToppingList = new List<PizzaToppingModel>();
             List<MenuPizzaToppingModel> menuPizzaToppings = DatabaseMenuPizzaProcessor.LoadMenuPizzaToppings();
 
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
-                List<dynamic> queryList = connection.Query<dynamic>(sql).ToList();
+                string selectQuerySql = @"select Id, PizzaId, ToppingHalf, ToppingAmount, MenuPizzaToppingId from dbo.PizzaTopping;";
+                List<dynamic> queryList = connection.Query<dynamic>(selectQuerySql).ToList();
 
                 foreach (var item in queryList)
                 {
@@ -112,8 +112,6 @@ namespace DataLibrary.BusinessLogic.Pizzas
 
         public static List<PizzaModel> LoadPizzas()
         {
-            string sql = @"select Id, Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId from dbo.Pizza;";
-
             var pizzaList = new List<PizzaModel>();
             List<PizzaToppingModel> pizzaToppingList = LoadPizzaToppings();
             List<MenuPizzaCheeseModel> menuPizzaCheeseList = DatabaseMenuPizzaProcessor.LoadMenuPizzaCheeses();
@@ -123,7 +121,8 @@ namespace DataLibrary.BusinessLogic.Pizzas
 
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
-                List<dynamic> queryList = connection.Query<dynamic>(sql).ToList();
+                string selectQuerySql = @"select Id, Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId from dbo.Pizza;";
+                List<dynamic> queryList = connection.Query<dynamic>(selectQuerySql).ToList();
 
                 foreach (var item in queryList)
                 {
@@ -210,10 +209,10 @@ namespace DataLibrary.BusinessLogic.Pizzas
 
         internal static int AddPizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
         {
-            string pizzaSql = @"insert into dbo.Pizza (Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId) output Inserted.Id
+            string insertPizzaSql = @"insert into dbo.Pizza (Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId) output Inserted.Id
                                 values (@Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId);";
 
-            object queryParameters = new
+            object insertPizzaQueryParameters = new
             {
                 Size = pizzaModel.Size,
                 MenuPizzaCrustId = pizzaModel.MenuPizzaCrust.Id,
@@ -225,7 +224,7 @@ namespace DataLibrary.BusinessLogic.Pizzas
             };
 
             // Save pizza record
-            pizzaModel.Id = SqlDataAccess.SaveNewRecord(pizzaSql, queryParameters, connection, transaction);
+            pizzaModel.Id = SqlDataAccess.SaveNewRecord(insertPizzaSql, insertPizzaQueryParameters, connection, transaction);
 
             // Save pizza topping records
             foreach (var pizzaTopping in pizzaModel.PizzaToppings)
