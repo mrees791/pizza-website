@@ -31,10 +31,51 @@ namespace DataLibrary.BusinessLogic.Carts
 
             foreach (var cart in carts)
             {
-                cart.CartPizzas.AddRange(cartPizzas.Where(c => c.Id == cart.Id));
+                cart.CartPizzas.AddRange(cartPizzas.Where(c => c.CartId == cart.Id));
             }
 
             return carts;
+        }
+
+        public static int DeleteAllItemsInCart(int cartId)
+        {
+            int totalRowsDeleted = 0;
+
+            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
+            {
+                connection.Open();
+
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        totalRowsDeleted = DeleteAllItemsInCart(cartId, connection, transaction);
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+
+            return totalRowsDeleted;
+        }
+
+        internal static int DeleteAllItemsInCart(int cartId, IDbConnection connection, IDbTransaction transaction)
+        {
+            int totalRowsDeleted = 0;
+
+            CartModel cart = LoadCarts().Where(c => c.Id == cartId).First();
+
+            // Delete all cart pizza records
+            foreach (var cartPizza in cart.CartPizzas)
+            {
+                totalRowsDeleted += DatabaseCartPizzaProcessor.DeleteCartPizza(cartPizza, connection, transaction);
+            }
+
+            return totalRowsDeleted;
         }
     }
 }
