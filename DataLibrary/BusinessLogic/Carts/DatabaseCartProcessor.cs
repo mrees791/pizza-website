@@ -25,15 +25,13 @@ namespace DataLibrary.BusinessLogic.Carts
             List<CartModel> carts = new List<CartModel>();
             List<CartPizzaModel> cartPizzas = DatabaseCartPizzaProcessor.LoadCartPizzas();
 
-            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
-            {
-                string selectCartQuerySql = @"select Id from dbo.Cart;";
-                carts = SqlDataAccess.LoadData<CartModel>(selectCartQuerySql);
+            // Load cart records
+            string selectCartQuerySql = @"select Id from dbo.Cart;";
+            carts = SqlDataAccess.LoadData<CartModel>(selectCartQuerySql);
 
-                foreach (var cart in carts)
-                {
-                    cart.CartPizzas.AddRange(cartPizzas.Where(c => c.Id == cart.Id));
-                }
+            foreach (var cart in carts)
+            {
+                cart.CartPizzas.AddRange(cartPizzas.Where(c => c.Id == cart.Id));
             }
 
             return carts;
