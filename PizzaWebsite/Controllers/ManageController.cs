@@ -1,6 +1,5 @@
 ﻿using PizzaWebsite.Models.Manage;
-using PizzaWebsite.Models.Menu;
-using PizzaWebsite.Models.Menu.Pizzas.Ingredients;
+using PizzaWebsite.Models.Menus.Pizzas.Ingredients;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;

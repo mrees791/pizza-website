@@ -1,4 +1,4 @@
-﻿using DataLibrary.Models.Menu;
+﻿using DataLibrary.Models.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;

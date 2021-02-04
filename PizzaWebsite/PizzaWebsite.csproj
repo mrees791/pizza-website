@@ -126,17 +126,17 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Manage\ManagePizzaIngredientsModel.cs" />
-    <Compile Include="Models\MenuItemWithIconModel.cs" />
-    <Compile Include="Models\Menu\MenuDipModel.cs" />
-    <Compile Include="Models\Menu\MenuItemModel.cs" />
-    <Compile Include="Models\Menu\MenuWingsSauceModel.cs" />
-    <Compile Include="Models\Menu\Pizzas\Ingredients\CheeseModel.cs" />
-    <Compile Include="Models\Menu\Pizzas\Ingredients\CrustModel.cs" />
-    <Compile Include="Models\Menu\Pizzas\Ingredients\CrustFlavor.cs" />
-    <Compile Include="Models\Menu\Pizzas\Ingredients\PizzaIngredientModel.cs" />
-    <Compile Include="Models\Menu\Pizzas\Ingredients\SauceModel.cs" />
-    <Compile Include="Models\Menu\Pizzas\Ingredients\ToppingModel.cs" />
-    <Compile Include="Models\Menu\Pizzas\Ingredients\ToppingTypeModel.cs" />
+    <Compile Include="Models\Menus\MenuItemWithIconModel.cs" />
+    <Compile Include="Models\Menus\MenuDipModel.cs" />
+    <Compile Include="Models\Menus\MenuItemModel.cs" />
+    <Compile Include="Models\Menus\MenuWingsSauceModel.cs" />
+    <Compile Include="Models\Menus\Pizzas\Ingredients\CheeseModel.cs" />
+    <Compile Include="Models\Menus\Pizzas\Ingredients\CrustModel.cs" />
+    <Compile Include="Models\Menus\Pizzas\Ingredients\CrustFlavor.cs" />
+    <Compile Include="Models\Menus\Pizzas\Ingredients\PizzaIngredientModel.cs" />
+    <Compile Include="Models\Menus\Pizzas\Ingredients\SauceModel.cs" />
+    <Compile Include="Models\Menus\Pizzas\Ingredients\ToppingModel.cs" />
+    <Compile Include="Models\Menus\Pizzas\Ingredients\ToppingTypeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

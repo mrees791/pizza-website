@@ -64,16 +64,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessLogic\DatabaseCartProcessor.cs" />
-    <Compile Include="BusinessLogic\DatabaseMenuPizzaProcessor.cs" />
-    <Compile Include="BusinessLogic\DatabaseMenuProcessor.cs" />
-    <Compile Include="BusinessLogic\DatabasePizzaProcessor.cs" />
-    <Compile Include="BusinessLogic\DatabaseUserProcessor.cs" />
     <Compile Include="DataAccess\SqlDataAccess.cs" />
     <Compile Include="Models\CustomerOrders\CustomerOrderModel.cs" />
     <Compile Include="Models\CustomerOrders\DeliveryInfoModel.cs" />
     <Compile Include="Models\Employees\EmployeeLocationModel.cs" />
     <Compile Include="Models\Employees\EmployeeModel.cs" />
+    <Compile Include="Models\Menus\DrinkSize.cs" />
     <Compile Include="Models\Stores\StoreLocationModel.cs" />
     <Compile Include="Models\Users\DeliveryAddressModel.cs" />
     <Compile Include="Models\Users\UserModel.cs" />
@@ -88,23 +84,23 @@
     <Compile Include="Models\Carts\CartSauceModel.cs" />
     <Compile Include="Models\Carts\CartSideModel.cs" />
     <Compile Include="Models\Carts\CartWingsModel.cs" />
-    <Compile Include="Models\Menu\MenuDessertModel.cs" />
-    <Compile Include="Models\Menu\MenuDipModel.cs" />
-    <Compile Include="Models\Menu\MenuDrinkModel.cs" />
-    <Compile Include="Models\Menu\MenuItemModel.cs" />
-    <Compile Include="Models\Menu\MenuItemWithIconModel.cs" />
-    <Compile Include="Models\Menu\MenuPastaModel.cs" />
-    <Compile Include="Models\Menu\MenuSauceModel.cs" />
-    <Compile Include="Models\Menu\MenuSideModel.cs" />
-    <Compile Include="Models\Menu\MenuWingsModel.cs" />
-    <Compile Include="Models\Menu\MenuWingsSauceModel.cs" />
-    <Compile Include="Models\Menu\Pizzas\MenuPizzaModel.cs" />
-    <Compile Include="Models\Menu\Pizzas\MenuPizzaCheeseModel.cs" />
-    <Compile Include="Models\Menu\Pizzas\MenuPizzaCrustFlavorModel.cs" />
-    <Compile Include="Models\Menu\Pizzas\MenuPizzaCrustModel.cs" />
-    <Compile Include="Models\Menu\Pizzas\MenuPizzaItemModel.cs" />
-    <Compile Include="Models\Menu\Pizzas\MenuPizzaSauceModel.cs" />
-    <Compile Include="Models\Menu\Pizzas\MenuPizzaToppingModel.cs" />
+    <Compile Include="Models\Menus\MenuDessertModel.cs" />
+    <Compile Include="Models\Menus\MenuDipModel.cs" />
+    <Compile Include="Models\Menus\MenuDrinkModel.cs" />
+    <Compile Include="Models\Menus\MenuItemModel.cs" />
+    <Compile Include="Models\Menus\MenuItemWithIconModel.cs" />
+    <Compile Include="Models\Menus\MenuPastaModel.cs" />
+    <Compile Include="Models\Menus\MenuSauceModel.cs" />
+    <Compile Include="Models\Menus\MenuSideModel.cs" />
+    <Compile Include="Models\Menus\MenuWingsModel.cs" />
+    <Compile Include="Models\Menus\MenuWingsSauceModel.cs" />
+    <Compile Include="Models\Menus\Pizzas\MenuPizzaModel.cs" />
+    <Compile Include="Models\Menus\Pizzas\MenuPizzaCheeseModel.cs" />
+    <Compile Include="Models\Menus\Pizzas\MenuPizzaCrustFlavorModel.cs" />
+    <Compile Include="Models\Menus\Pizzas\MenuPizzaCrustModel.cs" />
+    <Compile Include="Models\Menus\Pizzas\MenuPizzaItemModel.cs" />
+    <Compile Include="Models\Menus\Pizzas\MenuPizzaSauceModel.cs" />
+    <Compile Include="Models\Menus\Pizzas\MenuPizzaToppingModel.cs" />
     <Compile Include="Models\Pizzas\PizzaModel.cs" />
     <Compile Include="Models\Pizzas\PizzaToppingModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -112,6 +108,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="BusinessLogic\Carts\" />
+    <Folder Include="BusinessLogic\Menus\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
