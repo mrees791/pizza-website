@@ -30,7 +30,7 @@ namespace DataLibrary.BusinessLogic.Carts
                 PizzaId = cartPizza.Pizza.Id,
                 PricePerItem = cartPizza.Pizza.GetPrice(),
                 Quantity = cartPizza.Quantity,
-                DateAddedToCart = DateTime.Now
+                DateAddedToCart = cartPizza.DateAddedToCart
             };
 
             cartPizza.Id = SqlDataAccess.SaveNewRecord(insertCartPizzaSql, queryParameters, connection, transaction);
