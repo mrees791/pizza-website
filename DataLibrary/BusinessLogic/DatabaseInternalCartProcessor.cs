@@ -12,7 +12,6 @@ namespace DataLibrary.BusinessLogic
 {
     internal static class DatabaseInternalCartProcessor
     {
-
         internal static int AddPizzaToCart(int cartId, PizzaModel pizza, int quantity, IDbConnection connection, IDbTransaction transaction)
         {
             string insertSql = @"insert into dbo.CartPizza (CartId, PizzaId, PricePerItem, Quantity) output Inserted.Id values(@CartId, @PizzaId, @PricePerItem, @Quantity);";
@@ -366,7 +365,7 @@ namespace DataLibrary.BusinessLogic
         internal static int AddSauceToCart(int cartId, MenuSauceModel menuSauce, int quantity, IDbConnection connection, IDbTransaction transaction)
         {
             string insertSql = @"insert into dbo.CartSauce (CartId, MenuSauceId, PricePerItem, Quantity)
-                                 output Inserted.Id values(@CartId, MenuSauceId, PricePerItem, Quantity);";
+                                 output Inserted.Id values(@CartId, @MenuSauceId, @PricePerItem, @Quantity);";
 
             object queryParameters = new
             {
