@@ -174,6 +174,7 @@ namespace DataLibrary.BusinessLogic.Pizzas
             // Save new pizza topping records
             foreach (var pizzaTopping in pizzaModel.PizzaToppings)
             {
+                pizzaTopping.PizzaId = pizzaModel.Id;
                 pizzaTopping.Id = AddPizzaTopping(pizzaTopping, connection, transaction);
             }
 

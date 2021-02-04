@@ -76,6 +76,7 @@
     <Compile Include="Models\Employees\EmployeeLocationModel.cs" />
     <Compile Include="Models\Employees\EmployeeModel.cs" />
     <Compile Include="Models\Menus\DrinkSize.cs" />
+    <Compile Include="Models\Menus\Pizzas\MenuPizzaCategory.cs" />
     <Compile Include="Models\Menus\Pizzas\PizzaCheeseAmount.cs" />
     <Compile Include="Models\Menus\Pizzas\PizzaSauceAmount.cs" />
     <Compile Include="Models\Menus\Pizzas\PizzaSize.cs" />

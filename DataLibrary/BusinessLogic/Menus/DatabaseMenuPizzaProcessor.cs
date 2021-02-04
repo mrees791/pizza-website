@@ -126,9 +126,13 @@ namespace DataLibrary.BusinessLogic.Menus
             return menuPizzaRowsDeleted;
         }
 
+        private static void SetDefaultMenuPizzaSettings(MenuPizzaModel menuPizza)
+        {
+            menuPizza.Pizza.Size = PizzaSize.Medium;
+        }
+
         public static int AddMenuPizza(MenuPizzaModel menuPizzaModel)
         {
-
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
                 connection.Open();
@@ -137,6 +141,8 @@ namespace DataLibrary.BusinessLogic.Menus
                 {
                     try
                     {
+                        SetDefaultMenuPizzaSettings(menuPizzaModel);
+
                         // Add pizza record
                         int newPizzaRecordId = DatabasePizzaProcessor.AddPizza(menuPizzaModel.Pizza, connection, transaction);
 
