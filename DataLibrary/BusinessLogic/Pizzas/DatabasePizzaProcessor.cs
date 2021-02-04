@@ -17,12 +17,11 @@ namespace DataLibrary.BusinessLogic.Pizzas
     {
         internal static int DeletePizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
         {
-            string deletePizzaSql = "delete from dbo.Pizza where Id = @Id;";
-
             // Delete pizza topping records
             int pizzaToppingRowsDeleted = DeleteAllPizzaToppings(pizzaModel, connection, transaction);
 
             // Delete pizza record
+            string deletePizzaSql = "delete from dbo.Pizza where Id = @Id;";
             int pizzaRowsDeleted = SqlDataAccess.DeleteRecord(deletePizzaSql, pizzaModel, connection, transaction);
 
             if (pizzaRowsDeleted == 0)
@@ -146,13 +145,14 @@ namespace DataLibrary.BusinessLogic.Pizzas
 
         internal static int UpdatePizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
         {
-            string pizzaSql = @"update dbo.Pizza set Size = @Size, MenuPizzaCrustId = @MenuPizzaCrustId, MenuPizzaSauceId = @MenuPizzaSauceId, 
-                                SauceAmount = @SauceAmount, MenuPizzaCheeseId = @MenuPizzaCheeseId, CheeseAmount = @CheeseAmount, MenuPizzaCrustFlavorId = @MenuPizzaCrustFlavorId where Id = @Id;";
-
             // Delete previous pizza topping records
             int pizzaToppingRowsDeleted = DeleteAllPizzaToppings(pizzaModel, connection, transaction);
 
-            object updatePizzaQueryParameters = new
+            // Update pizza record
+            string updatePizzaSql = @"update dbo.Pizza set Size = @Size, MenuPizzaCrustId = @MenuPizzaCrustId, MenuPizzaSauceId = @MenuPizzaSauceId, 
+                                      SauceAmount = @SauceAmount, MenuPizzaCheeseId = @MenuPizzaCheeseId, CheeseAmount = @CheeseAmount, MenuPizzaCrustFlavorId = @MenuPizzaCrustFlavorId where Id = @Id;";
+
+            object queryParameters = new
             {
                 Id = pizzaModel.Id,
                 Size = pizzaModel.Size,
@@ -164,8 +164,7 @@ namespace DataLibrary.BusinessLogic.Pizzas
                 MenuPizzaCrustFlavorId = pizzaModel.MenuPizzaCrustFlavor.Id
             };
 
-            // Update pizza record
-            int rowsAffectedPizza = SqlDataAccess.UpdateRecord(pizzaSql, updatePizzaQueryParameters, connection, transaction);
+            int rowsAffectedPizza = SqlDataAccess.UpdateRecord(updatePizzaSql, queryParameters, connection, transaction);
 
             if (rowsAffectedPizza == 0)
             {
@@ -209,10 +208,11 @@ namespace DataLibrary.BusinessLogic.Pizzas
 
         internal static int AddPizza(PizzaModel pizzaModel, IDbConnection connection, IDbTransaction transaction)
         {
+            // Save pizza record
             string insertPizzaSql = @"insert into dbo.Pizza (Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId) output Inserted.Id
                                 values (@Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId);";
 
-            object insertPizzaQueryParameters = new
+            object queryParameters = new
             {
                 Size = pizzaModel.Size,
                 MenuPizzaCrustId = pizzaModel.MenuPizzaCrust.Id,
@@ -223,8 +223,7 @@ namespace DataLibrary.BusinessLogic.Pizzas
                 MenuPizzaCrustFlavorId = pizzaModel.MenuPizzaCrustFlavor.Id
             };
 
-            // Save pizza record
-            pizzaModel.Id = SqlDataAccess.SaveNewRecord(insertPizzaSql, insertPizzaQueryParameters, connection, transaction);
+            pizzaModel.Id = SqlDataAccess.SaveNewRecord(insertPizzaSql, queryParameters, connection, transaction);
 
             // Save pizza topping records
             foreach (var pizzaTopping in pizzaModel.PizzaToppings)
