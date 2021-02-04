@@ -78,22 +78,24 @@ namespace DataLibrary.BusinessLogic.Carts
             return totalRowsDeleted;
         }
 
-        internal static int CloneCart(int cartId, IDbConnection connection, IDbTransaction transaction)
+        internal static int CloneCart(int originalCartId, int destinationCartId, IDbConnection connection, IDbTransaction transaction)
         {
-            CartModel originalCart = LoadCarts().Where(c => c.Id == cartId).First();
-            int clonedCartId = AddNewCart(connection, transaction);
+            List<CartModel> carts = LoadCarts();
+            CartModel originalCart = carts.Where(c => c.Id == originalCartId).First();
+
+            int itemsDeletedFromDestinationCart = DeleteAllItemsInCart(destinationCartId);
 
             // Clone all cart pizza records
             foreach (var cartPizza in originalCart.CartPizzas)
             {
-                cartPizza.CartId = clonedCartId;
+                cartPizza.CartId = destinationCartId;
                 int cartPizzaId = DatabaseCartPizzaProcessor.AddPizzaToCart(cartPizza, connection, transaction);
             }
 
-            return clonedCartId;
+            return destinationCartId;
         }
 
-        public static int CloneCart(int cartId)
+        public static int CloneCart(int originalCartId, int destinationCartId)
         {
             int clonedCartId = 0;
 
@@ -105,7 +107,7 @@ namespace DataLibrary.BusinessLogic.Carts
                 {
                     try
                     {
-                        clonedCartId = CloneCart(cartId, connection, transaction);
+                        clonedCartId = CloneCart(originalCartId, destinationCartId, connection, transaction);
                         transaction.Commit();
                     }
                     catch (Exception ex)
