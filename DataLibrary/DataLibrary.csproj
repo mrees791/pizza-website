@@ -64,8 +64,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\Carts\DatabaseCartPizzaProcessor.cs" />
+    <Compile Include="BusinessLogic\Carts\DatabaseCartProcessor.cs" />
     <Compile Include="BusinessLogic\Menus\DatabaseMenuPizzaProcessor.cs" />
     <Compile Include="BusinessLogic\Menus\DatabaseMenuProcessor.cs" />
+    <Compile Include="BusinessLogic\Pizzas\DatabasePizzaProcessor.cs" />
+    <Compile Include="BusinessLogic\Users\DatabaseUserProcessor.cs" />
     <Compile Include="DataAccess\SqlDataAccess.cs" />
     <Compile Include="Models\CustomerOrders\CustomerOrderModel.cs" />
     <Compile Include="Models\CustomerOrders\DeliveryInfoModel.cs" />
@@ -115,8 +119,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BusinessLogic\Carts\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
