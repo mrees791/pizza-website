@@ -1,4 +1,5 @@
-﻿using DataLibrary.Models.Menus.Pizzas;
+﻿using DataLibrary.Models.Menus;
+using DataLibrary.Models.Menus.Pizzas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,21 +22,21 @@ namespace DataLibrary.Models.Pizzas
 
             switch (ToppingAmount)
             {
-                case "Light":
+                case PizzaToppingAmount.Light:
                     total += MenuPizzaTopping.PriceLight;
                     break;
-                case "Regular":
+                case PizzaToppingAmount.Regular:
                     total += MenuPizzaTopping.PriceRegular;
                     break;
-                case "Extra":
+                case PizzaToppingAmount.Extra:
                     total += MenuPizzaTopping.PriceExtra;
                     break;
             }
 
             switch (ToppingHalf)
             {
-                case "Left":
-                case "Right":
+                case PizzaToppingHalf.Left:
+                case PizzaToppingHalf.Right:
                     total /= 2.0m;
                     break;
             }

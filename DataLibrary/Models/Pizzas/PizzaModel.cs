@@ -30,39 +30,39 @@ namespace DataLibrary.Models.Pizzas
 
             switch (Size)
             {
-                case "Small":
+                case PizzaSize.Small:
                     total += MenuPizzaCrust.PriceSmall;
                     break;
-                case "Medium":
+                case PizzaSize.Medium:
                     total += MenuPizzaCrust.PriceMedium;
                     break;
-                case "Large":
+                case PizzaSize.Large:
                     total += MenuPizzaCrust.PriceLarge;
                     break;
             }
 
             switch (SauceAmount)
             {
-                case "Light":
+                case PizzaSauceAmount.Light:
                     total += MenuPizzaSauce.PriceLight;
                     break;
-                case "Regular":
+                case PizzaSauceAmount.Regular:
                     total += MenuPizzaSauce.PriceRegular;
                     break;
-                case "Extra":
+                case PizzaSauceAmount.Extra:
                     total += MenuPizzaSauce.PriceExtra;
                     break;
             }
 
             switch (CheeseAmount)
             {
-                case "Light":
+                case PizzaCheeseAmount.Light:
                     total += MenuPizzaCheese.PriceLight;
                     break;
-                case "Regular":
+                case PizzaCheeseAmount.Regular:
                     total += MenuPizzaCheese.PriceRegular;
                     break;
-                case "Extra":
+                case PizzaCheeseAmount.Extra:
                     total += MenuPizzaCheese.PriceExtra;
                     break;
             }
