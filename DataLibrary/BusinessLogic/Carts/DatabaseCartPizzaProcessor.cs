@@ -1,6 +1,8 @@
-﻿using DataLibrary.BusinessLogic.Pizzas;
+﻿using Dapper;
+using DataLibrary.BusinessLogic.Pizzas;
 using DataLibrary.DataAccess;
 using DataLibrary.Models.Carts;
+using DataLibrary.Models.Pizzas;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -149,6 +151,33 @@ namespace DataLibrary.BusinessLogic.Carts
             }
 
             return cartPizzaRowsDeleted;
+        }
+
+        public static List<CartPizzaModel> LoadCartPizzas()
+        {
+            List<CartPizzaModel> cartPizzas = new List<CartPizzaModel>();
+            List<PizzaModel> pizzas = DatabasePizzaProcessor.LoadPizzas();
+
+            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
+            {
+                string selectQuerySql = @"select Id, CartId, PizzaId, PricePerItem, Quantity, DateAddedToCart from dbo.CartPizza;";
+                List<dynamic> queryList = connection.Query<dynamic>(selectQuerySql).ToList();
+
+                foreach (var item in queryList)
+                {
+                    cartPizzas.Add(new CartPizzaModel()
+                    {
+                        Id = item.Id,
+                        CartId = item.CartId,
+                        Pizza = pizzas.Where(p => p.Id == item.PizzaId).First(),
+                        PricePerItem = item.PricePerItem,
+                        Quantity = item.Quantity,
+                        DateAddedToCart = item.DateAddedToCart
+                    });
+                }
+            }
+
+            return cartPizzas;
         }
     }
 }
