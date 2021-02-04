@@ -72,6 +72,11 @@
     <Compile Include="Models\Employees\EmployeeLocationModel.cs" />
     <Compile Include="Models\Employees\EmployeeModel.cs" />
     <Compile Include="Models\Menus\DrinkSize.cs" />
+    <Compile Include="Models\Menus\Pizzas\PizzaCheeseAmount.cs" />
+    <Compile Include="Models\Menus\Pizzas\PizzaSauceAmount.cs" />
+    <Compile Include="Models\Menus\Pizzas\PizzaSize.cs" />
+    <Compile Include="Models\Menus\Pizzas\PizzaToppingAmount.cs" />
+    <Compile Include="Models\Menus\Pizzas\PizzaToppingHalf.cs" />
     <Compile Include="Models\Stores\StoreLocationModel.cs" />
     <Compile Include="Models\Users\DeliveryAddressModel.cs" />
     <Compile Include="Models\Users\UserModel.cs" />
