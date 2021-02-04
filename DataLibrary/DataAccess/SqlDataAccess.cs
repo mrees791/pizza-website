@@ -12,7 +12,7 @@ namespace DataLibrary.DataAccess
 {
     public static class SqlDataAccess
     {
-        public static string GetConnectiongString(string connectionName = "PizzaDatabase")
+        internal static string GetConnectiongString(string connectionName = "PizzaDatabase")
         {
             return ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
         }
@@ -23,7 +23,7 @@ namespace DataLibrary.DataAccess
         /// <typeparam name="T">Model data-type</typeparam>
         /// <param name="sql">Select SQL query</param>
         /// <returns>List of records</returns>
-        public static List<T> LoadData<T>(string sql)
+        internal static List<T> LoadData<T>(string sql)
         {
             using (IDbConnection connection = new SqlConnection(GetConnectiongString()))
             {
@@ -31,7 +31,7 @@ namespace DataLibrary.DataAccess
             }
         }
 
-        public static T LoadSingleRecord<T>(string selectSql, object parameters)
+        internal static T LoadSingleRecord<T>(string selectSql, object parameters)
         {
             using (IDbConnection connection = new SqlConnection(GetConnectiongString()))
             {
@@ -46,7 +46,7 @@ namespace DataLibrary.DataAccess
         /// <param name="sql">Update SQL query</param>
         /// <param name="data">Updated model</param>
         /// <returns>Number of rows affected</returns>
-        public static int UpdateRecord<T>(string sql, T data)
+        internal static int UpdateRecord<T>(string sql, T data)
         {
             using (IDbConnection connection = new SqlConnection(GetConnectiongString()))
             {
@@ -54,7 +54,7 @@ namespace DataLibrary.DataAccess
             }
         }
 
-        public static int UpdateRecord(string sql, object data, IDbConnection connection, IDbTransaction transaction)
+        internal static int UpdateRecord(string sql, object data, IDbConnection connection, IDbTransaction transaction)
         {
             return connection.Execute(sql, data, transaction);
         }
@@ -66,7 +66,7 @@ namespace DataLibrary.DataAccess
         /// <param name="sql"></param>
         /// <param name="data"></param>
         /// <returns>Number of rows affected.</returns>
-        public static int UpdateRecord(string sql, object data)
+        internal static int UpdateRecord(string sql, object data)
         {
             using (IDbConnection connection = new SqlConnection(GetConnectiongString()))
             {
@@ -82,7 +82,7 @@ namespace DataLibrary.DataAccess
         /// <param name="sql">Insert SQL query</param>
         /// <param name="data">Model</param>
         /// <returns>ID of newly created record</returns>
-        public static int SaveNewRecord<T>(string sql, T data)
+        internal static int SaveNewRecord<T>(string sql, T data)
         {
             using (IDbConnection connection = new SqlConnection(GetConnectiongString()))
             {
@@ -90,7 +90,7 @@ namespace DataLibrary.DataAccess
             }
         }
 
-        public static int SaveNewRecord<T>(string sql, T data, IDbConnection connection, IDbTransaction transaction)
+        internal static int SaveNewRecord<T>(string sql, T data, IDbConnection connection, IDbTransaction transaction)
         {
             return connection.Query<int>(sql, data, transaction).Single();
         }
@@ -102,7 +102,7 @@ namespace DataLibrary.DataAccess
         /// <param name="sql"></param>
         /// <param name="data"></param>
         /// <returns>ID of newly created record</returns>
-        public static int SaveNewRecord(string sql, object data, IDbConnection connection)
+        internal static int SaveNewRecord(string sql, object data, IDbConnection connection)
         {
             return connection.Query<int>(sql, data).Single();
         }
@@ -115,12 +115,12 @@ namespace DataLibrary.DataAccess
         /// <param name="sql"></param>
         /// <param name="data"></param>
         /// <returns>ID of newly created record</returns>
-        public static int SaveNewRecord(string sql, object data, IDbConnection connection, IDbTransaction transaction)
+        internal static int SaveNewRecord(string sql, object data, IDbConnection connection, IDbTransaction transaction)
         {
             return connection.Query<int>(sql, data, transaction).Single();
         }
 
-        public static int DeleteRecord<T>(string sql, T data, IDbConnection connection, IDbTransaction transaction)
+        internal static int DeleteRecord<T>(string sql, T data, IDbConnection connection, IDbTransaction transaction)
         {
             return connection.Execute(sql, data, transaction);
         }

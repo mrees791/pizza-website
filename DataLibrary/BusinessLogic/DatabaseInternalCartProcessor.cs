@@ -1,44 +1,17 @@
 ﻿using DataLibrary.DataAccess;
-using DataLibrary.Models.Carts;
 using DataLibrary.Models.Menu;
 using DataLibrary.Models.Pizzas;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataLibrary.BusinessLogic
 {
-    public static class DatabaseCartProcessor
+    internal static class DatabaseInternalCartProcessor
     {
-        public static int AddPizzaToCart(int cartId, PizzaModel pizza, int quantity)
-        {
-            int cartPizzaId = 0;
-
-            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
-            {
-                connection.Open();
-
-                using (var transaction = connection.BeginTransaction())
-                {
-                    try
-                    {
-                        cartPizzaId = AddPizzaToCart(cartId, pizza, quantity, connection, transaction);
-                        transaction.Commit();
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
-                }
-            }
-
-            return cartPizzaId;
-        }
 
         internal static int AddPizzaToCart(int cartId, PizzaModel pizza, int quantity, IDbConnection connection, IDbTransaction transaction)
         {
@@ -47,7 +20,7 @@ namespace DataLibrary.BusinessLogic
             // Save pizza record
             pizza.Id = DatabasePizzaProcessor.AddPizza(pizza, connection, transaction);
 
-            object queryParameters = new 
+            object queryParameters = new
             {
                 CartId = cartId,
                 PizzaId = pizza.Id,
@@ -408,12 +381,12 @@ namespace DataLibrary.BusinessLogic
 
         internal static int UpdateCartSauceQuantity()
         {
-
+            throw new NotImplementedException();
         }
 
         internal static int UpdateCartSauce()
         {
-
+            throw new NotImplementedException();
         }
 
         internal static int AddNewCart(IDbConnection connection, IDbTransaction transaction)
