@@ -87,7 +87,7 @@ namespace DataLibrary.BusinessLogic.Carts
             foreach (var cartPizza in originalCart.CartPizzas)
             {
                 cartPizza.CartId = clonedCartId;
-                int rowsAdded = DatabaseCartPizzaProcessor.AddPizzaToCart(cartPizza, connection, transaction);
+                int cartPizzaId = DatabaseCartPizzaProcessor.AddPizzaToCart(cartPizza, connection, transaction);
             }
 
             return clonedCartId;
