@@ -27,13 +27,14 @@ namespace DataLibrary.BusinessLogic.Menus
                 {
                     try
                     {
-                        string updateMenuPizzaSql = @"update dbo.MenuPizza set CategoryName = @CategoryName, AvailableForPurchase = @AvailableForPurchase, PizzaName = @PizzaName,
-                                                      Description = @Description where Id = @Id;";
-
                         // Update pizza record
                         int pizzaRecordsUpdated = DatabasePizzaProcessor.UpdatePizza(menuPizzaModel.Pizza, connection, transaction);
 
-                        object menuPizzaUpdateQueryParameters = new
+                        // Update menu pizza record
+                        string updateMenuPizzaSql = @"update dbo.MenuPizza set CategoryName = @CategoryName, AvailableForPurchase = @AvailableForPurchase, PizzaName = @PizzaName,
+                                                      Description = @Description where Id = @Id;";
+
+                        object queryParameters = new
                         {
                             Id = menuPizzaModel.Id,
                             CategoryName = menuPizzaModel.CategoryName,
@@ -42,8 +43,7 @@ namespace DataLibrary.BusinessLogic.Menus
                             Description = menuPizzaModel.Description
                         };
 
-                        // Update menu pizza record
-                        menuPizzaRowsUpdated = SqlDataAccess.UpdateRecord(updateMenuPizzaSql, menuPizzaUpdateQueryParameters, connection, transaction);
+                        menuPizzaRowsUpdated = SqlDataAccess.UpdateRecord(updateMenuPizzaSql, queryParameters, connection, transaction);
 
                         if (menuPizzaRowsUpdated == 0)
                         {
@@ -70,8 +70,8 @@ namespace DataLibrary.BusinessLogic.Menus
 
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
-                string menuPizzaSql = @"select Id, PizzaId, CategoryName, AvailableForPurchase, PizzaName, Description from dbo.MenuPizza;";
-                List<dynamic> queryList = connection.Query<dynamic>(menuPizzaSql).ToList();
+                string selectMenuPizzaQuerySql = @"select Id, PizzaId, CategoryName, AvailableForPurchase, PizzaName, Description from dbo.MenuPizza;";
+                List<dynamic> queryList = connection.Query<dynamic>(selectMenuPizzaQuerySql).ToList();
 
                 foreach (var item in queryList)
                 {
@@ -102,9 +102,8 @@ namespace DataLibrary.BusinessLogic.Menus
                 {
                     try
                     {
-                        string deleteMenuPizzaSql = @"delete from dbo.MenuPizza where Id = @Id;";
-
                         // Delete menu pizza record
+                        string deleteMenuPizzaSql = @"delete from dbo.MenuPizza where Id = @Id;";
                         menuPizzaCategoryRowsDeleted = SqlDataAccess.DeleteRecord(deleteMenuPizzaSql, menuPizzaModel, connection, transaction);
 
                         // Delete pizza record
@@ -145,7 +144,7 @@ namespace DataLibrary.BusinessLogic.Menus
                         string insertMenuPizzaSql = @"insert into dbo.MenuPizza (PizzaId, CategoryName, AvailableForPurchase, PizzaName, Description)
                            output Inserted.Id values (@PizzaId, @CategoryName, @AvailableForPurchase, @PizzaName, @Description);";
 
-                        object menuPizzaQueryParameters = new
+                        object queryParameters = new
                         {
                             PizzaId = menuPizzaModel.Pizza.Id,
                             CategoryName = menuPizzaModel.CategoryName,
@@ -154,7 +153,7 @@ namespace DataLibrary.BusinessLogic.Menus
                             Description = menuPizzaModel.Description
                         };
 
-                        menuPizzaModel.Id = SqlDataAccess.SaveNewRecord(insertMenuPizzaSql, menuPizzaQueryParameters, connection, transaction);
+                        menuPizzaModel.Id = SqlDataAccess.SaveNewRecord(insertMenuPizzaSql, queryParameters, connection, transaction);
 
                         transaction.Commit();
                     }
