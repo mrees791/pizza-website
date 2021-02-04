@@ -92,7 +92,7 @@ namespace DataLibrary.BusinessLogic.Menus
 
         public static int DeleteMenuPizza(MenuPizzaModel menuPizzaModel)
         {
-            int menuPizzaCategoryRowsDeleted = 0;
+            int menuPizzaRowsDeleted = 0;
 
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
@@ -104,7 +104,7 @@ namespace DataLibrary.BusinessLogic.Menus
                     {
                         // Delete menu pizza record
                         string deleteMenuPizzaSql = @"delete from dbo.MenuPizza where Id = @Id;";
-                        menuPizzaCategoryRowsDeleted = SqlDataAccess.DeleteRecord(deleteMenuPizzaSql, menuPizzaModel, connection, transaction);
+                        menuPizzaRowsDeleted = SqlDataAccess.DeleteRecord(deleteMenuPizzaSql, menuPizzaModel, connection, transaction);
 
                         // Delete pizza record
                         int pizzaRecordsDeleted = DatabasePizzaProcessor.DeletePizza(menuPizzaModel.Pizza, connection, transaction);
@@ -123,7 +123,7 @@ namespace DataLibrary.BusinessLogic.Menus
                     }
                 }
             }
-            return menuPizzaCategoryRowsDeleted;
+            return menuPizzaRowsDeleted;
         }
 
         public static int AddMenuPizza(MenuPizzaModel menuPizzaModel)
