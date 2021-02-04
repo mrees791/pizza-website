@@ -77,5 +77,46 @@ namespace DataLibrary.BusinessLogic.Carts
 
             return totalRowsDeleted;
         }
+
+        internal static int CloneCart(int cartId, IDbConnection connection, IDbTransaction transaction)
+        {
+            CartModel originalCart = LoadCarts().Where(c => c.Id == cartId).First();
+            int clonedCartId = AddNewCart(connection, transaction);
+
+            // Clone all cart pizza records
+            foreach (var cartPizza in originalCart.CartPizzas)
+            {
+                cartPizza.CartId = clonedCartId;
+                int rowsAdded = DatabaseCartPizzaProcessor.AddPizzaToCart(cartPizza, connection, transaction);
+            }
+
+            return clonedCartId;
+        }
+
+        public static int CloneCart(int cartId)
+        {
+            int clonedCartId = 0;
+
+            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
+            {
+                connection.Open();
+
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        clonedCartId = CloneCart(cartId, connection, transaction);
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+
+            return clonedCartId;
+        }
     }
 }
