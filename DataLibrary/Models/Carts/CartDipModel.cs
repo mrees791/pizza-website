@@ -10,5 +10,10 @@ namespace DataLibrary.Models.Carts
     public class CartDipModel : CartItemModel
     {
         public MenuDipModel MenuDip { get; set; }
+
+        public override object Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

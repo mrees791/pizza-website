@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using DataLibrary.DataAccess;
 using DataLibrary.Models.Carts;
+using DataLibrary.Models.Pizzas;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -31,7 +32,7 @@ namespace DataLibrary.BusinessLogic.Carts
             return cartItems;
         }
 
-        public static List<CartModel> LoadCarts()
+        internal static List<CartModel> LoadCarts()
         {
             List<CartModel> carts = new List<CartModel>();
             List<CartItemModel> allCartItems = LoadAllCartItems();
@@ -102,29 +103,21 @@ namespace DataLibrary.BusinessLogic.Carts
             int itemsDeletedFromDestinationCart = DeleteAllItemsInCart(destinationCart, connection, transaction);
             cartItemRowsAffected += itemsDeletedFromDestinationCart;
 
-            // Clone all cart items
-            foreach (CartItemModel cartItem in originalCart.CartItems)
+            CartModel clonedCart = (CartModel)originalCart.Clone();
+
+            foreach (CartItemModel cartItem in clonedCart.CartItems)
             {
+                cartItem.CartId = destinationCart.Id;
+
                 if (cartItem is CartPizzaModel)
                 {
-                    CartPizzaModel clonedCartPizza = new CartPizzaModel()
-                    {
-                        CartId = destinationCart.Id,
-                        DateAddedToCart = cartItem.DateAddedToCart,
-                        Pizza = ((CartPizzaModel)cartItem).Pizza,
-                        PricePerItem = cartItem.PricePerItem,
-                        Quantity = cartItem.Quantity
-
-                    };
-                    int cartPizzaId = DatabaseCartPizzaProcessor.AddPizzaToCart(clonedCartPizza, connection, transaction);
-                    cartItemRowsAffected++;
+                    cartItem.Id = DatabaseCartPizzaProcessor.AddPizzaToCart((CartPizzaModel)cartItem, connection, transaction);
                 }
                 else
                 {
                     throw new Exception("Cart item type needs implemented.");
                 }
             }
-
             return cartItemRowsAffected;
         }
 
@@ -158,10 +151,8 @@ namespace DataLibrary.BusinessLogic.Carts
             return cartItemRowsAffected;
         }
 
-        /*internal static int MoveCartItems(int originalCartId, int destinationCartId, IDbConnection connection, IDbTransaction transaction)
+        public static int MoveCartItems(int originalCartId, int destinationCartId)
         {
-
-
             List<CartModel> carts = LoadCarts();
             CartModel originalCart = carts.Where(c => c.Id == originalCartId).First();
             CartModel destinationCart = carts.Where(c => c.Id == destinationCartId).First();
@@ -189,6 +180,6 @@ namespace DataLibrary.BusinessLogic.Carts
             }
 
             return cartItemRowsAffected;
-        }*/
+        }
     }
 }

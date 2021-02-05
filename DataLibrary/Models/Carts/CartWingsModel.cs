@@ -12,5 +12,10 @@ namespace DataLibrary.Models.Carts
         public MenuWingsModel MenuWings { get; set; }
         public MenuWingsSauceModel MenuWingsSauce { get; set; }
         public int PieceAmount { get; set; }
+
+        public override object Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

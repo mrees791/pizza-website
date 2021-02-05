@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Pizzas
 {
-    public class PizzaModel
+    public class PizzaModel : ICloneable
     {
         public int Id { get; set; }
         public string Size { get; set; }
@@ -73,6 +73,22 @@ namespace DataLibrary.Models.Pizzas
             }
 
             return total;
+        }
+
+        public object Clone()
+        {
+            return new PizzaModel()
+            {
+                Id = Id,
+                CheeseAmount = CheeseAmount,
+                MenuPizzaCheese = MenuPizzaCheese,
+                MenuPizzaCrust = MenuPizzaCrust,
+                MenuPizzaCrustFlavor = MenuPizzaCrustFlavor,
+                MenuPizzaSauce = MenuPizzaSauce,
+                PizzaToppings = new List<PizzaToppingModel>(PizzaToppings),
+                SauceAmount = SauceAmount,
+                Size = Size
+            };
         }
     }
 }

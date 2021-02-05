@@ -11,5 +11,10 @@ namespace DataLibrary.Models.Carts
     {
         public MenuDrinkModel MenuDrink { get; set; }
         public string Size { get; set; }
+
+        public override object Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
