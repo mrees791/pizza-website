@@ -6,12 +6,17 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Carts
 {
-    public abstract class CartItemModel
+    public abstract class CartItemModel : IComparable<CartItemModel>
     {
         public int Id { get; set; }
         public int CartId { get; set; }
         public decimal PricePerItem { get; set; }
         public int Quantity { get; set; }
         public DateTime DateAddedToCart { get; set; }
+
+        public int CompareTo(CartItemModel other)
+        {
+            return DateAddedToCart.CompareTo(other.DateAddedToCart);
+        }
     }
 }
