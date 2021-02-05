@@ -89,7 +89,7 @@ namespace DataLibrary.BusinessLogic.Users
 
         public static UserModel SignInUser(string email, string passwordHash)
         {
-            string selectUserSql = @"select TOP 1 Id, CurrentCartId, Email, PasswordHash, IsBanned, EmailConfirmed, PhoneNumber, PhoneNumberConfirmed, ZipCode
+            string selectUserSql = @"select TOP 1 Id, CurrentCartId, ConfirmOrderCartId, Email, PasswordHash, IsBanned, EmailConfirmed, PhoneNumber, PhoneNumberConfirmed, ZipCode
                                      from [dbo].[user] where Email=@Email and PasswordHash=@PasswordHash order by Id asc;";
 
             object queryParameters = new
