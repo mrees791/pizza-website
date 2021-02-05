@@ -32,7 +32,7 @@ namespace DataLibrary.BusinessLogic.Carts
 
         internal static int DeleteCartItem(CartItemModel cartItem, IDbConnection connection, IDbTransaction transaction)
         {
-            string deleteCartItemSql = @"delete from dbo.CartItem where Id = @Id;";
+            string deleteCartItemSql = @"delete from dbo.CartItem where Id = @CartItemId;";
             int cartPizzaRowsDeleted = SqlDataAccess.DeleteRecord(deleteCartItemSql, cartItem, connection, transaction);
 
             return cartPizzaRowsDeleted;
@@ -50,9 +50,9 @@ namespace DataLibrary.BusinessLogic.Carts
                 Quantity = cartItem.Quantity
             };
 
-            cartItem.Id = SqlDataAccess.SaveNewRecord(insertCartItemSql, cartItemQueryParameters, connection, transaction);
+            cartItem.CartItemId = SqlDataAccess.SaveNewRecord(insertCartItemSql, cartItemQueryParameters, connection, transaction);
 
-            return cartItem.Id;
+            return cartItem.CartItemId;
         }
 
         internal static int AddNewCart(IDbConnection connection, IDbTransaction transaction)

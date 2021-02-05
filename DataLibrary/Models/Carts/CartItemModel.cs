@@ -8,7 +8,6 @@ namespace DataLibrary.Models.Carts
 {
     public abstract class CartItemModel : IComparable<CartItemModel>, ICloneable
     {
-        public int Id { get; set; }
         public int CartId { get; set; }
         public int CartItemId { get; set; }
         public decimal PricePerItem { get; set; }

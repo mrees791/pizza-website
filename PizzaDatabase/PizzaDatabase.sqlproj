@@ -61,14 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Cart.sql" />
-    <Build Include="dbo\Tables\CartDessert.sql" />
-    <Build Include="dbo\Tables\CartDip.sql" />
-    <Build Include="dbo\Tables\CartDrink.sql" />
-    <Build Include="dbo\Tables\CartPasta.sql" />
     <Build Include="dbo\Tables\CartPizza.sql" />
-    <Build Include="dbo\Tables\CartSauce.sql" />
-    <Build Include="dbo\Tables\CartSide.sql" />
-    <Build Include="dbo\Tables\CartWings.sql" />
     <Build Include="dbo\Tables\CustomerOrder.sql" />
     <Build Include="dbo\Tables\DeliveryAddress.sql" />
     <Build Include="dbo\Tables\Employee.sql" />
@@ -93,5 +86,6 @@
     <Build Include="dbo\Tables\UserRole.sql" />
     <Build Include="dbo\Tables\DeliveryInfo.sql" />
     <Build Include="dbo\Tables\MenuPizza.sql" />
+    <Build Include="dbo\Tables\CartItem.sql" />
   </ItemGroup>
 </Project>

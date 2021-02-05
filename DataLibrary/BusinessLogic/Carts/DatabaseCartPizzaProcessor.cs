@@ -21,7 +21,7 @@ namespace DataLibrary.BusinessLogic.Carts
             cartPizza.Pizza.Id = DatabasePizzaProcessor.AddPizza(cartPizza.Pizza, connection, transaction);
 
             // Save cart item record
-            cartPizza.Id = DatabaseCartProcessor.AddCartItem(cartPizza, connection, transaction);
+            cartPizza.CartItemId = DatabaseCartProcessor.AddCartItem(cartPizza, connection, transaction);
 
             // Save cart pizza record
             string insertCartPizzaSql = @"insert into dbo.CartPizza (CartItemId, PizzaId) output Inserted.Id
@@ -29,13 +29,13 @@ namespace DataLibrary.BusinessLogic.Carts
 
             object cartPizzaQueryParameters = new
             {
-                CartItemId = cartPizza.Id,
+                CartItemId = cartPizza.CartItemId,
                 PizzaId = cartPizza.Pizza.Id
             };
 
-            int cartPizzaId = SqlDataAccess.SaveNewRecord(insertCartPizzaSql, cartPizzaQueryParameters, connection, transaction);
+            cartPizza.CartPizzaId = SqlDataAccess.SaveNewRecord(insertCartPizzaSql, cartPizzaQueryParameters, connection, transaction);
 
-            return cartPizza.Id;
+            return cartPizza.CartItemId;
         }
 
         public static int AddPizzaToCart(CartPizzaModel cartPizza)
@@ -48,7 +48,7 @@ namespace DataLibrary.BusinessLogic.Carts
                 {
                     try
                     {
-                        cartPizza.Id = AddPizzaToCart(cartPizza, connection, transaction);
+                        cartPizza.CartPizzaId = AddPizzaToCart(cartPizza, connection, transaction);
                         transaction.Commit();
                     }
                     catch (Exception ex)
@@ -59,7 +59,7 @@ namespace DataLibrary.BusinessLogic.Carts
                 }
             }
 
-            return cartPizza.Id;
+            return cartPizza.CartPizzaId;
         }
 
         public static List<CartPizzaModel> LoadCartPizzas()
@@ -67,7 +67,7 @@ namespace DataLibrary.BusinessLogic.Carts
             List<CartPizzaModel> cartPizzas = new List<CartPizzaModel>();
             List<PizzaModel> pizzas = DatabasePizzaProcessor.LoadPizzas();
 
-            string selectQuerySql = @"select CartItem.Id, CartItem.CartId, CartItem.PricePerItem, CartItem.Quantity, CartPizza.CartItemId, CartPizza.PizzaId
+            string selectQuerySql = @"select CartItem.Id, CartItem.CartId, CartItem.PricePerItem, CartItem.Quantity, CartPizza.Id as CartPizzaId, CartPizza.CartItemId, CartPizza.PizzaId
                                       from dbo.CartItem right join CartPizza on CartItem.Id=CartPizza.CartItemId;";
             List<dynamic> queryList = SqlDataAccess.LoadData<dynamic>(selectQuerySql).ToList();
 
@@ -75,11 +75,11 @@ namespace DataLibrary.BusinessLogic.Carts
             {
                 cartPizzas.Add(new CartPizzaModel()
                 {
-                    Id = item.Id,
                     CartId = item.CartId,
                     CartItemId = item.CartItemId,
                     PricePerItem = item.PricePerItem,
                     Quantity = item.Quantity,
+                    CartPizzaId = item.CartPizzaId,
                     Pizza = pizzas.Where(p => p.Id == item.PizzaId).First()
                 });
             }

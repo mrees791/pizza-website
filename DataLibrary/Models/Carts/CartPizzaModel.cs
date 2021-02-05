@@ -9,6 +9,7 @@ namespace DataLibrary.Models.Carts
 {
     public class CartPizzaModel : CartItemModel
     {
+        public int CartPizzaId { get; set; }
         public PizzaModel Pizza { get; set; }
 
         public override object Clone()
