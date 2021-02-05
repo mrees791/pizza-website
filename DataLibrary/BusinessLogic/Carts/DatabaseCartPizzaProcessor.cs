@@ -89,7 +89,7 @@ namespace DataLibrary.BusinessLogic.Carts
 
         public static int UpdateCartPizza(CartPizzaModel cartPizza)
         {
-            int cartPizzaRowsAffected = 0;
+            int cartItemRowsAffected = 0;
 
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
@@ -103,16 +103,7 @@ namespace DataLibrary.BusinessLogic.Carts
                         int pizzaRowsAffected = DatabasePizzaProcessor.UpdatePizza(cartPizza.Pizza, connection, transaction);
 
                         // Update cart item record
-                        string updateSql = @"update dbo.CartItem set PricePerItem = @PricePerItem, Quantity = @Quantity where Id = @Id;";
-
-                        object queryParameters = new
-                        {
-                            Id = cartPizza.CartItemId,
-                            PricePerItem = cartPizza.Pizza.GetPrice(),
-                            Quantity = cartPizza.Quantity
-                        };
-
-                        cartPizzaRowsAffected = SqlDataAccess.UpdateRecord(updateSql, queryParameters, connection, transaction);
+                        cartItemRowsAffected = DatabaseCartProcessor.UpdateCartItem(cartPizza, connection, transaction);
 
                         transaction.Commit();
                     }
@@ -124,23 +115,23 @@ namespace DataLibrary.BusinessLogic.Carts
                 }
             }
 
-            return cartPizzaRowsAffected;
+            return cartItemRowsAffected;
         }
 
-        /*internal static int DeleteCartPizza(CartPizzaModel cartPizza, IDbConnection connection, IDbTransaction transaction)
+        internal static int DeleteCartPizza(CartPizzaModel cartPizza, IDbConnection connection, IDbTransaction transaction)
         {
             // Delete cart pizza record
             string deleteCartPizzaSql = @"delete from dbo.CartPizza where Id = @Id;";
             int cartPizzaRowsDeleted = SqlDataAccess.DeleteRecord(deleteCartPizzaSql, cartPizza, connection, transaction);
 
+            // Delete cart item record
+            int cartItemRowsDeleted = DatabaseCartProcessor.DeleteCartItem(cartPizza, connection, transaction);
+
             // Delete pizza record
             int pizzaRecordRowsDeleted = DatabasePizzaProcessor.DeletePizza(cartPizza.Pizza, connection, transaction);
 
             return cartPizzaRowsDeleted;
-        }*/
-
-        /*
-
+        }
 
         public static int DeleteCartPizza(CartPizzaModel cartPizza)
         {
@@ -166,6 +157,6 @@ namespace DataLibrary.BusinessLogic.Carts
             }
 
             return cartPizzaRowsDeleted;
-        }*/
+        }
     }
 }

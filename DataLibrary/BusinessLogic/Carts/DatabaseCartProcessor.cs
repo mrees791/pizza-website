@@ -14,6 +14,30 @@ namespace DataLibrary.BusinessLogic.Carts
 {
     public static class DatabaseCartProcessor
     {
+        internal static int UpdateCartItem(CartItemModel cartItem, IDbConnection connection, IDbTransaction transaction)
+        {
+            string updateSql = @"update dbo.CartItem set PricePerItem = @PricePerItem, Quantity = @Quantity where Id = @Id;";
+
+            object queryParameters = new
+            {
+                Id = cartItem.CartItemId,
+                PricePerItem = cartItem.PricePerItem,
+                Quantity = cartItem.Quantity
+            };
+
+            int cartItemRowsAffected = SqlDataAccess.UpdateRecord(updateSql, queryParameters, connection, transaction);
+
+            return cartItemRowsAffected;
+        }
+
+        internal static int DeleteCartItem(CartItemModel cartItem, IDbConnection connection, IDbTransaction transaction)
+        {
+            string deleteCartItemSql = @"delete from dbo.CartItem where Id = @Id;";
+            int cartPizzaRowsDeleted = SqlDataAccess.DeleteRecord(deleteCartItemSql, cartItem, connection, transaction);
+
+            return cartPizzaRowsDeleted;
+        }
+
         internal static int AddCartItem(CartItemModel cartItem, IDbConnection connection, IDbTransaction transaction)
         {
             string insertCartItemSql = @"insert into dbo.CartItem (CartId, PricePerItem, Quantity) output Inserted.Id
