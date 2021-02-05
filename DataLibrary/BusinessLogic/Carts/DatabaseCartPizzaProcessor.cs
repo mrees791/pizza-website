@@ -67,7 +67,7 @@ namespace DataLibrary.BusinessLogic.Carts
             List<CartPizzaModel> cartPizzas = new List<CartPizzaModel>();
             List<PizzaModel> pizzas = DatabasePizzaProcessor.LoadPizzas();
 
-            string selectQuerySql = @"select CartItem.Id, CartItem.CartId, CartItem.PricePerItem, CartItem.Quantity, CartPizza.Id as CartPizzaId, CartPizza.CartItemId, CartPizza.PizzaId
+            string selectQuerySql = @"select CartItem.Id as CartItemId, CartItem.CartId, CartItem.PricePerItem, CartItem.Quantity, CartPizza.Id as CartPizzaId, CartPizza.CartItemId, CartPizza.PizzaId
                                       from dbo.CartItem right join CartPizza on CartItem.Id=CartPizza.CartItemId;";
             List<dynamic> queryList = SqlDataAccess.LoadData<dynamic>(selectQuerySql).ToList();
 
