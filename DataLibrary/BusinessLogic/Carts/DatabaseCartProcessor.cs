@@ -59,10 +59,10 @@ namespace DataLibrary.BusinessLogic.Carts
         {
             string insertCartSql = @"insert into dbo.Cart output Inserted.Id default values;";
 
-            return SqlDataAccess.SaveNewRecord(insertCartSql, new { }, connection, transaction);
+            return SqlDataAccess.SaveNewRecord(insertCartSql, null, connection, transaction);
         }
 
-        /*public static List<CartItemModel> LoadAllCartItems()
+        internal static List<CartItemModel> LoadAllCartItems()
         {
             List<CartItemModel> cartItems = new List<CartItemModel>();
             List<CartPizzaModel> cartPizzas = DatabaseCartPizzaProcessor.LoadCartPizzas().ToList();
@@ -73,12 +73,11 @@ namespace DataLibrary.BusinessLogic.Carts
             return cartItems;
         }
 
-        internal static List<CartModel> LoadCarts()
+        public static List<CartModel> LoadAllCarts()
         {
             List<CartModel> carts = new List<CartModel>();
             List<CartItemModel> allCartItems = LoadAllCartItems();
 
-            // Load cart records
             string selectCartQuerySql = @"select Id from dbo.Cart;";
             carts = SqlDataAccess.LoadData<CartModel>(selectCartQuerySql);
 
@@ -89,6 +88,8 @@ namespace DataLibrary.BusinessLogic.Carts
 
             return carts;
         }
+
+        /*
 
         public static int DeleteAllItemsInCart(int cartId)
         {
