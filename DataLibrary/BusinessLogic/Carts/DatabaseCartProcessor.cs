@@ -40,6 +40,7 @@ namespace DataLibrary.BusinessLogic.Carts
         public static int DeleteAllItemsInCart(int cartId)
         {
             int totalRowsDeleted = 0;
+            CartModel cart = LoadCarts().Where(c => c.Id == cartId).First();
 
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
@@ -49,7 +50,7 @@ namespace DataLibrary.BusinessLogic.Carts
                 {
                     try
                     {
-                        totalRowsDeleted = DeleteAllItemsInCart(cartId, connection, transaction);
+                        totalRowsDeleted = DeleteAllItemsInCart(cart, connection, transaction);
                         transaction.Commit();
                     }
                     catch (Exception ex)
@@ -63,11 +64,9 @@ namespace DataLibrary.BusinessLogic.Carts
             return totalRowsDeleted;
         }
 
-        internal static int DeleteAllItemsInCart(int cartId, IDbConnection connection, IDbTransaction transaction)
+        internal static int DeleteAllItemsInCart(CartModel cart, IDbConnection connection, IDbTransaction transaction)
         {
             int totalRowsDeleted = 0;
-
-            CartModel cart = LoadCarts().Where(c => c.Id == cartId).First();
 
             // Delete all cart pizza records
             foreach (var cartPizza in cart.CartPizzas)
@@ -78,26 +77,31 @@ namespace DataLibrary.BusinessLogic.Carts
             return totalRowsDeleted;
         }
 
-        internal static int CloneCart(int originalCartId, int destinationCartId, IDbConnection connection, IDbTransaction transaction)
+        internal static int CloneCart(CartModel originalCart, CartModel destinationCart, IDbConnection connection, IDbTransaction transaction)
         {
-            List<CartModel> carts = LoadCarts();
-            CartModel originalCart = carts.Where(c => c.Id == originalCartId).First();
+            int cartItemRowsAffected = 0;
 
-            int itemsDeletedFromDestinationCart = DeleteAllItemsInCart(destinationCartId);
+            int itemsDeletedFromDestinationCart = DeleteAllItemsInCart(destinationCart, connection, transaction);
+            cartItemRowsAffected += itemsDeletedFromDestinationCart;
 
             // Clone all cart pizza records
             foreach (var cartPizza in originalCart.CartPizzas)
             {
-                cartPizza.CartId = destinationCartId;
+                cartPizza.CartId = destinationCart.Id;
                 int cartPizzaId = DatabaseCartPizzaProcessor.AddPizzaToCart(cartPizza, connection, transaction);
+                cartItemRowsAffected++;
             }
 
-            return destinationCartId;
+            return cartItemRowsAffected;
         }
 
         public static int CloneCart(int originalCartId, int destinationCartId)
         {
-            int clonedCartId = 0;
+            List<CartModel> carts = LoadCarts();
+            CartModel originalCart = carts.Where(c => c.Id == originalCartId).First();
+            CartModel destinationCart = carts.Where(c => c.Id == destinationCartId).First();
+
+            int cartItemRowsAffected = 0;
 
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
@@ -107,7 +111,7 @@ namespace DataLibrary.BusinessLogic.Carts
                 {
                     try
                     {
-                        clonedCartId = CloneCart(originalCartId, destinationCartId, connection, transaction);
+                        cartItemRowsAffected = CloneCart(originalCart, destinationCart, connection, transaction);
                         transaction.Commit();
                     }
                     catch (Exception ex)
@@ -118,7 +122,7 @@ namespace DataLibrary.BusinessLogic.Carts
                 }
             }
 
-            return clonedCartId;
+            return cartItemRowsAffected;
         }
     }
 }
