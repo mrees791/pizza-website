@@ -87,8 +87,16 @@ namespace DataLibrary.BusinessLogic.Carts
             // Clone all cart pizza records
             foreach (var cartPizza in originalCart.CartPizzas)
             {
-                cartPizza.CartId = destinationCart.Id;
-                int cartPizzaId = DatabaseCartPizzaProcessor.AddPizzaToCart(cartPizza, connection, transaction);
+                CartPizzaModel clonedCartPizza = new CartPizzaModel()
+                {
+                    CartId = destinationCart.Id,
+                    DateAddedToCart = cartPizza.DateAddedToCart,
+                    Pizza = cartPizza.Pizza,
+                    PricePerItem = cartPizza.PricePerItem,
+                    Quantity = cartPizza.Quantity
+                    
+                };
+                int cartPizzaId = DatabaseCartPizzaProcessor.AddPizzaToCart(clonedCartPizza, connection, transaction);
                 cartItemRowsAffected++;
             }
 
