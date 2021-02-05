@@ -121,7 +121,7 @@ namespace DataLibrary.BusinessLogic.Carts
         internal static int DeleteCartPizza(CartPizzaModel cartPizza, IDbConnection connection, IDbTransaction transaction)
         {
             // Delete cart pizza record
-            string deleteCartPizzaSql = @"delete from dbo.CartPizza where Id = @Id;";
+            string deleteCartPizzaSql = @"delete from dbo.CartPizza where Id = @CartPizzaId;";
             int cartPizzaRowsDeleted = SqlDataAccess.DeleteRecord(deleteCartPizzaSql, cartPizza, connection, transaction);
 
             // Delete cart item record
