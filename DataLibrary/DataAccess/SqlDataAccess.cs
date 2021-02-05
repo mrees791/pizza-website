@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 
 namespace DataLibrary.DataAccess
 {
-    public static class SqlDataAccess
+    internal static class SqlDataAccess
     {
         internal static string GetConnectiongString(string connectionName = "PizzaDatabase")
         {
