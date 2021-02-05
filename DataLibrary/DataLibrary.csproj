@@ -86,16 +86,9 @@
     <Compile Include="Models\Users\DeliveryAddressModel.cs" />
     <Compile Include="Models\Users\UserModel.cs" />
     <Compile Include="Models\Users\UserRoleModel.cs" />
-    <Compile Include="Models\Carts\CartDessertModel.cs" />
-    <Compile Include="Models\Carts\CartDipModel.cs" />
-    <Compile Include="Models\Carts\CartDrinkModel.cs" />
     <Compile Include="Models\Carts\CartItemModel.cs" />
     <Compile Include="Models\Carts\CartModel.cs" />
-    <Compile Include="Models\Carts\CartPastaModel.cs" />
     <Compile Include="Models\Carts\CartPizzaModel.cs" />
-    <Compile Include="Models\Carts\CartSauceModel.cs" />
-    <Compile Include="Models\Carts\CartSideModel.cs" />
-    <Compile Include="Models\Carts\CartWingsModel.cs" />
     <Compile Include="Models\Menus\MenuDessertModel.cs" />
     <Compile Include="Models\Menus\MenuDipModel.cs" />
     <Compile Include="Models\Menus\MenuDrinkModel.cs" />

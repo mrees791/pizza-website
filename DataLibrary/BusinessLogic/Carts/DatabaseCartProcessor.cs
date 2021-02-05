@@ -21,7 +21,7 @@ namespace DataLibrary.BusinessLogic.Carts
             return SqlDataAccess.SaveNewRecord(insertCartSql, new { }, connection, transaction);
         }
 
-        public static List<CartItemModel> LoadAllCartItems()
+        /*public static List<CartItemModel> LoadAllCartItems()
         {
             List<CartItemModel> cartItems = new List<CartItemModel>();
             List<CartPizzaModel> cartPizzas = DatabaseCartPizzaProcessor.LoadCartPizzas().ToList();
@@ -180,6 +180,6 @@ namespace DataLibrary.BusinessLogic.Carts
             }
 
             return cartItemRowsAffected;
-        }
+        }*/
     }
 }
