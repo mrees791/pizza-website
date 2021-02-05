@@ -10,15 +10,15 @@ namespace DataLibrary.Models.Carts
     {
         public int Id { get; set; }
         public int CartId { get; set; }
+        public int CartItemId { get; set; }
         public decimal PricePerItem { get; set; }
         public int Quantity { get; set; }
-        public DateTime DateAddedToCart { get; set; }
 
         public abstract object Clone();
 
         public int CompareTo(CartItemModel other)
         {
-            return DateAddedToCart.CompareTo(other.DateAddedToCart);
+            return CartItemId.CompareTo(other.CartItemId);
         }
     }
 }

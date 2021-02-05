@@ -17,7 +17,6 @@ namespace DataLibrary.Models.Carts
 
             CartPizzaModel clone = new CartPizzaModel()
             {
-                DateAddedToCart = DateAddedToCart,
                 Pizza = pizzaClone,
                 PricePerItem = PricePerItem,
                 Quantity = Quantity,
