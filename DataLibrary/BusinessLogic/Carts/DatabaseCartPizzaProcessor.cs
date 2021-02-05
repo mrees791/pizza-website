@@ -21,17 +21,7 @@ namespace DataLibrary.BusinessLogic.Carts
             cartPizza.Pizza.Id = DatabasePizzaProcessor.AddPizza(cartPizza.Pizza, connection, transaction);
 
             // Save cart item record
-            string insertCartItemSql = @"insert into dbo.CartItem (CartId, PricePerItem, Quantity) output Inserted.Id
-                                         values(@CartId, @PricePerItem, @Quantity);";
-
-            object cartItemQueryParameters = new
-            {
-                CartId = cartPizza.CartId,
-                PricePerItem = cartPizza.PricePerItem,
-                Quantity = cartPizza.Quantity
-            };
-
-            cartPizza.Id = SqlDataAccess.SaveNewRecord(insertCartItemSql, cartItemQueryParameters, connection, transaction);
+            cartPizza.Id = DatabaseCartProcessor.AddCartItem(cartPizza, connection, transaction);
 
             // Save cart pizza record
             string insertCartPizzaSql = @"insert into dbo.CartPizza (CartItemId, PizzaId) output Inserted.Id
@@ -78,7 +68,7 @@ namespace DataLibrary.BusinessLogic.Carts
             List<PizzaModel> pizzas = DatabasePizzaProcessor.LoadPizzas();
 
             string selectQuerySql = @"select CartItem.Id, CartItem.CartId, CartItem.PricePerItem, CartItem.Quantity, CartPizza.CartItemId, CartPizza.PizzaId
-                                      from dbo.CartItem inner join CartPizza on CartItem.Id=CartPizza.CartItemId;";
+                                      from dbo.CartItem right join CartPizza on CartItem.Id=CartPizza.CartItemId;";
             List<dynamic> queryList = SqlDataAccess.LoadData<dynamic>(selectQuerySql).ToList();
 
             foreach (var item in queryList)

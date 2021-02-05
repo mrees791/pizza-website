@@ -14,6 +14,23 @@ namespace DataLibrary.BusinessLogic.Carts
 {
     public static class DatabaseCartProcessor
     {
+        internal static int AddCartItem(CartItemModel cartItem, IDbConnection connection, IDbTransaction transaction)
+        {
+            string insertCartItemSql = @"insert into dbo.CartItem (CartId, PricePerItem, Quantity) output Inserted.Id
+                                         values(@CartId, @PricePerItem, @Quantity);";
+
+            object cartItemQueryParameters = new
+            {
+                CartId = cartItem.CartId,
+                PricePerItem = cartItem.PricePerItem,
+                Quantity = cartItem.Quantity
+            };
+
+            cartItem.Id = SqlDataAccess.SaveNewRecord(insertCartItemSql, cartItemQueryParameters, connection, transaction);
+
+            return cartItem.Id;
+        }
+
         internal static int AddNewCart(IDbConnection connection, IDbTransaction transaction)
         {
             string insertCartSql = @"insert into dbo.Cart output Inserted.Id default values;";
