@@ -15,16 +15,20 @@ namespace DataLibrary.BusinessLogic.Users
     {
         internal static int AddNewUser(string email, string passwordHash, string phoneNumber, string zipCode, IDbConnection connection, IDbTransaction transaction)
         {
-            // Add new cart record
-            int newCartId = DatabaseCartProcessor.AddNewCart(connection, transaction);
+            // Add current cart record
+            int currentCartId = DatabaseCartProcessor.AddNewCart(connection, transaction);
+
+            // Add confirm order cart record
+            int confirmOrderCartId = DatabaseCartProcessor.AddNewCart(connection, transaction);
 
             // Add new user record
-            string insertUserSql = @"insert into [dbo].[User] (CurrentCartId, Email, PasswordHash, IsBanned, EmailConfirmed, PhoneNumber, PhoneNumberConfirmed, ZipCode)
-                                     output Inserted.Id values (@CurrentCartId, @Email, @PasswordHash, @IsBanned, @EmailConfirmed, @PhoneNumber, @PhoneNumberConfirmed, @ZipCode);";
+            string insertUserSql = @"insert into [dbo].[User] (CurrentCartId, ConfirmOrderCartId, Email, PasswordHash, IsBanned, EmailConfirmed, PhoneNumber, PhoneNumberConfirmed, ZipCode)
+                                     output Inserted.Id values (@CurrentCartId, @ConfirmOrderCartId, @Email, @PasswordHash, @IsBanned, @EmailConfirmed, @PhoneNumber, @PhoneNumberConfirmed, @ZipCode);";
 
             object queryParameters = new
             {
-                CurrentCartId = newCartId,
+                CurrentCartId = currentCartId,
+                ConfirmOrderCartId = confirmOrderCartId,
                 Email = email,
                 PasswordHash = passwordHash,
                 IsBanned = false,

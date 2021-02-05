@@ -13,6 +13,7 @@ namespace DataLibrary.Models.Users
         public int Id { get; set; }
         public string PasswordHash { get; set; }
         public int CurrentCartId { get; set; }
+        public int ConfirmOrderCartId { get; set; }
         public string Email { get; set; }
         public bool IsBanned { get; set; }
         public bool EmailConfirmed { get; set; }
