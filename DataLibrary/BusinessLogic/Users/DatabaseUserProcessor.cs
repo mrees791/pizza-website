@@ -13,6 +13,26 @@ namespace DataLibrary.BusinessLogic.Users
 {
     public static class DatabaseUserProcessor
     {
+        internal static bool EmailAlreadyInUse(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static NewUserValidationResult ValidateNewUser()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Adds a new user record along with a user role and carts. Is ran after validation is confirmed.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="passwordHash"></param>
+        /// <param name="phoneNumber"></param>
+        /// <param name="zipCode"></param>
+        /// <param name="connection"></param>
+        /// <param name="transaction"></param>
+        /// <returns></returns>
         internal static int AddNewUser(string email, string passwordHash, string phoneNumber, string zipCode, IDbConnection connection, IDbTransaction transaction)
         {
             // Add current cart record
