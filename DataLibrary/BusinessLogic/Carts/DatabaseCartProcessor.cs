@@ -116,12 +116,30 @@ namespace DataLibrary.BusinessLogic.Carts
             return cartItemRowsAffected;
         }
 
-        /*
+        internal static int DeleteAllItemsInCart(CartModel cart, IDbConnection connection, IDbTransaction transaction)
+        {
+            int totalRowsDeleted = 0;
+
+            // Delete all cart items
+            foreach (CartItemModel cartItem in cart.CartItems)
+            {
+                if (cartItem is CartPizzaModel)
+                {
+                    totalRowsDeleted += DatabaseCartPizzaProcessor.DeleteCartPizza((CartPizzaModel)cartItem, connection, transaction);
+                }
+                else
+                {
+                    throw new Exception("Cart item type needs implemented.");
+                }
+            }
+
+            return totalRowsDeleted;
+        }
 
         public static int DeleteAllItemsInCart(int cartId)
         {
             int totalRowsDeleted = 0;
-            CartModel cart = LoadCarts().Where(c => c.Id == cartId).First();
+            CartModel cart = LoadAllCarts().Where(c => c.Id == cartId).First();
 
             using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
             {
@@ -145,25 +163,8 @@ namespace DataLibrary.BusinessLogic.Carts
             return totalRowsDeleted;
         }
 
-        internal static int DeleteAllItemsInCart(CartModel cart, IDbConnection connection, IDbTransaction transaction)
-        {
-            int totalRowsDeleted = 0;
+        /*
 
-            // Delete all cart items
-            foreach (CartItemModel cartItem in cart.CartItems)
-            {
-                if (cartItem is CartPizzaModel)
-                {
-                    totalRowsDeleted += DatabaseCartPizzaProcessor.DeleteCartPizza((CartPizzaModel)cartItem, connection, transaction);
-                }
-                else
-                {
-                    throw new Exception("Cart item type needs implemented.");
-                }
-            }
-
-            return totalRowsDeleted;
-        }
 
         internal static int CloneCart(CartModel originalCart, CartModel destinationCart, IDbConnection connection, IDbTransaction transaction)
         {
