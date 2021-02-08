@@ -89,6 +89,33 @@ namespace DataLibrary.BusinessLogic.Carts
             return carts;
         }
 
+        internal static int MoveCartItems(int originalCartId, int destinationCartId, IDbConnection connection, IDbTransaction transaction)
+        {
+            string updateSql = @"update dbo.CartItem set CartId = @DestinationCartId where CartId = @OriginalCartId;";
+
+            object queryParameters = new
+            {
+                OriginalCartId = originalCartId,
+                DestinationCartId = destinationCartId
+            };
+
+            return SqlDataAccess.UpdateRecord(updateSql, queryParameters, connection, transaction);
+        }
+
+        public static int MoveCartItems(int originalCartId, int destinationCartId)
+        {
+            int cartItemRowsAffected = 0;
+
+            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
+            {
+                connection.Open();
+
+                cartItemRowsAffected = MoveCartItems(originalCartId, destinationCartId, connection, null);
+            }
+
+            return cartItemRowsAffected;
+        }
+
         /*
 
         public static int DeleteAllItemsInCart(int cartId)
@@ -180,37 +207,6 @@ namespace DataLibrary.BusinessLogic.Carts
                     try
                     {
                         cartItemRowsAffected = CloneCart(originalCart, destinationCart, connection, transaction);
-                        transaction.Commit();
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
-                }
-            }
-
-            return cartItemRowsAffected;
-        }
-
-        public static int MoveCartItems(int originalCartId, int destinationCartId)
-        {
-            List<CartModel> carts = LoadCarts();
-            CartModel originalCart = carts.Where(c => c.Id == originalCartId).First();
-            CartModel destinationCart = carts.Where(c => c.Id == destinationCartId).First();
-
-            int cartItemRowsAffected = 0;
-
-            using (IDbConnection connection = new SqlConnection(SqlDataAccess.GetConnectiongString()))
-            {
-                connection.Open();
-
-                using (var transaction = connection.BeginTransaction())
-                {
-                    try
-                    {
-                        cartItemRowsAffected += CloneCart(originalCart, destinationCart, connection, transaction);
-                        cartItemRowsAffected += DeleteAllItemsInCart(originalCart, connection, transaction);
                         transaction.Commit();
                     }
                     catch (Exception ex)
