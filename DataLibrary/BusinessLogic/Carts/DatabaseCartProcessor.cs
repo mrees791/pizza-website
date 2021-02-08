@@ -163,15 +163,11 @@ namespace DataLibrary.BusinessLogic.Carts
             return totalRowsDeleted;
         }
 
-        /*
-
-
         internal static int CloneCart(CartModel originalCart, CartModel destinationCart, IDbConnection connection, IDbTransaction transaction)
         {
             int cartItemRowsAffected = 0;
 
             int itemsDeletedFromDestinationCart = DeleteAllItemsInCart(destinationCart, connection, transaction);
-            cartItemRowsAffected += itemsDeletedFromDestinationCart;
 
             CartModel clonedCart = (CartModel)originalCart.Clone();
 
@@ -181,19 +177,21 @@ namespace DataLibrary.BusinessLogic.Carts
 
                 if (cartItem is CartPizzaModel)
                 {
-                    cartItem.Id = DatabaseCartPizzaProcessor.AddPizzaToCart((CartPizzaModel)cartItem, connection, transaction);
+                    CartPizzaModel cartPizza = (CartPizzaModel)cartItem;
+                    cartPizza.CartPizzaId = DatabaseCartPizzaProcessor.AddPizzaToCart(cartPizza, connection, transaction);
                 }
                 else
                 {
                     throw new Exception("Cart item type needs implemented.");
                 }
+                cartItemRowsAffected++;
             }
             return cartItemRowsAffected;
         }
 
         public static int CloneCart(int originalCartId, int destinationCartId)
         {
-            List<CartModel> carts = LoadCarts();
+            List<CartModel> carts = LoadAllCarts();
             CartModel originalCart = carts.Where(c => c.Id == originalCartId).First();
             CartModel destinationCart = carts.Where(c => c.Id == destinationCartId).First();
 
@@ -219,6 +217,6 @@ namespace DataLibrary.BusinessLogic.Carts
             }
 
             return cartItemRowsAffected;
-        }*/
+        }
     }
 }
