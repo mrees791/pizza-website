@@ -84,6 +84,7 @@
     <Compile Include="Models\Menus\Pizzas\PizzaToppingHalf.cs" />
     <Compile Include="Models\Stores\StoreLocationModel.cs" />
     <Compile Include="Models\Users\DeliveryAddressModel.cs" />
+    <Compile Include="Models\Users\NewUserValidationResult.cs" />
     <Compile Include="Models\Users\UserModel.cs" />
     <Compile Include="Models\Users\UserRoleModel.cs" />
     <Compile Include="Models\Carts\CartItemModel.cs" />
