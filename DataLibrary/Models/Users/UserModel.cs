@@ -11,10 +11,11 @@ namespace DataLibrary.Models.Users
     public class UserModel
     {
         public int Id { get; set; }
+        public string UserName { get; set; }
         public string PasswordHash { get; set; }
+        public string Email { get; set; }
         public int CurrentCartId { get; set; }
         public int ConfirmOrderCartId { get; set; }
-        public string Email { get; set; }
         public bool IsBanned { get; set; }
         public bool EmailConfirmed { get; set; }
         public string PhoneNumber { get; set; }

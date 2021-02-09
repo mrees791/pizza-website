@@ -13,27 +13,18 @@ namespace DataLibrary.BusinessLogic.Users
 {
     public static class DatabaseUserProcessor
     {
-        internal static bool EmailAlreadyInUse(string email)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal static NewUserValidationResult ValidateNewUser()
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
-        /// Adds a new user record along with a user role and carts. Is ran after validation is confirmed.
+        /// Adds a new user record and cart records.
         /// </summary>
+        /// <param name="userName"></param>
         /// <param name="email"></param>
         /// <param name="passwordHash"></param>
         /// <param name="phoneNumber"></param>
         /// <param name="zipCode"></param>
         /// <param name="connection"></param>
         /// <param name="transaction"></param>
-        /// <returns></returns>
-        internal static int AddNewUser(string email, string passwordHash, string phoneNumber, string zipCode, IDbConnection connection, IDbTransaction transaction)
+        /// <returns>ID of the newly created user.</returns>
+        internal static int AddNewUser(string userName, string email, string passwordHash, string phoneNumber, string zipCode, IDbConnection connection, IDbTransaction transaction)
         {
             // Add current cart record
             int currentCartId = DatabaseCartProcessor.AddNewCart(connection, transaction);
@@ -42,15 +33,16 @@ namespace DataLibrary.BusinessLogic.Users
             int confirmOrderCartId = DatabaseCartProcessor.AddNewCart(connection, transaction);
 
             // Add new user record
-            string insertUserSql = @"insert into [dbo].[User] (CurrentCartId, ConfirmOrderCartId, Email, PasswordHash, IsBanned, EmailConfirmed, PhoneNumber, PhoneNumberConfirmed, ZipCode)
-                                     output Inserted.Id values (@CurrentCartId, @ConfirmOrderCartId, @Email, @PasswordHash, @IsBanned, @EmailConfirmed, @PhoneNumber, @PhoneNumberConfirmed, @ZipCode);";
+            string insertUserSql = @"insert into [dbo].[User] (UserName, Email, PasswordHash, CurrentCartId, ConfirmOrderCartId, IsBanned, EmailConfirmed, PhoneNumber, PhoneNumberConfirmed, ZipCode)
+                                     output Inserted.Id values (@UserName, @Email, @PasswordHash, @CurrentCartId, @ConfirmOrderCartId, @IsBanned, @EmailConfirmed, @PhoneNumber, @PhoneNumberConfirmed, @ZipCode);";
 
             object queryParameters = new
             {
-                CurrentCartId = currentCartId,
-                ConfirmOrderCartId = confirmOrderCartId,
+                UserName = userName,
                 Email = email,
                 PasswordHash = passwordHash,
+                CurrentCartId = currentCartId,
+                ConfirmOrderCartId = confirmOrderCartId,
                 IsBanned = false,
                 EmailConfirmed = false,
                 PhoneNumber = phoneNumber,
@@ -72,7 +64,15 @@ namespace DataLibrary.BusinessLogic.Users
             return newUserId;
         }
 
-        public static int AddNewUser(string email, string passwordHash, string phoneNumber, string zipCode)
+        /// <summary>
+        /// Adds a new user record and cart records.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="passwordHash"></param>
+        /// <param name="phoneNumber"></param>
+        /// <param name="zipCode"></param>
+        /// <returns>ID of the newly created user.</returns>
+        public static int AddNewUser(string userName, string email, string passwordHash, string phoneNumber, string zipCode)
         {
             int newUserId = 0;
 
@@ -84,7 +84,7 @@ namespace DataLibrary.BusinessLogic.Users
                 {
                     try
                     {
-                        newUserId = AddNewUser(email, passwordHash, phoneNumber, zipCode, connection, transaction);
+                        newUserId = AddNewUser(userName, email, passwordHash, phoneNumber, zipCode, connection, transaction);
                         transaction.Commit();
                     }
                     catch (Exception ex)
@@ -107,14 +107,20 @@ namespace DataLibrary.BusinessLogic.Users
             return userRole.Id;
         }
 
-        public static UserModel SignInUser(string email, string passwordHash)
+        /// <summary>
+        /// Attempts to return the user's model if their username and password is correct.
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="passwordHash"></param>
+        /// <returns>User's UserModel if it was a successful sign in. Null if it was not a successful sign in.</returns>
+        public static UserModel SignInUser(string userName, string passwordHash)
         {
-            string selectUserSql = @"select TOP 1 Id, CurrentCartId, ConfirmOrderCartId, Email, PasswordHash, IsBanned, EmailConfirmed, PhoneNumber, PhoneNumberConfirmed, ZipCode
-                                     from [dbo].[user] where Email=@Email and PasswordHash=@PasswordHash order by Id asc;";
+            string selectUserSql = @"select TOP 1 Id, UserName, Email, PasswordHash, CurrentCartId, ConfirmOrderCartId, IsBanned, EmailConfirmed, PhoneNumber, PhoneNumberConfirmed, ZipCode
+                                     from [dbo].[user] where UserName=@UserName and PasswordHash=@PasswordHash order by Id asc;";
 
             object queryParameters = new
             {
-                Email = email,
+                UserName = userName,
                 PasswordHash = passwordHash
             };
 

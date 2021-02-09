@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [dbo].[User]
 (
   [Id] INT NOT NULL IDENTITY,
+  [UserName] VARCHAR(20) NOT NULL,
   [Email] VARCHAR(256) NOT NULL,
   [PasswordHash] NVARCHAR(MAX) NOT NULL,
   [CurrentCartId] INT NOT NULL,
