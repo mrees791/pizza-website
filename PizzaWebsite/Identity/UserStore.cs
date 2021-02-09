@@ -13,12 +13,10 @@ namespace PizzaWebsite.Identity
     {
         public Task CreateAsync(IdentityUser user)
         {
-            throw new NotImplementedException();
-
-            /*return new Task(() =>
+            return new Task(() =>
             {
-                int id = DatabaseUserProcessor.AddNewUser(user.Email, user.PasswordHash, user.PhoneNumber, user.ZipCode);
-            });*/
+                int newUserId = DatabaseUserProcessor.AddNewUser(user.UserName, user.Email, user.PasswordHash, user.PhoneNumber, user.ZipCode);
+            });
         }
 
         public Task DeleteAsync(IdentityUser user)
@@ -28,7 +26,6 @@ namespace PizzaWebsite.Identity
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
 
         public Task<IdentityUser> FindByIdAsync(string userId)
