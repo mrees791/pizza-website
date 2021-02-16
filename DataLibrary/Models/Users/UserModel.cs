@@ -16,11 +16,18 @@ namespace DataLibrary.Models.Users
         public string Email { get; set; }
         public int CurrentCartId { get; set; }
         public int ConfirmOrderCartId { get; set; }
+        public int OrderConfirmationId { get; set; }
         public bool IsBanned { get; set; }
         public bool EmailConfirmed { get; set; }
         public string PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
         public string ZipCode { get; set; }
+        public IList<string> Roles { get; set; }
+
+        public UserModel()
+        {
+            Roles = new List<string>();
+        }
         /*public List<DeliveryAddressModel> DeliveryAddresses { get; set; }
         public List<UserRoleModel> UserRoles { get; set; }
         public List<CustomerOrderModel> CustomerOrders { get; set; }*/

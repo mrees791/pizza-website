@@ -54,6 +54,11 @@ namespace DataLibrary.DataAccess
             }
         }
 
+        internal static int UpdateRecord<T>(string sql, T data, IDbConnection connection, IDbTransaction transaction)
+        {
+            return connection.Execute(sql, data, transaction);
+        }
+
         internal static int UpdateRecord(string sql, object data, IDbConnection connection, IDbTransaction transaction)
         {
             return connection.Execute(sql, data, transaction);
@@ -104,7 +109,7 @@ namespace DataLibrary.DataAccess
         /// <returns>ID of newly created record</returns>
         internal static int SaveNewRecord(string sql, object data, IDbConnection connection)
         {
-            return connection.Query<int>(sql, data).Single();
+            return SaveNewRecord(sql, data, connection, null);
         }
 
         /// <summary>

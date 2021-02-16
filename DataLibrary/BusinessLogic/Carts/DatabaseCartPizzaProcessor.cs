@@ -17,9 +17,6 @@ namespace DataLibrary.BusinessLogic.Carts
     {
         internal static int AddPizzaToCart(CartPizzaModel cartPizza, IDbConnection connection, IDbTransaction transaction)
         {
-            // Get updated price
-            cartPizza.PricePerItem = cartPizza.Pizza.GetPrice();
-
             // Save pizza record
             cartPizza.Pizza.Id = DatabasePizzaProcessor.AddPizza(cartPizza.Pizza, connection, transaction);
 

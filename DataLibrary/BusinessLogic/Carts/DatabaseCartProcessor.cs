@@ -163,7 +163,7 @@ namespace DataLibrary.BusinessLogic.Carts
             return totalRowsDeleted;
         }
 
-        internal static int CloneCart(CartModel originalCart, CartModel destinationCart, IDbConnection connection, IDbTransaction transaction)
+        internal static int CloneCart(CartModel originalCart, CartModel destinationCart, bool updatePrices, IDbConnection connection, IDbTransaction transaction)
         {
             int cartItemRowsAffected = 0;
 
@@ -174,6 +174,11 @@ namespace DataLibrary.BusinessLogic.Carts
             foreach (CartItemModel cartItem in clonedCart.CartItems)
             {
                 cartItem.CartId = destinationCart.Id;
+
+                /*if (updatePrices)
+                {
+                    cartItem.PricePerItem = cartItem.GetUpdatedPrice();
+                }*/
 
                 if (cartItem is CartPizzaModel)
                 {
@@ -189,7 +194,7 @@ namespace DataLibrary.BusinessLogic.Carts
             return cartItemRowsAffected;
         }
 
-        public static int CloneCart(int originalCartId, int destinationCartId)
+        public static int CloneCart(int originalCartId, int destinationCartId, bool updatePrices)
         {
             List<CartModel> carts = LoadAllCarts();
             CartModel originalCart = carts.Where(c => c.Id == originalCartId).First();
@@ -205,7 +210,7 @@ namespace DataLibrary.BusinessLogic.Carts
                 {
                     try
                     {
-                        cartItemRowsAffected = CloneCart(originalCart, destinationCart, connection, transaction);
+                        cartItemRowsAffected = CloneCart(originalCart, destinationCart, updatePrices, connection, transaction);
                         transaction.Commit();
                     }
                     catch (Exception ex)

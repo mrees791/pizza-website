@@ -6,6 +6,7 @@
   [PasswordHash] NVARCHAR(MAX) NOT NULL,
   [CurrentCartId] INT NOT NULL,
   [ConfirmOrderCartId] INT NOT NULL,
+  [OrderConfirmationId] INT NOT NULL,
   [IsBanned] BIT NOT NULL,
   [EmailConfirmed] BIT NOT NULL,
   [PhoneNumber] VARCHAR(10),
