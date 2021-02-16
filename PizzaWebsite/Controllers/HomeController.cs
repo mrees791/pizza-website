@@ -20,7 +20,7 @@ namespace PizzaWebsite.Controllers
         {
             userStore = new UserStoreModel();
             userManager = new UserManager<IdentityUserModel>(userStore);
-            userManager.UserValidator = new Models.Identity.Validators.UserValidator();
+            userManager.UserValidator = new Models.Identity.Validators.UserValidatorModel();
         }
 
         public ActionResult Index()
@@ -91,10 +91,30 @@ namespace PizzaWebsite.Controllers
             return "";
         }
 
+        // todo: Remove test user code
+        private RegisterUserModel CreateTestRegistration()
+        {
+            int additionalId = DatabaseUserProcessor.GetNumberOfUsers() + 10;
+
+            RegisterUserModel testUser = new RegisterUserModel()
+            {
+                UserName = $"mrees123",
+                Email = $"mrees123@gmail.com",
+                ConfirmEmail = $"mrees123@gmail.com",
+                Password = "abacus12345",
+                ConfirmPassword = "abacus12345",
+                PhoneNumber = "7402609777",
+                ZipCode = "12345"
+            };
+
+            return testUser;
+        }
+
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View(new RegisterUserModel());
+            RegisterUserModel registerUser = CreateTestRegistration();
+            return View(registerUser);
         }
     }
 }

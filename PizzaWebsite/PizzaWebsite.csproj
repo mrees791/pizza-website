@@ -203,7 +203,7 @@
     </Compile>
     <Compile Include="Models\Identity\IdentityUserModel.cs" />
     <Compile Include="Models\Identity\UserStoreModel.cs" />
-    <Compile Include="Models\Identity\Validators\UserValidator.cs" />
+    <Compile Include="Models\Identity\Validators\UserValidatorModel.cs" />
     <Compile Include="Models\Manage\ManagePizzaIngredientsModel.cs" />
     <Compile Include="Models\Menus\MenuItemWithIconModel.cs" />
     <Compile Include="Models\Menus\MenuDipModel.cs" />
