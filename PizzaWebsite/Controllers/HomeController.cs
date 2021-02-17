@@ -1,6 +1,7 @@
 ﻿using DataLibrary.BusinessLogic.Users;
 using Microsoft.AspNet.Identity;
 using PizzaWebsite.Models.Identity;
+using PizzaWebsite.Models.Identity.Validators;
 using PizzaWebsite.Models.Users;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace PizzaWebsite.Controllers
         {
             userStore = new UserStoreModel();
             userManager = new UserManager<IdentityUserModel>(userStore);
-            userManager.UserValidator = new Models.Identity.Validators.UserValidatorModel();
+            userManager.UserValidator = new UserValidatorModel();
         }
 
         public ActionResult Index()
@@ -77,15 +78,26 @@ namespace PizzaWebsite.Controllers
             return View(userRegistration);
         }
 
+        /// <summary>
+        /// Takes an error message created by the UserValidatorModel and returns the key for the model state error.
+        /// </summary>
+        /// <param name="error"></param>
+        /// <returns>The key for the model state error.</returns>
         private string GetUserRegistrationErrorKey(string error)
         {
-            if (error.StartsWith("Name"))
+            string lowerCaseError = error.ToLower();
+
+            if (lowerCaseError.StartsWith("name"))
             {
                 return "UserName";
             }
-            else if (error.StartsWith("Email"))
+            else if (lowerCaseError.StartsWith("email"))
             {
                 return "Email";
+            }
+            else if (lowerCaseError.StartsWith("phone number"))
+            {
+                return "PhoneNumber";
             }
 
             return "";

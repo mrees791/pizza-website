@@ -14,7 +14,6 @@ namespace PizzaWebsite.Models.Identity.Validators
         {
             List<string> errors = new List<string>();
 
-            // todo: Finish implementing validation
             ValidateUserName(item, errors);
             ValidateEmail(item, errors);
             ValidatePhoneNumber(item, errors);
@@ -35,12 +34,24 @@ namespace PizzaWebsite.Models.Identity.Validators
 
         private void ValidateEmail(IdentityUserModel item, List<string> errors)
         {
+            var previousUser = DatabaseUserProcessor.FindUserByEmail(item.Email);
+            bool emailAlreadyInUse = previousUser != null;
 
+            if (emailAlreadyInUse)
+            {
+                errors.Add($"Email '{item.Email}' is already in use.");
+            }
         }
 
         private void ValidatePhoneNumber(IdentityUserModel item, List<string> errors)
         {
+            var previousUser = DatabaseUserProcessor.FindUserByPhoneNumber(item.PhoneNumber);
+            bool phoneNumberAlreadyInUse = previousUser != null;
 
+            if (phoneNumberAlreadyInUse)
+            {
+                errors.Add($"Phone number is already in use.");
+            }
         }
     }
 }

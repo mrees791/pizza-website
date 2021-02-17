@@ -182,6 +182,11 @@ namespace DataLibrary.BusinessLogic.Users
             return LoadUsers().Where(u => u.Email == email).FirstOrDefault();
         }
 
+        public static UserModel FindUserByPhoneNumber(string phoneNumber)
+        {
+            return LoadUsers().Where(u => u.PhoneNumber == phoneNumber).FirstOrDefault();
+        }
+
         internal static int UpdateUser(UserModel updatedUser, IDbConnection connection, IDbTransaction transaction)
         {
             string updateSql = @"update [dbo].[User] set Email = @Email, PasswordHash = @PasswordHash, OrderConfirmationId = @OrderConfirmationId,
