@@ -21,7 +21,6 @@ namespace PizzaWebsite.Models.Identity.Validators
 
         public Task<IdentityResult> ValidateAsync(IdentityUserModel item)
         {
-            IdentityResult result = IdentityResult.Success;
             List<string> errors = new List<string>();
 
             ValidateUserName(item, errors);
@@ -30,9 +29,9 @@ namespace PizzaWebsite.Models.Identity.Validators
 
             if (errors.Any())
             {
-                result = new IdentityResult(errors);
+                return Task.FromResult(new IdentityResult(errors));
             }
-            return Task.FromResult(result);
+            return Task.FromResult(IdentityResult.Success);
         }
 
         private void ValidateUserName(IdentityUserModel item, List<string> errors)
