@@ -8,6 +8,9 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Identity.Validators
 {
+    /// <summary>
+    /// Provides server-side validation for user registration. Used by the UserManager UserValidator property.
+    /// </summary>
     public class UserValidatorModel : IIdentityValidator<IdentityUserModel>
     {
         public Task<IdentityResult> ValidateAsync(IdentityUserModel item)
