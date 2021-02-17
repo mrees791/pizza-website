@@ -46,7 +46,7 @@ namespace PizzaWebsite.Controllers
         }
 
         [HttpPost]
-        public  ActionResult Register(RegisterViewModel registerVm)
+        public ActionResult Register(RegisterViewModel registerVm)
         {
             if (ModelState.IsValid)
             {
@@ -63,10 +63,10 @@ namespace PizzaWebsite.Controllers
                 if (result.Succeeded)
                 {
                     // Needs grouped together in method.
-                    /*IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
+                    IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
                     ClaimsIdentity userIdentity = userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
                     authenticationManager.SignIn(new AuthenticationProperties() { }, userIdentity);
-                    return Login();*/
+                    //return View("Login");
                 }
                 else
                 {

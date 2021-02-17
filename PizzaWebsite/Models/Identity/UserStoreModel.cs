@@ -21,7 +21,6 @@ namespace PizzaWebsite.Models.Identity
         public Task CreateAsync(IdentityUserModel user)
         {
             int userId = DatabaseUserProcessor.AddNewUser(user.ToDbModel());
-            user.Id = userId.ToString();
             return Task.FromResult(0);
         }
 
