@@ -50,7 +50,7 @@ namespace PizzaWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUserModel()
+                var newUser = new IdentityUserModel()
                 {
                     UserName = registerVm.UserName,
                     Email = registerVm.Email,
@@ -58,13 +58,15 @@ namespace PizzaWebsite.Controllers
                     ZipCode = registerVm.ZipCode
                 };
 
-                IdentityResult result = userManager.Create(user, registerVm.Password);
+                IdentityResult result = userManager.Create(newUser, registerVm.Password);
 
                 if (result.Succeeded)
                 {
+                    newUser = userStore.FindByNameAsync(newUser.UserName).Result;
+
                     // Needs grouped together in method.
                     IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
-                    ClaimsIdentity userIdentity = userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
+                    ClaimsIdentity userIdentity = userManager.CreateIdentity(newUser, DefaultAuthenticationTypes.ApplicationCookie);
                     authenticationManager.SignIn(new AuthenticationProperties() { }, userIdentity);
                     //return View("Login");
                 }

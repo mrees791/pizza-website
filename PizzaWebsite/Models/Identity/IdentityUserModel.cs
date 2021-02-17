@@ -28,7 +28,7 @@ namespace PizzaWebsite.Models.Identity
             roles = new List<string>();
         }
 
-        public IdentityUserModel(UserModel user)
+        public IdentityUserModel(UserModel user) : this()
         {
             id = user.Id.ToString();
             userName = user.UserName;
