@@ -2,13 +2,15 @@
 using Microsoft.AspNet.Identity;
 using PizzaWebsite.Models.Identity;
 using PizzaWebsite.Models.Identity.Validators;
-using PizzaWebsite.Models.Users;
+using PizzaWebsite.ViewModels.Home;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.Owin.Security;
+using System.Security.Claims;
 
 namespace PizzaWebsite.Controllers
 {
@@ -21,7 +23,7 @@ namespace PizzaWebsite.Controllers
         {
             userStore = new UserStoreModel();
             userManager = new UserManager<IdentityUserModel>(userStore);
-            userManager.UserValidator = new UserValidatorModel();
+            userManager.UserValidator = new UserValidatorModel(userStore);
         }
 
         public ActionResult Index()
@@ -43,28 +45,28 @@ namespace PizzaWebsite.Controllers
             return View();
         }
 
-        private IdentityResult CreateUser(RegisterUserModel userRegistration)
-        {
-            var user = new IdentityUserModel()
-            {
-                UserName = userRegistration.UserName,
-                Email = userRegistration.Email,
-                PhoneNumber = userRegistration.PhoneNumber,
-                ZipCode = userRegistration.ZipCode
-            };
-            return userManager.CreateAsync(user, userRegistration.Password).Result;
-        }
-
         [HttpPost]
-        public  ActionResult Register(RegisterUserModel userRegistration)
+        public  ActionResult Register(RegisterViewModel registerVm)
         {
             if (ModelState.IsValid)
             {
-                IdentityResult result = CreateUser(userRegistration);
+                var user = new IdentityUserModel()
+                {
+                    UserName = registerVm.UserName,
+                    Email = registerVm.Email,
+                    PhoneNumber = registerVm.PhoneNumber,
+                    ZipCode = registerVm.ZipCode
+                };
+
+                IdentityResult result = userManager.Create(user, registerVm.Password);
 
                 if (result.Succeeded)
                 {
-                    // Needs implemented.
+                    // Needs grouped together in method.
+                    /*IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
+                    ClaimsIdentity userIdentity = userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
+                    authenticationManager.SignIn(new AuthenticationProperties() { }, userIdentity);
+                    return Login();*/
                 }
                 else
                 {
@@ -75,7 +77,7 @@ namespace PizzaWebsite.Controllers
                     }
                 }
             }
-            return View(userRegistration);
+            return View(registerVm);
         }
 
         /// <summary>
@@ -104,29 +106,43 @@ namespace PizzaWebsite.Controllers
         }
 
         // todo: Remove test user code
-        private RegisterUserModel CreateTestRegistration()
+        private RegisterViewModel CreateTestRegistration()
         {
-            int additionalId = DatabaseUserProcessor.GetNumberOfUsers() + 10;
+            int additionalId = DatabaseUserProcessor.GetNumberOfUsers();
+            long pn = 7402609777 + additionalId;
 
-            RegisterUserModel testUser = new RegisterUserModel()
+            RegisterViewModel testUser = new RegisterViewModel()
             {
-                UserName = $"mrees123",
-                Email = $"mrees123@gmail.com",
-                ConfirmEmail = $"mrees123@gmail.com",
+                UserName = $"mrees{additionalId}",
+                Email = $"mrees{additionalId}@gmail.com",
+                ConfirmEmail = $"mrees{additionalId}@gmail.com",
                 Password = "abacus12345",
                 ConfirmPassword = "abacus12345",
-                PhoneNumber = "7402609777",
+                PhoneNumber = pn.ToString(),
                 ZipCode = "12345"
             };
 
             return testUser;
         }
 
+        /*[HttpPost]
+        public ActionResult Login(LoginViewModel loginVm)
+        {
+            return View(loginVm);
+        }
+
+        [AllowAnonymous]
+        public ActionResult Login()
+        {
+            LoginViewModel loginVm = new LoginViewModel();
+            return View(loginVm);
+        }*/
+
         [AllowAnonymous]
         public ActionResult Register()
         {
-            RegisterUserModel registerUser = CreateTestRegistration();
-            return View(registerUser);
+            RegisterViewModel registerVm = CreateTestRegistration();
+            return View(registerVm);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using DataLibrary.BusinessLogic.Users;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,21 +12,33 @@ namespace PizzaWebsite.Models.Identity.Validators
     /// </summary>
     public class UserValidatorModel : IIdentityValidator<IdentityUserModel>
     {
+        private UserStoreModel userStore;
+
+        public UserValidatorModel(UserStoreModel userStore)
+        {
+            this.userStore = userStore;
+        }
+
         public Task<IdentityResult> ValidateAsync(IdentityUserModel item)
         {
+            IdentityResult result = IdentityResult.Success;
             List<string> errors = new List<string>();
 
             ValidateUserName(item, errors);
             ValidateEmail(item, errors);
             ValidatePhoneNumber(item, errors);
 
-            return Task.FromResult(new IdentityResult(errors));
+            if (errors.Any())
+            {
+                result = new IdentityResult(errors);
+            }
+            return Task.FromResult(result);
         }
 
         private void ValidateUserName(IdentityUserModel item, List<string> errors)
         {
-            var previousUser = DatabaseUserProcessor.FindUserByName(item.UserName);
-            bool nameAlreadyInUse = previousUser != null;
+            var previousUser = userStore.FindByNameAsync(item.UserName).Result;
+            bool nameAlreadyInUse = previousUser.Id != null;
 
             if (nameAlreadyInUse)
             {
@@ -37,8 +48,8 @@ namespace PizzaWebsite.Models.Identity.Validators
 
         private void ValidateEmail(IdentityUserModel item, List<string> errors)
         {
-            var previousUser = DatabaseUserProcessor.FindUserByEmail(item.Email);
-            bool emailAlreadyInUse = previousUser != null;
+            var previousUser = userStore.FindByEmailAsync(item.Email).Result;
+            bool emailAlreadyInUse = previousUser.Id != null;
 
             if (emailAlreadyInUse)
             {
@@ -48,8 +59,8 @@ namespace PizzaWebsite.Models.Identity.Validators
 
         private void ValidatePhoneNumber(IdentityUserModel item, List<string> errors)
         {
-            var previousUser = DatabaseUserProcessor.FindUserByPhoneNumber(item.PhoneNumber);
-            bool phoneNumberAlreadyInUse = previousUser != null;
+            var previousUser = userStore.FindByPhoneNumberAsync(item.PhoneNumber).Result;
+            bool phoneNumberAlreadyInUse = previousUser.Id != null;
 
             if (phoneNumberAlreadyInUse)
             {

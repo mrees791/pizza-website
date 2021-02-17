@@ -4,15 +4,19 @@ using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 
 namespace PizzaWebsite.Models.Identity
 {
     /// <summary>
-    /// A synchronous implementation of Microsoft's user store interfaces with role-based authorization.
+    /// A synchronous implementation of Microsoft's user store interfaces.
+    /// This article is used as a reference:
+    /// https://docs.microsoft.com/en-us/aspnet/identity/overview/getting-started/adding-aspnet-identity-to-an-empty-or-existing-web-forms-project
     /// </summary>
-    public class UserStoreModel : IUserStore<IdentityUserModel>, IUserPasswordStore<IdentityUserModel>, IUserRoleStore<IdentityUserModel>, IUserEmailStore<IdentityUserModel>
+    public class UserStoreModel : IUserStore<IdentityUserModel>, IUserLoginStore<IdentityUserModel>, IUserPasswordStore<IdentityUserModel>, IUserEmailStore<IdentityUserModel>,
+        IUserRoleStore<IdentityUserModel>, IUserClaimStore<IdentityUserModel>
     {
         public Task CreateAsync(IdentityUserModel user)
         {
@@ -23,11 +27,22 @@ namespace PizzaWebsite.Models.Identity
 
         public Task DeleteAsync(IdentityUserModel user)
         {
-            throw new NotImplementedException();
+            throw new Exception("User records cannot be deleted.");
         }
 
         public void Dispose()
         {
+        }
+
+        public Task<IdentityUserModel> FindByPhoneNumberAsync(string phoneNumber)
+        {
+            UserModel user = DatabaseUserProcessor.FindUserByPhoneNumber(phoneNumber);
+
+            if (user != null)
+            {
+                return Task.FromResult(new IdentityUserModel(user));
+            }
+            return Task.FromResult(new IdentityUserModel());
         }
 
         public Task<IdentityUserModel> FindByIdAsync(string userId)
@@ -59,7 +74,7 @@ namespace PizzaWebsite.Models.Identity
 
         public Task<bool> HasPasswordAsync(IdentityUserModel user)
         {
-            return Task.FromResult(user.PasswordHash.Any());
+            return Task.FromResult(user.PasswordHash != null);
         }
 
         public Task SetPasswordHashAsync(IdentityUserModel user, string passwordHash)
@@ -131,6 +146,41 @@ namespace PizzaWebsite.Models.Identity
                 return Task.FromResult(new IdentityUserModel(user));
             }
             return Task.FromResult(new IdentityUserModel());
+        }
+
+        public Task AddLoginAsync(IdentityUserModel user, UserLoginInfo login)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveLoginAsync(IdentityUserModel user, UserLoginInfo login)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<UserLoginInfo>> GetLoginsAsync(IdentityUserModel user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IdentityUserModel> FindAsync(UserLoginInfo login)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<Claim>> GetClaimsAsync(IdentityUserModel user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task AddClaimAsync(IdentityUserModel user, Claim claim)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveClaimAsync(IdentityUserModel user, Claim claim)
+        {
+            throw new NotImplementedException();
         }
     }
 }

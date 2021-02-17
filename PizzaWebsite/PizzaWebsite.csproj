@@ -216,9 +216,10 @@
     <Compile Include="Models\Menus\Pizzas\Ingredients\SauceModel.cs" />
     <Compile Include="Models\Menus\Pizzas\Ingredients\ToppingModel.cs" />
     <Compile Include="Models\Menus\Pizzas\Ingredients\ToppingTypeModel.cs" />
-    <Compile Include="Models\Users\RegisterUserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\Home\LoginViewModel.cs" />
+    <Compile Include="ViewModels\Home\RegisterViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -279,7 +280,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

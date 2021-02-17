@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace PizzaWebsite.Models.Users
+namespace PizzaWebsite.ViewModels.Home
 {
-    public class RegisterUserModel
+    public class RegisterViewModel
     {
         //public string ErrorMessage { get; set; }
 
