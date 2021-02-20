@@ -1,12 +1,12 @@
-﻿CREATE TABLE [dbo].[StoreLocation]
+﻿CREATE TABLE dbo.StoreLocation
 (
-  [Id] INT NOT NULL IDENTITY,
-  [Name] VARCHAR(50) NOT NULL,
-  [StreetAddress] VARCHAR(50) NOT NULL,
-  [City] VARCHAR(50) NOT NULL,
-  [State] VARCHAR(2) NOT NULL,
-  [ZipCode] VARCHAR(5) NOT NULL,
-  [PhoneNumber] VARCHAR(10) NOT NULL,
-  [IsActiveLocation] BIT NOT NULL,
-  PRIMARY KEY ([Id])
-);
+  Id INT NOT NULL IDENTITY,
+  Name NVARCHAR(50) NOT NULL,
+  StreetAddress NVARCHAR(50) NOT NULL,
+  City NVARCHAR(50) NOT NULL,
+  State NVARCHAR(2) NOT NULL,
+  ZipCode NVARCHAR(5) NOT NULL,
+  PhoneNumber NVARCHAR(MAX) NOT NULL,
+  IsActiveLocation BIT NOT NULL,
+  PRIMARY KEY (Id)
+)

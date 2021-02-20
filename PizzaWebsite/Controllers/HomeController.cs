@@ -16,13 +16,13 @@ namespace PizzaWebsite.Controllers
 {
     public class HomeController : Controller
     {
-        private UserStoreModel userStore;
-        private UserManager<IdentityUserModel> userManager;
+        private UserStoreModelOLD userStore;
+        private UserManager<IdentityUser> userManager;
 
         public HomeController()
         {
-            userStore = new UserStoreModel();
-            userManager = new UserManager<IdentityUserModel>(userStore);
+            userStore = new UserStoreModelOLD();
+            userManager = new UserManager<IdentityUser>(userStore);
             userManager.UserValidator = new UserValidatorModel(userStore);
         }
 
@@ -50,7 +50,7 @@ namespace PizzaWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                var newUser = new IdentityUserModel()
+                IdentityUser newUser = new IdentityUser()
                 {
                     UserName = registerVm.UserName,
                     Email = registerVm.Email,
@@ -68,7 +68,7 @@ namespace PizzaWebsite.Controllers
                     IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
                     ClaimsIdentity userIdentity = userManager.CreateIdentity(newUser, DefaultAuthenticationTypes.ApplicationCookie);
                     authenticationManager.SignIn(new AuthenticationProperties() { }, userIdentity);
-                    //return View("Login");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {

@@ -60,32 +60,11 @@
     <Folder Include="dbo\tables" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Tables\Cart.sql" />
-    <Build Include="dbo\Tables\CartPizza.sql" />
-    <Build Include="dbo\Tables\CustomerOrder.sql" />
-    <Build Include="dbo\Tables\DeliveryAddress.sql" />
-    <Build Include="dbo\Tables\Employee.sql" />
-    <Build Include="dbo\Tables\EmployeeLocation.sql" />
-    <Build Include="dbo\Tables\MenuDessert.sql" />
-    <Build Include="dbo\Tables\MenuDip.sql" />
-    <Build Include="dbo\Tables\MenuDrink.sql" />
-    <Build Include="dbo\Tables\MenuPasta.sql" />
-    <Build Include="dbo\Tables\MenuPizzaCheese.sql" />
     <Build Include="dbo\Tables\MenuPizzaCrust.sql" />
-    <Build Include="dbo\Tables\MenuPizzaCrustFlavor.sql" />
     <Build Include="dbo\Tables\MenuPizzaSauce.sql" />
-    <Build Include="dbo\Tables\MenuPizzaTopping.sql" />
-    <Build Include="dbo\Tables\MenuSauce.sql" />
-    <Build Include="dbo\Tables\MenuSide.sql" />
-    <Build Include="dbo\Tables\MenuWings.sql" />
-    <Build Include="dbo\Tables\MenuWingsSauce.sql" />
-    <Build Include="dbo\Tables\Pizza.sql" />
-    <Build Include="dbo\Tables\PizzaTopping.sql" />
-    <Build Include="dbo\Tables\StoreLocation.sql" />
-    <Build Include="dbo\Tables\User.sql" />
-    <Build Include="dbo\Tables\UserRole.sql" />
-    <Build Include="dbo\Tables\DeliveryInfo.sql" />
+    <Build Include="dbo\Tables\MenuPizzaCheese.sql" />
+    <Build Include="dbo\Tables\MenuPizzaCrustFlavor.sql" />
+    <Build Include="dbo\Tables\MenuPizzaToppingType.sql" />
     <Build Include="dbo\Tables\MenuPizza.sql" />
-    <Build Include="dbo\Tables\CartItem.sql" />
   </ItemGroup>
 </Project>

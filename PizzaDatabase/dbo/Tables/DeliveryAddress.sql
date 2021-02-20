@@ -1,14 +1,14 @@
-﻿CREATE TABLE [dbo].[DeliveryAddress]
+﻿CREATE TABLE dbo.DeliveryAddress
 (
-  [Id] INT NOT NULL IDENTITY,
-  [UserId] INT NOT NULL,
-  [AddressType] VARCHAR(50) NOT NULL,
-  [Name] VARCHAR(50) NOT NULL,
-  [StreetAddress] VARCHAR(50) NOT NULL,
-  [City] VARCHAR(50) NOT NULL,
-  [State] VARCHAR(2) NOT NULL,
-  [ZipCode] VARCHAR(5) NOT NULL,
-  [PhoneNumber] VARCHAR(10) NOT NULL,
-  PRIMARY KEY ([Id]),
-  FOREIGN KEY ([UserId]) REFERENCES [dbo].[User](Id)
-);
+  Id INT NOT NULL IDENTITY,
+  UserId INT NOT NULL,
+  AddressType NVARCHAR(50) NOT NULL,
+  Name NVARCHAR(50) NOT NULL,
+  StreetAddress NVARCHAR(50) NOT NULL,
+  City NVARCHAR(50) NOT NULL,
+  State NVARCHAR(2) NOT NULL,
+  ZipCode NVARCHAR(5) NOT NULL,
+  PhoneNumber NVARCHAR(MAX) NOT NULL,
+  PRIMARY KEY (Id),
+  CONSTRAINT FK_DeliveryAddress_SiteUser FOREIGN KEY (UserId) REFERENCES SiteUser(Id)
+)

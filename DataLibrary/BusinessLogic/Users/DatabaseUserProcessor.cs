@@ -92,52 +92,6 @@ namespace DataLibrary.BusinessLogic.Users
             return rowsAffected;
         }
 
-        /// <summary>
-        /// Adds a user to a role by adding a new record in the UserRole table.
-        /// </summary>
-        /// <param name="userRole"></param>
-        /// <param name="connection"></param>
-        /// <param name="transaction"></param>
-        /// <returns>ID of the newly created user role record.</returns>
-        internal static int AddUserRole(UserModel user, string roleName, IDbConnection connection, IDbTransaction transaction)
-        {
-            string insertSql = @"insert into dbo.UserRole (UserId, Name) output Inserted.Id values (@UserId, @Name);";
-
-            UserRoleModel userRole = new UserRoleModel()
-            {
-                Name = roleName,
-                UserId = user.Id
-            };
-
-            return SqlDataAccess.SaveNewRecord(insertSql, userRole, connection, transaction);
-        }
-
-        internal static int RemoveAllUserRoles(UserModel user, IDbConnection connection, IDbTransaction transaction)
-        {
-            string deleteRolesSql = @"delete from dbo.UserRole where UserId = @Id;";
-            return SqlDataAccess.DeleteRecord<UserModel>(deleteRolesSql, user, connection, transaction);
-        }
-
-        internal static List<UserRoleModel> LoadAllUserRoles()
-        {
-            string selectUserSql = @"select Id, UserId, Name from dbo.UserRole;";
-            return SqlDataAccess.LoadData<UserRoleModel>(selectUserSql);
-        }
-
-        public static List<UserRoleModel> LoadUserRoles(int userId)
-        {
-            return LoadAllUserRoles().Where(r => r.UserId == userId).ToList();
-        }
-
-        public static IList<string> LoadUserRoleNames(int userId)
-        {
-            return LoadUserRoles(userId).Select(r => r.Name).ToList();
-        }
-        public static bool UserIsInRole(int userId, string roleName)
-        {
-            return LoadUserRoleNames(userId).Contains(roleName);
-        }
-
         internal static List<UserModel> LoadUsers()
         {
             string selectUserSql = @"select Id, UserName, Email, PasswordHash, CurrentCartId, ConfirmOrderCartId, OrderConfirmationId, IsBanned, EmailConfirmed, PhoneNumber, PhoneNumberConfirmed, ZipCode
@@ -187,29 +141,18 @@ namespace DataLibrary.BusinessLogic.Users
             return LoadUsers().Where(u => u.PhoneNumber == phoneNumber).FirstOrDefault();
         }
 
+        public static string GetPasswordHash(int userId)
+        {
+            return FindUserById(userId).PasswordHash;
+        }
+
         internal static int UpdateUser(UserModel updatedUser, IDbConnection connection, IDbTransaction transaction)
         {
             string updateSql = @"update [dbo].[User] set Email = @Email, PasswordHash = @PasswordHash, OrderConfirmationId = @OrderConfirmationId,
                                  IsBanned = @IsBanned, EmailConfirmed = @EmailConfirmed, PhoneNumber = @PhoneNumber, PhoneNumberConfirmed = @PhoneNumberConfirmed
                                  ZipCode = @ZipCode where Id = @Id;";
 
-            int userRowsAffected = SqlDataAccess.UpdateRecord<UserModel>(updateSql, updatedUser, connection, transaction);
-            int roleRecordsAffected = UpdateUserRoles(updatedUser, connection, transaction);
-
-            return userRowsAffected;
-        }
-
-        internal static int UpdateUserRoles(UserModel updatedUser, IDbConnection connection, IDbTransaction transaction)
-        {
-            int rowsAffected = RemoveAllUserRoles(updatedUser, connection, transaction);
-
-            foreach (var role in updatedUser.Roles)
-            {
-                AddUserRole(updatedUser, role, connection, transaction);
-                rowsAffected += 1;
-            }
-
-            return rowsAffected;
+            return SqlDataAccess.UpdateRecord<UserModel>(updateSql, updatedUser, connection, transaction);
         }
     }
 }

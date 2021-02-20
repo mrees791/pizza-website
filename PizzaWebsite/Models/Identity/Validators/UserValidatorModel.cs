@@ -10,16 +10,16 @@ namespace PizzaWebsite.Models.Identity.Validators
     /// <summary>
     /// Provides server-side validation for user registration. Used by the UserManager UserValidator property.
     /// </summary>
-    public class UserValidatorModel : IIdentityValidator<IdentityUserModel>
+    public class UserValidatorModel : IIdentityValidator<IdentityUser>
     {
-        private UserStoreModel userStore;
+        private UserStoreModelOLD userStore;
 
-        public UserValidatorModel(UserStoreModel userStore)
+        public UserValidatorModel(UserStoreModelOLD userStore)
         {
             this.userStore = userStore;
         }
 
-        public Task<IdentityResult> ValidateAsync(IdentityUserModel item)
+        public Task<IdentityResult> ValidateAsync(IdentityUser item)
         {
             List<string> errors = new List<string>();
 
@@ -34,7 +34,7 @@ namespace PizzaWebsite.Models.Identity.Validators
             return Task.FromResult(IdentityResult.Success);
         }
 
-        private void ValidateUserName(IdentityUserModel item, List<string> errors)
+        private void ValidateUserName(IdentityUser item, List<string> errors)
         {
             var previousUser = userStore.FindByNameAsync(item.UserName).Result;
             bool nameAlreadyInUse = previousUser.Id != null;
@@ -45,7 +45,7 @@ namespace PizzaWebsite.Models.Identity.Validators
             }
         }
 
-        private void ValidateEmail(IdentityUserModel item, List<string> errors)
+        private void ValidateEmail(IdentityUser item, List<string> errors)
         {
             var previousUser = userStore.FindByEmailAsync(item.Email).Result;
             bool emailAlreadyInUse = previousUser.Id != null;
@@ -56,7 +56,7 @@ namespace PizzaWebsite.Models.Identity.Validators
             }
         }
 
-        private void ValidatePhoneNumber(IdentityUserModel item, List<string> errors)
+        private void ValidatePhoneNumber(IdentityUser item, List<string> errors)
         {
             var previousUser = userStore.FindByPhoneNumberAsync(item.PhoneNumber).Result;
             bool phoneNumberAlreadyInUse = previousUser.Id != null;

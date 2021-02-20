@@ -1,6 +1,4 @@
-﻿using DataLibrary.BusinessLogic.Users;
-using DataLibrary.Models.Users;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +13,13 @@ namespace PizzaWebsite.Models.Identity
     /// This article is used as a reference:
     /// https://docs.microsoft.com/en-us/aspnet/identity/overview/getting-started/adding-aspnet-identity-to-an-empty-or-existing-web-forms-project
     /// </summary>
-    public class UserStoreModel : IUserStore<IdentityUserModel>, IUserLoginStore<IdentityUserModel>, IUserPasswordStore<IdentityUserModel>, IUserEmailStore<IdentityUserModel>,
+    /*public class UserStoreModelOLD : IUserStore<IdentityUserModel>, IUserPasswordStore<IdentityUserModel>, IUserEmailStore<IdentityUserModel>,
         IUserRoleStore<IdentityUserModel>, IUserClaimStore<IdentityUserModel>
     {
         public Task CreateAsync(IdentityUserModel user)
         {
-            int userId = DatabaseUserProcessor.AddNewUser(user.ToDbModel());
+            DatabaseUserProcessor.AddNewUser(user.ToDbModel());
+
             return Task.FromResult(0);
         }
 
@@ -41,7 +40,7 @@ namespace PizzaWebsite.Models.Identity
             {
                 return Task.FromResult(new IdentityUserModel(user));
             }
-            return Task.FromResult(new IdentityUserModel());
+            return Task.FromResult<IdentityUserModel>(null);
         }
 
         public Task<IdentityUserModel> FindByIdAsync(string userId)
@@ -52,7 +51,7 @@ namespace PizzaWebsite.Models.Identity
             {
                 return Task.FromResult(new IdentityUserModel(user));
             }
-            return Task.FromResult(new IdentityUserModel());
+            return Task.FromResult<IdentityUserModel>(null);
         }
 
         public Task<IdentityUserModel> FindByNameAsync(string userName)
@@ -63,17 +62,19 @@ namespace PizzaWebsite.Models.Identity
             {
                 return Task.FromResult(new IdentityUserModel(user));
             }
-            return Task.FromResult(new IdentityUserModel());
+            return Task.FromResult<IdentityUserModel>(null);
         }
 
         public Task<string> GetPasswordHashAsync(IdentityUserModel user)
         {
-            return Task.FromResult(user.PasswordHash);
+            string passwordHash = DatabaseUserProcessor.GetPasswordHash(int.Parse(user.Id));
+            return Task.FromResult(passwordHash);
         }
 
         public Task<bool> HasPasswordAsync(IdentityUserModel user)
         {
-            return Task.FromResult(user.PasswordHash != null);
+            bool hasPassword = !string.IsNullOrEmpty(DatabaseUserProcessor.GetPasswordHash(int.Parse(user.Id)));
+            return Task.FromResult(hasPassword);
         }
 
         public Task SetPasswordHashAsync(IdentityUserModel user, string passwordHash)
@@ -84,18 +85,14 @@ namespace PizzaWebsite.Models.Identity
 
         public Task UpdateAsync(IdentityUserModel user)
         {
-            int rowsUpdated = DatabaseUserProcessor.UpdateUser(user.ToDbModel());
-
-            if (rowsUpdated > 0)
-            {
-                return Task.FromResult(0);
-            }
-            throw new Exception($"Unable to update user record for user ID {user.Id}.");
+            DatabaseUserProcessor.UpdateUser(user.ToDbModel());
+            return Task.FromResult(0);
         }
         
         public Task<IList<string>> GetRolesAsync(IdentityUserModel user)
         {
-            return Task.FromResult(user.Roles);
+            IList<string> roles = DatabaseRolesProcessor.FindByUserId(int.Parse(user.Id));
+            return Task.FromResult(roles);
         }
 
         public Task AddToRoleAsync(IdentityUserModel user, string roleName)
@@ -147,39 +144,20 @@ namespace PizzaWebsite.Models.Identity
             return Task.FromResult(new IdentityUserModel());
         }
 
-        public Task AddLoginAsync(IdentityUserModel user, UserLoginInfo login)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RemoveLoginAsync(IdentityUserModel user, UserLoginInfo login)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<UserLoginInfo>> GetLoginsAsync(IdentityUserModel user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IdentityUserModel> FindAsync(UserLoginInfo login)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<IList<Claim>> GetClaimsAsync(IdentityUserModel user)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(user.Claims);
         }
 
         public Task AddClaimAsync(IdentityUserModel user, Claim claim)
         {
-            throw new NotImplementedException();
+            user.Claims.Add(claim);
+            return Task.FromResult(0);
         }
 
         public Task RemoveClaimAsync(IdentityUserModel user, Claim claim)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(user.Claims.Remove(claim));
         }
-    }
+    }*/
 }

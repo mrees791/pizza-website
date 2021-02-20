@@ -1,8 +1,9 @@
-﻿CREATE TABLE [dbo].[UserRole]
+﻿CREATE TABLE dbo.UserRole
 (
-  [Id] INT NOT NULL IDENTITY,
-  [UserId] INT NOT NULL,
-  [Name] VARCHAR(50) NOT NULL,
-  PRIMARY KEY ([Id]),
-  FOREIGN KEY ([UserId]) REFERENCES [dbo].[User](Id)
-);
+  Id INT NOT NULL IDENTITY,
+  UserId INT NOT NULL,
+  RoleId INT NOT NULL,
+  PRIMARY KEY (Id),
+  CONSTRAINT FK_UserRole_SiteUser FOREIGN KEY (UserId) REFERENCES SiteUser(Id),
+  CONSTRAINT FK_UserRole_SiteRole FOREIGN KEY (RoleId) REFERENCES SiteRole(Id)
+)

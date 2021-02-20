@@ -22,14 +22,9 @@ namespace DataLibrary.Models.Users
         public string PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
         public string ZipCode { get; set; }
-        public IList<string> Roles { get; set; }
 
         public UserModel()
         {
-            Roles = new List<string>();
         }
-        /*public List<DeliveryAddressModel> DeliveryAddresses { get; set; }
-        public List<UserRoleModel> UserRoles { get; set; }
-        public List<CustomerOrderModel> CustomerOrders { get; set; }*/
     }
 }
