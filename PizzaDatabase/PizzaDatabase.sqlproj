@@ -66,5 +66,21 @@
     <Build Include="dbo\Tables\MenuPizzaCrustFlavor.sql" />
     <Build Include="dbo\Tables\MenuPizzaToppingType.sql" />
     <Build Include="dbo\Tables\MenuPizza.sql" />
+    <Build Include="dbo\Tables\MenuPizzaTopping.sql" />
+    <Build Include="dbo\Tables\Cart.sql" />
+    <Build Include="dbo\Tables\CartItem.sql" />
+    <Build Include="dbo\Tables\CartPizza.sql" />
+    <Build Include="dbo\Tables\CartPizzaTopping.sql" />
+    <Build Include="dbo\Tables\SiteUser.sql" />
+    <Build Include="dbo\Tables\UserLogin.sql" />
+    <Build Include="dbo\Tables\UserClaim.sql" />
+    <Build Include="dbo\Tables\SiteRole.sql" />
+    <Build Include="dbo\Tables\UserRole.sql" />
+    <Build Include="dbo\Tables\DeliveryAddress.sql" />
+    <Build Include="dbo\Tables\Employee.sql" />
+    <Build Include="dbo\Tables\StoreLocation.sql" />
+    <Build Include="dbo\Tables\EmployeeLocation.sql" />
+    <Build Include="dbo\Tables\DeliveryInfo.sql" />
+    <Build Include="dbo\Tables\CustomerOrder.sql" />
   </ItemGroup>
 </Project>

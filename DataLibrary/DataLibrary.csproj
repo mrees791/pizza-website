@@ -34,6 +34,9 @@
     <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.2.0.78\lib\net461\Dapper.dll</HintPath>
     </Reference>
+    <Reference Include="Dapper.SimpleCRUD, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.SimpleCRUD.2.2.0.1\lib\netstandard2.0\Dapper.SimpleCRUD.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.ConfigurationManager, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -55,6 +58,7 @@
     </Reference>
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,55 +68,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessLogic\Roles\DatabaseRolesProcessor.cs" />
-    <Compile Include="BusinessLogic\Users\DatabaseUserProcessor.cs" />
     <Compile Include="DataAccess\SqlDataAccess.cs" />
-    <Compile Include="Models\CustomerOrders\CustomerOrderModel.cs" />
-    <Compile Include="Models\CustomerOrders\DeliveryInfoModel.cs" />
-    <Compile Include="Models\Employees\EmployeeLocationModel.cs" />
-    <Compile Include="Models\Employees\EmployeeModel.cs" />
-    <Compile Include="Models\Menus\DrinkSize.cs" />
-    <Compile Include="Models\Menus\Pizzas\MenuPizzaCategory.cs" />
-    <Compile Include="Models\Menus\Pizzas\PizzaCheeseAmount.cs" />
-    <Compile Include="Models\Menus\Pizzas\PizzaSauceAmount.cs" />
-    <Compile Include="Models\Menus\Pizzas\PizzaSize.cs" />
-    <Compile Include="Models\Menus\Pizzas\PizzaToppingAmount.cs" />
-    <Compile Include="Models\Menus\Pizzas\PizzaToppingHalf.cs" />
-    <Compile Include="Models\Stores\StoreLocationModel.cs" />
-    <Compile Include="Models\Users\DeliveryAddressModel.cs" />
-    <Compile Include="Models\Users\UserModel.cs" />
-    <Compile Include="Models\Users\UserRoleModel.cs" />
-    <Compile Include="Models\Carts\CartItemModel.cs" />
-    <Compile Include="Models\Carts\CartModel.cs" />
-    <Compile Include="Models\Carts\CartPizzaModel.cs" />
-    <Compile Include="Models\Menus\MenuDessertModel.cs" />
-    <Compile Include="Models\Menus\MenuDipModel.cs" />
-    <Compile Include="Models\Menus\MenuDrinkModel.cs" />
-    <Compile Include="Models\Menus\MenuItemModel.cs" />
-    <Compile Include="Models\Menus\MenuItemWithIconModel.cs" />
-    <Compile Include="Models\Menus\MenuPastaModel.cs" />
-    <Compile Include="Models\Menus\MenuSauceModel.cs" />
-    <Compile Include="Models\Menus\MenuSideModel.cs" />
-    <Compile Include="Models\Menus\MenuWingsModel.cs" />
-    <Compile Include="Models\Menus\MenuWingsSauceModel.cs" />
-    <Compile Include="Models\Menus\Pizzas\MenuPizzaModel.cs" />
-    <Compile Include="Models\Menus\Pizzas\MenuPizzaCheeseModel.cs" />
-    <Compile Include="Models\Menus\Pizzas\MenuPizzaCrustFlavorModel.cs" />
-    <Compile Include="Models\Menus\Pizzas\MenuPizzaCrustModel.cs" />
-    <Compile Include="Models\Menus\Pizzas\MenuPizzaItemModel.cs" />
-    <Compile Include="Models\Menus\Pizzas\MenuPizzaSauceModel.cs" />
-    <Compile Include="Models\Menus\Pizzas\MenuPizzaToppingModel.cs" />
-    <Compile Include="Models\Pizzas\PizzaModel.cs" />
-    <Compile Include="Models\Pizzas\PizzaToppingModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BusinessLogic\Carts\" />
-    <Folder Include="BusinessLogic\Menus\" />
-    <Folder Include="BusinessLogic\Pizzas\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
