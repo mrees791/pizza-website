@@ -29,5 +29,13 @@ namespace PizzaWebsite.Models.Identity
         public string Name { get; set; }
 
         int IRole<int>.Id => id;
+
+        public int Id
+        {
+            get
+            {
+                return id;
+            }
+        }
     }
 }

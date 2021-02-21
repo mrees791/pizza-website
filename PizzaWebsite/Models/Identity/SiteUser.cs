@@ -12,6 +12,12 @@ namespace PizzaWebsite.Models.Identity
         private int id;
         private string userName;
 
+        public SiteUser(int id, string userName)
+        {
+            this.id = id;
+            this.userName = userName;
+        }
+
         public int Id => id;
 
         public string UserName { get => userName; set => userName = value; }

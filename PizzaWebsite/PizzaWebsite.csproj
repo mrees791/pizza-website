@@ -202,6 +202,8 @@
     </Compile>
     <Compile Include="Models\Identity\SiteRole.cs" />
     <Compile Include="Models\Identity\SiteUser.cs" />
+    <Compile Include="Models\Identity\UserClaim.cs" />
+    <Compile Include="Models\Identity\UserRole.cs" />
     <Compile Include="Models\Identity\UserStore.cs" />
     <Compile Include="Models\Identity\Validators\UserValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
