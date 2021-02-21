@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using PizzaWebsite.Models.Tests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,31 +12,21 @@ namespace PizzaWebsite.Models.Identity
         IUserStore<SiteUser, int>,
         IUserRoleStore<SiteUser, int>
     {
-        // User, role definitions
-        private List<SiteRole> roles;
-        private List<SiteUser> users;
-
-        // Links users to roles
-        private List<UserRole> userRoles;
+        // Dummy database serves as a test before DAL implementation
+        private DummyDatabase dbContext;
 
         public UserStore()
         {
-            users = new List<SiteUser>();
-            roles = new List<SiteRole>();
-            userRoles = new List<UserRole>();
-
-            CreateDummyDatabase();
+            CreateDummyDatabaseRecords();
         }
 
-        private void CreateDummyDatabase()
+        private void CreateDummyDatabaseRecords()
         {
-            // Add records to dummy database
-            SiteRole managerRole = new SiteRole("Manager", 1);
-            roles.Add(managerRole);
+            dbContext = new DummyDatabase();
 
             // Add users
-            CreateAsync(new SiteUser(1, "basic_user"));
-            CreateAsync(new SiteUser(2, "manager_user"));
+            CreateAsync(new SiteUser("basic_user"));
+            CreateAsync(new SiteUser("manager_user"));
 
             // Add user to manager role
             SiteUser managerUser = FindByNameAsync("manager_user").Result;
@@ -44,12 +35,12 @@ namespace PizzaWebsite.Models.Identity
 
         public Task AddToRoleAsync(SiteUser user, string roleName)
         {
-            int userRoleId = userRoles.Count + 1;
+            List<SiteRole> roles = dbContext.LoadRoles();
             SiteRole siteRole = roles.Where(r => r.Name == roleName).First();
-            UserRole userRole = new UserRole(userRoleId, user.Id, siteRole.Id);
+            UserRole userRole = new UserRole(user.Id, siteRole.Id);
 
             // Add UserRole record to dummy database
-            userRoles.Add(userRole);
+            dbContext.AddRecord(userRole);
 
             return Task.FromResult(0);
         }
@@ -57,7 +48,7 @@ namespace PizzaWebsite.Models.Identity
         public Task CreateAsync(SiteUser user)
         {
             // Add SiteUser to dummy database
-            users.Add(user);
+            dbContext.AddRecord(user);
 
             return Task.FromResult(0);
         }
@@ -78,32 +69,56 @@ namespace PizzaWebsite.Models.Identity
 
         public Task<SiteUser> FindByIdAsync(int userId)
         {
+            List<SiteUser> users = dbContext.LoadUsers();
             return Task.FromResult(users.Where(u => u.Id == userId).First());
         }
 
         public Task<SiteUser> FindByNameAsync(string userName)
         {
+            List<SiteUser> users = dbContext.LoadUsers();
             return Task.FromResult(users.Where(u => u.UserName == userName).First());
         }
 
         public Task<IList<string>> GetRolesAsync(SiteUser user)
         {
-            throw new NotImplementedException();
+            List<SiteRole> roles = dbContext.LoadRoles();
+            List<UserRole> userRoles = dbContext.LoadUserRoles();
+            IList<string> currentUserRoleNames = new List<string>();
+            List<UserRole> currentUserRoles = userRoles.Where(ur => ur.UserId == user.Id).ToList();
+
+            foreach (UserRole userRole in currentUserRoles)
+            {
+                SiteRole role = roles.Where(r => r.Id == userRole.RoleId).First();
+                currentUserRoleNames.Add(role.Name);
+            }
+
+            return Task.FromResult(currentUserRoleNames);
         }
 
         public Task<bool> IsInRoleAsync(SiteUser user, string roleName)
         {
-            throw new NotImplementedException();
+            IList<string> currentUserRoles = GetRolesAsync(user).Result;
+
+            return Task.FromResult(currentUserRoles.Contains(roleName));
         }
 
         public Task RemoveFromRoleAsync(SiteUser user, string roleName)
         {
-            throw new NotImplementedException();
+            List<SiteRole> roles = dbContext.LoadRoles();
+            List<UserRole> userRoles = dbContext.LoadUserRoles();
+            SiteRole role = roles.Where(r => r.Name == roleName).First();
+            UserRole userRole = userRoles.
+                Where(ur => ur.RoleId == role.Id && ur.UserId == user.Id).First();
+
+            dbContext.DeleteRecord(userRole);
+
+            return Task.FromResult(0);
         }
 
         public Task UpdateAsync(SiteUser user)
         {
-            throw new NotImplementedException();
+            // Update user records in database
+            return Task.FromResult(0);
         }
     }
 }

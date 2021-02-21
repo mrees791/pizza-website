@@ -13,12 +13,16 @@ namespace PizzaWebsite.Models.Identity
         private string claimType;
         private string claimValue;
 
-        public UserClaim(int id, int userId, string claimType, string claimValue)
+        public UserClaim(int userId, string claimType, string claimValue)
         {
-            this.id = id;
             this.userId = userId;
             this.claimType = claimType;
             this.claimValue = claimValue;
         }
+
+        public int Id { get => id; set => id = value; }
+        public int UserId { get => userId; }
+        public string ClaimType { get => claimType; }
+        public string ClaimValue { get => claimValue; }
     }
 }

@@ -10,20 +10,9 @@ namespace PizzaWebsite.Models.Identity
     {
         private int id;
 
-        public SiteRole()
-        {
-            id = int.Parse(Guid.NewGuid().ToString());
-        }
-
-        public SiteRole(string name) : this()
+        public SiteRole(string name)
         {
             Name = name;
-        }
-
-        public SiteRole(string name, int id)
-        {
-            Name = name;
-            this.id = id;
         }
 
         public string Name { get; set; }
@@ -35,6 +24,10 @@ namespace PizzaWebsite.Models.Identity
             get
             {
                 return id;
+            }
+            set
+            {
+                id = value;
             }
         }
     }
