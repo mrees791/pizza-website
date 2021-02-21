@@ -15,7 +15,8 @@ namespace PizzaWebsite.Models.Identity
         IUserEmailStore<SiteUser, int>,
         IUserRoleStore<SiteUser, int>,
         IUserClaimStore<SiteUser, int>,
-        IUserLoginStore<SiteUser, int>
+        IUserLoginStore<SiteUser, int>,
+        IUserSecurityStampStore<SiteUser, int>
     {
         // Dummy database serves as a test before DAL implementation
         private DummyDatabase dbContext;
@@ -235,6 +236,17 @@ namespace PizzaWebsite.Models.Identity
         private bool UserLoginIsEqual(UserLoginInfo login1, UserLoginInfo login2)
         {
             return login1.LoginProvider == login2.LoginProvider && login1.ProviderKey == login2.ProviderKey;
+        }
+
+        public Task SetSecurityStampAsync(SiteUser user, string stamp)
+        {
+            user.SecurityStamp = stamp;
+            return Task.FromResult(0);
+        }
+
+        public Task<string> GetSecurityStampAsync(SiteUser user)
+        {
+            return Task.FromResult(user.SecurityStamp);
         }
     }
 }
