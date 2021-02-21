@@ -188,7 +188,7 @@ namespace PizzaWebsite.Models.Identity
         public Task RemoveClaimAsync(SiteUser user, Claim claim)
         {
             List<UserClaim> userClaims = dbContext.LoadUserClaims().Where(uc => uc.UserId == user.Id).ToList();
-            UserClaim currentClaim = userClaims.Where(uc => uc.Claim == claim).First();
+            UserClaim currentClaim = userClaims.Where(uc => ClaimsAreEqual(uc.Claim, claim)).First();
             dbContext.DeleteRecord(currentClaim);
 
             return Task.FromResult(0);
@@ -204,7 +204,7 @@ namespace PizzaWebsite.Models.Identity
 
         public Task RemoveLoginAsync(SiteUser user, UserLoginInfo login)
         {
-            UserLogin userLoginRecord = dbContext.LoadUserLogins().Where(ul => ul.UserLoginInfo == login).First();
+            UserLogin userLoginRecord = dbContext.LoadUserLogins().Where(ul => UserLoginIsEqual(ul.UserLoginInfo, login)).First();
             dbContext.DeleteRecord(userLoginRecord);
 
             return Task.FromResult(0);
@@ -222,9 +222,19 @@ namespace PizzaWebsite.Models.Identity
         {
             List<UserLogin> userLogins = dbContext.LoadUserLogins();
             List<SiteUser> users = dbContext.LoadUsers();
-            UserLogin userLogin = userLogins.Where(ul => ul.UserLoginInfo == login).First();
+            UserLogin userLogin = userLogins.Where(ul => UserLoginIsEqual(ul.UserLoginInfo, login)).First();
 
             return Task.FromResult(users.Where(u => u.Id == userLogin.UserId).First());
+        }
+
+        private bool ClaimsAreEqual(Claim claim1, Claim claim2)
+        {
+            return claim1.Type == claim2.Type && claim1.Value == claim2.Value;
+        }
+
+        private bool UserLoginIsEqual(UserLoginInfo login1, UserLoginInfo login2)
+        {
+            return login1.LoginProvider == login2.LoginProvider && login1.ProviderKey == login2.ProviderKey;
         }
     }
 }
