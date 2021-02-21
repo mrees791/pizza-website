@@ -19,6 +19,10 @@ namespace PizzaWebsite.Models.Identity
         private bool phoneNumberConfirmed;
         private bool twoFactorEnabled;
 
+        private DateTimeOffset lockoutEndDate;
+        private int accessFailedCount;
+        private bool lockoutEnabled;
+
         // This constructor will be used when users use external logins (UserLogin)
         public SiteUser()
         {
@@ -41,6 +45,16 @@ namespace PizzaWebsite.Models.Identity
             return !(string.IsNullOrEmpty(email));
         }
 
+        public int IncrementAccessFailedCount()
+        {
+            return ++accessFailedCount;
+        }
+
+        public void ResetAccessFailedCount()
+        {
+            accessFailedCount = 0;
+        }
+
         public int Id { get => id; set => id = value; }
 
         public string UserName { get => userName; set => userName = value; }
@@ -51,5 +65,8 @@ namespace PizzaWebsite.Models.Identity
         public string PhoneNumber { get => phoneNumber; set => phoneNumber = value; }
         public bool PhoneNumberConfirmed { get => phoneNumberConfirmed; set => phoneNumberConfirmed = value; }
         public bool TwoFactorEnabled { get => twoFactorEnabled; set => twoFactorEnabled = value; }
+        public DateTimeOffset LockoutEndDate { get => lockoutEndDate; set => lockoutEndDate = value; }
+        public int AccessFailedCount { get => accessFailedCount; set => accessFailedCount = value; }
+        public bool LockoutEnabled { get => lockoutEnabled; set => lockoutEnabled = value; }
     }
 }

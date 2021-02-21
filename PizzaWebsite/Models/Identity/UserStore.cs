@@ -18,7 +18,8 @@ namespace PizzaWebsite.Models.Identity
         IUserLoginStore<SiteUser, int>,
         IUserSecurityStampStore<SiteUser, int>,
         IUserPhoneNumberStore<SiteUser, int>,
-        IUserTwoFactorStore<SiteUser, int>
+        IUserTwoFactorStore<SiteUser, int>,
+        IUserLockoutStore<SiteUser, int>
     {
         // Dummy database serves as a test before DAL implementation
         private DummyDatabase dbContext;
@@ -282,6 +283,45 @@ namespace PizzaWebsite.Models.Identity
         public Task<bool> GetTwoFactorEnabledAsync(SiteUser user)
         {
             return Task.FromResult(user.TwoFactorEnabled);
+        }
+
+        public Task<DateTimeOffset> GetLockoutEndDateAsync(SiteUser user)
+        {
+            return Task.FromResult(user.LockoutEndDate);
+        }
+
+        public Task SetLockoutEndDateAsync(SiteUser user, DateTimeOffset lockoutEnd)
+        {
+            user.LockoutEndDate = lockoutEnd;
+            return Task.FromResult(0);
+        }
+
+        public Task<int> IncrementAccessFailedCountAsync(SiteUser user)
+        {
+            int accessFailedCount = user.IncrementAccessFailedCount();
+            return Task.FromResult(accessFailedCount);
+        }
+
+        public Task ResetAccessFailedCountAsync(SiteUser user)
+        {
+            user.ResetAccessFailedCount();
+            return Task.FromResult(0);
+        }
+
+        public Task<int> GetAccessFailedCountAsync(SiteUser user)
+        {
+            return Task.FromResult(user.AccessFailedCount);
+        }
+
+        public Task<bool> GetLockoutEnabledAsync(SiteUser user)
+        {
+            return Task.FromResult(user.LockoutEnabled);
+        }
+
+        public Task SetLockoutEnabledAsync(SiteUser user, bool enabled)
+        {
+            user.LockoutEnabled = enabled;
+            return Task.FromResult(0);
         }
     }
 }
