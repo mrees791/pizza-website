@@ -17,7 +17,8 @@ namespace PizzaWebsite.Models.Identity
         IUserClaimStore<SiteUser, int>,
         IUserLoginStore<SiteUser, int>,
         IUserSecurityStampStore<SiteUser, int>,
-        IUserPhoneNumberStore<SiteUser, int>
+        IUserPhoneNumberStore<SiteUser, int>,
+        IUserTwoFactorStore<SiteUser, int>
     {
         // Dummy database serves as a test before DAL implementation
         private DummyDatabase dbContext;
@@ -270,6 +271,17 @@ namespace PizzaWebsite.Models.Identity
         {
             user.PhoneNumberConfirmed = confirmed;
             return Task.FromResult(0);
+        }
+
+        public Task SetTwoFactorEnabledAsync(SiteUser user, bool enabled)
+        {
+            user.TwoFactorEnabled = enabled;
+            return Task.FromResult(0);
+        }
+
+        public Task<bool> GetTwoFactorEnabledAsync(SiteUser user)
+        {
+            return Task.FromResult(user.TwoFactorEnabled);
         }
     }
 }

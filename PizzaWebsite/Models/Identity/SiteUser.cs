@@ -17,6 +17,7 @@ namespace PizzaWebsite.Models.Identity
         private string securityStamp;
         private string phoneNumber;
         private bool phoneNumberConfirmed;
+        private bool twoFactorEnabled;
 
         // This constructor will be used when users use external logins (UserLogin)
         public SiteUser()
@@ -49,5 +50,6 @@ namespace PizzaWebsite.Models.Identity
         public string SecurityStamp { get => securityStamp; set => securityStamp = value; }
         public string PhoneNumber { get => phoneNumber; set => phoneNumber = value; }
         public bool PhoneNumberConfirmed { get => phoneNumberConfirmed; set => phoneNumberConfirmed = value; }
+        public bool TwoFactorEnabled { get => twoFactorEnabled; set => twoFactorEnabled = value; }
     }
 }
