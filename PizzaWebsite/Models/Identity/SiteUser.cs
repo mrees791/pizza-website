@@ -12,15 +12,19 @@ namespace PizzaWebsite.Models.Identity
         private int id;
         private string userName;
         private string passwordHash;
+        private string email;
+        private bool emailConfirmed;
 
-        public SiteUser(string userName)
+        // This constructor will be used when users use external logins (UserLogin)
+        public SiteUser()
         {
-            this.userName = userName;
         }
 
-        public SiteUser(string userName, string passwordHash) : this(userName)
+        public SiteUser(string userName, string passwordHash, string email)
         {
+            this.userName = userName;
             this.passwordHash = passwordHash;
+            this.email = email;
         }
 
         public bool HasPassword()
@@ -28,9 +32,16 @@ namespace PizzaWebsite.Models.Identity
             return !(string.IsNullOrEmpty(passwordHash));
         }
 
+        public bool HasEmail()
+        {
+            return !(string.IsNullOrEmpty(email));
+        }
+
         public int Id { get => id; set => id = value; }
 
         public string UserName { get => userName; set => userName = value; }
         public string PasswordHash { get => passwordHash; set => passwordHash = value; }
+        public string Email { get => email; set => email = value; }
+        public bool EmailConfirmed { get => emailConfirmed; set => emailConfirmed = value; }
     }
 }

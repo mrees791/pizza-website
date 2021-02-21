@@ -11,7 +11,8 @@ namespace PizzaWebsite.Models.Identity
     public class UserStore :
         IUserStore<SiteUser, int>,
         IUserRoleStore<SiteUser, int>,
-        IUserPasswordStore<SiteUser, int>
+        IUserPasswordStore<SiteUser, int>,
+        IUserEmailStore<SiteUser, int>
     {
         // Dummy database serves as a test before DAL implementation
         private DummyDatabase dbContext;
@@ -25,8 +26,8 @@ namespace PizzaWebsite.Models.Identity
         private void CreateDummyDatabaseRecords()
         {
             // Add users
-            CreateAsync(new SiteUser("basic_user"));
-            CreateAsync(new SiteUser("manager_user"));
+            CreateAsync(new SiteUser("basic_user", "PASSHASH1234", "user@gmail.com"));
+            CreateAsync(new SiteUser("manager_user", "PASSHASH5678", "manager@gmail.com"));
 
             // Add user to manager role
             SiteUser managerUser = FindByNameAsync("manager_user").Result;
@@ -135,6 +136,34 @@ namespace PizzaWebsite.Models.Identity
         public Task<bool> HasPasswordAsync(SiteUser user)
         {
             return Task.FromResult(user.HasPassword());
+        }
+
+        public Task SetEmailAsync(SiteUser user, string email)
+        {
+            user.Email = email;
+            return Task.FromResult(0);
+        }
+
+        public Task<string> GetEmailAsync(SiteUser user)
+        {
+            return Task.FromResult(user.Email);
+        }
+
+        public Task<bool> GetEmailConfirmedAsync(SiteUser user)
+        {
+            return Task.FromResult(user.EmailConfirmed);
+        }
+
+        public Task SetEmailConfirmedAsync(SiteUser user, bool confirmed)
+        {
+            user.EmailConfirmed = confirmed;
+            return Task.FromResult(0);
+        }
+
+        public Task<SiteUser> FindByEmailAsync(string email)
+        {
+            List<SiteUser> users = dbContext.LoadUsers();
+            return Task.FromResult(users.Where(u => u.Email == email).First());
         }
     }
 }
