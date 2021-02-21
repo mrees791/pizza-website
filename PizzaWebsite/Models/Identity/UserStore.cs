@@ -10,20 +10,20 @@ namespace PizzaWebsite.Models.Identity
 {
     public class UserStore :
         IUserStore<SiteUser, int>,
-        IUserRoleStore<SiteUser, int>
+        IUserRoleStore<SiteUser, int>,
+        IUserPasswordStore<SiteUser, int>
     {
         // Dummy database serves as a test before DAL implementation
         private DummyDatabase dbContext;
 
         public UserStore()
         {
+            dbContext = new DummyDatabase();
             CreateDummyDatabaseRecords();
         }
 
         private void CreateDummyDatabaseRecords()
         {
-            dbContext = new DummyDatabase();
-
             // Add users
             CreateAsync(new SiteUser("basic_user"));
             CreateAsync(new SiteUser("manager_user"));
@@ -119,6 +119,22 @@ namespace PizzaWebsite.Models.Identity
         {
             // Update user records in database
             return Task.FromResult(0);
+        }
+
+        public Task SetPasswordHashAsync(SiteUser user, string passwordHash)
+        {
+            user.PasswordHash = passwordHash;
+            return Task.FromResult(0);
+        }
+
+        public Task<string> GetPasswordHashAsync(SiteUser user)
+        {
+            return Task.FromResult(user.PasswordHash);
+        }
+
+        public Task<bool> HasPasswordAsync(SiteUser user)
+        {
+            return Task.FromResult(user.HasPassword());
         }
     }
 }
