@@ -16,7 +16,8 @@ namespace PizzaWebsite.Models.Identity
         IUserRoleStore<SiteUser, int>,
         IUserClaimStore<SiteUser, int>,
         IUserLoginStore<SiteUser, int>,
-        IUserSecurityStampStore<SiteUser, int>
+        IUserSecurityStampStore<SiteUser, int>,
+        IUserPhoneNumberStore<SiteUser, int>
     {
         // Dummy database serves as a test before DAL implementation
         private DummyDatabase dbContext;
@@ -247,6 +248,28 @@ namespace PizzaWebsite.Models.Identity
         public Task<string> GetSecurityStampAsync(SiteUser user)
         {
             return Task.FromResult(user.SecurityStamp);
+        }
+
+        public Task SetPhoneNumberAsync(SiteUser user, string phoneNumber)
+        {
+            user.PhoneNumber = phoneNumber;
+            return Task.FromResult(0);
+        }
+
+        public Task<string> GetPhoneNumberAsync(SiteUser user)
+        {
+            return Task.FromResult(user.PhoneNumber);
+        }
+
+        public Task<bool> GetPhoneNumberConfirmedAsync(SiteUser user)
+        {
+            return Task.FromResult(user.PhoneNumberConfirmed);
+        }
+
+        public Task SetPhoneNumberConfirmedAsync(SiteUser user, bool confirmed)
+        {
+            user.PhoneNumberConfirmed = confirmed;
+            return Task.FromResult(0);
         }
     }
 }
