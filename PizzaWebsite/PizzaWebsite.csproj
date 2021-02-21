@@ -197,27 +197,13 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Identity\IdentityRole.cs" />
-    <Compile Include="Models\Identity\IdentityUser.cs" />
+    <Compile Include="Models\Identity\SiteRole.cs" />
+    <Compile Include="Models\Identity\SiteUser.cs" />
     <Compile Include="Models\Identity\UserStore.cs" />
-    <Compile Include="Models\Identity\UserStoreOLD.cs" />
-    <Compile Include="Models\Identity\Validators\UserValidatorModel.cs" />
-    <Compile Include="Models\Manage\ManagePizzaIngredientsModel.cs" />
-    <Compile Include="Models\Menus\MenuItemWithIconModel.cs" />
-    <Compile Include="Models\Menus\MenuDipModel.cs" />
-    <Compile Include="Models\Menus\MenuItemModel.cs" />
-    <Compile Include="Models\Menus\MenuWingsSauceModel.cs" />
-    <Compile Include="Models\Menus\Pizzas\Ingredients\CheeseModel.cs" />
-    <Compile Include="Models\Menus\Pizzas\Ingredients\CrustModel.cs" />
-    <Compile Include="Models\Menus\Pizzas\Ingredients\CrustFlavor.cs" />
-    <Compile Include="Models\Menus\Pizzas\Ingredients\PizzaIngredientModel.cs" />
-    <Compile Include="Models\Menus\Pizzas\Ingredients\SauceModel.cs" />
-    <Compile Include="Models\Menus\Pizzas\Ingredients\ToppingModel.cs" />
-    <Compile Include="Models\Menus\Pizzas\Ingredients\ToppingTypeModel.cs" />
+    <Compile Include="Models\Identity\Validators\UserValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Home\LoginViewModel.cs" />
@@ -272,12 +258,6 @@
     <Content Include="webfonts\fa-solid-900.ttf" />
     <Content Include="webfonts\fa-solid-900.woff" />
     <Content Include="webfonts\fa-solid-900.woff2" />
-    <Content Include="Views\Manage\ModifyCrust.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ManageMenu.cshtml" />
-    <Content Include="Views\Manage\ManagePizzaMenu.cshtml" />
-    <Content Include="Views\Manage\ManagePizzaIngredients.cshtml" />
-    <Content Include="Views\Manage\_ModifyCrustPartialView.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>

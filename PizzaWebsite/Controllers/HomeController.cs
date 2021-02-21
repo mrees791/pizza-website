@@ -1,5 +1,4 @@
-﻿using DataLibrary.BusinessLogic.Users;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using PizzaWebsite.Models.Identity;
 using PizzaWebsite.Models.Identity.Validators;
 using PizzaWebsite.ViewModels.Home;
@@ -16,14 +15,13 @@ namespace PizzaWebsite.Controllers
 {
     public class HomeController : Controller
     {
-        private UserStoreModelOLD userStore;
-        private UserManager<IdentityUser> userManager;
+        private UserManager<SiteUser, int> userManager;
 
         public HomeController()
         {
-            userStore = new UserStoreModelOLD();
-            userManager = new UserManager<IdentityUser>(userStore);
-            userManager.UserValidator = new UserValidatorModel(userStore);
+            UserStore userStore = new UserStore();
+            userManager = new UserManager<SiteUser, int>(userStore);
+            userManager.UserValidator = new UserValidator(userStore);
         }
 
         public ActionResult Index()
@@ -50,7 +48,7 @@ namespace PizzaWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                IdentityUser newUser = new IdentityUser()
+                /*SiteUser newUser = new SiteUser()
                 {
                     UserName = registerVm.UserName,
                     Email = registerVm.Email,
@@ -77,7 +75,7 @@ namespace PizzaWebsite.Controllers
                         string key = GetUserRegistrationErrorKey(error);
                         ModelState.AddModelError(key, error);
                     }
-                }
+                }*/
             }
             return View(registerVm);
         }
@@ -110,7 +108,8 @@ namespace PizzaWebsite.Controllers
         // todo: Remove test user code
         private RegisterViewModel CreateTestRegistration()
         {
-            int additionalId = DatabaseUserProcessor.GetNumberOfUsers();
+            int additionalId = 1;
+            //int additionalId = DatabaseUserProcessor.GetNumberOfUsers();
             long pn = 7402609777 + additionalId;
 
             RegisterViewModel testUser = new RegisterViewModel()
@@ -126,19 +125,6 @@ namespace PizzaWebsite.Controllers
 
             return testUser;
         }
-
-        /*[HttpPost]
-        public ActionResult Login(LoginViewModel loginVm)
-        {
-            return View(loginVm);
-        }
-
-        [AllowAnonymous]
-        public ActionResult Login()
-        {
-            LoginViewModel loginVm = new LoginViewModel();
-            return View(loginVm);
-        }*/
 
         [AllowAnonymous]
         public ActionResult Register()

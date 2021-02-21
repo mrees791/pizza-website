@@ -6,21 +6,21 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Identity
 {
-    public class IdentityRole : IRole<int>
+    public class SiteRole : IRole<int>
     {
         private int id;
 
-        public IdentityRole()
+        public SiteRole()
         {
             id = int.Parse(Guid.NewGuid().ToString());
         }
 
-        public IdentityRole(string name) : this()
+        public SiteRole(string name) : this()
         {
             Name = name;
         }
 
-        public IdentityRole(string name, int id)
+        public SiteRole(string name, int id)
         {
             Name = name;
             this.id = id;
