@@ -2,8 +2,8 @@
 (
   Id INT NOT NULL IDENTITY,
   UserId INT NOT NULL,
-  LoginProvider NVARCHAR(128),
-  ProviderKey NVARCHAR(128),
+  LoginProvider NVARCHAR(128) NOT NULL,
+  ProviderKey NVARCHAR(128) NOT NULL,
   PRIMARY KEY (Id),
   CONSTRAINT FK_UserLogin_SiteUser FOREIGN KEY (UserId) REFERENCES SiteUser(Id)
 )

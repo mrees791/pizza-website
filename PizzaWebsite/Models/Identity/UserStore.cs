@@ -14,7 +14,8 @@ namespace PizzaWebsite.Models.Identity
         IUserPasswordStore<SiteUser, int>,
         IUserEmailStore<SiteUser, int>,
         IUserRoleStore<SiteUser, int>,
-        IUserClaimStore<SiteUser, int>
+        IUserClaimStore<SiteUser, int>,
+        IUserLoginStore<SiteUser, int>
     {
         // Dummy database serves as a test before DAL implementation
         private DummyDatabase dbContext;
@@ -191,6 +192,39 @@ namespace PizzaWebsite.Models.Identity
             dbContext.DeleteRecord(currentClaim);
 
             return Task.FromResult(0);
+        }
+
+        public Task AddLoginAsync(SiteUser user, UserLoginInfo login)
+        {
+            UserLogin userLogin = new UserLogin(user.Id, login);
+            dbContext.AddRecord(userLogin);
+
+            return Task.FromResult(0);
+        }
+
+        public Task RemoveLoginAsync(SiteUser user, UserLoginInfo login)
+        {
+            UserLogin userLoginRecord = dbContext.LoadUserLogins().Where(ul => ul.UserLoginInfo == login).First();
+            dbContext.DeleteRecord(userLoginRecord);
+
+            return Task.FromResult(0);
+        }
+
+        public Task<IList<UserLoginInfo>> GetLoginsAsync(SiteUser user)
+        {
+            List<UserLogin> userLoginRecords = dbContext.LoadUserLogins().Where(ul => ul.UserId == user.Id).ToList();
+            IList<UserLoginInfo> loginInfo = userLoginRecords.Select(ul => ul.UserLoginInfo).ToList();
+
+            return Task.FromResult(loginInfo);
+        }
+
+        public Task<SiteUser> FindAsync(UserLoginInfo login)
+        {
+            List<UserLogin> userLogins = dbContext.LoadUserLogins();
+            List<SiteUser> users = dbContext.LoadUsers();
+            UserLogin userLogin = userLogins.Where(ul => ul.UserLoginInfo == login).First();
+
+            return Task.FromResult(users.Where(u => u.Id == userLogin.UserId).First());
         }
     }
 }

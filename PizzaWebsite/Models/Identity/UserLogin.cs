@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,19 +13,16 @@ namespace PizzaWebsite.Models.Identity
     {
         private int id;
         private int userId;
-        private string loginProvider;
-        private string providerKey;
+        private UserLoginInfo userLoginInfo;
 
-        public UserLogin(int userId, string loginProvider, string providerKey)
+        public UserLogin(int userId, UserLoginInfo userLoginInfo)
         {
             this.userId = userId;
-            this.loginProvider = loginProvider;
-            this.providerKey = providerKey;
+            this.userLoginInfo = userLoginInfo;
         }
 
         public int Id { get => id; set => id = value; }
         public int UserId { get => userId; }
-        public string LoginProvider { get => loginProvider; }
-        public string ProviderKey { get => providerKey; }
+        public UserLoginInfo UserLoginInfo { get => userLoginInfo; }
     }
 }
