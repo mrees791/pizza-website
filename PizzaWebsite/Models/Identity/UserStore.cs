@@ -3,6 +3,7 @@ using PizzaWebsite.Models.Tests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -10,9 +11,10 @@ namespace PizzaWebsite.Models.Identity
 {
     public class UserStore :
         IUserStore<SiteUser, int>,
-        IUserRoleStore<SiteUser, int>,
         IUserPasswordStore<SiteUser, int>,
-        IUserEmailStore<SiteUser, int>
+        IUserEmailStore<SiteUser, int>,
+        IUserRoleStore<SiteUser, int>,
+        IUserClaimStore<SiteUser, int>
     {
         // Dummy database serves as a test before DAL implementation
         private DummyDatabase dbContext;
@@ -164,6 +166,31 @@ namespace PizzaWebsite.Models.Identity
         {
             List<SiteUser> users = dbContext.LoadUsers();
             return Task.FromResult(users.Where(u => u.Email == email).First());
+        }
+
+        public Task<IList<Claim>> GetClaimsAsync(SiteUser user)
+        {
+            List<UserClaim> userClaims = dbContext.LoadUserClaims().Where(uc => uc.UserId == user.Id).ToList();
+            IList<Claim> claims = userClaims.Select(uc => uc.Claim).ToList();
+
+            return Task.FromResult(claims);
+        }
+
+        public Task AddClaimAsync(SiteUser user, Claim claim)
+        {
+            UserClaim userClaim = new UserClaim(user.Id, claim);
+            dbContext.AddRecord(userClaim);
+
+            return Task.FromResult(0);
+        }
+
+        public Task RemoveClaimAsync(SiteUser user, Claim claim)
+        {
+            List<UserClaim> userClaims = dbContext.LoadUserClaims().Where(uc => uc.UserId == user.Id).ToList();
+            UserClaim currentClaim = userClaims.Where(uc => uc.Claim == claim).First();
+            dbContext.DeleteRecord(currentClaim);
+
+            return Task.FromResult(0);
         }
     }
 }

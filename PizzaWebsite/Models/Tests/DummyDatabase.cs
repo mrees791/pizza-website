@@ -67,6 +67,11 @@ namespace PizzaWebsite.Models.Tests
             userRoles.Remove(userRole);
         }
 
+        public void DeleteRecord(UserClaim userClaim)
+        {
+            userClaims.Remove(userClaim);
+        }
+
         // Load methods in an actual database context would run a query to get updated records.
         public List<SiteRole> LoadRoles()
         {
