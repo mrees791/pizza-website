@@ -10,7 +10,6 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.Owin.Security;
 using System.Security.Claims;
-using PizzaWebsite.ViewModels.Tests;
 
 namespace PizzaWebsite.Controllers
 {
@@ -62,17 +61,13 @@ namespace PizzaWebsite.Controllers
 
                 if (result.Succeeded)
                 {
-                    newUser = userStore.FindByNameAsync(newUser.UserName).Result;
-
                     // Testing roles and claims
                     userStore.AddToRoleAsync(newUser, "Manager");
                     userStore.AddClaimAsync(newUser, new Claim("myClaimType", "myClaimValue"));
 
                     // Needs grouped together in method.
-                    IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
-                    ClaimsIdentity userIdentity = userManager.CreateIdentity(newUser, DefaultAuthenticationTypes.ApplicationCookie);
-                    authenticationManager.SignIn(new AuthenticationProperties() { }, userIdentity);
-                    return RedirectToAction("Index", "Home");
+                    SignInUser(newUser);
+                    return RedirectToAction("TestUser");
                 }
                 else
                 {
@@ -84,6 +79,13 @@ namespace PizzaWebsite.Controllers
                 }
             }
             return View(registerVm);
+        }
+
+        private void SignInUser(SiteUser user)
+        {
+            IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
+            ClaimsIdentity userIdentity = userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
+            authenticationManager.SignIn(new AuthenticationProperties() { }, userIdentity);
         }
 
         /// <summary>
@@ -147,9 +149,22 @@ namespace PizzaWebsite.Controllers
             {
                 string userName = User.Identity.GetUserName();
                 SiteUser user = userStore.FindByNameAsync(userName).Result;
+                IList<string> roles = userStore.GetRolesAsync(user).Result;
+                IList<Claim> claims = userStore.GetClaimsAsync(user).Result;
 
                 testUserVm.Message1 = $"Signed in as {userName}";
-                testUserVm.Message1 += $"Email: {user.Email}";
+                testUserVm.Message1 += $", Email: {user.Email}";
+                testUserVm.Message1 += $", Roles: ";
+                foreach (string role in roles)
+                {
+                    testUserVm.Message1 += $" {role} ";
+                }
+                testUserVm.Message1 += $", Claims: ";
+                foreach (Claim claim in claims)
+                {
+                    testUserVm.Message1 += $" ({claim.Issuer}:{claim.Type},{claim.Value}) ";
+                }
+
             }
 
             return View(testUserVm);
@@ -160,6 +175,35 @@ namespace PizzaWebsite.Controllers
             IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
             authenticationManager.SignOut();
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult SignIn(SignInViewModel signInVm)
+        {
+            if (ModelState.IsValid)
+            {
+                // Validate username and password.
+                SiteUser user = userManager.Find(signInVm.UserName, signInVm.Password);
+
+                if (user != null)
+                {
+                    SignInUser(user);
+                    return RedirectToAction("TestUser");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid username or password.");
+                }
+            }
+
+            return View(signInVm);
+        }
+
+        [AllowAnonymous]
+        public ActionResult SignIn()
+        {
+            SignInViewModel signInVm = new SignInViewModel();
+            return View(signInVm);
         }
     }
 }

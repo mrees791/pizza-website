@@ -210,9 +210,9 @@
     <Compile Include="Models\Tests\DummyDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\Home\LoginViewModel.cs" />
+    <Compile Include="ViewModels\Home\SignInViewModel.cs" />
     <Compile Include="ViewModels\Home\RegisterViewModel.cs" />
-    <Compile Include="ViewModels\Tests\TestUserViewModel.cs" />
+    <Compile Include="ViewModels\Home\TestUserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -265,6 +265,7 @@
     <Content Include="webfonts\fa-solid-900.woff2" />
     <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Home\TestUser.cshtml" />
+    <Content Include="Views\Home\SignIn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

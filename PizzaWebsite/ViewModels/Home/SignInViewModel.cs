@@ -6,7 +6,7 @@ using System.Web;
 
 namespace PizzaWebsite.ViewModels.Home
 {
-    public class LoginViewModel
+    public class SignInViewModel
     {
         [Display(Name = "Username")]
         [Required(ErrorMessage = "You must enter your username.")]
