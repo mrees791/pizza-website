@@ -8,14 +8,20 @@
 
 <div>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Message1)
-        </dt>
+    @if (Model.UserIsSignedIn)
+    {
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Message1)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Message1)
-        </dd>
-
-    </dl>
+            <dd>
+                @Html.DisplayFor(model => model.Message1)
+            </dd>
+        </dl>
+    }
+    else
+    {
+        <p>You must be signed in to view this page.</p>
+    }
 </div>

@@ -8,6 +8,8 @@ namespace PizzaWebsite.ViewModels.Home
 {
     public class RegisterViewModel
     {
+        private bool userIsSignedIn;
+        private string alreadySignedInMessage;
         //public string ErrorMessage { get; set; }
 
         [Display(Name = "Username")]
@@ -48,5 +50,7 @@ namespace PizzaWebsite.ViewModels.Home
         [Required(ErrorMessage = "Your zip code is required.")]
         [StringLength(5, MinimumLength = 5, ErrorMessage = "Your zip code must be 5 numbers.")]
         public string ZipCode { get; set; }
+        public bool UserIsSignedIn { get => userIsSignedIn; set => userIsSignedIn = value; }
+        public string AlreadySignedInMessage { get => alreadySignedInMessage; set => alreadySignedInMessage = value; }
     }
 }

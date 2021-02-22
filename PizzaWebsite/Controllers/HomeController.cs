@@ -143,16 +143,24 @@ namespace PizzaWebsite.Controllers
         public ActionResult Register()
         {
             RegisterViewModel registerVm = CreateTestRegistration();
+
+            if (User.Identity.IsAuthenticated)
+            {
+                string userName = User.Identity.GetUserName();
+                registerVm.UserIsSignedIn = true;
+                registerVm.AlreadySignedInMessage = $"You are already signed in as {userName}.";
+            }
+
             return View(registerVm);
         }
 
         public ActionResult UserProfile()
         {
             UserProfileViewModel userProfileVm = new UserProfileViewModel();
-            userProfileVm.Message1 = "Not signed in.";
 
             if (User.Identity.IsAuthenticated)
             {
+                userProfileVm.UserIsSignedIn = true;
                 string userName = User.Identity.GetUserName();
                 SiteUser user = userManager.FindByNameAsync(userName).Result;
                 IList<string> roles = userManager.GetRolesAsync(user.Id).Result;
@@ -209,6 +217,14 @@ namespace PizzaWebsite.Controllers
         public ActionResult SignIn()
         {
             SignInViewModel signInVm = new SignInViewModel();
+
+            if (User.Identity.IsAuthenticated)
+            {
+                string userName = User.Identity.GetUserName();
+                signInVm.UserIsSignedIn = true;
+                signInVm.AlreadySignedInMessage = $"You are already signed in as {userName}.";
+            }
+
             return View(signInVm);
         }
     }
