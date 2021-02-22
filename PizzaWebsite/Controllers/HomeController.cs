@@ -10,17 +10,19 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.Owin.Security;
 using System.Security.Claims;
+using PizzaWebsite.Models.Tests;
 
 namespace PizzaWebsite.Controllers
 {
     public class HomeController : Controller
     {
-        private UserStore userStore;
+        private DummyDatabase dbContext;
         private UserManager<SiteUser, int> userManager;
 
         public HomeController()
         {
-            userStore = new UserStore();
+            dbContext = new DummyDatabase();
+            UserStore userStore = new UserStore();
             userManager = new UserManager<SiteUser, int>(userStore);
             userManager.UserValidator = new UserValidator(userStore);
         }
@@ -62,8 +64,8 @@ namespace PizzaWebsite.Controllers
                 if (result.Succeeded)
                 {
                     // Testing roles and claims
-                    userStore.AddToRoleAsync(newUser, "Manager");
-                    userStore.AddClaimAsync(newUser, new Claim("myClaimType", "myClaimValue"));
+                    userManager.AddToRoleAsync(newUser.Id, "Manager");
+                    userManager.AddClaimAsync(newUser.Id, new Claim("myClaimType", "myClaimValue"));
 
                     // Needs grouped together in method.
                     SignInUser(newUser);
@@ -116,7 +118,7 @@ namespace PizzaWebsite.Controllers
         // todo: Remove test user code
         private RegisterViewModel CreateTestRegistration()
         {
-            int additionalId = userStore.DbContext.GetNumberOfUsers();
+            int additionalId = dbContext.GetNumberOfUsers();
             long pn = 7402609777 + additionalId;
 
             RegisterViewModel testUser = new RegisterViewModel()
@@ -148,9 +150,9 @@ namespace PizzaWebsite.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 string userName = User.Identity.GetUserName();
-                SiteUser user = userStore.FindByNameAsync(userName).Result;
-                IList<string> roles = userStore.GetRolesAsync(user).Result;
-                IList<Claim> claims = userStore.GetClaimsAsync(user).Result;
+                SiteUser user = userManager.FindByNameAsync(userName).Result;
+                IList<string> roles = userManager.GetRolesAsync(user.Id).Result;
+                IList<Claim> claims = userManager.GetClaimsAsync(user.Id).Result;
 
                 testUserVm.Message1 = $"Signed in as {userName}";
                 testUserVm.Message1 += $", Email: {user.Email}";
