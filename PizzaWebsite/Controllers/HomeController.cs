@@ -69,7 +69,7 @@ namespace PizzaWebsite.Controllers
 
                     // Needs grouped together in method.
                     SignInUser(newUser);
-                    return RedirectToAction("TestUser");
+                    return RedirectToAction(nameof(UserProfile));
                 }
                 else
                 {
@@ -83,6 +83,10 @@ namespace PizzaWebsite.Controllers
             return View(registerVm);
         }
 
+        /// <summary>
+        /// Signs in a user with a claims identity after they have already been authenticated.
+        /// </summary>
+        /// <param name="user"></param>
         private void SignInUser(SiteUser user)
         {
             IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
@@ -142,10 +146,10 @@ namespace PizzaWebsite.Controllers
             return View(registerVm);
         }
 
-        public ActionResult TestUser()
+        public ActionResult UserProfile()
         {
-            TestUserViewModel testUserVm = new TestUserViewModel();
-            testUserVm.Message1 = "Not signed in.";
+            UserProfileViewModel userProfileVm = new UserProfileViewModel();
+            userProfileVm.Message1 = "Not signed in.";
 
             if (User.Identity.IsAuthenticated)
             {
@@ -154,22 +158,22 @@ namespace PizzaWebsite.Controllers
                 IList<string> roles = userManager.GetRolesAsync(user.Id).Result;
                 IList<Claim> claims = userManager.GetClaimsAsync(user.Id).Result;
 
-                testUserVm.Message1 = $"Signed in as {userName}";
-                testUserVm.Message1 += $", Email: {user.Email}";
-                testUserVm.Message1 += $", Roles: ";
+                userProfileVm.Message1 = $"Signed in as {userName}";
+                userProfileVm.Message1 += $", Email: {user.Email}";
+                userProfileVm.Message1 += $", Roles: ";
                 foreach (string role in roles)
                 {
-                    testUserVm.Message1 += $" {role} ";
+                    userProfileVm.Message1 += $" {role} ";
                 }
-                testUserVm.Message1 += $", Claims: ";
+                userProfileVm.Message1 += $", Claims: ";
                 foreach (Claim claim in claims)
                 {
-                    testUserVm.Message1 += $" ({claim.Issuer}:{claim.Type},{claim.Value}) ";
+                    userProfileVm.Message1 += $" ({claim.Issuer}:{claim.Type},{claim.Value}) ";
                 }
 
             }
 
-            return View(testUserVm);
+            return View(userProfileVm);
         }
 
         public ActionResult SignOut()
@@ -190,7 +194,7 @@ namespace PizzaWebsite.Controllers
                 if (user != null)
                 {
                     SignInUser(user);
-                    return RedirectToAction("TestUser");
+                    return RedirectToAction(nameof(UserProfile));
                 }
                 else
                 {

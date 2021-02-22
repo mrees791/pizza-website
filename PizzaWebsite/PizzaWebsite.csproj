@@ -212,7 +212,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Home\SignInViewModel.cs" />
     <Compile Include="ViewModels\Home\RegisterViewModel.cs" />
-    <Compile Include="ViewModels\Home\TestUserViewModel.cs" />
+    <Compile Include="ViewModels\Home\UserProfileViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -264,7 +264,7 @@
     <Content Include="webfonts\fa-solid-900.woff" />
     <Content Include="webfonts\fa-solid-900.woff2" />
     <Content Include="Views\Home\Register.cshtml" />
-    <Content Include="Views\Home\TestUser.cshtml" />
+    <Content Include="Views\Home\UserProfile.cshtml" />
     <Content Include="Views\Home\SignIn.cshtml" />
   </ItemGroup>
   <ItemGroup>

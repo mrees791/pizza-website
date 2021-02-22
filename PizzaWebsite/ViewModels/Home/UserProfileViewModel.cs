@@ -5,7 +5,7 @@ using System.Web;
 
 namespace PizzaWebsite.ViewModels.Home
 {
-    public class TestUserViewModel
+    public class UserProfileViewModel
     {
         private string message1;
 
