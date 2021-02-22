@@ -10,25 +10,24 @@ namespace PizzaWebsite.Models.Tests
     public class DummyDatabase
     {
         // User, role definitions
-        private List<SiteRole> roles;
-        private List<SiteUser> users;
+        private static List<SiteRole> roles = new List<SiteRole>();
+        private static List<SiteUser> users = new List<SiteUser>();
 
         // Links users to roles, claims, external login APIs
-        private List<UserRole> userRoles;
-        private List<UserClaim> userClaims;
-        private List<UserLogin> userLogins;
+        private static List<UserRole> userRoles = new List<UserRole>();
+        private static List<UserClaim> userClaims = new List<UserClaim>();
+        private static List<UserLogin> userLogins = new List<UserLogin>();
+
+        static DummyDatabase()
+        {
+            // Add records to dummy database
+            SiteRole managerRole = new SiteRole("Manager");
+            roles.Add(managerRole);
+            managerRole.Id = roles.Count;
+        }
 
         public DummyDatabase()
         {
-            users = new List<SiteUser>();
-            roles = new List<SiteRole>();
-            userRoles = new List<UserRole>();
-            userClaims = new List<UserClaim>();
-            userLogins = new List<UserLogin>();
-
-            // Add records to dummy database
-            SiteRole managerRole = new SiteRole("Manager");
-            AddRecord(managerRole);
         }
 
         // CRUD

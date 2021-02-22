@@ -20,12 +20,12 @@ namespace PizzaWebsite.Models.Identity.Validators
         }
 
         // todo: Re-implement ValidateAsync.
-        public Task<IdentityResult> ValidateAsync(SiteUser item)
+        /*public Task<IdentityResult> ValidateAsync(SiteUser item)
         {
             return Task.FromResult(IdentityResult.Success);
-        }
+        }*/
 
-        /*public Task<IdentityResult> ValidateAsync(SiteUser item)
+        public Task<IdentityResult> ValidateAsync(SiteUser item)
         {
             List<string> errors = new List<string>();
 
@@ -65,12 +65,12 @@ namespace PizzaWebsite.Models.Identity.Validators
         private void ValidatePhoneNumber(SiteUser item, List<string> errors)
         {
             var previousUser = userStore.FindByPhoneNumberAsync(item.PhoneNumber).Result;
-            bool phoneNumberAlreadyInUse = previousUser.Id != null;
+            bool phoneNumberAlreadyInUse = previousUser != null;
 
             if (phoneNumberAlreadyInUse)
             {
                 errors.Add($"Phone number is already in use.");
             }
-        }*/
+        }
     }
 }

@@ -27,38 +27,29 @@ namespace PizzaWebsite.Models.Identity
         public UserStore()
         {
             dbContext = new DummyDatabase();
-            CreateDummyDatabaseRecords();
         }
-
-        private void CreateDummyDatabaseRecords()
-        {
-            // Add users
-            CreateAsync(new SiteUser("basic_user", "PASSHASH1234", "user@gmail.com"));
-            CreateAsync(new SiteUser("manager_user", "PASSHASH5678", "manager@gmail.com"));
-
-            // Add user to manager role
-            SiteUser managerUser = FindByNameAsync("manager_user").Result;
-            AddToRoleAsync(managerUser, "Manager");
-        }
-
-        public Task AddToRoleAsync(SiteUser user, string roleName)
-        {
-            List<SiteRole> roles = dbContext.LoadRoles();
-            SiteRole siteRole = roles.Where(r => r.Name == roleName).First();
-            UserRole userRole = new UserRole(user.Id, siteRole.Id);
-
-            // Add UserRole record to dummy database
-            dbContext.AddRecord(userRole);
-
-            return Task.FromResult(0);
-        }
-
         public Task CreateAsync(SiteUser user)
         {
             // Add SiteUser to dummy database
             dbContext.AddRecord(user);
 
             return Task.FromResult(0);
+        }
+
+        public Task AddToRoleAsync(SiteUser user, string roleName)
+        {
+            List<SiteRole> roles = dbContext.LoadRoles();
+            SiteRole siteRole = roles.Where(r => r.Name == roleName).FirstOrDefault();
+
+            if (siteRole != null)
+            {
+                UserRole userRole = new UserRole(user.Id, siteRole.Id);
+                dbContext.AddRecord(userRole);
+
+                return Task.FromResult(0);
+            }
+
+            throw new ArgumentException("Invalid role name: roleName");
         }
 
         /// <summary>
@@ -78,13 +69,27 @@ namespace PizzaWebsite.Models.Identity
         public Task<SiteUser> FindByIdAsync(int userId)
         {
             List<SiteUser> users = dbContext.LoadUsers();
-            return Task.FromResult(users.Where(u => u.Id == userId).First());
+            SiteUser user = users.Where(u => u.Id == userId).FirstOrDefault();
+
+            if (user != null)
+            {
+                return Task.FromResult(user);
+            }
+
+            return Task.FromResult<SiteUser>(null);
         }
 
         public Task<SiteUser> FindByNameAsync(string userName)
         {
             List<SiteUser> users = dbContext.LoadUsers();
-            return Task.FromResult(users.Where(u => u.UserName == userName).First());
+            SiteUser user = users.Where(u => u.UserName == userName).FirstOrDefault();
+
+            if (user != null)
+            {
+                return Task.FromResult(user);
+            }
+
+            return Task.FromResult<SiteUser>(null);
         }
 
         public Task<IList<string>> GetRolesAsync(SiteUser user)
@@ -106,21 +111,29 @@ namespace PizzaWebsite.Models.Identity
         public Task<bool> IsInRoleAsync(SiteUser user, string roleName)
         {
             IList<string> currentUserRoles = GetRolesAsync(user).Result;
-
-            return Task.FromResult(currentUserRoles.Contains(roleName));
+            bool isInRole = currentUserRoles.Contains(roleName);
+            return Task.FromResult(isInRole);
         }
 
         public Task RemoveFromRoleAsync(SiteUser user, string roleName)
         {
             List<SiteRole> roles = dbContext.LoadRoles();
             List<UserRole> userRoles = dbContext.LoadUserRoles();
-            SiteRole role = roles.Where(r => r.Name == roleName).First();
-            UserRole userRole = userRoles.
-                Where(ur => ur.RoleId == role.Id && ur.UserId == user.Id).First();
+            SiteRole role = roles.Where(r => r.Name == roleName).FirstOrDefault();
 
-            dbContext.DeleteRecord(userRole);
+            if (role != null)
+            {
+                UserRole userRole = userRoles.Where(ur => ur.RoleId == role.Id && ur.UserId == user.Id).FirstOrDefault();
 
-            return Task.FromResult(0);
+                if (userRole != null)
+                {
+                    dbContext.DeleteRecord(userRole);
+                }
+
+                return Task.FromResult(0);
+            }
+
+            throw new ArgumentException("Invalid role name: roleName");
         }
 
         public Task UpdateAsync(SiteUser user)
@@ -170,14 +183,33 @@ namespace PizzaWebsite.Models.Identity
         public Task<SiteUser> FindByEmailAsync(string email)
         {
             List<SiteUser> users = dbContext.LoadUsers();
-            return Task.FromResult(users.Where(u => u.Email == email).First());
+            SiteUser user = users.Where(u => u.Email == email).FirstOrDefault();
+
+            if (user != null)
+            {
+                return Task.FromResult(user);
+            }
+
+            return Task.FromResult<SiteUser>(null);
+        }
+
+        public Task<SiteUser> FindByPhoneNumberAsync(string phoneNumber)
+        {
+            List<SiteUser> users = dbContext.LoadUsers();
+            SiteUser user = users.Where(u => u.PhoneNumber == phoneNumber).FirstOrDefault();
+
+            if (user != null)
+            {
+                return Task.FromResult(user);
+            }
+
+            return Task.FromResult<SiteUser>(null);
         }
 
         public Task<IList<Claim>> GetClaimsAsync(SiteUser user)
         {
             List<UserClaim> userClaims = dbContext.LoadUserClaims().Where(uc => uc.UserId == user.Id).ToList();
             IList<Claim> claims = userClaims.Select(uc => uc.Claim).ToList();
-
             return Task.FromResult(claims);
         }
 
@@ -185,15 +217,18 @@ namespace PizzaWebsite.Models.Identity
         {
             UserClaim userClaim = new UserClaim(user.Id, claim);
             dbContext.AddRecord(userClaim);
-
             return Task.FromResult(0);
         }
 
         public Task RemoveClaimAsync(SiteUser user, Claim claim)
         {
             List<UserClaim> userClaims = dbContext.LoadUserClaims().Where(uc => uc.UserId == user.Id).ToList();
-            UserClaim currentClaim = userClaims.Where(uc => ClaimsAreEqual(uc.Claim, claim)).First();
-            dbContext.DeleteRecord(currentClaim);
+            UserClaim currentClaim = userClaims.Where(uc => ClaimsAreEqual(uc.Claim, claim)).FirstOrDefault();
+
+            if (currentClaim != null)
+            {
+                dbContext.DeleteRecord(currentClaim);
+            }
 
             return Task.FromResult(0);
         }
@@ -202,33 +237,47 @@ namespace PizzaWebsite.Models.Identity
         {
             UserLogin userLogin = new UserLogin(user.Id, login);
             dbContext.AddRecord(userLogin);
-
             return Task.FromResult(0);
         }
 
         public Task RemoveLoginAsync(SiteUser user, UserLoginInfo login)
         {
-            UserLogin userLoginRecord = dbContext.LoadUserLogins().Where(ul => UserLoginIsEqual(ul.UserLoginInfo, login)).First();
-            dbContext.DeleteRecord(userLoginRecord);
+            List<UserLogin> userLogins = dbContext.LoadUserLogins();
+            UserLogin userLogin = userLogins.Where(ul => UserLoginIsEqual(ul.UserLoginInfo, login)).FirstOrDefault();
+
+            if (userLogin != null)
+            {
+                dbContext.DeleteRecord(userLogin);
+            }
 
             return Task.FromResult(0);
         }
 
         public Task<IList<UserLoginInfo>> GetLoginsAsync(SiteUser user)
         {
-            List<UserLogin> userLoginRecords = dbContext.LoadUserLogins().Where(ul => ul.UserId == user.Id).ToList();
-            IList<UserLoginInfo> loginInfo = userLoginRecords.Select(ul => ul.UserLoginInfo).ToList();
+            List<UserLogin> userLogins = dbContext.LoadUserLogins();
+            IList<UserLoginInfo> loginInfo = userLogins.Where(ul => ul.UserId == user.Id).Select(ul => ul.UserLoginInfo).ToList();
 
             return Task.FromResult(loginInfo);
         }
 
         public Task<SiteUser> FindAsync(UserLoginInfo login)
         {
-            List<UserLogin> userLogins = dbContext.LoadUserLogins();
             List<SiteUser> users = dbContext.LoadUsers();
-            UserLogin userLogin = userLogins.Where(ul => UserLoginIsEqual(ul.UserLoginInfo, login)).First();
+            List<UserLogin> userLogins = dbContext.LoadUserLogins();
+            UserLogin userLogin = userLogins.Where(ul => UserLoginIsEqual(ul.UserLoginInfo, login)).FirstOrDefault();
 
-            return Task.FromResult(users.Where(u => u.Id == userLogin.UserId).First());
+            if (userLogin != null)
+            {
+                SiteUser user = users.Where(u => u.Id == userLogin.UserId).FirstOrDefault();
+
+                if (user != null)
+                {
+                    return Task.FromResult(user);
+                }
+            }
+
+            return Task.FromResult<SiteUser>(null);
         }
 
         private bool ClaimsAreEqual(Claim claim1, Claim claim2)
@@ -323,5 +372,6 @@ namespace PizzaWebsite.Models.Identity
             user.LockoutEnabled = enabled;
             return Task.FromResult(0);
         }
+        public DummyDatabase DbContext { get => dbContext; }
     }
 }
