@@ -1,0 +1,21 @@
+﻿@model PizzaWebsite.ViewModels.Tests.TestUserViewModel
+
+@{
+    ViewBag.Title = "Test User";
+}
+
+<h2>Test User</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Message1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Message1)
+        </dd>
+
+    </dl>
+</div>

@@ -12,6 +12,7 @@ namespace PizzaWebsite.Models.Identity
         private int id;
         private string userName;
         private string passwordHash;
+        private string zipCode;
         private string email;
         private bool emailConfirmed;
         private string securityStamp;
@@ -68,5 +69,6 @@ namespace PizzaWebsite.Models.Identity
         public DateTimeOffset LockoutEndDate { get => lockoutEndDate; set => lockoutEndDate = value; }
         public int AccessFailedCount { get => accessFailedCount; set => accessFailedCount = value; }
         public bool LockoutEnabled { get => lockoutEnabled; set => lockoutEnabled = value; }
+        public string ZipCode { get => zipCode; set => zipCode = value; }
     }
 }

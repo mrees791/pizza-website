@@ -282,7 +282,7 @@ namespace PizzaWebsite.Models.Identity
 
         private bool ClaimsAreEqual(Claim claim1, Claim claim2)
         {
-            return claim1.Type == claim2.Type && claim1.Value == claim2.Value;
+            return claim1.Equals(claim2);
         }
 
         private bool UserLoginIsEqual(UserLoginInfo login1, UserLoginInfo login2)

@@ -10,16 +10,18 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.Owin.Security;
 using System.Security.Claims;
+using PizzaWebsite.ViewModels.Tests;
 
 namespace PizzaWebsite.Controllers
 {
     public class HomeController : Controller
     {
+        private UserStore userStore;
         private UserManager<SiteUser, int> userManager;
 
         public HomeController()
         {
-            UserStore userStore = new UserStore();
+            userStore = new UserStore();
             userManager = new UserManager<SiteUser, int>(userStore);
             userManager.UserValidator = new UserValidator(userStore);
         }
@@ -48,7 +50,7 @@ namespace PizzaWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                /*SiteUser newUser = new SiteUser()
+                SiteUser newUser = new SiteUser()
                 {
                     UserName = registerVm.UserName,
                     Email = registerVm.Email,
@@ -61,6 +63,10 @@ namespace PizzaWebsite.Controllers
                 if (result.Succeeded)
                 {
                     newUser = userStore.FindByNameAsync(newUser.UserName).Result;
+
+                    // Testing roles and claims
+                    userStore.AddToRoleAsync(newUser, "Manager");
+                    userStore.AddClaimAsync(newUser, new Claim("myClaimType", "myClaimValue"));
 
                     // Needs grouped together in method.
                     IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
@@ -75,7 +81,7 @@ namespace PizzaWebsite.Controllers
                         string key = GetUserRegistrationErrorKey(error);
                         ModelState.AddModelError(key, error);
                     }
-                }*/
+                }
             }
             return View(registerVm);
         }
@@ -108,8 +114,7 @@ namespace PizzaWebsite.Controllers
         // todo: Remove test user code
         private RegisterViewModel CreateTestRegistration()
         {
-            int additionalId = 1;
-            //int additionalId = DatabaseUserProcessor.GetNumberOfUsers();
+            int additionalId = userStore.DbContext.GetNumberOfUsers();
             long pn = 7402609777 + additionalId;
 
             RegisterViewModel testUser = new RegisterViewModel()
@@ -131,6 +136,30 @@ namespace PizzaWebsite.Controllers
         {
             RegisterViewModel registerVm = CreateTestRegistration();
             return View(registerVm);
+        }
+
+        public ActionResult TestUser()
+        {
+            TestUserViewModel testUserVm = new TestUserViewModel();
+            testUserVm.Message1 = "Not signed in.";
+
+            if (User.Identity.IsAuthenticated)
+            {
+                string userName = User.Identity.GetUserName();
+                SiteUser user = userStore.FindByNameAsync(userName).Result;
+
+                testUserVm.Message1 = $"Signed in as {userName}";
+                testUserVm.Message1 += $"Email: {user.Email}";
+            }
+
+            return View(testUserVm);
+        }
+
+        public ActionResult SignOut()
+        {
+            IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
+            authenticationManager.SignOut();
+            return RedirectToAction("Index");
         }
     }
 }

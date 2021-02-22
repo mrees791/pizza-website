@@ -30,6 +30,11 @@ namespace PizzaWebsite.Models.Tests
         {
         }
 
+        public int GetNumberOfUsers()
+        {
+            return users.Count;
+        }
+
         // CRUD
         public void AddRecord(SiteUser user)
         {

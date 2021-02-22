@@ -43,7 +43,7 @@ namespace PizzaWebsite.Models.Identity.Validators
         private void ValidateUserName(SiteUser item, List<string> errors)
         {
             var previousUser = userStore.FindByNameAsync(item.UserName).Result;
-            bool nameAlreadyInUse = previousUser.Id != null;
+            bool nameAlreadyInUse = previousUser != null;
 
             if (nameAlreadyInUse)
             {
@@ -54,7 +54,7 @@ namespace PizzaWebsite.Models.Identity.Validators
         private void ValidateEmail(SiteUser item, List<string> errors)
         {
             var previousUser = userStore.FindByEmailAsync(item.Email).Result;
-            bool emailAlreadyInUse = previousUser.Id != null;
+            bool emailAlreadyInUse = previousUser != null;
 
             if (emailAlreadyInUse)
             {
