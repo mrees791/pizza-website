@@ -63,11 +63,6 @@ namespace PizzaWebsite.Controllers
 
                 if (result.Succeeded)
                 {
-                    // Testing roles and claims
-                    userManager.AddToRoleAsync(newUser.Id, "Manager");
-                    userManager.AddClaimAsync(newUser.Id, new Claim("myClaimType", "myClaimValue"));
-
-                    // Needs grouped together in method.
                     SignInUser(newUser);
                     return RedirectToAction(nameof(UserProfile));
                 }
@@ -178,7 +173,6 @@ namespace PizzaWebsite.Controllers
                 {
                     userProfileVm.Message1 += $" ({claim.Issuer}:{claim.Type},{claim.Value}) ";
                 }
-
             }
 
             return View(userProfileVm);
@@ -196,7 +190,6 @@ namespace PizzaWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Validate username and password.
                 SiteUser user = userManager.Find(signInVm.UserName, signInVm.Password);
 
                 if (user != null)
@@ -226,6 +219,13 @@ namespace PizzaWebsite.Controllers
             }
 
             return View(signInVm);
+        }
+
+        // todo: Remove test authorization code.
+        [Authorize(Roles = "Manager")]
+        public ActionResult ManageSite()
+        {
+            return View();
         }
     }
 }
