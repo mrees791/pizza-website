@@ -59,6 +59,9 @@ namespace PizzaWebsite.Controllers
                     ZipCode = registerVm.ZipCode
                 };
 
+                // Confirm email
+
+                // Add user records if successful.
                 IdentityResult result = userManager.Create(newUser, registerVm.Password);
 
                 if (result.Succeeded)
