@@ -15,9 +15,13 @@ using System.Net.Mail;
 using System.Net;
 using System.Diagnostics;
 using System.Configuration;
+using Microsoft.AspNet.Identity.Owin;
+using PizzaWebsite.App_Start;
+using PizzaWebsite.Models.Identity.ExternalLogins;
 
 namespace PizzaWebsite.Controllers
 {
+    [RequireHttps]
     public class HomeController : Controller
     {
         private DummyDatabase dbContext;
@@ -28,12 +32,21 @@ namespace PizzaWebsite.Controllers
             dbContext = new DummyDatabase();
             UserStore userStore = new UserStore();
             userManager = new UserManager<SiteUser, int>(userStore);
+            userManager.EmailService = new EmailService();
             userManager.UserValidator = new UserValidator(userStore);
+            userManager.UserTokenProvider = new DataProtectorTokenProvider<SiteUser, int>(Startup.DataProtectionProvider.Create("ASP.NET Identity")); ;
         }
 
         public ActionResult Index()
         {
+            TestUserList();
             return View();
+        }
+
+        // todo: Remove
+        private void TestUserList()
+        {
+            var users = dbContext.LoadUsers();
         }
 
         public ActionResult About()
@@ -49,7 +62,8 @@ namespace PizzaWebsite.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(RegisterViewModel registerVm)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Register(RegisterViewModel registerVm)
         {
             if (ModelState.IsValid)
             {
@@ -61,15 +75,34 @@ namespace PizzaWebsite.Controllers
                     ZipCode = registerVm.ZipCode
                 };
 
-                // Confirm email
-
-                // Add user records if successful.
-                IdentityResult result = userManager.Create(newUser, registerVm.Password);
+                IdentityResult result = await userManager.CreateAsync(newUser, registerVm.Password);
 
                 if (result.Succeeded)
                 {
-                    SignInUser(newUser);
-                    return RedirectToAction(nameof(UserProfile));
+                    SignInManager<SiteUser, int> signInManager = CreateSignInManager();
+
+                    await signInManager.SignInAsync(newUser, false, false);
+
+                    // Good email confirmation code
+                    /*string code = await userManager.GenerateEmailConfirmationTokenAsync(newUser.Id);
+                    string callbackUrl = Url.Action("ConfirmEmail", "Home",
+                        new
+                        {
+                            userId = newUser.Id,
+                            code = code
+                        },
+                        Request.Url.Scheme);
+                    await userManager.SendEmailAsync(newUser.Id,
+                        "Confirm Your Little Brutus Account",
+                        $"Confirm your account by clicking <a href=\"{callbackUrl}\">here</a>");
+
+                    InfoViewModel infoVm = new InfoViewModel()
+                    {
+                        Message = "Check your email and confirm your account. You must be confirmed before you can log in."
+                    };
+
+                    return RedirectToAction("Info", infoVm);*/
+                    return RedirectToAction(nameof(Profile));
                 }
                 else
                 {
@@ -83,16 +116,42 @@ namespace PizzaWebsite.Controllers
             return View(registerVm);
         }
 
+        public ActionResult Info(InfoViewModel infoVm)
+        {
+            return View(infoVm);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        {
+            int id = 0;
+            bool validId = int.TryParse(userId, out id);
+
+            if (!validId || userId == null || code == null)
+            {
+                return View("Error");
+            }
+
+            var result = await userManager.ConfirmEmailAsync(id, code);
+            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+        }
+
+        private SignInManager<SiteUser, int> CreateSignInManager()
+        {
+            SignInManager<SiteUser, int> signInManager = new SignInManager<SiteUser, int>(userManager, AuthenticationManager);
+
+            return signInManager;
+        }
+
         /// <summary>
         /// Signs in a user with a claims identity after they have already been authenticated.
         /// </summary>
         /// <param name="user"></param>
-        private void SignInUser(SiteUser user)
+        /*private void SignInUser(SiteUser user)
         {
-            IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
             ClaimsIdentity userIdentity = userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
             authenticationManager.SignIn(new AuthenticationProperties() { }, userIdentity);
-        }
+        }*/
 
         /// <summary>
         /// Takes an error message created by the UserValidatorModel and returns the key for the model state error.
@@ -128,8 +187,8 @@ namespace PizzaWebsite.Controllers
             RegisterViewModel testUser = new RegisterViewModel()
             {
                 UserName = $"mrees{additionalId}",
-                Email = $"mrees{additionalId}@gmail.com",
-                ConfirmEmail = $"mrees{additionalId}@gmail.com",
+                Email = $"acct@littlebrutus.ddns.net",
+                ConfirmEmail = $"acct@littlebrutus.ddns.net",
                 Password = "abacus12345",
                 ConfirmPassword = "abacus12345",
                 PhoneNumber = pn.ToString(),
@@ -168,6 +227,7 @@ namespace PizzaWebsite.Controllers
 
                 userProfileVm.Message1 = $"Signed in as {userName}";
                 userProfileVm.Message1 += $", Email: {user.Email}";
+                userProfileVm.Message1 += $", Email Confirmed: {user.EmailConfirmed}";
                 userProfileVm.Message1 += $", Roles: ";
                 foreach (string role in roles)
                 {
@@ -185,21 +245,139 @@ namespace PizzaWebsite.Controllers
 
         public ActionResult SignOut()
         {
-            IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;
-            authenticationManager.SignOut();
+            AuthenticationManager.SignOut();
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public ActionResult SignIn(SignInViewModel signInVm)
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult ExternalLogin(string provider, string returnUrl)
         {
+            // Request a redirect to the external login provider.
+            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Home", new { ReturnUrl = returnUrl }));
+        }
+
+        [AllowAnonymous]
+        public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
+        {
+            ExternalLoginInfo loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            if (loginInfo == null)
+            {
+                return RedirectToAction("SignIn");
+            }
+
+            // Sign in user with this external login provider if the user already has a login.
+            var signInManager = CreateSignInManager();
+            var result = await signInManager.ExternalSignInAsync(loginInfo, false);
+
+            // todo: Complete all result cases, including locked out and requires verification.
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    return RedirectToLocal(returnUrl);
+                case SignInStatus.LockedOut:
+                    throw new NotImplementedException();
+                case SignInStatus.RequiresVerification:
+                    throw new NotImplementedException();
+                case SignInStatus.Failure:
+                default:
+                    // User does not have an account. Prompt the user to create an account.
+                    ExternalLoginConfirmationViewModel externalLoginConfirmationVm = new ExternalLoginConfirmationViewModel()
+                    {
+                        ReturnUrl = returnUrl,
+                        LoginProvider = loginInfo.Login.LoginProvider,
+                        Email = loginInfo.Email
+                    };
+                    return View("ExternalLoginConfirmation", externalLoginConfirmationVm);
+            }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                model.ReturnUrl = returnUrl;
+                return View(model);
+            }
+
+            // Get information about the user from the external login provider
+            var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return View("ExternalLoginFailure");
+            }
+            SiteUser user = new SiteUser
+            {
+                UserName = model.Email,
+                Email = model.Email
+            };
+            var result = await userManager.CreateAsync(user);
+            if (result.Succeeded)
+            {
+                var signInManager = CreateSignInManager();
+                await signInManager.SignInAsync(user, false, false);
+                return RedirectToLocal(returnUrl);
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error);
+            }
+            model.ReturnUrl = returnUrl;
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult ExternalLoginFailure()
+        {
+            return View();
+        }
+
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        private IAuthenticationManager AuthenticationManager
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().Authentication;
+            }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SignIn(SignInViewModel signInVm)
+        {
+            signInVm.LoginProviders.AddRange(AuthenticationManager.GetExternalAuthenticationTypes());
+
             if (ModelState.IsValid)
             {
+                // Require the user to have a confirmed email before they can sign in.
+
+                // Authenticate username and password
                 SiteUser user = userManager.Find(signInVm.UserName, signInVm.Password);
 
                 if (user != null)
                 {
-                    SignInUser(user);
+                    SignInManager<SiteUser, int> signInManager = CreateSignInManager();
+                    await signInManager.SignInAsync(user, false, false);
+
                     return RedirectToAction(nameof(UserProfile));
                 }
                 else
@@ -212,7 +390,7 @@ namespace PizzaWebsite.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult SignIn()
+        public ActionResult SignIn(string returnUrl)
         {
             SignInViewModel signInVm = new SignInViewModel();
 
@@ -221,6 +399,11 @@ namespace PizzaWebsite.Controllers
                 string userName = User.Identity.GetUserName();
                 signInVm.UserIsSignedIn = true;
                 signInVm.AlreadySignedInMessage = $"You are already signed in as {userName}.";
+            }
+            else
+            {
+                signInVm.ReturnUrl = returnUrl;
+                signInVm.LoginProviders.AddRange(AuthenticationManager.GetExternalAuthenticationTypes());
             }
 
             return View(signInVm);

@@ -27,6 +27,7 @@ namespace PizzaWebsite.App_Start
             mail.To.Add(message.Destination);
             mail.Subject = message.Subject;
             mail.Body = message.Body;
+            mail.IsBodyHtml = true;
 
             smtpServer.Port = int.Parse(ConfigurationManager.AppSettings["smtpPort"]);
             smtpServer.Credentials = new NetworkCredential(

@@ -10,7 +10,6 @@ namespace PizzaWebsite.ViewModels.Home
     {
         private bool userIsSignedIn;
         private string alreadySignedInMessage;
-        //public string ErrorMessage { get; set; }
 
         [Display(Name = "Username")]
         [Required(ErrorMessage = "A username is required.")]

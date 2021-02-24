@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Owin.Security;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,6 +11,13 @@ namespace PizzaWebsite.ViewModels.Home
     {
         private bool userIsSignedIn;
         private string alreadySignedInMessage;
+        private string returnUrl;
+        private List<AuthenticationDescription> loginProviders;
+
+        public SignInViewModel()
+        {
+            loginProviders = new List<AuthenticationDescription>();
+        }
 
         [Display(Name = "Username")]
         [Required(ErrorMessage = "You must enter your username.")]
@@ -22,5 +30,7 @@ namespace PizzaWebsite.ViewModels.Home
 
         public bool UserIsSignedIn { get => userIsSignedIn; set => userIsSignedIn = value; }
         public string AlreadySignedInMessage { get => alreadySignedInMessage; set => alreadySignedInMessage = value; }
+        public List<AuthenticationDescription> LoginProviders { get => loginProviders; }
+        public string ReturnUrl { get => returnUrl; set => returnUrl = value; }
     }
 }
