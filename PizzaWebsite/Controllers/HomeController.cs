@@ -11,6 +11,10 @@ using System.Web.Mvc;
 using Microsoft.Owin.Security;
 using System.Security.Claims;
 using PizzaWebsite.Models.Tests;
+using System.Net.Mail;
+using System.Net;
+using System.Diagnostics;
+using System.Configuration;
 
 namespace PizzaWebsite.Controllers
 {
@@ -35,14 +39,12 @@ namespace PizzaWebsite.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
             return View();
         }
 
