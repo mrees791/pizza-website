@@ -23,13 +23,12 @@ namespace PizzaWebsite.App_Start
             MailMessage mail = new MailMessage();
             SmtpClient smtpServer = new SmtpClient(ConfigurationManager.AppSettings["smtpHost"]);
 
-            string toAddress = "acct@littlebrutus.ddns.net";
             mail.From = new MailAddress(ConfigurationManager.AppSettings["smtpEmailAddress"]);
-            mail.To.Add(toAddress);
-            mail.Subject = "Test mail subject 4.";
-            mail.Body = "The test worked.";
+            mail.To.Add(message.Destination);
+            mail.Subject = message.Subject;
+            mail.Body = message.Body;
 
-            smtpServer.Port = 587;
+            smtpServer.Port = int.Parse(ConfigurationManager.AppSettings["smtpPort"]);
             smtpServer.Credentials = new NetworkCredential(
                 ConfigurationManager.AppSettings["smtpEmailAddress"],
                 ConfigurationManager.AppSettings["smtpPassword"]);
@@ -38,11 +37,12 @@ namespace PizzaWebsite.App_Start
 
             try
             {
-                smtpServer.Send(mail);
+                await smtpServer.SendMailAsync(mail);
             }
             catch (Exception ex)
             {
-                Trace.TraceError($"Error sending email to {toAddress}.");
+                Trace.TraceError($"Error sending email to {message.Destination}.\n{ex.StackTrace}");
+                await Task.FromResult(0);
             }
         }
     }
