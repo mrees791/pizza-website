@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLibrary", "DataLibrary\
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PizzaDatabase", "PizzaDatabase\PizzaDatabase.sqlproj", "{2BCB215C-396E-4691-AA17-986E92A65919}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaWebsite2", "PizzaWebsite2\PizzaWebsite2.csproj", "{88DD38A4-9A53-4150-A94B-95C1B4573E2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{2BCB215C-396E-4691-AA17-986E92A65919}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BCB215C-396E-4691-AA17-986E92A65919}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2BCB215C-396E-4691-AA17-986E92A65919}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{88DD38A4-9A53-4150-A94B-95C1B4573E2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88DD38A4-9A53-4150-A94B-95C1B4573E2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88DD38A4-9A53-4150-A94B-95C1B4573E2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88DD38A4-9A53-4150-A94B-95C1B4573E2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

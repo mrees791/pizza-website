@@ -3,6 +3,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.DataProtection;
 using Owin;
+using PizzaWebsite.Models.Tests;
 using System;
 using System.Configuration;
 using System.Threading.Tasks;
@@ -13,13 +14,9 @@ namespace PizzaWebsite
 {
     public class Startup
     {
-        internal static IDataProtectionProvider DataProtectionProvider { get; private set; }
-
+        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=316888
         public void Configuration(IAppBuilder app)
         {
-            DataProtectionProvider = app.GetDataProtectionProvider();
-
-            // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=316888
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie

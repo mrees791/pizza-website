@@ -70,12 +70,13 @@
   <ItemGroup>
     <Compile Include="DataAccess\SqlDataAccess.cs" />
     <Compile Include="Models\DatabaseContext.cs" />
-    <Compile Include="Models\TableEntities\SiteUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\TableEntities\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,27 @@
+﻿@model PizzaWebsite.ViewModels.Account.UserProfileViewModel
+
+@{
+    ViewBag.Title = "Profile";
+}
+
+<h2>Profile</h2>
+
+<div>
+    <hr />
+    @if (Model.UserIsSignedIn)
+    {
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Message1)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Message1)
+            </dd>
+        </dl>
+    }
+    else
+    {
+        <p>You must be signed in to view this page.</p>
+    }
+</div>
