@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace PizzaWebsite2.Models.Identity
@@ -22,6 +24,14 @@ namespace PizzaWebsite2.Models.Identity
         private DateTimeOffset lockoutEndDate;
         private int accessFailedCount;
         private bool lockoutEnabled;
+
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
+        {
+            // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
+            var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+            // Add custom user claims here
+            return userIdentity;
+        }
 
         // This constructor will be used when users use external logins (UserLogin)
         public IdentityUser()

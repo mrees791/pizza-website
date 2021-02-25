@@ -10,16 +10,21 @@ namespace PizzaWebsite2.Models.Identity
 {
     public class RoleStore : IRoleStore<IdentityRole, int>
     {
-        private DummyDatabase dbContext;
+        private DummyDatabase database;
 
         public RoleStore()
         {
-            dbContext = new DummyDatabase();
+            database = new DummyDatabase();
+        }
+
+        public RoleStore(DummyDatabase database)
+        {
+            this.database = database;
         }
 
         public Task CreateAsync(IdentityRole role)
         {
-            dbContext.AddRecord(role);
+            database.AddRecord(role);
             return Task.FromResult(0);
         }
 
@@ -39,7 +44,7 @@ namespace PizzaWebsite2.Models.Identity
 
         public Task<IdentityRole> FindByIdAsync(int roleId)
         {
-            List<IdentityRole> roles = dbContext.LoadRoles();
+            List<IdentityRole> roles = database.LoadRoles();
             IdentityRole role = roles.Where(r => r.Id == roleId).FirstOrDefault();
 
             if (role != null)
@@ -52,7 +57,7 @@ namespace PizzaWebsite2.Models.Identity
 
         public Task<IdentityRole> FindByNameAsync(string roleName)
         {
-            List<IdentityRole> roles = dbContext.LoadRoles();
+            List<IdentityRole> roles = database.LoadRoles();
             IdentityRole role = roles.Where(r => r.Name == roleName).FirstOrDefault();
 
             if (role != null)

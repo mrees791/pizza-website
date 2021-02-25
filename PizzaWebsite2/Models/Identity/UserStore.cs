@@ -10,6 +10,11 @@ using System.Web;
 
 namespace PizzaWebsite2.Models.Identity
 {
+    /// <summary>
+    /// A custom implementation of the Identity framework's store interfaces.
+    /// Reference:
+    /// https://docs.microsoft.com/en-us/aspnet/identity/overview/extensibility/overview-of-custom-storage-providers-for-aspnet-identity
+    /// </summary>
     public class UserStore :
         IUserStore<IdentityUser, int>,
         IUserPasswordStore<IdentityUser, int>,
@@ -22,27 +27,33 @@ namespace PizzaWebsite2.Models.Identity
         IUserTwoFactorStore<IdentityUser, int>,
         IUserLockoutStore<IdentityUser, int>
     {
-        private DummyDatabase dbContext;
+        private DummyDatabase database;
 
         public UserStore()
         {
-            dbContext = new DummyDatabase();
+            database = new DummyDatabase();
         }
+
+        public UserStore(DummyDatabase database)
+        {
+            this.database = database;
+        }
+
         public Task CreateAsync(IdentityUser user)
         {
-            dbContext.AddRecord(user);
+            database.AddRecord(user);
             return Task.FromResult(0);
         }
 
         public Task AddToRoleAsync(IdentityUser user, string roleName)
         {
-            List<IdentityRole> roles = dbContext.LoadRoles();
+            List<IdentityRole> roles = database.LoadRoles();
             IdentityRole IdentityRole = roles.Where(r => r.Name == roleName).FirstOrDefault();
 
             if (IdentityRole != null)
             {
                 UserRole userRole = new UserRole(user.Id, IdentityRole.Id);
-                dbContext.AddRecord(userRole);
+                database.AddRecord(userRole);
 
                 return Task.FromResult(0);
             }
@@ -66,7 +77,7 @@ namespace PizzaWebsite2.Models.Identity
 
         public Task<IdentityUser> FindByIdAsync(int userId)
         {
-            List<IdentityUser> users = dbContext.LoadUsers();
+            List<IdentityUser> users = database.LoadUsers();
             IdentityUser user = users.Where(u => u.Id == userId).FirstOrDefault();
 
             if (user != null)
@@ -79,7 +90,7 @@ namespace PizzaWebsite2.Models.Identity
 
         public Task<IdentityUser> FindByNameAsync(string userName)
         {
-            List<IdentityUser> users = dbContext.LoadUsers();
+            List<IdentityUser> users = database.LoadUsers();
             IdentityUser user = users.Where(u => u.UserName == userName).FirstOrDefault();
 
             if (user != null)
@@ -92,8 +103,8 @@ namespace PizzaWebsite2.Models.Identity
 
         public Task<IList<string>> GetRolesAsync(IdentityUser user)
         {
-            List<IdentityRole> roles = dbContext.LoadRoles();
-            List<UserRole> userRoles = dbContext.LoadUserRoles();
+            List<IdentityRole> roles = database.LoadRoles();
+            List<UserRole> userRoles = database.LoadUserRoles();
             IList<string> currentUserRoleNames = new List<string>();
             List<UserRole> currentUserRoles = userRoles.Where(ur => ur.UserId == user.Id).ToList();
 
@@ -115,8 +126,8 @@ namespace PizzaWebsite2.Models.Identity
 
         public Task RemoveFromRoleAsync(IdentityUser user, string roleName)
         {
-            List<IdentityRole> roles = dbContext.LoadRoles();
-            List<UserRole> userRoles = dbContext.LoadUserRoles();
+            List<IdentityRole> roles = database.LoadRoles();
+            List<UserRole> userRoles = database.LoadUserRoles();
             IdentityRole role = roles.Where(r => r.Name == roleName).FirstOrDefault();
 
             if (role != null)
@@ -125,7 +136,7 @@ namespace PizzaWebsite2.Models.Identity
 
                 if (userRole != null)
                 {
-                    dbContext.DeleteRecord(userRole);
+                    database.DeleteRecord(userRole);
                 }
 
                 return Task.FromResult(0);
@@ -180,7 +191,7 @@ namespace PizzaWebsite2.Models.Identity
 
         public Task<IdentityUser> FindByEmailAsync(string email)
         {
-            List<IdentityUser> users = dbContext.LoadUsers();
+            List<IdentityUser> users = database.LoadUsers();
             IdentityUser user = users.Where(u => u.Email == email).FirstOrDefault();
 
             if (user != null)
@@ -193,7 +204,7 @@ namespace PizzaWebsite2.Models.Identity
 
         public Task<IdentityUser> FindByPhoneNumberAsync(string phoneNumber)
         {
-            List<IdentityUser> users = dbContext.LoadUsers();
+            List<IdentityUser> users = database.LoadUsers();
             IdentityUser user = users.Where(u => u.PhoneNumber == phoneNumber).FirstOrDefault();
 
             if (user != null)
@@ -206,7 +217,7 @@ namespace PizzaWebsite2.Models.Identity
 
         public Task<IList<Claim>> GetClaimsAsync(IdentityUser user)
         {
-            List<UserClaim> userClaims = dbContext.LoadUserClaims().Where(uc => uc.UserId == user.Id).ToList();
+            List<UserClaim> userClaims = database.LoadUserClaims().Where(uc => uc.UserId == user.Id).ToList();
             IList<Claim> claims = userClaims.Select(uc => uc.Claim).ToList();
             return Task.FromResult(claims);
         }
@@ -214,18 +225,18 @@ namespace PizzaWebsite2.Models.Identity
         public Task AddClaimAsync(IdentityUser user, Claim claim)
         {
             UserClaim userClaim = new UserClaim(user.Id, claim);
-            dbContext.AddRecord(userClaim);
+            database.AddRecord(userClaim);
             return Task.FromResult(0);
         }
 
         public Task RemoveClaimAsync(IdentityUser user, Claim claim)
         {
-            List<UserClaim> userClaims = dbContext.LoadUserClaims().Where(uc => uc.UserId == user.Id).ToList();
+            List<UserClaim> userClaims = database.LoadUserClaims().Where(uc => uc.UserId == user.Id).ToList();
             UserClaim currentClaim = userClaims.Where(uc => ClaimsAreEqual(uc.Claim, claim)).FirstOrDefault();
 
             if (currentClaim != null)
             {
-                dbContext.DeleteRecord(currentClaim);
+                database.DeleteRecord(currentClaim);
             }
 
             return Task.FromResult(0);
@@ -234,18 +245,18 @@ namespace PizzaWebsite2.Models.Identity
         public Task AddLoginAsync(IdentityUser user, UserLoginInfo login)
         {
             UserLogin userLogin = new UserLogin(user.Id, login);
-            dbContext.AddRecord(userLogin);
+            database.AddRecord(userLogin);
             return Task.FromResult(0);
         }
 
         public Task RemoveLoginAsync(IdentityUser user, UserLoginInfo login)
         {
-            List<UserLogin> userLogins = dbContext.LoadUserLogins();
+            List<UserLogin> userLogins = database.LoadUserLogins();
             UserLogin userLogin = userLogins.Where(ul => UserLoginIsEqual(ul.UserLoginInfo, login)).FirstOrDefault();
 
             if (userLogin != null)
             {
-                dbContext.DeleteRecord(userLogin);
+                database.DeleteRecord(userLogin);
             }
 
             return Task.FromResult(0);
@@ -253,7 +264,7 @@ namespace PizzaWebsite2.Models.Identity
 
         public Task<IList<UserLoginInfo>> GetLoginsAsync(IdentityUser user)
         {
-            List<UserLogin> userLogins = dbContext.LoadUserLogins();
+            List<UserLogin> userLogins = database.LoadUserLogins();
             IList<UserLoginInfo> loginInfo = userLogins.Where(ul => ul.UserId == user.Id).Select(ul => ul.UserLoginInfo).ToList();
 
             return Task.FromResult(loginInfo);
@@ -261,8 +272,8 @@ namespace PizzaWebsite2.Models.Identity
 
         public Task<IdentityUser> FindAsync(UserLoginInfo login)
         {
-            List<IdentityUser> users = dbContext.LoadUsers();
-            List<UserLogin> userLogins = dbContext.LoadUserLogins();
+            List<IdentityUser> users = database.LoadUsers();
+            List<UserLogin> userLogins = database.LoadUserLogins();
             UserLogin userLogin = userLogins.Where(ul => UserLoginIsEqual(ul.UserLoginInfo, login)).FirstOrDefault();
 
             if (userLogin != null)
@@ -370,6 +381,6 @@ namespace PizzaWebsite2.Models.Identity
             user.LockoutEnabled = enabled;
             return Task.FromResult(0);
         }
-        public DummyDatabase DbContext { get => dbContext; }
+        public DummyDatabase DbContext { get => database; }
     }
 }

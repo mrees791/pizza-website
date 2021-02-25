@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 using PizzaWebsite.Models.Identity;
 using PizzaWebsite.Models.Tests;
 using PizzaWebsite.ViewModels.Account;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
