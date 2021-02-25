@@ -25,11 +25,11 @@ namespace PizzaWebsite
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie
             });
 
-            app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
+            /*app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             app.UseGoogleAuthentication(
                 ConfigurationManager.AppSettings["googleOAuth2ClientId"],
-                ConfigurationManager.AppSettings["googleOAuth2ClientSecret"]);
+                ConfigurationManager.AppSettings["googleOAuth2ClientSecret"]);*/
         }
     }
 }

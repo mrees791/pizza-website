@@ -17,7 +17,6 @@ using System.Diagnostics;
 using System.Configuration;
 using Microsoft.AspNet.Identity.Owin;
 using PizzaWebsite.App_Start;
-using PizzaWebsite.Models.Identity.ExternalLogins;
 
 namespace PizzaWebsite.Controllers
 {
@@ -247,108 +246,6 @@ namespace PizzaWebsite.Controllers
         {
             AuthenticationManager.SignOut();
             return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult ExternalLogin(string provider, string returnUrl)
-        {
-            // Request a redirect to the external login provider.
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Home", new { ReturnUrl = returnUrl }));
-        }
-
-        [AllowAnonymous]
-        public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
-        {
-            ExternalLoginInfo loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
-            if (loginInfo == null)
-            {
-                return RedirectToAction("SignIn");
-            }
-
-            // Sign in user with this external login provider if the user already has a login.
-            var signInManager = CreateSignInManager();
-            var result = await signInManager.ExternalSignInAsync(loginInfo, false);
-
-            // todo: Complete all result cases, including locked out and requires verification.
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    throw new NotImplementedException();
-                case SignInStatus.RequiresVerification:
-                    throw new NotImplementedException();
-                case SignInStatus.Failure:
-                default:
-                    // User does not have an account. Prompt the user to create an account.
-                    ExternalLoginConfirmationViewModel externalLoginConfirmationVm = new ExternalLoginConfirmationViewModel()
-                    {
-                        ReturnUrl = returnUrl,
-                        LoginProvider = loginInfo.Login.LoginProvider,
-                        Email = loginInfo.Email
-                    };
-                    return View("ExternalLoginConfirmation", externalLoginConfirmationVm);
-            }
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                model.ReturnUrl = returnUrl;
-                return View(model);
-            }
-
-            // Get information about the user from the external login provider
-            var info = await AuthenticationManager.GetExternalLoginInfoAsync();
-            if (info == null)
-            {
-                return View("ExternalLoginFailure");
-            }
-            SiteUser user = new SiteUser
-            {
-                UserName = model.Email,
-                Email = model.Email
-            };
-            var result = await userManager.CreateAsync(user);
-            if (result.Succeeded)
-            {
-                var signInManager = CreateSignInManager();
-                await signInManager.SignInAsync(user, false, false);
-                return RedirectToLocal(returnUrl);
-            }
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("", error);
-            }
-            model.ReturnUrl = returnUrl;
-            return View(model);
-        }
-
-        [AllowAnonymous]
-        public ActionResult ExternalLoginFailure()
-        {
-            return View();
-        }
-
-        private ActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-
-            return RedirectToAction("Index", "Home");
         }
 
         private IAuthenticationManager AuthenticationManager

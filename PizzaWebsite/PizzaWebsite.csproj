@@ -208,7 +208,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Identity\ExternalLogins\ChallengeResult.cs" />
     <Compile Include="Models\Identity\SiteRole.cs" />
     <Compile Include="Models\Identity\SiteUser.cs" />
     <Compile Include="Models\Identity\UserClaim.cs" />
@@ -219,7 +218,6 @@
     <Compile Include="Models\Tests\DummyDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\Home\ExternalLoginConfirmationViewModel.cs" />
     <Compile Include="ViewModels\Home\InfoViewModel.cs" />
     <Compile Include="ViewModels\Home\SignInViewModel.cs" />
     <Compile Include="ViewModels\Home\RegisterViewModel.cs" />
@@ -280,11 +278,11 @@
     <Content Include="Views\Home\ManageSite.cshtml" />
     <Content Include="Views\Home\ConfirmEmail.cshtml" />
     <Content Include="Views\Home\Info.cshtml" />
-    <Content Include="Views\Home\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Home\ExternalLoginFailure.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ViewModels\Account\" />
+    <Folder Include="Views\Account\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -43,6 +43,9 @@ else
             </div>
         </div>
     }
+    <div>
+        <p>Don't have an account? Register a new account @Html.ActionLink("here", "Register", "Home").</p>
+    </div>
     if (Model.LoginProviders.Any())
     {
         using (Html.BeginForm("ExternalLogin", "Home", new { ReturnUrl = Model.ReturnUrl }))
