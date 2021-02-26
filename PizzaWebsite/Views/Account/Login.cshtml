@@ -1,4 +1,5 @@
 ﻿@using PizzaWebsite.Models
+@using Microsoft.Owin.Security
 @model LoginViewModel
 @{
     ViewBag.Title = "Log in";
@@ -51,11 +52,17 @@
             }
         </section>
     </div>
-    <div class="col-md-4">
-        <section id="socialLoginForm">
-            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-        </section>
-    </div>
+    @{
+        var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+        if (loginProviders.Any())
+        {
+            <div class="col-md-4">
+                <section id="socialLoginForm">
+                    @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                </section>
+            </div>
+        }
+    }
 </div>
 
 @section Scripts {

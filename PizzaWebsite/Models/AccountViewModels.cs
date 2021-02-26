@@ -60,6 +60,8 @@ namespace PizzaWebsite.Models
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+
+        public bool ExternalLoginProvidersAvailable { get; set; }
     }
 
     public class RegisterViewModel
