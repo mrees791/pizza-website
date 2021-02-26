@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaWebsite", "PizzaWebsite\PizzaWebsite.csproj", "{09A8870E-669D-4302-BC17-0770D97406C6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLibrary", "DataLibrary\DataLibrary.csproj", "{BA703D85-3BEE-450B-91A8-5A813E0109CE}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PizzaDatabase", "PizzaDatabase\PizzaDatabase.sqlproj", "{2BCB215C-396E-4691-AA17-986E92A65919}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaWebsite2", "PizzaWebsite2\PizzaWebsite2.csproj", "{88DD38A4-9A53-4150-A94B-95C1B4573E2C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaWebsite", "PizzaWebsite\PizzaWebsite.csproj", "{2E63CF67-02EF-4619-8585-633DD941F68A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{09A8870E-669D-4302-BC17-0770D97406C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09A8870E-669D-4302-BC17-0770D97406C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{09A8870E-669D-4302-BC17-0770D97406C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{09A8870E-669D-4302-BC17-0770D97406C6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BA703D85-3BEE-450B-91A8-5A813E0109CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BA703D85-3BEE-450B-91A8-5A813E0109CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA703D85-3BEE-450B-91A8-5A813E0109CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -31,10 +25,10 @@ Global
 		{2BCB215C-396E-4691-AA17-986E92A65919}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BCB215C-396E-4691-AA17-986E92A65919}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2BCB215C-396E-4691-AA17-986E92A65919}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{88DD38A4-9A53-4150-A94B-95C1B4573E2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88DD38A4-9A53-4150-A94B-95C1B4573E2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88DD38A4-9A53-4150-A94B-95C1B4573E2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88DD38A4-9A53-4150-A94B-95C1B4573E2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E63CF67-02EF-4619-8585-633DD941F68A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E63CF67-02EF-4619-8585-633DD941F68A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E63CF67-02EF-4619-8585-633DD941F68A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E63CF67-02EF-4619-8585-633DD941F68A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
