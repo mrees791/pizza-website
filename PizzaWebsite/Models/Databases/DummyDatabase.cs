@@ -2,6 +2,7 @@
 using PizzaWebsite.Models.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 
@@ -10,6 +11,8 @@ namespace PizzaWebsite.Models.Databases
     // Dummy database serves as a test before DAL implementation
     public class DummyDatabase : IDisposable
     {
+        private IDbConnection connection;
+
         // User, role definitions
         private static List<IdentityRole> roles = new List<IdentityRole>();
         private static List<IdentityUser> users = new List<IdentityUser>();
@@ -29,6 +32,15 @@ namespace PizzaWebsite.Models.Databases
 
         public DummyDatabase()
         {
+        }
+
+        public void Dispose()
+        {
+            if (connection != null)
+            {
+                connection.Dispose();
+                connection = null;
+            }
         }
 
         public int GetNumberOfUsers()
@@ -106,11 +118,6 @@ namespace PizzaWebsite.Models.Databases
         public List<UserLogin> LoadUserLogins()
         {
             return new List<UserLogin>(userLogins);
-        }
-
-        public void Dispose()
-        {
-            // todo: Dispose database resources.
         }
     }
 }
