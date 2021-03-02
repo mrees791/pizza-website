@@ -14,7 +14,7 @@
   PhoneNumberConfirmed BIT NOT NULL,
   TwoFactorEnabled BIT NOT NULL,
   LockoutEndDateUtc DATETIME,
-  LackoutEnabled BIT NOT NULL,
+  LockoutEnabled BIT NOT NULL,
   AccessFailedCount INT NOT NULL,
   UserName NVARCHAR(256) NOT NULL,
   PRIMARY KEY (Id),

@@ -68,15 +68,19 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccess\SqlDataAccess.cs" />
-    <Compile Include="Models\DatabaseContext.cs" />
+    <Compile Include="Models\DatabaseContextOLD.cs" />
+    <Compile Include="Models\PizzaDatabase.cs" />
+    <Compile Include="Models\Tables\Cart.cs" />
+    <Compile Include="Models\Tables\SiteRole.cs" />
+    <Compile Include="Models\Tables\SiteUser.cs" />
+    <Compile Include="Models\Tables\UserClaim.cs" />
+    <Compile Include="Models\Tables\UserLogin.cs" />
+    <Compile Include="Models\Tables\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\TableEntities\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
