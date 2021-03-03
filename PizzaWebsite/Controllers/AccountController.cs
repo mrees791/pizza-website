@@ -83,13 +83,6 @@ namespace PizzaWebsite.Controllers
                 return View(model);
             }
 
-            // Ensure email is confirmed before signing the user in.
-            if (!await UserManager.IsEmailConfirmedAsync(user.Id))
-            {
-                ModelState.AddModelError("", "You need to confirm your email address.");
-                return View(model);
-            }
-
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
@@ -178,8 +171,9 @@ namespace PizzaWebsite.Controllers
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Confirm your Little Brutus account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    return View("DisplayEmail");
+                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+
+                    return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
             }
