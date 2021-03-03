@@ -41,7 +41,7 @@ namespace PizzaWebsite.Models.Identity
         // This constructor will be used when users use external logins (UserLogin)
         public IdentityUser()
         {
-            lockoutEndDateUtc = new DateTimeOffset(new DateTime(9999,1,1));
+            lockoutEndDateUtc = DateTimeOffset.Now;
         }
 
         public bool HasPassword()
