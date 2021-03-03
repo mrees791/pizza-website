@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using DataLibrary.Models.Tables;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,17 +14,21 @@ namespace PizzaWebsite.Models.Identity
         private int id;
         private string userName;
         private string passwordHash;
-        private string zipCode;
         private string email;
         private bool emailConfirmed;
         private string securityStamp;
         private string phoneNumber;
         private bool phoneNumberConfirmed;
         private bool twoFactorEnabled;
-
-        private DateTimeOffset lockoutEndDate;
+        private DateTimeOffset lockoutEndDateUtc;
         private int accessFailedCount;
         private bool lockoutEnabled;
+
+        private string zipCode;
+        private int confirmOrderCartId;
+        private int currentCartId;
+        private bool isBanned;
+        private int orderConfirmationId;
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
         {
@@ -36,13 +41,7 @@ namespace PizzaWebsite.Models.Identity
         // This constructor will be used when users use external logins (UserLogin)
         public IdentityUser()
         {
-        }
-
-        public IdentityUser(string userName, string passwordHash, string email)
-        {
-            this.userName = userName;
-            this.passwordHash = passwordHash;
-            this.email = email;
+            lockoutEndDateUtc = new DateTimeOffset(new DateTime(9999,1,1));
         }
 
         public bool HasPassword()
@@ -74,9 +73,58 @@ namespace PizzaWebsite.Models.Identity
         public string PhoneNumber { get => phoneNumber; set => phoneNumber = value; }
         public bool PhoneNumberConfirmed { get => phoneNumberConfirmed; set => phoneNumberConfirmed = value; }
         public bool TwoFactorEnabled { get => twoFactorEnabled; set => twoFactorEnabled = value; }
-        public DateTimeOffset LockoutEndDate { get => lockoutEndDate; set => lockoutEndDate = value; }
+        public DateTimeOffset LockoutEndDateUtc { get => lockoutEndDateUtc; set => lockoutEndDateUtc = value; }
         public int AccessFailedCount { get => accessFailedCount; set => accessFailedCount = value; }
         public bool LockoutEnabled { get => lockoutEnabled; set => lockoutEnabled = value; }
         public string ZipCode { get => zipCode; set => zipCode = value; }
+        public int ConfirmOrderCartId { get => confirmOrderCartId; set => confirmOrderCartId = value; }
+        public int CurrentCartId { get => currentCartId; set => currentCartId = value; }
+        public bool IsBanned { get => isBanned; set => isBanned = value; }
+        public int OrderConfirmationId { get => orderConfirmationId; set => orderConfirmationId = value; }
+
+        public SiteUser ToDbRecord()
+        {
+            return new SiteUser()
+            {
+                AccessFailedCount = accessFailedCount,
+                ConfirmOrderCartId = ConfirmOrderCartId,
+                CurrentCartId = CurrentCartId,
+                Email = Email,
+                EmailConfirmed = EmailConfirmed,
+                Id = Id,
+                IsBanned = IsBanned,
+                LockoutEnabled = LockoutEnabled,
+                LockoutEndDateUtc = LockoutEndDateUtc.Date,
+                OrderConfirmationId = OrderConfirmationId,
+                PasswordHash = PasswordHash,
+                PhoneNumber = PhoneNumber,
+                PhoneNumberConfirmed = PhoneNumberConfirmed,
+                SecurityStamp = SecurityStamp,
+                TwoFactorEnabled = TwoFactorEnabled,
+                UserName = UserName,
+                ZipCode = ZipCode
+            };
+        }
+
+        public IdentityUser(SiteUser dbRecord)
+        {
+            AccessFailedCount = dbRecord.AccessFailedCount;
+            ConfirmOrderCartId = dbRecord.ConfirmOrderCartId;
+            CurrentCartId = dbRecord.CurrentCartId;
+            Email = dbRecord.Email;
+            EmailConfirmed = dbRecord.EmailConfirmed;
+            Id = dbRecord.Id;
+            IsBanned = dbRecord.IsBanned;
+            LockoutEnabled = dbRecord.LockoutEnabled;
+            LockoutEndDateUtc = dbRecord.LockoutEndDateUtc;
+            OrderConfirmationId = dbRecord.OrderConfirmationId;
+            PasswordHash = dbRecord.PasswordHash;
+            PhoneNumber = dbRecord.PhoneNumber;
+            PhoneNumberConfirmed = dbRecord.PhoneNumberConfirmed;
+            SecurityStamp = dbRecord.SecurityStamp;
+            TwoFactorEnabled = dbRecord.TwoFactorEnabled;
+            UserName = dbRecord.UserName;
+            ZipCode = dbRecord.ZipCode;
+        }
     }
 }

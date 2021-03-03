@@ -169,10 +169,6 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Databases\DatabaseContext.cs" />
-    <Compile Include="Models\Databases\DummyDatabase.cs" />
-    <Compile Include="Models\Databases\Users\UserClaim.cs" />
-    <Compile Include="Models\Databases\Users\UserLogin.cs" />
-    <Compile Include="Models\Databases\Users\UserRole.cs" />
     <Compile Include="Models\Identity\IdentityRole.cs" />
     <Compile Include="Models\Identity\IdentityUser.cs" />
     <Compile Include="Models\Identity\Stores\RoleStore.cs" />
@@ -254,6 +250,12 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataLibrary\DataLibrary.csproj">
+      <Project>{ba703d85-3bee-450b-91a8-5a813e0109ce}</Project>
+      <Name>DataLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

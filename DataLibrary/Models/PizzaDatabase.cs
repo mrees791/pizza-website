@@ -22,52 +22,133 @@ namespace DataLibrary.Models
             connection.Open();
         }
 
-        // todo: Remove
-        public void Test()
-        {
-            /*Cart myCart = new Cart();
-            connection.Insert<int,Cart>(myCart);
-
-            Cart cart1 = connection.Get<Cart>(1);
-            Cart cart2 = connection.Get<Cart>(2);
-            Cart cart3 = connection.Get<Cart>(3);
-
-            var carts = connection.GetList<Cart>();*/
-
-            // RAN INSIDE TRANSACTION
-            using (var transaction = connection.BeginTransaction())
-            {
-                int currentCartId = CreateNewCart(connection, transaction);
-                int confirmOrderCartId = CreateNewCart(connection, transaction);
-
-                SiteUser user = new SiteUser()
-                {
-                    CurrentCartId = currentCartId,
-                    ConfirmOrderCartId = confirmOrderCartId,
-                    UserName = "TestUser",
-                    LockoutEndDateUtc = DateTime.UtcNow
-                };
-
-                int? userId = connection.Insert(user, transaction);
-
-                transaction.Commit();
-            }
-            /*var testCart = new Cart();
-            int cartId = connection.Execute("INSERT INTO Cart DEFAULT VALUES;");*/
-
-            var carts = connection.GetList<Cart>();
-            var users = connection.GetList<SiteUser>();
-        }
-
-        private int CreateNewCart(IDbConnection connection, IDbTransaction transaction = null)
-        {
-            return connection.Query<int>("INSERT INTO Cart OUTPUT Inserted.Id DEFAULT VALUES;", null, transaction).Single();
-        }
-
         public void Dispose()
         {
             connection.Close();
             connection.Dispose();
+        }
+
+        // CRUD Operations
+
+        // Cart CRUD
+        private int InsertCart(IDbTransaction transaction = null)
+        {
+            // We had to use Query<int> instead of Insert because the Insert method will not work with DEFAULT VALUES.
+            return connection.Query<int>("INSERT INTO Cart OUTPUT Inserted.Id DEFAULT VALUES;", null, transaction).Single();
+        }
+
+        public async Task<List<Cart>> GetCartListAsync()
+        {
+            return new List<Cart>(await connection.GetListAsync<Cart>());
+        }
+
+        public void Update(Cart cart, IDbTransaction transaction = null)
+        {
+            connection.Update(cart, transaction);
+        }
+
+        // SiteRole CRUD
+        public int Insert(SiteRole siteRole, IDbTransaction transaction = null)
+        {
+            return connection.Insert(siteRole, transaction).Value;
+        }
+
+        public async Task<List<SiteRole>> GetSiteRoleListAsync(object whereConditions = null)
+        {
+            return new List<SiteRole>(await connection.GetListAsync<SiteRole>(whereConditions));
+        }
+
+        public void Update(SiteRole siteRole, IDbTransaction transaction = null)
+        {
+            connection.Update(siteRole, transaction);
+        }
+        
+        // SiteUser CRUD
+        public int Insert(SiteUser siteUser)
+        {
+            using (var transaction = connection.BeginTransaction())
+            {
+                siteUser.CurrentCartId = InsertCart(transaction);
+                siteUser.ConfirmOrderCartId = InsertCart(transaction);
+                int? userId = connection.Insert(siteUser, transaction);
+
+                transaction.Commit();
+
+                return userId.Value;
+            }
+        }
+
+        public async Task<List<SiteUser>> GetSiteUserListAsync(object whereConditions = null)
+        {
+            return new List<SiteUser>(await connection.GetListAsync<SiteUser>(whereConditions));
+        }
+
+        public void Update(SiteUser siteUser, IDbTransaction transaction = null)
+        {
+            connection.Update(siteUser, transaction);
+        }
+
+        // UserClaim CRUD
+        public int Insert(UserClaim userClaim, IDbTransaction transaction = null)
+        {
+            return connection.Insert(userClaim, transaction).Value;
+        }
+
+        public async Task<List<UserClaim>> GetUserClaimListAsync(object whereConditions = null)
+        {
+            return new List<UserClaim>(await connection.GetListAsync<UserClaim>(whereConditions));
+        }
+
+        public void Update(UserClaim userClaim, IDbTransaction transaction = null)
+        {
+            connection.Update(userClaim, transaction);
+        }
+
+        public void Delete(UserClaim userClaim, IDbTransaction transaction = null)
+        {
+            connection.Delete(userClaim, transaction);
+        }
+
+        // UserLogin CRUD
+        public int Insert(UserLogin userLogin, IDbTransaction transaction = null)
+        {
+            return connection.Insert(userLogin, transaction).Value;
+        }
+
+        public async Task<List<UserLogin>> GetUserLoginListAsync(object whereConditions = null)
+        {
+            return new List<UserLogin>(await connection.GetListAsync<UserLogin>(whereConditions));
+        }
+
+        public void Update(UserLogin userLogin, IDbTransaction transaction = null)
+        {
+            connection.Update(userLogin, transaction);
+        }
+
+        public void Delete(UserLogin userLogin, IDbTransaction transaction = null)
+        {
+            connection.Delete(userLogin, transaction);
+        }
+
+        // UserRole CRUD
+        public int Insert(UserRole userRole, IDbTransaction transaction = null)
+        {
+            return connection.Insert(userRole, transaction).Value;
+        }
+
+        public async Task<List<UserRole>> GetUserRoleListAsync(object whereConditions = null)
+        {
+            return new List<UserRole>(await connection.GetListAsync<UserRole>(whereConditions));
+        }
+
+        public void Update(UserRole userRole, IDbTransaction transaction = null)
+        {
+            connection.Update(userRole, transaction);
+        }
+
+        public void Delete(UserRole userRole, IDbTransaction transaction = null)
+        {
+            connection.Delete(userRole, transaction);
         }
     }
 }

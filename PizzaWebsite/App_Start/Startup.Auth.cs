@@ -1,4 +1,5 @@
 ﻿using System;
+using DataLibrary.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -17,7 +18,7 @@ namespace PizzaWebsite
         public void ConfigureAuth(IAppBuilder app)
         {
             // Configure the db context, user manager and signin manager to use a single instance per request
-            app.CreatePerOwinContext<DummyDatabase>(DatabaseContext.Create); // todo: May remove this line.
+            app.CreatePerOwinContext<PizzaDatabase>(DatabaseContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
 

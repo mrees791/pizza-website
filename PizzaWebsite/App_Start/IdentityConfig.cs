@@ -8,6 +8,7 @@ using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
+using DataLibrary.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -76,7 +77,7 @@ namespace PizzaWebsite
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new UserStore(context.Get<DummyDatabase>()));
+            var manager = new ApplicationUserManager(new UserStore(context.Get<PizzaDatabase>()));
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<IdentityUser, int>(manager)
             {

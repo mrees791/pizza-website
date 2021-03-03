@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using DataLibrary.Models;
+using DataLibrary.Models.Tables;
+using Microsoft.AspNet.Identity;
 using PizzaWebsite.Models.Databases;
 using System;
 using System.Collections.Generic;
@@ -15,21 +17,16 @@ namespace PizzaWebsite.Models.Identity.Stores
     /// </summary>
     public class RoleStore : IRoleStore<IdentityRole, int>
     {
-        private DummyDatabase database;
+        private PizzaDatabase database;
 
-        public RoleStore()
-        {
-            database = new DummyDatabase();
-        }
-
-        public RoleStore(DummyDatabase database)
+        public RoleStore(PizzaDatabase database)
         {
             this.database = database;
         }
 
         public Task CreateAsync(IdentityRole role)
         {
-            database.AddRecord(role);
+            database.Insert(role.ToDbRecord());
             return Task.FromResult(0);
         }
 
@@ -45,38 +42,31 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public void Dispose()
         {
+            database.Dispose();
         }
 
-        public Task<IdentityRole> FindByIdAsync(int roleId)
+        public async Task<IdentityRole> FindByIdAsync(int roleId)
         {
-            List<IdentityRole> roles = database.LoadRoles();
-            IdentityRole role = roles.Where(r => r.Id == roleId).FirstOrDefault();
+            List<SiteRole> siteRoles = await database.GetSiteRoleListAsync(new { Id = roleId });
+            List<IdentityRole> identityRoles = siteRoles.Select(sr => new IdentityRole(sr)).ToList();
+            IdentityRole currentRole = identityRoles.FirstOrDefault();
 
-            if (role != null)
-            {
-                return Task.FromResult(role);
-            }
-
-            return Task.FromResult<IdentityRole>(null);
+            return currentRole;
         }
 
-        public Task<IdentityRole> FindByNameAsync(string roleName)
+        public async Task<IdentityRole> FindByNameAsync(string roleName)
         {
-            List<IdentityRole> roles = database.LoadRoles();
-            IdentityRole role = roles.Where(r => r.Name == roleName).FirstOrDefault();
+            List<SiteRole> siteRoles = await database.GetSiteRoleListAsync(new { Name = roleName });
+            List<IdentityRole> identityRoles = siteRoles.Select(sr => new IdentityRole(sr)).ToList();
+            IdentityRole currentRole = identityRoles.FirstOrDefault();
 
-            if (role != null)
-            {
-                return Task.FromResult(role);
-            }
-
-            return Task.FromResult<IdentityRole>(null);
+            return currentRole;
         }
 
         public Task UpdateAsync(IdentityRole role)
         {
-            // Update role record in database.
-            throw new NotImplementedException();
+            database.Update(role.ToDbRecord());
+            return Task.FromResult(0);
         }
     }
 }

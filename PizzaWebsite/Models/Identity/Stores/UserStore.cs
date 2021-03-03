@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using DataLibrary.Models;
+using DataLibrary.Models.Tables;
+using Microsoft.AspNet.Identity;
 using PizzaWebsite.Models.Databases;
-using PizzaWebsite.Models.Databases.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,38 +28,34 @@ namespace PizzaWebsite.Models.Identity.Stores
         IUserTwoFactorStore<IdentityUser, int>,
         IUserLockoutStore<IdentityUser, int>
     {
-        private DummyDatabase database;
+        private PizzaDatabase database;
 
-        public UserStore()
-        {
-            database = new DummyDatabase();
-        }
-
-        public UserStore(DummyDatabase database)
+        public UserStore(PizzaDatabase database)
         {
             this.database = database;
         }
 
         public Task CreateAsync(IdentityUser user)
         {
-            database.AddRecord(user);
+            database.Insert(user.ToDbRecord());
             return Task.FromResult(0);
         }
 
-        public Task AddToRoleAsync(IdentityUser user, string roleName)
+        public async Task AddToRoleAsync(IdentityUser user, string roleName)
         {
-            List<IdentityRole> roles = database.LoadRoles();
-            IdentityRole IdentityRole = roles.Where(r => r.Name == roleName).FirstOrDefault();
+            var siteRoles = await database.GetSiteRoleListAsync(new { Name = roleName });
+            SiteRole siteRole = siteRoles.FirstOrDefault();
 
-            if (IdentityRole != null)
+            if (siteRole == null)
             {
-                UserRole userRole = new UserRole(user.Id, IdentityRole.Id);
-                database.AddRecord(userRole);
-
-                return Task.FromResult(0);
+                throw new ArgumentException("Invalid role name: roleName");
             }
 
-            throw new ArgumentException("Invalid role name: roleName");
+            UserRole userRole = new UserRole();
+            userRole.UserId = user.Id;
+            userRole.RoleId = siteRole.Id;
+
+            database.Insert(userRole);
         }
 
         /// <summary>
@@ -73,82 +70,77 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public void Dispose()
         {
+            database.Dispose();
         }
 
-        public Task<IdentityUser> FindByIdAsync(int userId)
+        public async Task<IdentityUser> FindByIdAsync(int userId)
         {
-            List<IdentityUser> users = database.LoadUsers();
-            IdentityUser user = users.Where(u => u.Id == userId).FirstOrDefault();
+            var siteUsers = await database.GetSiteUserListAsync(new { Id = userId });
+            SiteUser siteUser = siteUsers.FirstOrDefault();
 
-            if (user != null)
+            if (siteUser == null)
             {
-                return Task.FromResult(user);
+                return null;
             }
 
-            return Task.FromResult<IdentityUser>(null);
+            return new IdentityUser(siteUser);
         }
 
-        public Task<IdentityUser> FindByNameAsync(string userName)
+        public async Task<IdentityUser> FindByNameAsync(string userName)
         {
-            List<IdentityUser> users = database.LoadUsers();
-            IdentityUser user = users.Where(u => u.UserName == userName).FirstOrDefault();
+            var siteUsers = await database.GetSiteUserListAsync(new { UserName = userName });
+            SiteUser siteUser = siteUsers.FirstOrDefault();
 
-            if (user != null)
+            if (siteUser == null)
             {
-                return Task.FromResult(user);
+                return null;
             }
 
-            return Task.FromResult<IdentityUser>(null);
+            return new IdentityUser(siteUser);
         }
 
-        public Task<IList<string>> GetRolesAsync(IdentityUser user)
+        public async Task<IList<string>> GetRolesAsync(IdentityUser user)
         {
-            List<IdentityRole> roles = database.LoadRoles();
-            List<UserRole> userRoles = database.LoadUserRoles();
             IList<string> currentUserRoleNames = new List<string>();
-            List<UserRole> currentUserRoles = userRoles.Where(ur => ur.UserId == user.Id).ToList();
+            var siteRoles = await database.GetSiteRoleListAsync();
+            var currentUserRoles = await database.GetUserRoleListAsync(new { UserId = user.Id });
 
             foreach (UserRole userRole in currentUserRoles)
             {
-                IdentityRole role = roles.Where(r => r.Id == userRole.RoleId).First();
-                currentUserRoleNames.Add(role.Name);
+                var currentRole = siteRoles.Where(r => r.Id == userRole.RoleId).First();
+                currentUserRoleNames.Add(currentRole.Name);
             }
 
-            return Task.FromResult(currentUserRoleNames);
+            return currentUserRoleNames;
         }
 
-        public Task<bool> IsInRoleAsync(IdentityUser user, string roleName)
+        public async Task<bool> IsInRoleAsync(IdentityUser user, string roleName)
         {
-            IList<string> currentUserRoles = GetRolesAsync(user).Result;
+            IList<string> currentUserRoles = await GetRolesAsync(user);
             bool isInRole = currentUserRoles.Contains(roleName);
-            return Task.FromResult(isInRole);
+            return isInRole;
         }
 
-        public Task RemoveFromRoleAsync(IdentityUser user, string roleName)
+        public async Task RemoveFromRoleAsync(IdentityUser user, string roleName)
         {
-            List<IdentityRole> roles = database.LoadRoles();
-            List<UserRole> userRoles = database.LoadUserRoles();
-            IdentityRole role = roles.Where(r => r.Name == roleName).FirstOrDefault();
-
-            if (role != null)
+            List<SiteRole> siteRoles = await database.GetSiteRoleListAsync(new { Name = roleName });
+            SiteRole currentRole = siteRoles.FirstOrDefault();
+            if (currentRole == null)
             {
-                UserRole userRole = userRoles.Where(ur => ur.RoleId == role.Id && ur.UserId == user.Id).FirstOrDefault();
-
-                if (userRole != null)
-                {
-                    database.DeleteRecord(userRole);
-                }
-
-                return Task.FromResult(0);
+                throw new ArgumentException("Invalid role name: roleName");
             }
+            UserRole currentUserRole = (await database.GetUserRoleListAsync(new { UserId = user.Id, RoleId = currentRole.Id })).FirstOrDefault();
 
-            throw new ArgumentException("Invalid role name: roleName");
+            if (currentUserRole != null)
+            {
+                database.Delete(currentUserRole);
+            }
         }
 
         public Task UpdateAsync(IdentityUser user)
         {
-            // Update user records in database.
-            throw new NotImplementedException();
+            database.Update(user.ToDbRecord());
+            return Task.FromResult(0);
         }
 
         public Task SetPasswordHashAsync(IdentityUser user, string passwordHash)
@@ -189,104 +181,91 @@ namespace PizzaWebsite.Models.Identity.Stores
             return Task.FromResult(0);
         }
 
-        public Task<IdentityUser> FindByEmailAsync(string email)
+        public async Task<IdentityUser> FindByEmailAsync(string email)
         {
-            List<IdentityUser> users = database.LoadUsers();
-            IdentityUser user = users.Where(u => u.Email == email).FirstOrDefault();
+            var siteUsers = await database.GetSiteUserListAsync(new { Email = email });
+            SiteUser siteUser = siteUsers.FirstOrDefault();
 
-            if (user != null)
+            if (siteUser == null)
             {
-                return Task.FromResult(user);
+                return null;
             }
 
-            return Task.FromResult<IdentityUser>(null);
+            return new IdentityUser(siteUser);
         }
 
-        public Task<IdentityUser> FindByPhoneNumberAsync(string phoneNumber)
+        public async Task<IList<Claim>> GetClaimsAsync(IdentityUser user)
         {
-            List<IdentityUser> users = database.LoadUsers();
-            IdentityUser user = users.Where(u => u.PhoneNumber == phoneNumber).FirstOrDefault();
-
-            if (user != null)
-            {
-                return Task.FromResult(user);
-            }
-
-            return Task.FromResult<IdentityUser>(null);
-        }
-
-        public Task<IList<Claim>> GetClaimsAsync(IdentityUser user)
-        {
-            List<UserClaim> userClaims = database.LoadUserClaims().Where(uc => uc.UserId == user.Id).ToList();
-            IList<Claim> claims = userClaims.Select(uc => uc.Claim).ToList();
-            return Task.FromResult(claims);
+            List<UserClaim> userClaims = await database.GetUserClaimListAsync(new { UserId = user.Id });
+            IList<Claim> claims = userClaims.Select(uc => new Claim(uc.ClaimType, uc.ClaimValue)).ToList();
+            return claims;
         }
 
         public Task AddClaimAsync(IdentityUser user, Claim claim)
         {
-            UserClaim userClaim = new UserClaim(user.Id, claim);
-            database.AddRecord(userClaim);
+            UserClaim userClaim = new UserClaim()
+            {
+                UserId = user.Id,
+                ClaimType = claim.Type,
+                ClaimValue = claim.Value
+            };
+            database.Insert(userClaim);
             return Task.FromResult(0);
         }
 
-        public Task RemoveClaimAsync(IdentityUser user, Claim claim)
+        public async Task RemoveClaimAsync(IdentityUser user, Claim claim)
         {
-            List<UserClaim> userClaims = database.LoadUserClaims().Where(uc => uc.UserId == user.Id).ToList();
-            UserClaim currentClaim = userClaims.Where(uc => ClaimsAreEqual(uc.Claim, claim)).FirstOrDefault();
+            List<UserClaim> userClaims = await database.GetUserClaimListAsync(new { UserId = user.Id });
+            UserClaim currentClaim = userClaims.Where(uc => uc.ClaimType == claim.Type && uc.ClaimValue == claim.Value).FirstOrDefault();
 
             if (currentClaim != null)
             {
-                database.DeleteRecord(currentClaim);
+                database.Delete(currentClaim);
             }
-
-            return Task.FromResult(0);
         }
 
         public Task AddLoginAsync(IdentityUser user, UserLoginInfo login)
         {
-            UserLogin userLogin = new UserLogin(user.Id, login);
-            database.AddRecord(userLogin);
+            UserLogin userLogin = new UserLogin()
+            {
+                UserId = user.Id,
+                LoginProvider = login.LoginProvider,
+                ProviderKey = login.ProviderKey
+            };
+            database.Insert(userLogin);
             return Task.FromResult(0);
         }
 
-        public Task RemoveLoginAsync(IdentityUser user, UserLoginInfo login)
+        public async Task RemoveLoginAsync(IdentityUser user, UserLoginInfo login)
         {
-            List<UserLogin> userLogins = database.LoadUserLogins();
-            UserLogin userLogin = userLogins.Where(ul => UserLoginIsEqual(ul.UserLoginInfo, login)).FirstOrDefault();
+            List<UserLogin> userLogins = await database.GetUserLoginListAsync(new { UserId = user.Id, LoginProvider = login.LoginProvider, ProviderKey = login.ProviderKey });
+            UserLogin currentUserLogin = userLogins.FirstOrDefault();
 
-            if (userLogin != null)
+            if (currentUserLogin != null)
             {
-                database.DeleteRecord(userLogin);
+                database.Delete(currentUserLogin);
             }
-
-            return Task.FromResult(0);
         }
 
-        public Task<IList<UserLoginInfo>> GetLoginsAsync(IdentityUser user)
+        public async Task<IList<UserLoginInfo>> GetLoginsAsync(IdentityUser user)
         {
-            List<UserLogin> userLogins = database.LoadUserLogins();
-            IList<UserLoginInfo> loginInfo = userLogins.Where(ul => ul.UserId == user.Id).Select(ul => ul.UserLoginInfo).ToList();
-
-            return Task.FromResult(loginInfo);
+            List<UserLogin> userLogins = await database.GetUserLoginListAsync(new { UserId = user.Id });
+            IList<UserLoginInfo> loginInfoList = userLogins.Select(ul => new UserLoginInfo(ul.LoginProvider, ul.ProviderKey)).ToList();
+            return loginInfoList;
         }
 
-        public Task<IdentityUser> FindAsync(UserLoginInfo login)
+        public async Task<IdentityUser> FindAsync(UserLoginInfo login)
         {
-            List<IdentityUser> users = database.LoadUsers();
-            List<UserLogin> userLogins = database.LoadUserLogins();
-            UserLogin userLogin = userLogins.Where(ul => UserLoginIsEqual(ul.UserLoginInfo, login)).FirstOrDefault();
+            List<UserLogin> userLogins = await database.GetUserLoginListAsync(new { LoginProvider = login.LoginProvider, ProviderKey = login.ProviderKey });
+            UserLogin currentUserLogin = userLogins.FirstOrDefault();
 
-            if (userLogin != null)
+            if (currentUserLogin == null)
             {
-                IdentityUser user = users.Where(u => u.Id == userLogin.UserId).FirstOrDefault();
-
-                if (user != null)
-                {
-                    return Task.FromResult(user);
-                }
+                return null;
             }
 
-            return Task.FromResult<IdentityUser>(null);
+            IdentityUser user = await FindByIdAsync(currentUserLogin.UserId);
+            return user;
         }
 
         private bool ClaimsAreEqual(Claim claim1, Claim claim2)
@@ -345,12 +324,12 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public Task<DateTimeOffset> GetLockoutEndDateAsync(IdentityUser user)
         {
-            return Task.FromResult(user.LockoutEndDate);
+            return Task.FromResult(user.LockoutEndDateUtc);
         }
 
         public Task SetLockoutEndDateAsync(IdentityUser user, DateTimeOffset lockoutEnd)
         {
-            user.LockoutEndDate = lockoutEnd;
+            user.LockoutEndDateUtc = lockoutEnd;
             return Task.FromResult(0);
         }
 
@@ -381,6 +360,5 @@ namespace PizzaWebsite.Models.Identity.Stores
             user.LockoutEnabled = enabled;
             return Task.FromResult(0);
         }
-        public DummyDatabase DbContext { get => database; }
     }
 }
