@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using DataLibrary.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -62,11 +63,11 @@ namespace PizzaWebsite
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = ConfigurationManager.AppSettings["googleOAuth2ClientId"],
+                ClientSecret = ConfigurationManager.AppSettings["googleOAuth2ClientSecret"]
+            });
         }
     }
 }
