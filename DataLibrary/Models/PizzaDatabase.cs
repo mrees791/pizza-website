@@ -28,7 +28,7 @@ namespace DataLibrary.Models
             connection.Dispose();
         }
 
-        // CRUD Operations
+        // CRUD Table Operations
 
         // Cart CRUD
         private int InsertCart(IDbTransaction transaction = null)
