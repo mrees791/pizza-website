@@ -70,8 +70,11 @@
   <ItemGroup>
     <Compile Include="Models\PizzaDatabase.cs" />
     <Compile Include="Models\Tables\Cart.cs" />
+    <Compile Include="Models\Tables\Employee.cs" />
+    <Compile Include="Models\Tables\EmployeeLocation.cs" />
     <Compile Include="Models\Tables\SiteRole.cs" />
     <Compile Include="Models\Tables\SiteUser.cs" />
+    <Compile Include="Models\Tables\StoreLocation.cs" />
     <Compile Include="Models\Tables\UserClaim.cs" />
     <Compile Include="Models\Tables\UserLogin.cs" />
     <Compile Include="Models\Tables\UserRole.cs" />
