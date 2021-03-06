@@ -96,15 +96,15 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> ManageStores()
         {
-            List<StoreLocationViewModel> storeLocationVms = new List<StoreLocationViewModel>();
+            ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
             List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>();
 
             foreach (var location in storeLocationRecords)
             {
-                storeLocationVms.Add(new StoreLocationViewModel(location));
+                manageStoresVm.StoreLocationVmList.Add(new StoreLocationViewModel(location));
             }
 
-            return View(storeLocationVms);
+            return View(manageStoresVm);
         }
     }
 }

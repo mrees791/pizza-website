@@ -8,11 +8,19 @@ using System.Web;
 
 namespace PizzaWebsite.Models
 {
+    public class ManageStoresViewModel
+    {
+        public StoreLocationViewModel StoreLocationVm { get; set; }
+        public List<StoreLocationViewModel> StoreLocationVmList { get; set; }
+
+        public ManageStoresViewModel()
+        {
+            StoreLocationVmList = new List<StoreLocationViewModel>();
+        }
+    }
+
     public class StoreLocationViewModel : IDatabaseRecordConverter<DataLibrary.Models.Tables.StoreLocation>
     {
-        public bool IsNewRecord { get; set; }
-        public List<State> StateList { get; set; }
-
         public StoreLocationViewModel()
         {
             IsNewRecord = true;
@@ -32,6 +40,9 @@ namespace PizzaWebsite.Models
             PhoneNumber = dbRecord.PhoneNumber;
             IsActiveLocation = dbRecord.IsActiveLocation;
         }
+
+        public bool IsNewRecord { get; set; }
+        public List<State> StateList { get; set; }
         public int Id { get; set; }
 
         [Required]
