@@ -12,6 +12,7 @@ namespace PizzaWebsite.Models
     {
         public StoreLocationViewModel StoreLocationVm { get; set; }
         public List<StoreLocationViewModel> StoreLocationVmList { get; set; }
+        public string NameFilterField { get; set; }
 
         public ManageStoresViewModel()
         {

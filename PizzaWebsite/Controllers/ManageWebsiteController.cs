@@ -60,6 +60,19 @@ namespace PizzaWebsite.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditStoreLocation(StoreLocationViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            PizzaDb.Update(model.ToDbModel());
+            return RedirectToAction(nameof(ManageStores));
+        }
+
         [HttpGet]
         public async Task<ActionResult> EditStoreLocation(int? id)
         {
@@ -85,7 +98,6 @@ namespace PizzaWebsite.Controllers
             }
 
             PizzaDb.Insert(model.ToDbModel());
-
             return RedirectToAction(nameof(ManageStores));
         }
 
