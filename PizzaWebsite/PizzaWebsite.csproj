@@ -241,7 +241,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\ManageWebsite\Index.cshtml" />
     <Content Include="Views\ManageWebsite\ManageStores.cshtml" />
-    <Content Include="Views\ManageWebsite\CreateNewStoreLocation.cshtml" />
+    <Content Include="Views\ManageWebsite\CreateStoreLocation.cshtml" />
     <Content Include="Views\ManageWebsite\_StoreLocationPartial.cshtml" />
     <Content Include="Views\ManageWebsite\EditStoreLocation.cshtml" />
   </ItemGroup>

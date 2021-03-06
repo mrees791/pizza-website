@@ -77,7 +77,7 @@ namespace PizzaWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateNewStoreLocation(StoreLocationViewModel model)
+        public ActionResult CreateStoreLocation(StoreLocationViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -89,7 +89,7 @@ namespace PizzaWebsite.Controllers
             return RedirectToAction(nameof(ManageStores));
         }
 
-        public ActionResult CreateNewStoreLocation()
+        public ActionResult CreateStoreLocation()
         {
             return View(new StoreLocationViewModel());
         }
