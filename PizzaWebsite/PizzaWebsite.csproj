@@ -170,11 +170,15 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Databases\DatabaseContext.cs" />
+    <Compile Include="Models\Geography\State.cs" />
+    <Compile Include="Models\Geography\StateListCreator.cs" />
+    <Compile Include="Models\IDatabaseRecordConverter.cs" />
     <Compile Include="Models\Identity\IdentityRole.cs" />
     <Compile Include="Models\Identity\IdentityUser.cs" />
     <Compile Include="Models\Identity\Stores\RoleStore.cs" />
     <Compile Include="Models\Identity\Stores\UserStore.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ManageWebsiteViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -189,6 +193,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -235,6 +240,10 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\ManageWebsite\Index.cshtml" />
+    <Content Include="Views\ManageWebsite\ManageStores.cshtml" />
+    <Content Include="Views\ManageWebsite\CreateNewStoreLocation.cshtml" />
+    <Content Include="Views\ManageWebsite\_StoreLocationPartial.cshtml" />
+    <Content Include="Views\ManageWebsite\EditStoreLocation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
