@@ -7,7 +7,7 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Identity
 {
-    public class IdentityRole : IRole<int>
+    public class IdentityRole : IRole<int>, IDatabaseRecordConverter<SiteRole>
     {
         private int id;
 
@@ -15,6 +15,7 @@ namespace PizzaWebsite.Models.Identity
         {
             Name = name;
         }
+
         public IdentityRole(SiteRole dbRecord)
         {
             Id = dbRecord.Id;
@@ -37,7 +38,7 @@ namespace PizzaWebsite.Models.Identity
             }
         }
 
-        public SiteRole ToDbRecord()
+        public SiteRole ToDbModel()
         {
             return new SiteRole()
             {

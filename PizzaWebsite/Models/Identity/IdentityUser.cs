@@ -9,7 +9,7 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Identity
 {
-    public class IdentityUser : IUser<int>
+    public class IdentityUser : IUser<int>, IDatabaseRecordConverter<SiteUser>
     {
         private int id;
         private string userName;
@@ -82,7 +82,7 @@ namespace PizzaWebsite.Models.Identity
         public bool IsBanned { get => isBanned; set => isBanned = value; }
         public int OrderConfirmationId { get => orderConfirmationId; set => orderConfirmationId = value; }
 
-        public SiteUser ToDbRecord()
+        public SiteUser ToDbModel()
         {
             return new SiteUser()
             {

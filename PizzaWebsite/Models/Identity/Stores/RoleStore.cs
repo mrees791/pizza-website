@@ -26,7 +26,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public Task CreateAsync(IdentityRole role)
         {
-            database.Insert(role.ToDbRecord());
+            database.Insert(role.ToDbModel());
             return Task.FromResult(0);
         }
 
@@ -47,7 +47,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IdentityRole> FindByIdAsync(int roleId)
         {
-            List<SiteRole> siteRoles = await database.GetSiteRoleListAsync(new { Id = roleId });
+            List<SiteRole> siteRoles = await database.GetListAsync<SiteRole>(new { Id = roleId });
             List<IdentityRole> identityRoles = siteRoles.Select(sr => new IdentityRole(sr)).ToList();
             IdentityRole currentRole = identityRoles.FirstOrDefault();
 
@@ -56,7 +56,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IdentityRole> FindByNameAsync(string roleName)
         {
-            List<SiteRole> siteRoles = await database.GetSiteRoleListAsync(new { Name = roleName });
+            List<SiteRole> siteRoles = await database.GetListAsync<SiteRole>(new { Name = roleName });
             List<IdentityRole> identityRoles = siteRoles.Select(sr => new IdentityRole(sr)).ToList();
             IdentityRole currentRole = identityRoles.FirstOrDefault();
 
@@ -65,7 +65,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public Task UpdateAsync(IdentityRole role)
         {
-            database.Update(role.ToDbRecord());
+            database.Update(role.ToDbModel());
             return Task.FromResult(0);
         }
     }

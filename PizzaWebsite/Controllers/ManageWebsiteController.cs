@@ -63,7 +63,7 @@ namespace PizzaWebsite.Controllers
         [HttpGet]
         public async Task<ActionResult> EditStoreLocation(int? id)
         {
-            List<StoreLocation> storeLocationRecords = await PizzaDb.GetStoreLocationListAsync(new { Id = id });
+            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(new { Id = id });
             StoreLocation storeLocationRecord = storeLocationRecords.FirstOrDefault();
 
             if (storeLocationRecord != null)
@@ -97,8 +97,8 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> ManageStores()
         {
             List<StoreLocationViewModel> storeLocationVms = new List<StoreLocationViewModel>();
+            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>();
 
-            var storeLocationRecords = await PizzaDb.GetStoreLocationListAsync();
             foreach (var location in storeLocationRecords)
             {
                 storeLocationVms.Add(new StoreLocationViewModel(location));

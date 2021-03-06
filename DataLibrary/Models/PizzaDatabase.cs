@@ -29,6 +29,10 @@ namespace DataLibrary.Models
         }
 
         // CRUD Table Operations
+        public async Task<List<T>> GetListAsync<T>(object whereConditions = null)
+        {
+            return new List<T>(await connection.GetListAsync<T>(whereConditions));
+        }
 
         // Cart CRUD
         private int InsertCart(IDbTransaction transaction = null)
@@ -37,10 +41,10 @@ namespace DataLibrary.Models
             return connection.Query<int>("INSERT INTO Cart OUTPUT Inserted.Id DEFAULT VALUES;", null, transaction).Single();
         }
 
-        public async Task<List<Cart>> GetCartListAsync()
+        /*public async Task<List<Cart>> GetCartListAsync()
         {
             return new List<Cart>(await connection.GetListAsync<Cart>());
-        }
+        }*/
 
         public void Update(Cart cart, IDbTransaction transaction = null)
         {
@@ -51,11 +55,6 @@ namespace DataLibrary.Models
         public int Insert(Employee employee, IDbTransaction transaction = null)
         {
             return connection.Insert(employee, transaction).Value;
-        }
-
-        public async Task<List<Employee>> GetEmployeeListAsync(object whereConditions = null)
-        {
-            return new List<Employee>(await connection.GetListAsync<Employee>(whereConditions));
         }
 
         public void Update(Employee employee, IDbTransaction transaction = null)
@@ -69,11 +68,6 @@ namespace DataLibrary.Models
             return connection.Insert(employeeLocation, transaction).Value;
         }
 
-        public async Task<List<EmployeeLocation>> GetEmployeeLocationListAsync(object whereConditions = null)
-        {
-            return new List<EmployeeLocation>(await connection.GetListAsync<EmployeeLocation>(whereConditions));
-        }
-
         public void Update(EmployeeLocation employeeLocation, IDbTransaction transaction = null)
         {
             connection.Update(employeeLocation, transaction);
@@ -83,11 +77,6 @@ namespace DataLibrary.Models
         public int Insert(SiteRole siteRole, IDbTransaction transaction = null)
         {
             return connection.Insert(siteRole, transaction).Value;
-        }
-
-        public async Task<List<SiteRole>> GetSiteRoleListAsync(object whereConditions = null)
-        {
-            return new List<SiteRole>(await connection.GetListAsync<SiteRole>(whereConditions));
         }
 
         public void Update(SiteRole siteRole, IDbTransaction transaction = null)
@@ -110,11 +99,6 @@ namespace DataLibrary.Models
             }
         }
 
-        public async Task<List<SiteUser>> GetSiteUserListAsync(object whereConditions = null)
-        {
-            return new List<SiteUser>(await connection.GetListAsync<SiteUser>(whereConditions));
-        }
-
         public void Update(SiteUser siteUser, IDbTransaction transaction = null)
         {
             connection.Update(siteUser, transaction);
@@ -126,11 +110,6 @@ namespace DataLibrary.Models
             return connection.Insert(storeLocation, transaction).Value;
         }
 
-        public async Task<List<StoreLocation>> GetStoreLocationListAsync(object whereConditions = null)
-        {
-            return new List<StoreLocation>(await connection.GetListAsync<StoreLocation>(whereConditions));
-        }
-
         public void Update(StoreLocation storeLocation, IDbTransaction transaction = null)
         {
             connection.Update(storeLocation, transaction);
@@ -140,11 +119,6 @@ namespace DataLibrary.Models
         public int Insert(UserClaim userClaim, IDbTransaction transaction = null)
         {
             return connection.Insert(userClaim, transaction).Value;
-        }
-
-        public async Task<List<UserClaim>> GetUserClaimListAsync(object whereConditions = null)
-        {
-            return new List<UserClaim>(await connection.GetListAsync<UserClaim>(whereConditions));
         }
 
         public void Update(UserClaim userClaim, IDbTransaction transaction = null)
@@ -163,11 +137,6 @@ namespace DataLibrary.Models
             return connection.Insert(userLogin, transaction).Value;
         }
 
-        public async Task<List<UserLogin>> GetUserLoginListAsync(object whereConditions = null)
-        {
-            return new List<UserLogin>(await connection.GetListAsync<UserLogin>(whereConditions));
-        }
-
         public void Update(UserLogin userLogin, IDbTransaction transaction = null)
         {
             connection.Update(userLogin, transaction);
@@ -182,11 +151,6 @@ namespace DataLibrary.Models
         public int Insert(UserRole userRole, IDbTransaction transaction = null)
         {
             return connection.Insert(userRole, transaction).Value;
-        }
-
-        public async Task<List<UserRole>> GetUserRoleListAsync(object whereConditions = null)
-        {
-            return new List<UserRole>(await connection.GetListAsync<UserRole>(whereConditions));
         }
 
         public void Update(UserRole userRole, IDbTransaction transaction = null)
