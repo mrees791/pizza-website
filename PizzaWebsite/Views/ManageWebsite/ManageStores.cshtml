@@ -6,6 +6,16 @@
 
 <h2>Manage Stores</h2>
 
+<p>Filters</p>
+<p>
+    @using (Html.BeginForm("ManageStores", "ManageWebsite", FormMethod.Get))
+    {
+        <input value="name">
+        <!--<input type="submit" value="Apply" class="btn btn-default" />-->
+        Html.ActionLink("Apply", "ManageStores", new { name = "abacus" });
+    }
+</p>
+
 <p>
     @Html.ActionLink("Create New Store", "CreateStoreLocation")
 </p>

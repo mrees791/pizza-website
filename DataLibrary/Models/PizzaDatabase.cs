@@ -31,7 +31,8 @@ namespace DataLibrary.Models
         // CRUD Table Operations
         public async Task<List<T>> GetListAsync<T>(object whereConditions = null)
         {
-            return new List<T>(await connection.GetListAsync<T>(whereConditions));
+            IEnumerable<T> list = await connection.GetListAsync<T>(whereConditions);
+            return list.ToList();
         }
 
         // Cart CRUD
