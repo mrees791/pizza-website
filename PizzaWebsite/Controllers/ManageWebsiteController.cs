@@ -1,4 +1,5 @@
 ﻿using DataLibrary.Models;
+using DataLibrary.Models.Filters;
 using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity.Owin;
 using PizzaWebsite.Models;
@@ -110,9 +111,16 @@ namespace PizzaWebsite.Controllers
         {
             ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
 
-            // Apply filters, paging here
+            // Apply filters
+            SearchFilter searchFilter = new SearchFilter();
+            searchFilter.AddFilter("name", name);
 
-            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>("Name LIKE South", null);
+            object filterParameters = new
+            {
+                name = name
+            };
+
+            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(searchFilter, filterParameters);
 
             foreach (var location in storeLocationRecords)
             {
