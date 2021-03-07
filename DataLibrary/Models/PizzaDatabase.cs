@@ -29,9 +29,15 @@ namespace DataLibrary.Models
         }
 
         // CRUD Table Operations
-        public async Task<List<T>> GetListAsync<T>(object whereConditions = null)
+        public async Task<List<T>> GetListAsync<T>(string conditions, object parameters)
         {
-            IEnumerable<T> list = await connection.GetListAsync<T>(whereConditions);
+            IEnumerable<T> list = await connection.GetListAsync<T>(conditions, parameters);
+            return list.ToList();
+        }
+
+        public async Task<List<T>> GetListPagesAsync<T>(int pageNumber, int rowsPerPage, string orderby, string conditions, object parameters)
+        {
+            IEnumerable<T> list = await connection.GetListPagedAsync<T>(pageNumber, rowsPerPage, conditions, orderby, parameters);
             return list.ToList();
         }
 
@@ -41,11 +47,6 @@ namespace DataLibrary.Models
             // We had to use Query<int> instead of Insert because the Insert method will not work with DEFAULT VALUES.
             return connection.Query<int>("INSERT INTO Cart OUTPUT Inserted.Id DEFAULT VALUES;", null, transaction).Single();
         }
-
-        /*public async Task<List<Cart>> GetCartListAsync()
-        {
-            return new List<Cart>(await connection.GetListAsync<Cart>());
-        }*/
 
         public void Update(Cart cart, IDbTransaction transaction = null)
         {

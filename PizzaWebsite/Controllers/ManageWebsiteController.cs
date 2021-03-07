@@ -76,7 +76,7 @@ namespace PizzaWebsite.Controllers
         [HttpGet]
         public async Task<ActionResult> EditStoreLocation(int? id)
         {
-            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(new { Id = id });
+            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>("", new { Id = id });
             StoreLocation storeLocationRecord = storeLocationRecords.FirstOrDefault();
 
             if (storeLocationRecord != null)
@@ -112,20 +112,9 @@ namespace PizzaWebsite.Controllers
 
             // Apply filters, paging here
 
-            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>();
-            List<StoreLocation> filteredStoreLocationRecords = new List<StoreLocation>();
+            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>("Name LIKE South", null);
 
-            // test filter
-            if (name != null)
-            {
-                filteredStoreLocationRecords.AddRange(storeLocationRecords.Where(s => s.Name.ToLower().Contains(name.ToLower())).ToList());
-            }
-            else
-            {
-                filteredStoreLocationRecords = storeLocationRecords;
-            }
-
-            foreach (var location in filteredStoreLocationRecords)
+            foreach (var location in storeLocationRecords)
             {
                 manageStoresVm.StoreLocationVmList.Add(new StoreLocationViewModel(location));
             }
