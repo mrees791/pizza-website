@@ -106,33 +106,31 @@ namespace PizzaWebsite.Controllers
             return View(new StoreLocationViewModel());
         }
 
-        [HttpGet]
-        public ActionResult ManageStores(string name)
+        public async Task<ActionResult> ManageStores(string name)
         {
             ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
 
             // Apply filters, paging here
-            /*List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>();
 
-            foreach (var location in storeLocationRecords)
-            {
-                manageStoresVm.StoreLocationVmList.Add(new StoreLocationViewModel(location));
-            }*/
-
-            return View(manageStoresVm);
-        }
-
-        /*public async Task<ActionResult> ManageStores()
-        {
-            ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
             List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>();
+            List<StoreLocation> filteredStoreLocationRecords = new List<StoreLocation>();
 
-            foreach (var location in storeLocationRecords)
+            // test filter
+            if (name != null)
+            {
+                filteredStoreLocationRecords.AddRange(storeLocationRecords.Where(s => s.Name.ToLower().Contains(name.ToLower())).ToList());
+            }
+            else
+            {
+                filteredStoreLocationRecords = storeLocationRecords;
+            }
+
+            foreach (var location in filteredStoreLocationRecords)
             {
                 manageStoresVm.StoreLocationVmList.Add(new StoreLocationViewModel(location));
             }
 
             return View(manageStoresVm);
-        }*/
+        }
     }
 }

@@ -103,7 +103,6 @@ namespace PizzaWebsite.Models.Identity.Stores
         {
             List<SiteRole> siteRolesTask = await database.GetListAsync<SiteRole>();
             List<UserRole> currentUserRolesTask = await database.GetListAsync<UserRole>(new { UserId = user.Id });
-
             IList<string> currentUserRoleNames = new List<string>();
 
             foreach (UserRole userRole in currentUserRolesTask)

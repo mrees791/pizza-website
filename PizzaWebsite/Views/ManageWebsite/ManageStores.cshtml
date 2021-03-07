@@ -10,9 +10,9 @@
 <p>
     @using (Html.BeginForm("ManageStores", "ManageWebsite", FormMethod.Get))
     {
-        <input value="name">
-        <!--<input type="submit" value="Apply" class="btn btn-default" />-->
-        Html.ActionLink("Apply", "ManageStores", new { name = "abacus" });
+        <label for="name">Store Name</label>
+        @Html.TextBox("name", null, new { @class="form-control" })
+        <input type="submit" value="Apply" class="btn btn-default" />
     }
 </p>
 
