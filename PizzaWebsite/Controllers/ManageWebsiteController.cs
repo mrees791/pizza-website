@@ -107,17 +107,17 @@ namespace PizzaWebsite.Controllers
             return View(new StoreLocationViewModel());
         }
 
-        public async Task<ActionResult> ManageStores(string name)
+        public async Task<ActionResult> ManageStores(string storeName)
         {
             ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
 
             // Apply filters
             SearchFilter searchFilter = new SearchFilter();
-            searchFilter.AddFilter("name", name);
+            searchFilter.AddFilter("Name", storeName);
 
             object filterParameters = new
             {
-                name = name
+                Name = storeName,
             };
 
             List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(searchFilter, filterParameters);

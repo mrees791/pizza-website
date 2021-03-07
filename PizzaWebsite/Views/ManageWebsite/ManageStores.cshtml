@@ -10,8 +10,8 @@
 <p>
     @using (Html.BeginForm("ManageStores", "ManageWebsite", FormMethod.Get))
     {
-        <label for="name">Store Name</label>
-        @Html.TextBox("name", null, new { @class="form-control" })
+        @Html.Label("StoreName", "Store Name")
+        @Html.TextBox("StoreName", Request["StoreName"], new { @class = "form-control" })
         <input type="submit" value="Apply" class="btn btn-default" />
     }
 </p>
@@ -63,7 +63,16 @@
             @Html.DisplayFor(modelItem => item.IsActiveLocation)
         </td>
         <td>
-            @Html.ActionLink("Edit", "EditStoreLocation", new { id=item.Id })
+            @*/
+        @Html.ActionLink("Edit", "EditStoreLocation", new { id=item.Id })
+            *@
+
+            @using (Html.BeginForm("EditStoreLocation", "ManageWebsite", FormMethod.Get))
+            {
+                @Html.Hidden("Id", item.Id)
+                @Html.Hidden("StoreName", Request["StoreName"])
+                <input type="submit" value="Edit" class="btn btn-default" />
+            }
         </td>
     </tr>
 }

@@ -26,6 +26,10 @@ namespace DataLibrary.Models.Filters
 
         internal List<FilterPair> FilterPairs { get => filterPairs; }
 
+        /// <summary>
+        /// Creates a where clause used by Dapper's get list conditions parameter.
+        /// </summary>
+        /// <returns></returns>
         internal string GetSqlConditions()
         {
             int queriesAdded = 0;
