@@ -101,13 +101,13 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IList<string>> GetRolesAsync(IdentityUser user)
         {
-            List<SiteRole> siteRolesTask = await database.GetListAsync<SiteRole>(null);
-            List<UserRole> currentUserRolesTask = await database.GetListAsync<UserRole>(new { UserId = user.Id });
+            List<SiteRole> siteRoles = await database.GetListAsync<SiteRole>();
+            List<UserRole> currentUserRoles = await database.GetListAsync<UserRole>(new { UserId = user.Id });
             IList<string> currentUserRoleNames = new List<string>();
 
-            foreach (UserRole userRole in currentUserRolesTask)
+            foreach (UserRole userRole in currentUserRoles)
             {
-                var currentRole = siteRolesTask.Where(r => r.Id == userRole.RoleId).First();
+                var currentRole = siteRoles.Where(r => r.Id == userRole.RoleId).First();
                 currentUserRoleNames.Add(currentRole.Name);
             }
 

@@ -1,5 +1,4 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.Filters;
 using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity.Owin;
 using PizzaWebsite.Models;
@@ -109,18 +108,17 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> ManageStores(string storeName)
         {
-            ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
+            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>();
 
             // Apply filters
-            SearchFilter searchFilter = new SearchFilter();
-            searchFilter.AddFilter("Name", storeName);
-
-            object filterParameters = new
+            if (storeName != null)
             {
-                Name = storeName,
-            };
+                storeName = storeName.ToLower();
+                storeLocationRecords = storeLocationRecords.Where(r => r.Name.ToLower().Contains(storeName)).ToList();
+            }
 
-            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(searchFilter, filterParameters);
+            // Create view model
+            ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
 
             foreach (var location in storeLocationRecords)
             {
@@ -129,30 +127,5 @@ namespace PizzaWebsite.Controllers
 
             return View(manageStoresVm);
         }
-
-        // OLD VERSION WITHOUT PAGING
-        // todo: Remove
-        /*public async Task<ActionResult> ManageStores(string storeName)
-        {
-            ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
-
-            // Apply filters
-            SearchFilter searchFilter = new SearchFilter();
-            searchFilter.AddFilter("Name", storeName);
-
-            object filterParameters = new
-            {
-                Name = storeName,
-            };
-
-            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(searchFilter, filterParameters);
-
-            foreach (var location in storeLocationRecords)
-            {
-                manageStoresVm.StoreLocationVmList.Add(new StoreLocationViewModel(location));
-            }
-
-            return View(manageStoresVm);
-        }*/
     }
 }

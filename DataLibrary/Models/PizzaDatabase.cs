@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using DataLibrary.Models.Filters;
 using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
@@ -39,7 +38,7 @@ namespace DataLibrary.Models
 
         public async Task<List<T>> GetListAsync<T>()
         {
-            IEnumerable<T> list = await connection.GetListAsync<T>("");
+            IEnumerable<T> list = await connection.GetListAsync<T>();
             return list.ToList();
         }
 
@@ -49,24 +48,18 @@ namespace DataLibrary.Models
             return list.ToList();
         }
 
-        public async Task<List<T>> GetListAsync<T>(SearchFilter searchFilter, object parameters)
-        {
-            IEnumerable<T> list = await connection.GetListAsync<T>(searchFilter.GetSqlConditions(), parameters);
-            return list.ToList();
-        }
-
-        internal async Task<List<T>> GetListPagesAsync<T>(int pageNumber, int rowsPerPage, string orderby, string conditions, object parameters)
+        /*internal async Task<List<T>> GetListPagedAsync<T>(int pageNumber, int rowsPerPage, string orderby, string conditions, object parameters)
         {
             IEnumerable<T> list = await connection.GetListPagedAsync<T>(pageNumber, rowsPerPage, conditions, orderby, parameters);
             return list.ToList();
         }
 
-        public async Task<List<T>> GetListPagesAsync<T>(SearchFilter searchFilter, int pageNumber, int rowsPerPage, string orderby, object parameters)
+        public async Task<List<T>> GetListPagedAsync<T>(SearchFilter searchFilter, int pageNumber, int rowsPerPage, string orderby, object parameters)
         {
             string conditions = searchFilter.GetSqlConditions();
             IEnumerable<T> list = await connection.GetListPagedAsync<T>(pageNumber, rowsPerPage, conditions, orderby, parameters);
             return list.ToList();
-        }
+        }*/
 
         // Cart CRUD
         private int InsertCart(IDbTransaction transaction = null)

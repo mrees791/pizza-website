@@ -68,8 +68,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Filters\FilterPair.cs" />
-    <Compile Include="Models\Filters\SearchFilter.cs" />
     <Compile Include="Models\PizzaDatabase.cs" />
     <Compile Include="Models\Tables\Cart.cs" />
     <Compile Include="Models\Tables\Employee.cs" />
