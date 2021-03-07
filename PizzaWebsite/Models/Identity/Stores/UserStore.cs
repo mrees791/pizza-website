@@ -43,7 +43,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task AddToRoleAsync(IdentityUser user, string roleName)
         {
-            List<SiteRole> siteRoles = await database.GetListAsync<SiteRole>("", new { Name = roleName });
+            List<SiteRole> siteRoles = await database.GetListAsync<SiteRole>(new { Name = roleName });
             SiteRole siteRole = siteRoles.FirstOrDefault();
 
             if (siteRole == null)
@@ -75,7 +75,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IdentityUser> FindByIdAsync(int userId)
         {
-            List<SiteUser> siteUsers = await database.GetListAsync<SiteUser>("", new { Id = userId });
+            List<SiteUser> siteUsers = await database.GetListAsync<SiteUser>(new { Id = userId });
             SiteUser siteUser = siteUsers.FirstOrDefault();
 
             if (siteUser == null)
@@ -88,7 +88,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IdentityUser> FindByNameAsync(string userName)
         {
-            List<SiteUser> siteUsers = await database.GetListAsync<SiteUser>("", new { UserName = userName });
+            List<SiteUser> siteUsers = await database.GetListAsync<SiteUser>(new { UserName = userName });
             SiteUser siteUser = siteUsers.FirstOrDefault();
 
             if (siteUser == null)
@@ -101,8 +101,8 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IList<string>> GetRolesAsync(IdentityUser user)
         {
-            List<SiteRole> siteRolesTask = await database.GetListAsync<SiteRole>("", null);
-            List<UserRole> currentUserRolesTask = await database.GetListAsync<UserRole>("", new { UserId = user.Id });
+            List<SiteRole> siteRolesTask = await database.GetListAsync<SiteRole>(null);
+            List<UserRole> currentUserRolesTask = await database.GetListAsync<UserRole>(new { UserId = user.Id });
             IList<string> currentUserRoleNames = new List<string>();
 
             foreach (UserRole userRole in currentUserRolesTask)
@@ -123,7 +123,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task RemoveFromRoleAsync(IdentityUser user, string roleName)
         {
-            List<SiteRole> siteRoles = await database.GetListAsync<SiteRole>("", new { Name = roleName });
+            List<SiteRole> siteRoles = await database.GetListAsync<SiteRole>(new { Name = roleName });
             SiteRole currentRole = siteRoles.FirstOrDefault();
 
             if (currentRole == null)
@@ -131,7 +131,7 @@ namespace PizzaWebsite.Models.Identity.Stores
                 throw new ArgumentException("Invalid role name: roleName");
             }
 
-            UserRole currentUserRole = (await database.GetListAsync<UserRole>("", new { UserId = user.Id, RoleId = currentRole.Id })).FirstOrDefault();
+            UserRole currentUserRole = (await database.GetListAsync<UserRole>(new { UserId = user.Id, RoleId = currentRole.Id })).FirstOrDefault();
 
             if (currentUserRole != null)
             {
@@ -185,7 +185,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IdentityUser> FindByEmailAsync(string email)
         {
-            List<SiteUser> siteUsers = await database.GetListAsync<SiteUser>("", new { Email = email });
+            List<SiteUser> siteUsers = await database.GetListAsync<SiteUser>(new { Email = email });
             SiteUser siteUser = siteUsers.FirstOrDefault();
 
             if (siteUser == null)
@@ -198,7 +198,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IList<Claim>> GetClaimsAsync(IdentityUser user)
         {
-            List<UserClaim> userClaims = await database.GetListAsync<UserClaim>("", new { UserId = user.Id });
+            List<UserClaim> userClaims = await database.GetListAsync<UserClaim>(new { UserId = user.Id });
             IList<Claim> claims = userClaims.Select(uc => new Claim(uc.ClaimType, uc.ClaimValue)).ToList();
             return claims;
         }
@@ -217,7 +217,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task RemoveClaimAsync(IdentityUser user, Claim claim)
         {
-            List<UserClaim> userClaims = await database.GetListAsync<UserClaim>("", new { UserId = user.Id });
+            List<UserClaim> userClaims = await database.GetListAsync<UserClaim>(new { UserId = user.Id });
             UserClaim currentClaim = userClaims.Where(uc => uc.ClaimType == claim.Type && uc.ClaimValue == claim.Value).FirstOrDefault();
 
             if (currentClaim != null)
@@ -240,7 +240,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task RemoveLoginAsync(IdentityUser user, UserLoginInfo login)
         {
-            List<UserLogin> userLogins = await database.GetListAsync<UserLogin>("", new { UserId = user.Id, LoginProvider = login.LoginProvider, ProviderKey = login.ProviderKey });
+            List<UserLogin> userLogins = await database.GetListAsync<UserLogin>(new { UserId = user.Id, LoginProvider = login.LoginProvider, ProviderKey = login.ProviderKey });
             UserLogin currentUserLogin = userLogins.FirstOrDefault();
 
             if (currentUserLogin != null)
@@ -251,14 +251,14 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IList<UserLoginInfo>> GetLoginsAsync(IdentityUser user)
         {
-            List<UserLogin> userLogins = await database.GetListAsync<UserLogin>("", new { UserId = user.Id });
+            List<UserLogin> userLogins = await database.GetListAsync<UserLogin>(new { UserId = user.Id });
             IList<UserLoginInfo> loginInfoList = userLogins.Select(ul => new UserLoginInfo(ul.LoginProvider, ul.ProviderKey)).ToList();
             return loginInfoList;
         }
 
         public async Task<IdentityUser> FindAsync(UserLoginInfo login)
         {
-            List<UserLogin> userLogins = await database.GetListAsync<UserLogin>("", new { LoginProvider = login.LoginProvider, ProviderKey = login.ProviderKey });
+            List<UserLogin> userLogins = await database.GetListAsync<UserLogin>(new { LoginProvider = login.LoginProvider, ProviderKey = login.ProviderKey });
             UserLogin currentUserLogin = userLogins.FirstOrDefault();
 
             if (currentUserLogin == null)

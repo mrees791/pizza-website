@@ -77,7 +77,7 @@ namespace PizzaWebsite.Controllers
         [HttpGet]
         public async Task<ActionResult> EditStoreLocation(int? id)
         {
-            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>("", new { Id = id });
+            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(new { Id = id });
             StoreLocation storeLocationRecord = storeLocationRecords.FirstOrDefault();
 
             if (storeLocationRecord != null)
@@ -129,5 +129,30 @@ namespace PizzaWebsite.Controllers
 
             return View(manageStoresVm);
         }
+
+        // OLD VERSION WITHOUT PAGING
+        // todo: Remove
+        /*public async Task<ActionResult> ManageStores(string storeName)
+        {
+            ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
+
+            // Apply filters
+            SearchFilter searchFilter = new SearchFilter();
+            searchFilter.AddFilter("Name", storeName);
+
+            object filterParameters = new
+            {
+                Name = storeName,
+            };
+
+            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(searchFilter, filterParameters);
+
+            foreach (var location in storeLocationRecords)
+            {
+                manageStoresVm.StoreLocationVmList.Add(new StoreLocationViewModel(location));
+            }
+
+            return View(manageStoresVm);
+        }*/
     }
 }

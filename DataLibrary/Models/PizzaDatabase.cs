@@ -31,11 +31,24 @@ namespace DataLibrary.Models
 
         // CRUD Table Operations
 
-        public async Task<List<T>> GetListAsync<T>(string conditions, object parameters)
+        internal async Task<List<T>> GetListAsync<T>(string conditions, object parameters)
         {
             IEnumerable<T> list = await connection.GetListAsync<T>(conditions, parameters);
             return list.ToList();
         }
+
+        public async Task<List<T>> GetListAsync<T>()
+        {
+            IEnumerable<T> list = await connection.GetListAsync<T>("");
+            return list.ToList();
+        }
+
+        public async Task<List<T>> GetListAsync<T>(object parameters)
+        {
+            IEnumerable<T> list = await connection.GetListAsync<T>("", parameters);
+            return list.ToList();
+        }
+
         public async Task<List<T>> GetListAsync<T>(SearchFilter searchFilter, object parameters)
         {
             IEnumerable<T> list = await connection.GetListAsync<T>(searchFilter.GetSqlConditions(), parameters);
