@@ -55,8 +55,15 @@ namespace DataLibrary.Models
             return list.ToList();
         }
 
-        public async Task<List<T>> GetListPagesAsync<T>(int pageNumber, int rowsPerPage, string orderby, string conditions, object parameters)
+        internal async Task<List<T>> GetListPagesAsync<T>(int pageNumber, int rowsPerPage, string orderby, string conditions, object parameters)
         {
+            IEnumerable<T> list = await connection.GetListPagedAsync<T>(pageNumber, rowsPerPage, conditions, orderby, parameters);
+            return list.ToList();
+        }
+
+        public async Task<List<T>> GetListPagesAsync<T>(SearchFilter searchFilter, int pageNumber, int rowsPerPage, string orderby, object parameters)
+        {
+            string conditions = searchFilter.GetSqlConditions();
             IEnumerable<T> list = await connection.GetListPagedAsync<T>(pageNumber, rowsPerPage, conditions, orderby, parameters);
             return list.ToList();
         }
