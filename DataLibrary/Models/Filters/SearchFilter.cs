@@ -29,7 +29,7 @@ namespace DataLibrary.Models.Filters
         /// Creates a where clause used by Dapper's get list conditions parameter.
         /// </summary>
         /// <returns></returns>
-        internal string GetSqlConditions()
+        internal string GetSqlConditionClause()
         {
             int queriesAdded = 0;
             string conditions = string.Empty;

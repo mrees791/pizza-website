@@ -10,7 +10,7 @@
         @using (Html.BeginForm("ManageStores", "ManageWebsite", FormMethod.Get))
         {
             @Html.Hidden("Page", "1")
-            @Html.Hidden("RowsPerPage", "50")
+            @Html.Hidden("RowsPerPage", "10")
             <input type="submit" value="Manage Stores" class="btn btn-default" />
         }
     </p>

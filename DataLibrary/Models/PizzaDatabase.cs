@@ -45,17 +45,38 @@ namespace DataLibrary.Models
 
         public async Task<List<T>> GetListAsync<T>(SearchFilter searchFilter, object parameters)
         {
-            IEnumerable<T> list = await connection.GetListAsync<T>(searchFilter.GetSqlConditions(), parameters);
+            IEnumerable<T> list = await connection.GetListAsync<T>(searchFilter.GetSqlConditionClause(), parameters);
             return list.ToList();
         }
 
-        /*internal async Task<List<T>> GetListPagedAsync<T>(int pageNumber, int rowsPerPage, string orderby, string conditions, object parameters)
+        public async Task<List<T>> GetListPagedAsync<T>(SearchFilter searchFilter, int pageNumber, int rowsPerPage, string orderby, object parameters)
         {
+            string conditions = searchFilter.GetSqlConditionClause();
             IEnumerable<T> list = await connection.GetListPagedAsync<T>(pageNumber, rowsPerPage, conditions, orderby, parameters);
             return list.ToList();
         }
 
-        public async Task<List<T>> GetListPagedAsync<T>(int pageNumber, int rowsPerPage, string orderby, object parameters)
+        public async Task<int> GetNumberOfPagesAsync<T>(SearchFilter searchFilter, int rowsPerPage, object parameters)
+        {
+            if (rowsPerPage == 0)
+            {
+                throw new ArgumentException("rowsPerPage cannot be zero.");
+            }
+            int recordCount = await connection.RecordCountAsync<T>(searchFilter.GetSqlConditionClause(), parameters);
+            if (recordCount == 0)
+            {
+                return 0;
+            }
+            int pages = recordCount / rowsPerPage;
+            int remainder = recordCount % rowsPerPage;
+            if (remainder != 0)
+            {
+                pages += 1;
+            }
+            return pages;
+        }
+
+        /*public async Task<List<T>> GetListPagedAsync<T>(int pageNumber, int rowsPerPage, string orderby, object parameters)
         {
             IEnumerable<T> list = await connection.GetListPagedAsync<T>(pageNumber, rowsPerPage, "", orderby, parameters);
             return list.ToList();

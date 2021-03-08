@@ -118,9 +118,8 @@ namespace PizzaWebsite.Controllers
                 Name = storeName
             };
 
-            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(searchFilter, searchParameters);
-
-            // Apply paging
+            int totalPages = await PizzaDb.GetNumberOfPagesAsync<StoreLocation>(searchFilter, rowsPerPage.Value, searchParameters);
+            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListPagedAsync<StoreLocation>(searchFilter, page.Value, rowsPerPage.Value, "Name", searchParameters);
 
             // Create view model
             ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();

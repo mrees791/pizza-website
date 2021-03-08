@@ -12,7 +12,7 @@
     {
         @Html.Label("StoreName", "Store Name")
         @Html.TextBox("StoreName", Request["StoreName"], new { @class = "form-control" })
-        @Html.Hidden("Page", Request["Page"])
+        @Html.Hidden("Page", "1")
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
         <input type="submit" value="Apply" class="btn btn-default" />
     }
