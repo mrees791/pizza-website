@@ -1,5 +1,6 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.Filters;
+using DataLibrary.Models.Filters.TableFilters;
 using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity.Owin;
 using PizzaWebsite.Models;

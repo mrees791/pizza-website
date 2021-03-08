@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLibrary.Models.Filters
+namespace DataLibrary.Models.Filters.TableFilters
 {
     public class StoreLocationFilter : SearchFilter
     {
