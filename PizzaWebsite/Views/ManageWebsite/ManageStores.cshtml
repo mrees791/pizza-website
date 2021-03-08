@@ -12,6 +12,8 @@
     {
         @Html.Label("StoreName", "Store Name")
         @Html.TextBox("StoreName", Request["StoreName"], new { @class = "form-control" })
+        @Html.Hidden("Page", Request["Page"])
+        @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
         <input type="submit" value="Apply" class="btn btn-default" />
     }
 </p>
@@ -63,14 +65,12 @@
             @Html.DisplayFor(modelItem => item.IsActiveLocation)
         </td>
         <td>
-            @*/
-        @Html.ActionLink("Edit", "EditStoreLocation", new { id=item.Id })
-            *@
-
             @using (Html.BeginForm("EditStoreLocation", "ManageWebsite", FormMethod.Get))
             {
                 @Html.Hidden("Id", item.Id)
                 @Html.Hidden("StoreName", Request["StoreName"])
+                @Html.Hidden("Page", Request["Page"])
+                @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
                 <input type="submit" value="Edit" class="btn btn-default" />
             }
         </td>

@@ -12,6 +12,8 @@
     @using (Html.BeginForm("ManageStores", "ManageWebsite", FormMethod.Get))
     {
         @Html.Hidden("StoreName", Request["StoreName"])
+        @Html.Hidden("Page", Request["Page"])
+        @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
         <input type="submit" value="Back" class="btn btn-default" />
     }
 </div>

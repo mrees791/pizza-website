@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataLibrary.Models.Filters;
 using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
@@ -30,21 +31,21 @@ namespace DataLibrary.Models
 
         // CRUD Table Operations
 
-        internal async Task<List<T>> GetListAsync<T>(string conditions, object parameters)
-        {
-            IEnumerable<T> list = await connection.GetListAsync<T>(conditions, parameters);
-            return list.ToList();
-        }
-
         public async Task<List<T>> GetListAsync<T>()
         {
             IEnumerable<T> list = await connection.GetListAsync<T>();
             return list.ToList();
         }
 
-        public async Task<List<T>> GetListAsync<T>(object parameters)
+        public async Task<List<T>> GetListAsync<T>(object whereConditions)
         {
-            IEnumerable<T> list = await connection.GetListAsync<T>("", parameters);
+            IEnumerable<T> list = await connection.GetListAsync<T>(whereConditions);
+            return list.ToList();
+        }
+
+        public async Task<List<T>> GetListAsync<T>(SearchFilter searchFilter, object parameters)
+        {
+            IEnumerable<T> list = await connection.GetListAsync<T>(searchFilter.GetSqlConditions(), parameters);
             return list.ToList();
         }
 
@@ -54,10 +55,9 @@ namespace DataLibrary.Models
             return list.ToList();
         }
 
-        public async Task<List<T>> GetListPagedAsync<T>(SearchFilter searchFilter, int pageNumber, int rowsPerPage, string orderby, object parameters)
+        public async Task<List<T>> GetListPagedAsync<T>(int pageNumber, int rowsPerPage, string orderby, object parameters)
         {
-            string conditions = searchFilter.GetSqlConditions();
-            IEnumerable<T> list = await connection.GetListPagedAsync<T>(pageNumber, rowsPerPage, conditions, orderby, parameters);
+            IEnumerable<T> list = await connection.GetListPagedAsync<T>(pageNumber, rowsPerPage, "", orderby, parameters);
             return list.ToList();
         }*/
 

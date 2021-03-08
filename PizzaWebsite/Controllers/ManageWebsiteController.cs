@@ -1,4 +1,5 @@
 ﻿using DataLibrary.Models;
+using DataLibrary.Models.Filters;
 using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity.Owin;
 using PizzaWebsite.Models;
@@ -76,7 +77,7 @@ namespace PizzaWebsite.Controllers
         [HttpGet]
         public async Task<ActionResult> EditStoreLocation(int? id)
         {
-            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(new { Id = id });
+            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(new { Id = id.Value });
             StoreLocation storeLocationRecord = storeLocationRecords.FirstOrDefault();
 
             if (storeLocationRecord != null)
@@ -106,7 +107,35 @@ namespace PizzaWebsite.Controllers
             return View(new StoreLocationViewModel());
         }
 
-        public async Task<ActionResult> ManageStores(string storeName)
+        public async Task<ActionResult> ManageStores(string storeName, int? page, int? rowsPerPage)
+        {
+            // Apply filters
+            SearchFilter searchFilter = new SearchFilter();
+            searchFilter.AddFilter("Name", storeName);
+
+            object searchParameters = new
+            {
+                Name = storeName
+            };
+
+            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(searchFilter, searchParameters);
+
+            // Apply paging
+
+            // Create view model
+            ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
+
+            foreach (var location in storeLocationRecords)
+            {
+                manageStoresVm.StoreLocationVmList.Add(new StoreLocationViewModel(location));
+            }
+
+            return View(manageStoresVm);
+        }
+
+        // Old version without paging.
+        // todo: Remove
+        /*public async Task<ActionResult> ManageStores(string storeName)
         {
             List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>();
 
@@ -126,6 +155,6 @@ namespace PizzaWebsite.Controllers
             }
 
             return View(manageStoresVm);
-        }
+        }*/
     }
 }
