@@ -11,10 +11,6 @@ namespace DataLibrary.Models.Filters.TableFilters
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
 
-        public StoreLocationFilter() : base()
-        {
-        }
-
         protected override List<FilterPair> CreateFilterPairs()
         {
             List<FilterPair> filterPairs = new List<FilterPair>();

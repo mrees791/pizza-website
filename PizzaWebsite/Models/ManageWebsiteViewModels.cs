@@ -13,6 +13,10 @@ namespace PizzaWebsite.Models
         public StoreLocationViewModel StoreLocationVm { get; set; }
         public List<StoreLocationViewModel> StoreLocationVmList { get; set; }
 
+        // Navigation pane properties. Will be moved to NavigationPaneViewModel. todo: Move to NavigationPaneViewModel
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+
         public ManageStoresViewModel()
         {
             StoreLocationVmList = new List<StoreLocationViewModel>();

@@ -60,7 +60,7 @@ namespace DataLibrary.Models
         {
             if (rowsPerPage == 0)
             {
-                throw new ArgumentException("rowsPerPage cannot be zero.");
+                return 0;
             }
             int recordCount = await connection.RecordCountAsync<T>(searchFilter.GetSqlConditionClause(), searchFilter);
             if (recordCount == 0)

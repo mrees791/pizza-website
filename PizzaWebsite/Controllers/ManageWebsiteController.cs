@@ -130,6 +130,8 @@ namespace PizzaWebsite.Controllers
 
             // Create view model
             ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
+            manageStoresVm.CurrentPage = page.Value;
+            manageStoresVm.TotalPages = totalPages;
 
             foreach (var location in storeLocationRecords)
             {

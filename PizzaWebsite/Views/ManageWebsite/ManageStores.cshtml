@@ -9,7 +9,7 @@
 <div>
     @using (Html.BeginForm("ManageStores", "ManageWebsite", FormMethod.Get))
     {
-        @Html.Hidden("Page", "1")
+        <input type="hidden" name="Page" value="1" />
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
         @Html.Label("StoreName", "Store Name")
         @Html.TextBox("StoreName", Request["StoreName"], new { @class = "form-control" })
@@ -52,38 +52,52 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model.StoreLocationVmList) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StreetAddress)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.City)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ZipCode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PhoneNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsActiveLocation)
-        </td>
-        <td>
-            @using (Html.BeginForm("EditStoreLocation", "ManageWebsite", FormMethod.Get))
-            {
-                @Html.Hidden("Id", item.Id)
-                @Html.Hidden("Page", Request["Page"])
-                @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
-                @Html.Hidden("StoreName", Request["StoreName"])
-                @Html.Hidden("PhoneNumber", Request["PhoneNumber"])
-                <input type="submit" value="Edit" class="btn btn-default" />
-            }
-        </td>
-    </tr>
-}
-
+    @foreach (var item in Model.StoreLocationVmList)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StreetAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ZipCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActiveLocation)
+            </td>
+            <td>
+                @using (Html.BeginForm("EditStoreLocation", "ManageWebsite", FormMethod.Get))
+                {
+                    @Html.Hidden("Id", item.Id)
+                    @Html.Hidden("Page", Request["Page"])
+                    @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
+                    @Html.Hidden("StoreName", Request["StoreName"])
+                    @Html.Hidden("PhoneNumber", Request["PhoneNumber"])
+                    <input type="submit" value="Edit" class="btn btn-default" />
+                }
+            </td>
+        </tr>
+    }
 </table>
+<!-- Testing navigation partial view -->
+<div>
+    @for (int iPage = 1; iPage <= Model.TotalPages; iPage++)
+    {
+        using (Html.BeginForm("ManageStores", "ManageWebsite", FormMethod.Get, new { style = "display: inline" }))
+        {
+            <input type="hidden" name="Page" value="@iPage"/>
+            @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
+            @Html.Hidden("StoreName", Request["StoreName"])
+            @Html.Hidden("PhoneNumber", Request["PhoneNumber"])
+            <input type="submit" value="@iPage" class="btn btn-default"/>
+        }
+    }
+</div>
