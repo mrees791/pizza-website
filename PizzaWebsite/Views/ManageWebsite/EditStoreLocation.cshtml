@@ -1,19 +1,35 @@
 ﻿@model PizzaWebsite.Models.StoreLocationViewModel
 
 @{
-    ViewBag.Title = "Edit Store";
+    if (Model.IsNewRecord)
+    {
+        ViewBag.Title = "Create Store";
+    }
+    else
+    {
+        ViewBag.Title = "Edit Store";
+    }
 }
-
-<h2>Edit Store</h2>
+@{
+    if (Model.IsNewRecord)
+    {
+        <h2>Create Store</h2>
+    }
+    else
+    {
+        <h2>Edit Store</h2>
+    }
+}
 
 @Html.Partial("_StoreLocationPartial")
 
 <div>
     @using (Html.BeginForm("ManageStores", "ManageWebsite", FormMethod.Get))
     {
-        @Html.Hidden("StoreName", Request["StoreName"])
         @Html.Hidden("Page", Request["Page"])
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
+        @Html.Hidden("StoreName", Request["StoreName"])
+        @Html.Hidden("PhoneNumber", Request["PhoneNumber"])
         <input type="submit" value="Back" class="btn btn-default" />
     }
 </div>

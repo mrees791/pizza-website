@@ -9,21 +9,18 @@ namespace DataLibrary.Models.Filters
     /// <summary>
     /// Used to create an SQL where condition needed by the Dapper get list methods.
     /// </summary>
-    public class SearchFilter
+    public abstract class SearchFilter
     {
-        private List<FilterPair> filterPairs;
-
         public SearchFilter()
         {
-            filterPairs = new List<FilterPair>();
         }
 
-        public void AddFilter(string columnName, string columnValue)
+        protected abstract List<FilterPair> CreateFilterPairs();
+
+        protected void AddFilterPair(List<FilterPair> list, string columnName, string columnValue)
         {
-            filterPairs.Add(new FilterPair(columnName, columnValue));
+            list.Add(new FilterPair(columnName, columnValue));
         }
-
-        internal List<FilterPair> FilterPairs { get => filterPairs; }
 
         /// <summary>
         /// Creates a where clause used by Dapper's get list conditions parameter.
@@ -33,6 +30,8 @@ namespace DataLibrary.Models.Filters
         {
             int queriesAdded = 0;
             string conditions = string.Empty;
+
+            List<FilterPair> filterPairs = CreateFilterPairs();
 
             for (int i = 0; i < filterPairs.Count; i++)
             {

@@ -104,22 +104,28 @@ namespace PizzaWebsite.Controllers
 
         public ActionResult CreateStoreLocation()
         {
-            return View(new StoreLocationViewModel());
+            return View("EditStoreLocation", new StoreLocationViewModel());
         }
 
-        public async Task<ActionResult> ManageStores(string storeName, int? page, int? rowsPerPage)
+        public async Task<ActionResult> ManageStores(int? page, int? rowsPerPage, string storeName, string phoneNumber)
         {
-            // Apply filters
-            SearchFilter searchFilter = new SearchFilter();
-            searchFilter.AddFilter("Name", storeName);
-
-            object searchParameters = new
+            // Set default values
+            if (!page.HasValue)
             {
-                Name = storeName
-            };
+                page = 1;
+            }
+            if (!rowsPerPage.HasValue)
+            {
+                rowsPerPage = 10;
+            }
 
-            int totalPages = await PizzaDb.GetNumberOfPagesAsync<StoreLocation>(searchFilter, rowsPerPage.Value, searchParameters);
-            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListPagedAsync<StoreLocation>(searchFilter, page.Value, rowsPerPage.Value, "Name", searchParameters);
+            // Apply search filters
+            StoreLocationFilter searchFilter = new StoreLocationFilter();
+            searchFilter.Name = storeName;
+            searchFilter.PhoneNumber = phoneNumber;
+
+            int totalPages = await PizzaDb.GetNumberOfPagesAsync<StoreLocation>(searchFilter, rowsPerPage.Value);
+            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListPagedAsync<StoreLocation>(searchFilter, page.Value, rowsPerPage.Value, "Name");
 
             // Create view model
             ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
@@ -131,29 +137,5 @@ namespace PizzaWebsite.Controllers
 
             return View(manageStoresVm);
         }
-
-        // Old version without paging.
-        // todo: Remove
-        /*public async Task<ActionResult> ManageStores(string storeName)
-        {
-            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>();
-
-            // Apply filters
-            if (storeName != null)
-            {
-                storeName = storeName.ToLower();
-                storeLocationRecords = storeLocationRecords.Where(r => r.Name.ToLower().Contains(storeName)).ToList();
-            }
-
-            // Create view model
-            ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
-
-            foreach (var location in storeLocationRecords)
-            {
-                manageStoresVm.StoreLocationVmList.Add(new StoreLocationViewModel(location));
-            }
-
-            return View(manageStoresVm);
-        }*/
     }
 }
