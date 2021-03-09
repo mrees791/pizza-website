@@ -130,8 +130,29 @@ namespace PizzaWebsite.Controllers
 
             // Create view model
             ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
+
+            // Navigation pane
             manageStoresVm.CurrentPage = page.Value;
             manageStoresVm.TotalPages = totalPages;
+
+            int maxPagesListed = 5;
+
+            /*if (page.Value > 0 && page.Value <= manageStoresVm.TotalPages)
+            {
+                if (page.Value == 1)
+                {
+                    for (int iPage = 1; iPage <= manageStoresVm.TotalPages && iPage < page.Value + maxPagesListed; iPage++)
+                    {
+                        manageStoresVm.PageRange.Add(iPage);
+                    }
+                }
+                // Others needed
+            }*/
+
+            if (manageStoresVm.PageRange.Count() < maxPagesListed)
+            {
+                manageStoresVm.PageRange.Add(manageStoresVm.TotalPages);
+            }
 
             foreach (var location in storeLocationRecords)
             {

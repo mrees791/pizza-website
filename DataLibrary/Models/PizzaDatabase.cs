@@ -45,13 +45,13 @@ namespace DataLibrary.Models
 
         public async Task<List<T>> GetListAsync<T>(SearchFilter searchFilter, object parameters)
         {
-            IEnumerable<T> list = await connection.GetListAsync<T>(searchFilter.GetSqlConditionClause(), parameters);
+            IEnumerable<T> list = await connection.GetListAsync<T>(searchFilter.GetSqlWhereFilterClause(), parameters);
             return list.ToList();
         }
 
         public async Task<List<T>> GetListPagedAsync<T>(SearchFilter searchFilter, int pageNumber, int rowsPerPage, string orderby)
         {
-            string conditions = searchFilter.GetSqlConditionClause();
+            string conditions = searchFilter.GetSqlWhereFilterClause();
             IEnumerable<T> list = await connection.GetListPagedAsync<T>(pageNumber, rowsPerPage, conditions, orderby, searchFilter);
             return list.ToList();
         }
@@ -62,7 +62,7 @@ namespace DataLibrary.Models
             {
                 return 0;
             }
-            int recordCount = await connection.RecordCountAsync<T>(searchFilter.GetSqlConditionClause(), searchFilter);
+            int recordCount = await connection.RecordCountAsync<T>(searchFilter.GetSqlWhereFilterClause(), searchFilter);
             if (recordCount == 0)
             {
                 return 0;

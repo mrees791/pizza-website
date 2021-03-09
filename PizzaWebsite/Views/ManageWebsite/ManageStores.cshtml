@@ -87,17 +87,25 @@
         </tr>
     }
 </table>
-<!-- Testing navigation partial view -->
-<div>
-    @for (int iPage = 1; iPage <= Model.TotalPages; iPage++)
-    {
-        using (Html.BeginForm("ManageStores", "ManageWebsite", FormMethod.Get, new { style = "display: inline" }))
-        {
-            <input type="hidden" name="Page" value="@iPage"/>
-            @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
-            @Html.Hidden("StoreName", Request["StoreName"])
-            @Html.Hidden("PhoneNumber", Request["PhoneNumber"])
-            <input type="submit" value="@iPage" class="btn btn-default"/>
-        }
-    }
+
+<!-- todo: Remove pagination test code -->
+<!-- Testing Pagination -->
+<div id="manageStoresPagination">
+
 </div>
+<!-- Testing navigation partial view -->
+@*/
+    <div>
+        @foreach (int iPage in Model.PageRange)
+        {
+            using (Html.BeginForm("ManageStores", "ManageWebsite", FormMethod.Get, new { style = "display: inline" }))
+            {
+                <input type="hidden" name="Page" value="@iPage"/>
+                @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
+                @Html.Hidden("StoreName", Request["StoreName"])
+                @Html.Hidden("PhoneNumber", Request["PhoneNumber"])
+                <input type="submit" value="@iPage" class="btn btn-default"/>
+            }
+        }
+    </div>
+*@

@@ -1,61 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Filters
 {
     /// <summary>
-    /// Used to create an SQL where condition needed by the Dapper get list methods.
+    /// Used to create an SQL where condition clause needed by the Dapper get list methods.
     /// </summary>
     public abstract class SearchFilter
     {
-        public SearchFilter()
-        {
-        }
-
-        protected abstract List<FilterPair> CreateFilterPairs();
-
-        protected void AddFilterPair(List<FilterPair> list, string columnName, string columnValue)
-        {
-            list.Add(new FilterPair(columnName, columnValue));
-        }
-
         /// <summary>
-        /// Creates a where clause used by Dapper's get list conditions parameter.
+        /// Creates a where clause which can be used to run queries with filters using the like operator.
+        /// This is used by Simple Dapper's get list methods.
         /// </summary>
-        /// <returns></returns>
-        internal string GetSqlConditionClause()
+        /// <returns>An SQL where clause.</returns>
+        internal string GetSqlWhereFilterClause()
         {
             int queriesAdded = 0;
-            string conditions = string.Empty;
+            string sqlWhereClause = string.Empty;
 
-            List<FilterPair> filterPairs = CreateFilterPairs();
-
-            for (int i = 0; i < filterPairs.Count; i++)
+            foreach (PropertyInfo propertyInfo in GetType().GetProperties())
             {
-                FilterPair currentPair = filterPairs[i];
+                Type propertyType = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
 
-                if (currentPair.ColumnValue != null)
+                object propertyValue = propertyInfo.GetValue(this);
+
+                if (propertyValue != null)
                 {
+                    string columnName = propertyInfo.Name;
+
                     if (queriesAdded == 0)
                     {
-                        conditions += "where ";
+                        sqlWhereClause += "where ";
                     }
                     else
                     {
-                        conditions += "and ";
+                        sqlWhereClause += "and ";
                     }
 
                     // Only uses the column name with a placeholder to avoid SQL injections.
                     // The column name variable is never set by user input.
-                    conditions += $"{currentPair.ColumnName} like '%' + @{currentPair.ColumnName} + '%'";
+                    sqlWhereClause += $"{columnName} like '%' + @{columnName} + '%'";
                     queriesAdded++;
                 }
             }
 
-            return conditions;
+            return sqlWhereClause;
         }
     }
 }
