@@ -7,11 +7,8 @@
 
 <ul>
     <li>
-        @using (Html.BeginForm("ManageStores", "ManageWebsite", FormMethod.Get))
-        {
-            @Html.Hidden("Page", "1")
-            @Html.Hidden("RowsPerPage", "10")
-            <input type="submit" value="Manage Stores" class="btn btn-default" />
-        }
+        <a href="@Url.Action("ManageStores", "ManageWebsite")?Page=1&RowsPerPage=10">
+            <input type="button" value="Manage Stores" class="btn btn-default" />
+        </a>
     </li>
 </ul>

@@ -66,13 +66,19 @@ namespace PizzaWebsite.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditStoreLocation(StoreLocationViewModel model)
         {
+            model.IsNewRecord = false;
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View("CreateEditStoreLocation", model);
             }
 
             PizzaDb.Update(model.ToDbModel());
-            return RedirectToAction(nameof(ManageStores));
+
+            ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
+            confirmationModel.ConfirmationMessage = $"Your changes to {model.Name} have been confirmed.";
+            confirmationModel.ReturnUrlAction = $"{Url.Action("ManageStores")}?{Request.QueryString}";
+
+            return View("CreateEditConfirmation", confirmationModel);
         }
 
         public async Task<ActionResult> EditStoreLocation(int? id)
@@ -83,9 +89,10 @@ namespace PizzaWebsite.Controllers
             if (storeLocationRecord != null)
             {
                 StoreLocationViewModel storeLocationVm = new StoreLocationViewModel(storeLocationRecord);
-                return View(storeLocationVm);
+                return View("CreateEditStoreLocation", storeLocationVm);
             }
 
+            // todo: Fix
             throw new NotImplementedException();
         }
 
@@ -95,16 +102,22 @@ namespace PizzaWebsite.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View("CreateEditStoreLocation", model);
             }
 
             PizzaDb.Insert(model.ToDbModel());
-            return RedirectToAction(nameof(ManageStores));
+
+            ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
+            confirmationModel.ConfirmationMessage = $"{model.Name} has been added to the database.";
+            confirmationModel.ReturnUrlAction = $"{Url.Action("ManageStores")}?{Request.QueryString}";
+
+            return View("CreateEditConfirmation", confirmationModel);
         }
 
         public ActionResult CreateStoreLocation()
         {
-            return View("EditStoreLocation", new StoreLocationViewModel());
+            StoreLocationViewModel model = new StoreLocationViewModel();
+            return View("CreateEditStoreLocation", model);
         }
 
         public async Task<ActionResult> ManageStores(int? page, int? rowsPerPage, string storeName, string phoneNumber)
@@ -131,8 +144,8 @@ namespace PizzaWebsite.Controllers
             ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
 
             // Navigation pane
-            manageStoresVm.CurrentPage = page.Value;
-            manageStoresVm.TotalPages = totalPages;
+            //manageStoresVm.CurrentPage = page.Value;
+            //manageStoresVm.TotalPages = totalPages;
 
             int maxPagesListed = 5;
 
@@ -148,10 +161,10 @@ namespace PizzaWebsite.Controllers
                 // Others needed
             }*/
 
-            if (manageStoresVm.PageRange.Count() < maxPagesListed)
+            /*if (manageStoresVm.PageRange.Count() < maxPagesListed)
             {
                 manageStoresVm.PageRange.Add(manageStoresVm.TotalPages);
-            }
+            }*/
 
             foreach (var location in storeLocationRecords)
             {
