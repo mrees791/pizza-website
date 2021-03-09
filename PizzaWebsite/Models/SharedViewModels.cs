@@ -5,9 +5,11 @@ using System.Web;
 
 namespace PizzaWebsite.Models
 {
-    public class PageNavigationViewModel
+    // todo: Finish or remove if not needed.
+    public class PaginationViewModel
     {
+        public int NumberOfItems { get; set; }
+        public int ItemsOnPage { get; set; }
         public int CurrentPage { get; set; }
-        // todo: Finish or remove if not needed.
     }
 }

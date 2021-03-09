@@ -35,14 +35,11 @@ namespace PizzaWebsite.Models
     {
         public StoreLocationViewModel()
         {
-            IsNewRecord = true;
-            IsActiveLocation = true;
             StateList = StateListCreator.CreateStateList();
         }
 
         public StoreLocationViewModel(StoreLocation dbRecord) : this()
         {
-            IsNewRecord = false;
             Id = dbRecord.Id;
             Name = dbRecord.Name;
             StreetAddress = dbRecord.StreetAddress;
@@ -53,7 +50,6 @@ namespace PizzaWebsite.Models
             IsActiveLocation = dbRecord.IsActiveLocation;
         }
 
-        public bool IsNewRecord { get; set; }
         public List<State> StateList { get; set; }
         public int Id { get; set; }
 
@@ -102,6 +98,11 @@ namespace PizzaWebsite.Models
                 PhoneNumber = PhoneNumber,
                 IsActiveLocation = IsActiveLocation
             };
+        }
+
+        public bool IsNewRecord()
+        {
+            return Id == 0;
         }
     }
 }

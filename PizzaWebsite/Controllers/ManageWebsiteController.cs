@@ -66,7 +66,6 @@ namespace PizzaWebsite.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditStoreLocation(StoreLocationViewModel model)
         {
-            model.IsNewRecord = false;
             if (!ModelState.IsValid)
             {
                 return View("CreateEditStoreLocation", model);

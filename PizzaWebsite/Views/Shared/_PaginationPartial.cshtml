@@ -1,0 +1,18 @@
+﻿@model PizzaWebsite.Models.PaginationViewModel
+<div id="pagination">
+
+</div>
+@section Scripts {
+    <script>
+        $(function () {
+            $("#pagination").pagination({
+                items: 100,
+                itemsOnPage: 10,
+                currentPage: '@Request["Page"]',
+                hrefTextPrefix: '?Page=',
+                hrefTextSuffix: '@Request.QueryString',
+                cssStyle: 'light-theme'
+            });
+        });
+    </script>
+}
