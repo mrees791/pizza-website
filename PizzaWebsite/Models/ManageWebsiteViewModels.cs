@@ -8,6 +8,12 @@ using System.Web;
 
 namespace PizzaWebsite.Models
 {
+    public class ErrorViewModel
+    {
+        public string ErrorMessage { get; set; }
+        public string ReturnUrlAction { get; set; }
+    }
+
     public class ConfirmationViewModel
     {
         public string ConfirmationMessage { get; set; }
