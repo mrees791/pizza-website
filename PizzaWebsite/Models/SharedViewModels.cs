@@ -8,6 +8,6 @@ namespace PizzaWebsite.Models
     public class PageNavigationViewModel
     {
         public int CurrentPage { get; set; }
-        // todo: Finish
+        // todo: Finish or remove if not needed.
     }
 }

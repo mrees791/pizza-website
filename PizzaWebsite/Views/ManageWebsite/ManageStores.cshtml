@@ -20,14 +20,9 @@
 </div>
 
 <div>
-    @using (Html.BeginForm("CreateStoreLocation", "ManageWebsite", FormMethod.Get))
-    {
-        @Html.Hidden("Page", Request["Page"])
-        @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
-        @Html.Hidden("StoreName", Request["StoreName"])
-        @Html.Hidden("PhoneNumber", Request["PhoneNumber"])
-        <input type="submit" value="Create New Store" class="btn btn-default" />
-    }
+    <a href="@Url.Action("CreateStoreLocation", "ManageWebsite")?@(Request.QueryString)">
+        <input type="button" value="Create New Store" class="btn btn-default" />
+    </a>
 </div>
 <table class="table">
     <tr>
@@ -74,15 +69,9 @@
                 @Html.DisplayFor(modelItem => item.IsActiveLocation)
             </td>
             <td>
-                @using (Html.BeginForm("EditStoreLocation", "ManageWebsite", FormMethod.Get))
-                {
-                    @Html.Hidden("Id", item.Id)
-                    @Html.Hidden("Page", Request["Page"])
-                    @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
-                    @Html.Hidden("StoreName", Request["StoreName"])
-                    @Html.Hidden("PhoneNumber", Request["PhoneNumber"])
-                    <input type="submit" value="Edit" class="btn btn-default" />
-                }
+                <a href="@Url.Action("EditStoreLocation", "ManageWebsite")/@item.Id?@(Request.QueryString)">
+                    <input type="button" value="Edit" class="btn btn-default" />
+                </a>
             </td>
         </tr>
     }

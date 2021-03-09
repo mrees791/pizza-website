@@ -24,12 +24,7 @@
 @Html.Partial("_StoreLocationPartial")
 
 <div>
-    @using (Html.BeginForm("ManageStores", "ManageWebsite", FormMethod.Get))
-    {
-        @Html.Hidden("Page", Request["Page"])
-        @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
-        @Html.Hidden("StoreName", Request["StoreName"])
-        @Html.Hidden("PhoneNumber", Request["PhoneNumber"])
-        <input type="submit" value="Back" class="btn btn-default" />
-    }
+    <a href="@Url.Action("ManageStores", "ManageWebsite")?@(Request.QueryString)">
+        <input type="button" value="Back" class="btn btn-default" />
+    </a>
 </div>

@@ -75,7 +75,6 @@ namespace PizzaWebsite.Controllers
             return RedirectToAction(nameof(ManageStores));
         }
 
-        [HttpGet]
         public async Task<ActionResult> EditStoreLocation(int? id)
         {
             List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(new { Id = id.Value });
