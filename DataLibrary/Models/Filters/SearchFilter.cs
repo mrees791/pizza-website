@@ -25,7 +25,6 @@ namespace DataLibrary.Models.Filters
             foreach (PropertyInfo propertyInfo in GetType().GetProperties())
             {
                 Type propertyType = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
-
                 object propertyValue = propertyInfo.GetValue(this);
 
                 if (propertyValue != null)
