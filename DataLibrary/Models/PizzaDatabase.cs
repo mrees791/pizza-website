@@ -56,13 +56,19 @@ namespace DataLibrary.Models
             return list.ToList();
         }
 
+        public async Task<int> GetNumberOfRecords<T>(SearchFilter searchFilter)
+        {
+            int recordCount = await connection.RecordCountAsync<T>(searchFilter.GetSqlWhereFilterClause(), searchFilter);
+            return recordCount;
+        }
+
         public async Task<int> GetNumberOfPagesAsync<T>(SearchFilter searchFilter, int rowsPerPage)
         {
             if (rowsPerPage == 0)
             {
                 return 0;
             }
-            int recordCount = await connection.RecordCountAsync<T>(searchFilter.GetSqlWhereFilterClause(), searchFilter);
+            int recordCount = await GetNumberOfRecords<T>(searchFilter);
             if (recordCount == 0)
             {
                 return 0;

@@ -147,6 +147,7 @@ namespace PizzaWebsite.Controllers
             searchFilter.Name = storeName;
             searchFilter.PhoneNumber = phoneNumber;
 
+            int totalNumberOfItems = await PizzaDb.GetNumberOfRecords<StoreLocation>(searchFilter);
             int totalPages = await PizzaDb.GetNumberOfPagesAsync<StoreLocation>(searchFilter, rowsPerPage.Value);
             List<StoreLocation> storeLocationRecords = await PizzaDb.GetListPagedAsync<StoreLocation>(searchFilter, page.Value, rowsPerPage.Value, "Name");
 
@@ -154,10 +155,12 @@ namespace PizzaWebsite.Controllers
             ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
 
             // Navigation pane
-            //manageStoresVm.CurrentPage = page.Value;
-            //manageStoresVm.TotalPages = totalPages;
+            manageStoresVm.PaginationVm.QueryString = Request.QueryString;
+            manageStoresVm.PaginationVm.CurrentPage = page.Value;
+            manageStoresVm.PaginationVm.RowsPerPage = rowsPerPage.Value;
+            manageStoresVm.PaginationVm.TotalPages = totalPages;
+            manageStoresVm.PaginationVm.TotalNumberOfItems = totalNumberOfItems;
 
-            int maxPagesListed = 5;
 
             /*if (page.Value > 0 && page.Value <= manageStoresVm.TotalPages)
             {

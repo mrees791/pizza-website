@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
 
 namespace PizzaWebsite.Models
 {
-    // todo: Finish or remove if not needed.
     public class PaginationViewModel
     {
-        public int NumberOfItems { get; set; }
-        public int ItemsOnPage { get; set; }
+        public int TotalPages { get; set; }
+        public int RowsPerPage { get; set; }
         public int CurrentPage { get; set; }
+        public int TotalNumberOfItems { get; set; }
+        public NameValueCollection QueryString { get; set; }
     }
 }
