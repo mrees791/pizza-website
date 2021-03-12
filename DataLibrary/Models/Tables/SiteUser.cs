@@ -12,7 +12,9 @@ namespace DataLibrary.Models.Tables
     {
         [Key]
         public int Id { get; set; }
+        [ReadOnly(true)]
         public int CurrentCartId { get; set; }
+        [ReadOnly(true)]
         public int ConfirmOrderCartId { get; set; }
         public int OrderConfirmationId { get; set; }
         public bool IsBanned { get; set; }
@@ -27,6 +29,7 @@ namespace DataLibrary.Models.Tables
         public DateTime LockoutEndDateUtc { get; set; }
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
+        [ReadOnly(true)]
         public string UserName { get; set; }
     }
 }

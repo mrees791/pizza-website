@@ -59,6 +59,15 @@ namespace PizzaWebsite.Controllers
         {
             return View();
         }
+        public async Task<ActionResult> EditStoreLocation(int? id)
+        {
+            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(new { Id = id.Value });
+            StoreLocation storeLocation = storeLocationRecords.FirstOrDefault();
+
+            ManageStoreLocationViewModel storeLocationVm = new ManageStoreLocationViewModel();
+            storeLocationVm.FromDbModel(storeLocation);
+            return View("CreateEditStoreLocation", storeLocationVm);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -78,14 +87,38 @@ namespace PizzaWebsite.Controllers
             return View("CreateEditConfirmation", confirmationModel);
         }
 
-        public async Task<ActionResult> EditStoreLocation(int? id)
+        public async Task<ActionResult> ManageUser(int? id)
         {
-            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(new { Id = id.Value });
-            StoreLocation storeLocation = storeLocationRecords.FirstOrDefault();
+            List<SiteUser> userRecords = await PizzaDb.GetListAsync<SiteUser>(new { Id = id.Value });
+            SiteUser user = userRecords.FirstOrDefault();
 
-            ManageStoreLocationViewModel storeLocationVm = new ManageStoreLocationViewModel();
-            storeLocationVm.FromDbModel(storeLocation);
-            return View("CreateEditStoreLocation", storeLocationVm);
+            ManageUserViewModel manageUserVm = new ManageUserViewModel();
+            manageUserVm.FromDbModel(user);
+            return View("ManageUser", manageUserVm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ManageUser(ManageUserViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("ManageUser", model);
+            }
+
+            // Find user record
+            List<SiteUser> userRecords = await PizzaDb.GetListAsync<SiteUser>(new { Id = model.Id });
+            SiteUser user = userRecords.FirstOrDefault();
+
+            // Update user record
+            user.IsBanned = model.IsBanned;
+            PizzaDb.Update(user);
+
+            ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
+            confirmationModel.ConfirmationMessage = $"Your changes to {model.UserName} have been confirmed.";
+            confirmationModel.ReturnUrlAction = $"{Url.Action("ManageUsers")}?{Request.QueryString}";
+
+            return View("CreateEditConfirmation", confirmationModel);
         }
 
         [HttpPost]

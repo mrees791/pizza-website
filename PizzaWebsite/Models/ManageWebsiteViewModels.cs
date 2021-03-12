@@ -22,10 +22,6 @@ namespace PizzaWebsite.Models
         public string ReturnUrlAction { get; set; }
     }
 
-    /// <summary>
-    /// A base view model for managing a single item in the pizza database.
-    /// </summary>
-    /// <typeparam name="T">DataLibrary equivalent.</typeparam>
     public abstract class ManageViewModelBase<T> : IDatabaseRecordConverter<T> where T : class, new()
     {
         public ManageViewModelBase()
@@ -85,12 +81,10 @@ namespace PizzaWebsite.Models
 
     public class ManageUserViewModel : ManageViewModelBase<SiteUser>
     {
-        private SiteUser dbModel;
-
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
         [Display(Name = "User Name")]
-        public string UserName { get; private set; }
+        public string UserName { get; set; }
 
         [Display(Name = "Email")]
         public string Email { get; set; }
@@ -105,8 +99,7 @@ namespace PizzaWebsite.Models
 
         public override void FromDbModel(SiteUser dbModel)
         {
-            this.dbModel = dbModel;
-
+            Id = dbModel.Id;
             UserName = dbModel.UserName;
             Email = dbModel.Email;
             IsBanned = dbModel.IsBanned;
@@ -117,6 +110,8 @@ namespace PizzaWebsite.Models
             return new SiteUser()
             {
                 Id = Id,
+                UserName = UserName,
+                Email = Email,
                 IsBanned = IsBanned
             };
         }
@@ -130,7 +125,7 @@ namespace PizzaWebsite.Models
         }
 
         public List<State> StateList { get; set; }
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
         [Required]
         [Display(Name = "Store Name")]

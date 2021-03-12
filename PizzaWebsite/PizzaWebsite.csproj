@@ -249,6 +249,7 @@
     <Content Include="Views\ManageWebsite\CreateEditConfirmation.cshtml" />
     <Content Include="Views\ManageWebsite\Error.cshtml" />
     <Content Include="Views\ManageWebsite\ManageUsers.cshtml" />
+    <Content Include="Views\ManageWebsite\ManageUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
