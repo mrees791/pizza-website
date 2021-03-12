@@ -23,6 +23,21 @@ namespace PizzaWebsite.Models
         public string ReturnUrlAction { get; set; }
     }
 
+    /// <summary>
+    /// A base view model for managing a single item in the pizza database.
+    /// </summary>
+    /// <typeparam name="T">DataLibrary equivalent.</typeparam>
+    public abstract class ManageViewModelBase<T> : IDatabaseRecordConverter<T> where T : class, new()
+    {
+        public ManageViewModelBase()
+        {
+
+        }
+
+        public abstract void FromDbModel(T dbModel);
+        public abstract T ToDbModel();
+    }
+
     // T is ViewModel class, U is DataLibrary equivalent, V is the filter class
     // todo: Update documentation here.
     public class ManageListViewModel<T, U, V> where U : class, new() where T : ManageViewModelBase<U>, new() where V : SearchFilter, new()
@@ -71,18 +86,7 @@ namespace PizzaWebsite.Models
         }
     }
 
-    public abstract class ManageViewModelBase<T> : IDatabaseRecordConverter<T> where T : class, new()
-    {
-        public ManageViewModelBase()
-        {
-
-        }
-
-        public abstract void FromDbModel(T dbModel);
-        public abstract T ToDbModel();
-    }
-
-    public class StoreLocationViewModel : ManageViewModelBase<DataLibrary.Models.Tables.StoreLocation>
+    public class StoreLocationViewModel : ManageViewModelBase<StoreLocation>
     {
         public StoreLocationViewModel()
         {
