@@ -86,9 +86,9 @@ namespace PizzaWebsite.Models
         }
     }
 
-    public class StoreLocationViewModel : ManageViewModelBase<StoreLocation>
+    public class ManageStoreLocationViewModel : ManageViewModelBase<StoreLocation>
     {
-        public StoreLocationViewModel()
+        public ManageStoreLocationViewModel()
         {
             StateList = StateListCreator.CreateStateList();
         }

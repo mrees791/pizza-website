@@ -64,7 +64,7 @@ namespace PizzaWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditStoreLocation(StoreLocationViewModel model)
+        public ActionResult EditStoreLocation(ManageStoreLocationViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -102,14 +102,14 @@ namespace PizzaWebsite.Controllers
                 return View("Error", errorModel);
             }
 
-            StoreLocationViewModel storeLocationVm = new StoreLocationViewModel();
+            ManageStoreLocationViewModel storeLocationVm = new ManageStoreLocationViewModel();
             storeLocationVm.FromDbModel(storeLocation);
             return View("CreateEditStoreLocation", storeLocationVm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateStoreLocation(StoreLocationViewModel model)
+        public ActionResult CreateStoreLocation(ManageStoreLocationViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -127,13 +127,13 @@ namespace PizzaWebsite.Controllers
 
         public ActionResult CreateStoreLocation()
         {
-            StoreLocationViewModel model = new StoreLocationViewModel();
+            ManageStoreLocationViewModel model = new ManageStoreLocationViewModel();
             return View("CreateEditStoreLocation", model);
         }
 
         public async Task<ActionResult> ManageStores(int? page, int? rowsPerPage, string storeName, string phoneNumber)
         {
-            var manageStoresVm = new ManageListViewModel<StoreLocationViewModel, StoreLocation, StoreLocationFilter>();
+            var manageStoresVm = new ManageListViewModel<ManageStoreLocationViewModel, StoreLocation, StoreLocationFilter>();
 
             // Apply search filters
             manageStoresVm.SearchFilter.Name = storeName;
@@ -143,5 +143,18 @@ namespace PizzaWebsite.Controllers
 
             return View(manageStoresVm);
         }
+
+        /*public async Task<ActionResult> ManageUsers(int? page, int? rowsPerPage)
+        {
+            var manageStoresVm = new ManageListViewModel<ManageStoreLocationViewModel, SiteUser, SiteUserFilter>();
+
+            // Apply search filters
+            manageStoresVm.SearchFilter.Name = storeName;
+            manageStoresVm.SearchFilter.PhoneNumber = phoneNumber;
+
+            await manageStoresVm.LoadViewModelRecordsAsync(PizzaDb, Request, page, rowsPerPage, "Name");
+
+            return View(manageStoresVm);
+        }*/
     }
 }

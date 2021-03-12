@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Filters\SearchFilter.cs" />
+    <Compile Include="Models\Filters\TableFilters\SiteUserFilter.cs" />
     <Compile Include="Models\Filters\TableFilters\StoreLocationFilter.cs" />
     <Compile Include="Models\PizzaDatabase.cs" />
     <Compile Include="Models\Tables\Cart.cs" />
