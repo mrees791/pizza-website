@@ -1,5 +1,4 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.Filters;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Models.Geography;
 using System;
@@ -40,21 +39,19 @@ namespace PizzaWebsite.Models
 
     // T is ViewModel class, U is DataLibrary equivalent, V is the filter class
     // todo: Update documentation here.
-    public class ManageListViewModel<T, U, V> where U : class, new() where T : ManageViewModelBase<U>, new() where V : SearchFilter, new()
+    public class ManageListViewModel<T, U> where U : class, new() where T : ManageViewModelBase<U>, new()
     {
         public T ItemViewModel { get; set; }
         public List<T> ItemViewModelList { get; set; }
         public PaginationViewModel PaginationVm { get; set; }
-        public V SearchFilter { get; set; }
 
         public ManageListViewModel()
         {
             ItemViewModelList = new List<T>();
             PaginationVm = new PaginationViewModel();
-            SearchFilter = new V();
         }
 
-        public async Task LoadViewModelRecordsAsync(PizzaDatabase database, HttpRequestBase request, int? page, int? rowsPerPage, string sortColumnName)
+        public async Task LoadViewModelRecordsAsync(PizzaDatabase database, HttpRequestBase request, int? page, int? rowsPerPage, string sortColumnName, object searchFilters)
         {
             // Set default values
             if (!page.HasValue)
@@ -66,9 +63,9 @@ namespace PizzaWebsite.Models
                 rowsPerPage = 10;
             }
 
-            int totalNumberOfItems = await database.GetNumberOfRecords<U>(SearchFilter);
-            int totalPages = await database.GetNumberOfPagesAsync<U>(SearchFilter, rowsPerPage.Value);
-            List<U> databaseRecords = await database.GetListPagedAsync<U>(SearchFilter, page.Value, rowsPerPage.Value, sortColumnName);
+            int totalNumberOfItems = await database.GetNumberOfRecords<U>(searchFilters);
+            int totalPages = await database.GetNumberOfPagesAsync<U>(searchFilters, rowsPerPage.Value);
+            List<U> databaseRecords = await database.GetListPagedAsync<U>(searchFilters, page.Value, rowsPerPage.Value, sortColumnName);
 
             // Navigation pane
             PaginationVm.QueryString = request.QueryString;

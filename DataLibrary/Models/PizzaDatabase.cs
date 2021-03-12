@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using DataLibrary.Models.Filters;
 using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
@@ -7,6 +6,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,26 +43,26 @@ namespace DataLibrary.Models
             return list.ToList();
         }
 
-        public async Task<List<T>> GetListAsync<T>(SearchFilter searchFilter, object parameters) where T : class
+        public async Task<List<T>> GetListAsync<T>(object searchFilter, object parameters) where T : class
         {
-            IEnumerable<T> list = await connection.GetListAsync<T>(searchFilter.GetSqlWhereFilterClause(), parameters);
+            IEnumerable<T> list = await connection.GetListAsync<T>(GetSqlWhereFilterClause(searchFilter), parameters);
             return list.ToList();
         }
 
-        public async Task<List<T>> GetListPagedAsync<T>(SearchFilter searchFilter, int pageNumber, int rowsPerPage, string orderby) where T : class
+        public async Task<List<T>> GetListPagedAsync<T>(object searchFilter, int pageNumber, int rowsPerPage, string orderby) where T : class
         {
-            string conditions = searchFilter.GetSqlWhereFilterClause();
+            string conditions = GetSqlWhereFilterClause(searchFilter);
             IEnumerable<T> list = await connection.GetListPagedAsync<T>(pageNumber, rowsPerPage, conditions, orderby, searchFilter);
             return list.ToList();
         }
 
-        public async Task<int> GetNumberOfRecords<T>(SearchFilter searchFilter)
+        public async Task<int> GetNumberOfRecords<T>(object searchFilter)
         {
-            int recordCount = await connection.RecordCountAsync<T>(searchFilter.GetSqlWhereFilterClause(), searchFilter);
+            int recordCount = await connection.RecordCountAsync<T>(GetSqlWhereFilterClause(searchFilter), searchFilter);
             return recordCount;
         }
 
-        public async Task<int> GetNumberOfPagesAsync<T>(SearchFilter searchFilter, int rowsPerPage)
+        public async Task<int> GetNumberOfPagesAsync<T>(object searchFilter, int rowsPerPage)
         {
             if (rowsPerPage == 0)
             {
@@ -82,11 +82,44 @@ namespace DataLibrary.Models
             return pages;
         }
 
-        /*public async Task<List<T>> GetListPagedAsync<T>(int pageNumber, int rowsPerPage, string orderby, object parameters)
+        /// <summary>
+        /// Creates a where clause which can be used to run queries with filters using the like operator.
+        /// This is used by Simple Dapper's get list methods.
+        /// </summary>
+        /// <param name="searchFilter"></param>
+        /// <returns>An SQL where clause.</returns>
+        internal string GetSqlWhereFilterClause(object searchFilter)
         {
-            IEnumerable<T> list = await connection.GetListPagedAsync<T>(pageNumber, rowsPerPage, "", orderby, parameters);
-            return list.ToList();
-        }*/
+            int queriesAdded = 0;
+            string sqlWhereClause = string.Empty;
+
+            foreach (PropertyInfo propertyInfo in searchFilter.GetType().GetProperties())
+            {
+                Type propertyType = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
+                object propertyValue = propertyInfo.GetValue(searchFilter);
+
+                if (propertyValue != null)
+                {
+                    string columnName = propertyInfo.Name;
+
+                    if (queriesAdded == 0)
+                    {
+                        sqlWhereClause += "where ";
+                    }
+                    else
+                    {
+                        sqlWhereClause += "and ";
+                    }
+
+                    // Only uses the column name with a placeholder to avoid SQL injections.
+                    // The column name variable is never set by user input.
+                    sqlWhereClause += $"{columnName} like '%' + @{columnName} + '%'";
+                    queriesAdded++;
+                }
+            }
+
+            return sqlWhereClause;
+        }
 
         // Cart CRUD
         private int InsertCart(IDbTransaction transaction = null)

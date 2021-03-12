@@ -1,6 +1,4 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.Filters;
-using DataLibrary.Models.Filters.TableFilters;
 using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity.Owin;
 using PizzaWebsite.Models;
@@ -133,28 +131,32 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> ManageStores(int? page, int? rowsPerPage, string storeName, string phoneNumber)
         {
-            var manageStoresVm = new ManageListViewModel<ManageStoreLocationViewModel, StoreLocation, StoreLocationFilter>();
+            var manageStoresVm = new ManageListViewModel<ManageStoreLocationViewModel, StoreLocation>();
 
-            // Apply search filters
-            manageStoresVm.SearchFilter.Name = storeName;
-            manageStoresVm.SearchFilter.PhoneNumber = phoneNumber;
+            object searchFilters = new
+            {
+                Name = storeName,
+                PhoneNumber = phoneNumber
+            };
 
-            await manageStoresVm.LoadViewModelRecordsAsync(PizzaDb, Request, page, rowsPerPage, "Name");
+            await manageStoresVm.LoadViewModelRecordsAsync(PizzaDb, Request, page, rowsPerPage, "Name", searchFilters);
 
             return View(manageStoresVm);
         }
 
         public async Task<ActionResult> ManageUsers(int? page, int? rowsPerPage, string userName, string email)
         {
-            var manageStoresVm = new ManageListViewModel<ManageUserViewModel, SiteUser, SiteUserFilter>();
+            var manageUsersVm = new ManageListViewModel<ManageUserViewModel, SiteUser>();
 
-            // Apply search filters
-            manageStoresVm.SearchFilter.UserName = userName;
-            manageStoresVm.SearchFilter.Email = email;
+            object searchFilters = new
+            {
+                UserName = userName,
+                Email = email
+            };
 
-            await manageStoresVm.LoadViewModelRecordsAsync(PizzaDb, Request, page, rowsPerPage, "UserName");
+            await manageUsersVm.LoadViewModelRecordsAsync(PizzaDb, Request, page, rowsPerPage, "UserName", searchFilters);
 
-            return View(manageStoresVm);
+            return View(manageUsersVm);
         }
     }
 }
