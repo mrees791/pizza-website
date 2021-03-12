@@ -80,25 +80,8 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> EditStoreLocation(int? id)
         {
-            if (!id.HasValue)
-            {
-                ErrorViewModel errorModel = new ErrorViewModel();
-                errorModel.ErrorMessage = $"ID is missing.";
-                errorModel.ReturnUrlAction = $"{Url.Action("ManageStores")}?{Request.QueryString}";
-                return View("Error", errorModel);
-            }
-
             List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(new { Id = id.Value });
             StoreLocation storeLocation = storeLocationRecords.FirstOrDefault();
-            bool idExists = storeLocation != null;
-
-            if (!idExists)
-            {
-                ErrorViewModel errorModel = new ErrorViewModel();
-                errorModel.ErrorMessage = $"Store with ID: {id.Value} does not exist.";
-                errorModel.ReturnUrlAction = $"{Url.Action("ManageStores")}?{Request.QueryString}";
-                return View("Error", errorModel);
-            }
 
             ManageStoreLocationViewModel storeLocationVm = new ManageStoreLocationViewModel();
             storeLocationVm.FromDbModel(storeLocation);
