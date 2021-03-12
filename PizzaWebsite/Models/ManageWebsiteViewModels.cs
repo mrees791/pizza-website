@@ -20,6 +20,11 @@ namespace PizzaWebsite.Models
         public string ReturnUrlAction { get; set; }
     }
 
+    public class ManageListViewModel
+    {
+
+    }
+
     public class ManageStoresViewModel
     {
         public StoreLocationViewModel StoreLocationVm { get; set; }

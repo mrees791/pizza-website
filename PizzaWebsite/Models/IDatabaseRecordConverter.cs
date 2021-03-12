@@ -9,8 +9,7 @@ namespace PizzaWebsite.Models
     /// <summary>
     /// Converts a PizzaWebsite model to its DataLibrary equivalent.
     /// </summary>
-    /// <typeparam name="T">Database record type.</typeparam>
-    public interface IDatabaseRecordConverter<T>
+    public interface IDatabaseRecordConverter<T> where T : class
     {
         T ToDbModel();
     }
