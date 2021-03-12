@@ -144,12 +144,13 @@ namespace PizzaWebsite.Controllers
             return View(manageStoresVm);
         }
 
-        public async Task<ActionResult> ManageUsers(int? page, int? rowsPerPage, string userName)
+        public async Task<ActionResult> ManageUsers(int? page, int? rowsPerPage, string userName, string email)
         {
             var manageStoresVm = new ManageListViewModel<ManageUserViewModel, SiteUser, SiteUserFilter>();
 
             // Apply search filters
             manageStoresVm.SearchFilter.UserName = userName;
+            manageStoresVm.SearchFilter.Email = email;
 
             await manageStoresVm.LoadViewModelRecordsAsync(PizzaDb, Request, page, rowsPerPage, "UserName");
 

@@ -92,8 +92,11 @@ namespace PizzaWebsite.Models
 
         public int Id { get; private set; }
 
-        [Display(Name = "UserName")]
+        [Display(Name = "User Name")]
         public string UserName { get; private set; }
+
+        [Display(Name = "Email")]
+        public string Email { get; set; }
 
         [Display(Name = "Banned")]
         public bool IsBanned { get; set; }
@@ -108,6 +111,7 @@ namespace PizzaWebsite.Models
             this.dbModel = dbModel;
 
             UserName = dbModel.UserName;
+            Email = dbModel.Email;
             IsBanned = dbModel.IsBanned;
         }
 

@@ -9,5 +9,6 @@ namespace DataLibrary.Models.Filters.TableFilters
     public class SiteUserFilter : SearchFilter
     {
         public string UserName { get; set; }
+        public string Email { get; set; }
     }
 }

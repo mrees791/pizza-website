@@ -13,6 +13,8 @@
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
         @Html.Label("UserName", "User Name")
         @Html.TextBox("UserName", Request["UserName"], new { @class = "form-control" })
+        @Html.Label("Email", "Email")
+        @Html.TextBox("Email", Request["Email"], new { @class = "form-control" })
         <input type="submit" value="Apply Search Filters" class="btn btn-default" />
     }
 </div>
@@ -23,8 +25,12 @@
             @Html.DisplayNameFor(model => model.ItemViewModel.UserName)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.ItemViewModel.Email)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.ItemViewModel.IsBanned)
         </th>
+        <th><!-- Empty header for edit column --></th>
     </tr>
 
     @foreach (var item in Model.ItemViewModelList)
@@ -32,6 +38,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsBanned)
