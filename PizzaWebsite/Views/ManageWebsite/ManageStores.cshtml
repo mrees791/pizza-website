@@ -24,6 +24,7 @@
         <input type="button" value="Create New Store" class="btn btn-default" />
     </a>
 </div>
+
 <table class="table">
     <tr>
         <th>
@@ -44,7 +45,6 @@
         <th>
             @Html.DisplayNameFor(model => model.ItemViewModel.IsActiveLocation)
         </th>
-        <th></th>
     </tr>
 
     @foreach (var item in Model.ItemViewModelList)
@@ -76,14 +76,16 @@
         </tr>
     }
 </table>
+
 <nav>
-    <ul id="manageStoresPagination" class="pagination">
+    <ul id="managePagination" class="pagination">
     </ul>
 </nav>
+
 @section Scripts {
     <script type="text/javascript">
         $(function () {
-            pizzaSiteNs.createPagination('#manageStoresPagination', @Model.PaginationVm.CurrentPage, @Model.PaginationVm.RowsPerPage, @Model.PaginationVm.TotalPages, @Model.PaginationVm.TotalNumberOfItems);
+            pizzaSiteNs.createPagination('#managePagination', @Model.PaginationVm.CurrentPage, @Model.PaginationVm.RowsPerPage, @Model.PaginationVm.TotalPages, @Model.PaginationVm.TotalNumberOfItems);
         });
     </script>
 }

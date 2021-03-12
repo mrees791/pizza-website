@@ -8,5 +8,6 @@ namespace DataLibrary.Models.Filters.TableFilters
 {
     public class SiteUserFilter : SearchFilter
     {
+        public string UserName { get; set; }
     }
 }

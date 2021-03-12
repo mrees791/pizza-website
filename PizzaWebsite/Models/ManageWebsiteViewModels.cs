@@ -86,6 +86,41 @@ namespace PizzaWebsite.Models
         }
     }
 
+    public class ManageUserViewModel : ManageViewModelBase<SiteUser>
+    {
+        private SiteUser dbModel;
+
+        public int Id { get; private set; }
+
+        [Display(Name = "UserName")]
+        public string UserName { get; private set; }
+
+        [Display(Name = "Banned")]
+        public bool IsBanned { get; set; }
+
+        public ManageUserViewModel()
+        {
+
+        }
+
+        public override void FromDbModel(SiteUser dbModel)
+        {
+            this.dbModel = dbModel;
+
+            UserName = dbModel.UserName;
+            IsBanned = dbModel.IsBanned;
+        }
+
+        public override SiteUser ToDbModel()
+        {
+            return new SiteUser()
+            {
+                Id = Id,
+                IsBanned = IsBanned
+            };
+        }
+    }
+
     public class ManageStoreLocationViewModel : ManageViewModelBase<StoreLocation>
     {
         public ManageStoreLocationViewModel()
@@ -94,7 +129,7 @@ namespace PizzaWebsite.Models
         }
 
         public List<State> StateList { get; set; }
-        public int Id { get; set; }
+        public int Id { get; private set; }
 
         [Required]
         [Display(Name = "Store Name")]

@@ -144,17 +144,16 @@ namespace PizzaWebsite.Controllers
             return View(manageStoresVm);
         }
 
-        /*public async Task<ActionResult> ManageUsers(int? page, int? rowsPerPage)
+        public async Task<ActionResult> ManageUsers(int? page, int? rowsPerPage, string userName)
         {
-            var manageStoresVm = new ManageListViewModel<ManageStoreLocationViewModel, SiteUser, SiteUserFilter>();
+            var manageStoresVm = new ManageListViewModel<ManageUserViewModel, SiteUser, SiteUserFilter>();
 
             // Apply search filters
-            manageStoresVm.SearchFilter.Name = storeName;
-            manageStoresVm.SearchFilter.PhoneNumber = phoneNumber;
+            manageStoresVm.SearchFilter.UserName = userName;
 
-            await manageStoresVm.LoadViewModelRecordsAsync(PizzaDb, Request, page, rowsPerPage, "Name");
+            await manageStoresVm.LoadViewModelRecordsAsync(PizzaDb, Request, page, rowsPerPage, "UserName");
 
             return View(manageStoresVm);
-        }*/
+        }
     }
 }

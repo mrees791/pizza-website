@@ -1,20 +1,33 @@
 ﻿const pizzaSiteNs = {
-    runAlertTest: (message) => {
-        window.alert(message);
-    },
     createPagination: (paginationSelector, currentPage, rowsPerPage, totalPages, totalNumberOfItems) => {
+        var maxPages = 5;
         var isOnLastPage = currentPage === totalPages;
         var isOnFirstPage = currentPage === 1;
+
+        var finalFormat = '';
+
+        if (totalPages > 1) {
+            finalFormat = '[< nc';
+
+            for (var iPage = 3; iPage <= totalPages && iPage <= maxPages; iPage++) {
+                finalFormat += 'n';
+            }
+
+            finalFormat += '! >]';
+        }
+
+        //format: '[< ncnnn! >]', // define how the navigation should look like and in which order onFormat() get's called
 
         $(paginationSelector).paging(totalNumberOfItems,
             { // Total number of items (elements)
                 // Set up onclick handler
                 onClick: function (ev) {
                 },
-                format: '[< ncnnn! >]', // define how the navigation should look like and in which order onFormat() get's called
+                format: finalFormat, // define how the navigation should look like and in which order onFormat() get's called
                 perpage: rowsPerPage, // show 10 elements per page
                 lapping: 0, // don't overlap pages for the moment
                 page: currentPage, // start at page, can also be "null" or negative
+                pages: totalPages,
                 onSelect: function (page) {
                     // add code which gets executed when user selects a page, how about $.ajax() or $(...).slice()?
                     //console.log(this);
