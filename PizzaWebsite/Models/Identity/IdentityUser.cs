@@ -106,25 +106,30 @@ namespace PizzaWebsite.Models.Identity
             };
         }
 
-        public IdentityUser(SiteUser dbRecord)
+        public void FromDbModel(SiteUser dbModel)
         {
-            AccessFailedCount = dbRecord.AccessFailedCount;
-            ConfirmOrderCartId = dbRecord.ConfirmOrderCartId;
-            CurrentCartId = dbRecord.CurrentCartId;
-            Email = dbRecord.Email;
-            EmailConfirmed = dbRecord.EmailConfirmed;
-            Id = dbRecord.Id;
-            IsBanned = dbRecord.IsBanned;
-            LockoutEnabled = dbRecord.LockoutEnabled;
-            LockoutEndDateUtc = dbRecord.LockoutEndDateUtc;
-            OrderConfirmationId = dbRecord.OrderConfirmationId;
-            PasswordHash = dbRecord.PasswordHash;
-            PhoneNumber = dbRecord.PhoneNumber;
-            PhoneNumberConfirmed = dbRecord.PhoneNumberConfirmed;
-            SecurityStamp = dbRecord.SecurityStamp;
-            TwoFactorEnabled = dbRecord.TwoFactorEnabled;
-            UserName = dbRecord.UserName;
-            ZipCode = dbRecord.ZipCode;
+            AccessFailedCount = dbModel.AccessFailedCount;
+            ConfirmOrderCartId = dbModel.ConfirmOrderCartId;
+            CurrentCartId = dbModel.CurrentCartId;
+            Email = dbModel.Email;
+            EmailConfirmed = dbModel.EmailConfirmed;
+            Id = dbModel.Id;
+            IsBanned = dbModel.IsBanned;
+            LockoutEnabled = dbModel.LockoutEnabled;
+            LockoutEndDateUtc = dbModel.LockoutEndDateUtc;
+            OrderConfirmationId = dbModel.OrderConfirmationId;
+            PasswordHash = dbModel.PasswordHash;
+            PhoneNumber = dbModel.PhoneNumber;
+            PhoneNumberConfirmed = dbModel.PhoneNumberConfirmed;
+            SecurityStamp = dbModel.SecurityStamp;
+            TwoFactorEnabled = dbModel.TwoFactorEnabled;
+            UserName = dbModel.UserName;
+            ZipCode = dbModel.ZipCode;
+        }
+
+        public IdentityUser(SiteUser dbModel)
+        {
+            FromDbModel(dbModel);
         }
     }
 }

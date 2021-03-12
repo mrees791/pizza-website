@@ -1,4 +1,4 @@
-﻿@model PizzaWebsite.Models.ManageStoresViewModel
+﻿@model PizzaWebsite.Models.ManageListViewModel<PizzaWebsite.Models.StoreLocationViewModel, DataLibrary.Models.Tables.StoreLocation, DataLibrary.Models.Filters.TableFilters.StoreLocationFilter>
 
 @{
     ViewBag.Title = "Manage Stores";
@@ -27,27 +27,27 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.StoreLocationVm.Name)
+            @Html.DisplayNameFor(model => model.ItemViewModel.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StoreLocationVm.StreetAddress)
+            @Html.DisplayNameFor(model => model.ItemViewModel.StreetAddress)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StoreLocationVm.City)
+            @Html.DisplayNameFor(model => model.ItemViewModel.City)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StoreLocationVm.ZipCode)
+            @Html.DisplayNameFor(model => model.ItemViewModel.ZipCode)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StoreLocationVm.PhoneNumber)
+            @Html.DisplayNameFor(model => model.ItemViewModel.PhoneNumber)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StoreLocationVm.IsActiveLocation)
+            @Html.DisplayNameFor(model => model.ItemViewModel.IsActiveLocation)
         </th>
         <th></th>
     </tr>
 
-    @foreach (var item in Model.StoreLocationVmList)
+    @foreach (var item in Model.ItemViewModelList)
     {
         <tr>
             <td>

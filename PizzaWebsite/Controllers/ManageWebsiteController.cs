@@ -91,8 +91,8 @@ namespace PizzaWebsite.Controllers
             }
 
             List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(new { Id = id.Value });
-            StoreLocation storeLocationRecord = storeLocationRecords.FirstOrDefault();
-            bool idExists = storeLocationRecord != null;
+            StoreLocation storeLocation = storeLocationRecords.FirstOrDefault();
+            bool idExists = storeLocation != null;
 
             if (!idExists)
             {
@@ -102,7 +102,8 @@ namespace PizzaWebsite.Controllers
                 return View("Error", errorModel);
             }
 
-            StoreLocationViewModel storeLocationVm = new StoreLocationViewModel(storeLocationRecord);
+            StoreLocationViewModel storeLocationVm = new StoreLocationViewModel();
+            storeLocationVm.FromDbModel(storeLocation);
             return View("CreateEditStoreLocation", storeLocationVm);
         }
 
@@ -132,57 +133,13 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> ManageStores(int? page, int? rowsPerPage, string storeName, string phoneNumber)
         {
-            // Set default values
-            if (!page.HasValue)
-            {
-                page = 1;
-            }
-            if (!rowsPerPage.HasValue)
-            {
-                rowsPerPage = 10;
-            }
+            var manageStoresVm = new ManageListViewModel<StoreLocationViewModel, StoreLocation, StoreLocationFilter>();
 
             // Apply search filters
-            StoreLocationFilter searchFilter = new StoreLocationFilter();
-            searchFilter.Name = storeName;
-            searchFilter.PhoneNumber = phoneNumber;
+            manageStoresVm.SearchFilter.Name = storeName;
+            manageStoresVm.SearchFilter.PhoneNumber = phoneNumber;
 
-            int totalNumberOfItems = await PizzaDb.GetNumberOfRecords<StoreLocation>(searchFilter);
-            int totalPages = await PizzaDb.GetNumberOfPagesAsync<StoreLocation>(searchFilter, rowsPerPage.Value);
-            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListPagedAsync<StoreLocation>(searchFilter, page.Value, rowsPerPage.Value, "Name");
-
-            // Create view model
-            ManageStoresViewModel manageStoresVm = new ManageStoresViewModel();
-
-            // Navigation pane
-            manageStoresVm.PaginationVm.QueryString = Request.QueryString;
-            manageStoresVm.PaginationVm.CurrentPage = page.Value;
-            manageStoresVm.PaginationVm.RowsPerPage = rowsPerPage.Value;
-            manageStoresVm.PaginationVm.TotalPages = totalPages;
-            manageStoresVm.PaginationVm.TotalNumberOfItems = totalNumberOfItems;
-
-
-            /*if (page.Value > 0 && page.Value <= manageStoresVm.TotalPages)
-            {
-                if (page.Value == 1)
-                {
-                    for (int iPage = 1; iPage <= manageStoresVm.TotalPages && iPage < page.Value + maxPagesListed; iPage++)
-                    {
-                        manageStoresVm.PageRange.Add(iPage);
-                    }
-                }
-                // Others needed
-            }*/
-
-            /*if (manageStoresVm.PageRange.Count() < maxPagesListed)
-            {
-                manageStoresVm.PageRange.Add(manageStoresVm.TotalPages);
-            }*/
-
-            foreach (var location in storeLocationRecords)
-            {
-                manageStoresVm.StoreLocationVmList.Add(new StoreLocationViewModel(location));
-            }
+            await manageStoresVm.LoadViewModelRecordsAsync(PizzaDb, Request, page, rowsPerPage, "Name");
 
             return View(manageStoresVm);
         }

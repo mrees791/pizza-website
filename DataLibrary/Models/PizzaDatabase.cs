@@ -31,25 +31,25 @@ namespace DataLibrary.Models
 
         // CRUD Table Operations
 
-        public async Task<List<T>> GetListAsync<T>()
+        public async Task<List<T>> GetListAsync<T>() where T : class
         {
             IEnumerable<T> list = await connection.GetListAsync<T>();
             return list.ToList();
         }
 
-        public async Task<List<T>> GetListAsync<T>(object whereConditions)
+        public async Task<List<T>> GetListAsync<T>(object whereConditions) where T : class
         {
             IEnumerable<T> list = await connection.GetListAsync<T>(whereConditions);
             return list.ToList();
         }
 
-        public async Task<List<T>> GetListAsync<T>(SearchFilter searchFilter, object parameters)
+        public async Task<List<T>> GetListAsync<T>(SearchFilter searchFilter, object parameters) where T : class
         {
             IEnumerable<T> list = await connection.GetListAsync<T>(searchFilter.GetSqlWhereFilterClause(), parameters);
             return list.ToList();
         }
 
-        public async Task<List<T>> GetListPagedAsync<T>(SearchFilter searchFilter, int pageNumber, int rowsPerPage, string orderby)
+        public async Task<List<T>> GetListPagedAsync<T>(SearchFilter searchFilter, int pageNumber, int rowsPerPage, string orderby) where T : class
         {
             string conditions = searchFilter.GetSqlWhereFilterClause();
             IEnumerable<T> list = await connection.GetListPagedAsync<T>(pageNumber, rowsPerPage, conditions, orderby, searchFilter);

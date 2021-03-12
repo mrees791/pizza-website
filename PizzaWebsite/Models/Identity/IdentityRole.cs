@@ -16,10 +16,9 @@ namespace PizzaWebsite.Models.Identity
             Name = name;
         }
 
-        public IdentityRole(SiteRole dbRecord)
+        public IdentityRole(SiteRole dbModel)
         {
-            Id = dbRecord.Id;
-            Name = dbRecord.Name;
+            FromDbModel(dbModel);
         }
 
         public string Name { get; set; }
@@ -45,6 +44,12 @@ namespace PizzaWebsite.Models.Identity
                 Id = Id,
                 Name = Name
             };
+        }
+
+        public void FromDbModel(SiteRole dbModel)
+        {
+            Id = dbModel.Id;
+            Name = dbModel.Name;
         }
     }
 }
