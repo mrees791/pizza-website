@@ -9,7 +9,7 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Identity
 {
-    public class IdentityUser : IUser<int>, IRecordViewModel<SiteUser>
+    public class IdentityUser : IUser<int>, IEntityConverter<SiteUser>
     {
         private int id;
         private string userName;

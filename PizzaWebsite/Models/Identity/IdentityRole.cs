@@ -7,7 +7,7 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Identity
 {
-    public class IdentityRole : IRole<int>, IRecordViewModel<SiteRole>
+    public class IdentityRole : IRole<int>, IEntityConverter<SiteRole>
     {
         private int id;
 

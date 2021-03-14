@@ -22,7 +22,7 @@ namespace PizzaWebsite.Models
         public string ReturnUrlAction { get; set; }
     }
 
-    public abstract class ManageViewModelBase<T> : IRecordViewModel<T> where T : class, new()
+    public abstract class ManageViewModelBase<T> : IEntityConverter<T> where T : class, new()
     {
         public ManageViewModelBase()
         {
