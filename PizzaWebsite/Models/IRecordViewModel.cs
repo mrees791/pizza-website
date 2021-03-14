@@ -11,7 +11,7 @@ namespace PizzaWebsite.Models
     /// This is used for creating view models for TEntity database records.
     /// </summary>
     // todo: Update documentation here
-    public interface IDatabaseRecordConverter<TEntity> where TEntity : class, new()
+    public interface IRecordViewModel<TEntity> where TEntity : class, new()
     {
         TEntity ToDbModel();
         void FromDbModel(TEntity dbModel);
