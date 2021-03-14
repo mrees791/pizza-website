@@ -8,12 +8,12 @@ namespace PizzaWebsite.Models
 {
     /// <summary>
     /// Converts a PizzaWebsite model to its DataLibrary equivalent.
+    /// This is used for creating view models for TEntity database records.
     /// </summary>
     // todo: Update documentation here
-    // A is DataLibrary class
-    public interface IDatabaseRecordConverter<A> where A : class
+    public interface IDatabaseRecordConverter<TEntity> where TEntity : class, new()
     {
-        A ToDbModel();
-        void FromDbModel(A dbModel);
+        TEntity ToDbModel();
+        void FromDbModel(TEntity dbModel);
     }
 }
