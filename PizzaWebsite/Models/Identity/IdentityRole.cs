@@ -18,7 +18,7 @@ namespace PizzaWebsite.Models.Identity
 
         public IdentityRole(SiteRole dbModel)
         {
-            FromDbModel(dbModel);
+            FromEntity(dbModel);
         }
 
         public string Name { get; set; }
@@ -37,7 +37,7 @@ namespace PizzaWebsite.Models.Identity
             }
         }
 
-        public SiteRole ToDbModel()
+        public SiteRole ToEntity()
         {
             return new SiteRole()
             {
@@ -46,7 +46,7 @@ namespace PizzaWebsite.Models.Identity
             };
         }
 
-        public void FromDbModel(SiteRole dbModel)
+        public void FromEntity(SiteRole dbModel)
         {
             Id = dbModel.Id;
             Name = dbModel.Name;

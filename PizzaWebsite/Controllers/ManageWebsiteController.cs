@@ -12,79 +12,27 @@ using System.Web.Mvc;
 namespace PizzaWebsite.Controllers
 {
     [Authorize(Roles = "Admin,Manager")]
-    public class ManageWebsiteController : Controller
+    public class ManageWebsiteController : BaseController
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
-        private PizzaDatabase _pizzaDb;
-
-        public PizzaDatabase PizzaDb
-        {
-            get
-            {
-                return _pizzaDb ?? HttpContext.GetOwinContext().Get<PizzaDatabase>();
-            }
-            private set
-            {
-                _pizzaDb = value;
-            }
-        }
-
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set
-            {
-                _signInManager = value;
-            }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
 
         // GET: ManageWebsite
         public ActionResult Index()
         {
             return View();
         }
-        public async Task<ActionResult> EditStoreLocation(int? id)
+
+
+        /*
+
+        public async Task<ActionResult> ManageEmployee(string id)
         {
-            List<StoreLocation> storeLocationRecords = await PizzaDb.GetListAsync<StoreLocation>(new { Id = id.Value });
-            StoreLocation storeLocation = storeLocationRecords.FirstOrDefault();
+            List<Employee> employeeRecords = await PizzaDb.GetListAsync<Employee>(new { Id = id });
+            Employee employee = employeeRecords.FirstOrDefault();
 
-            ManageStoreLocationViewModel storeLocationVm = new ManageStoreLocationViewModel();
-            storeLocationVm.FromDbModel(storeLocation);
-            return View("CreateEditStoreLocation", storeLocationVm);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EditStoreLocation(ManageStoreLocationViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View("CreateEditStoreLocation", model);
-            }
-
-            PizzaDb.Update(model.ToDbModel());
-
-            ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
-            confirmationModel.ConfirmationMessage = $"Your changes to {model.Name} have been confirmed.";
-            confirmationModel.ReturnUrlAction = $"{Url.Action("ManageStores")}?{Request.QueryString}";
-
-            return View("CreateEditConfirmation", confirmationModel);
+            ManageEmployeeViewModel manageEmployeeVm = new ManageEmployeeViewModel();
+            manageEmployeeVm.FromEntity(employee);
+            manageEmployeeVm.IsManager = await UserManager.IsInRoleAsync(employee.UserId, "Manager");
+            return View("ManageEmployee", manageEmployeeVm);
         }
 
         public async Task<ActionResult> ManageUser(int? id)
@@ -93,7 +41,7 @@ namespace PizzaWebsite.Controllers
             SiteUser user = userRecords.FirstOrDefault();
 
             ManageUserViewModel manageUserVm = new ManageUserViewModel();
-            manageUserVm.FromDbModel(user);
+            manageUserVm.FromEntity(user);
             return View("ManageUser", manageUserVm);
         }
 
@@ -130,7 +78,7 @@ namespace PizzaWebsite.Controllers
                 return View("CreateEditStoreLocation", model);
             }
 
-            PizzaDb.Insert(model.ToDbModel());
+            PizzaDb.Insert(model.ToEntity());
 
             ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
             confirmationModel.ConfirmationMessage = $"{model.Name} has been added to the database.";
@@ -145,9 +93,23 @@ namespace PizzaWebsite.Controllers
             return View("CreateEditStoreLocation", model);
         }
 
+        public async Task<ActionResult> ManageEmployees(int? page, int? rowsPerPage, string employeeId)
+        {
+            var manageEmployeesVm = new PagedListViewModel<ManageEmployeeViewModel, Employee>();
+
+            object searchFilters = new
+            {
+                Id = employeeId
+            };
+
+            await manageEmployeesVm.LoadViewModelRecordsAsync(PizzaDb, Request, page, rowsPerPage, "Id", searchFilters);
+
+            return View(manageEmployeesVm);
+        }
+
         public async Task<ActionResult> ManageStores(int? page, int? rowsPerPage, string storeName, string phoneNumber)
         {
-            var manageStoresVm = new ManageListViewModel<ManageStoreLocationViewModel, StoreLocation>();
+            var manageStoresVm = new PagedListViewModel<ManageStoreLocationViewModel, StoreLocation>();
 
             object searchFilters = new
             {
@@ -162,7 +124,7 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> ManageUsers(int? page, int? rowsPerPage, string userName, string email)
         {
-            var manageUsersVm = new ManageListViewModel<ManageUserViewModel, SiteUser>();
+            var manageUsersVm = new PagedListViewModel<ManageUserViewModel, SiteUser>();
 
             object searchFilters = new
             {
@@ -173,6 +135,6 @@ namespace PizzaWebsite.Controllers
             await manageUsersVm.LoadViewModelRecordsAsync(PizzaDb, Request, page, rowsPerPage, "UserName", searchFilters);
 
             return View(manageUsersVm);
-        }
+        }*/
     }
 }

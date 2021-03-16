@@ -1,20 +1,18 @@
-﻿@model PizzaWebsite.Models.PagedListViewModel<PizzaWebsite.Models.ManageUserViewModel, DataLibrary.Models.Tables.SiteUser>
+﻿@model PizzaWebsite.Models.PagedListViewModel<PizzaWebsite.Models.ManageEmployeeViewModel, DataLibrary.Models.Tables.Employee>
 
 @{
-    ViewBag.Title = "Manage Users";
+    ViewBag.Title = "Manage Employees";
 }
 
-<h2>Manage Users</h2>
+<h2>Manage Employees</h2>
 
 <div>
-    @using (Html.BeginForm("ManageUsers", "ManageWebsite", FormMethod.Get))
+    @using (Html.BeginForm("ManageEmployees", "ManageWebsite", FormMethod.Get))
     {
         <input type="hidden" name="Page" value="1" />
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
-        @Html.Label("UserName", "User Name")
-        @Html.TextBox("UserName", Request["UserName"], new { @class = "form-control" })
-        @Html.Label("Email", "Email")
-        @Html.TextBox("Email", Request["Email"], new { @class = "form-control" })
+        @Html.Label("EmployeeId", "Employee ID")
+        @Html.TextBox("EmployeeId", Request["EmployeeId"], new { @class = "form-control" })
         <input type="submit" value="Apply Search Filters" class="btn btn-default" />
     }
 </div>
@@ -22,13 +20,10 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.ItemViewModel.UserName)
+            @Html.DisplayNameFor(model => model.ItemViewModel.Id)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ItemViewModel.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ItemViewModel.IsBanned)
+            @Html.DisplayNameFor(model => model.ItemViewModel.CurrentlyEmployed)
         </th>
         <th><!-- Empty header for edit column --></th>
     </tr>
@@ -37,16 +32,13 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.UserName)
+                @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Email)
+                @Html.DisplayFor(modelItem => item.CurrentlyEmployed)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsBanned)
-            </td>
-            <td>
-                <a href="@Url.Action("ManageUser", "ManageWebsite")/@item.Id?@(Request.QueryString)">
+                <a href="@Url.Action("ManageEmployee", "ManageWebsite")/@item.Id?@(Request.QueryString)">
                     <input type="button" value="Edit" class="btn btn-default" />
                 </a>
             </td>

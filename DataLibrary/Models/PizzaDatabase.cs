@@ -30,45 +30,51 @@ namespace DataLibrary.Models
         }
 
         // CRUD Table Operations
-
-        public async Task<List<T>> GetListAsync<T>() where T : class
+        // todo: Remove this non async get list method
+        /*public List<TEntity> GetList<TEntity>() where TEntity : class
         {
-            IEnumerable<T> list = await connection.GetListAsync<T>();
+            IEnumerable<TEntity> list = connection.GetList<TEntity>();
+            return list.ToList();
+        }*/
+
+        public async Task<List<TEntity>> GetListAsync<TEntity>() where TEntity : class
+        {
+            IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>();
             return list.ToList();
         }
 
-        public async Task<List<T>> GetListAsync<T>(object whereConditions) where T : class
+        public async Task<List<TEntity>> GetListAsync<TEntity>(object whereConditions) where TEntity : class
         {
-            IEnumerable<T> list = await connection.GetListAsync<T>(whereConditions);
+            IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>(whereConditions);
             return list.ToList();
         }
 
-        public async Task<List<T>> GetListAsync<T>(object searchFilter, object parameters) where T : class
+        public async Task<List<TEntity>> GetListAsync<TEntity>(object searchFilter, object parameters) where TEntity : class
         {
-            IEnumerable<T> list = await connection.GetListAsync<T>(GetSqlWhereFilterClause(searchFilter), parameters);
+            IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>(GetSqlWhereFilterClause(searchFilter), parameters);
             return list.ToList();
         }
 
-        public async Task<List<T>> GetListPagedAsync<T>(object searchFilter, int pageNumber, int rowsPerPage, string orderby) where T : class
+        public async Task<List<TEntity>> GetListPagedAsync<TEntity>(object searchFilter, int pageNumber, int rowsPerPage, string orderby) where TEntity : class
         {
             string conditions = GetSqlWhereFilterClause(searchFilter);
-            IEnumerable<T> list = await connection.GetListPagedAsync<T>(pageNumber, rowsPerPage, conditions, orderby, searchFilter);
+            IEnumerable<TEntity> list = await connection.GetListPagedAsync<TEntity>(pageNumber, rowsPerPage, conditions, orderby, searchFilter);
             return list.ToList();
         }
 
-        public async Task<int> GetNumberOfRecords<T>(object searchFilter)
+        public async Task<int> GetNumberOfRecords<TEntity>(object searchFilter)
         {
-            int recordCount = await connection.RecordCountAsync<T>(GetSqlWhereFilterClause(searchFilter), searchFilter);
+            int recordCount = await connection.RecordCountAsync<TEntity>(GetSqlWhereFilterClause(searchFilter), searchFilter);
             return recordCount;
         }
 
-        public async Task<int> GetNumberOfPagesAsync<T>(object searchFilter, int rowsPerPage)
+        public async Task<int> GetNumberOfPagesAsync<TEntity>(object searchFilter, int rowsPerPage)
         {
             if (rowsPerPage == 0)
             {
                 return 0;
             }
-            int recordCount = await GetNumberOfRecords<T>(searchFilter);
+            int recordCount = await GetNumberOfRecords<TEntity>(searchFilter);
             if (recordCount == 0)
             {
                 return 0;
@@ -90,8 +96,8 @@ namespace DataLibrary.Models
         /// <returns>An SQL where clause.</returns>
         internal string GetSqlWhereFilterClause(object searchFilter)
         {
-            int queriesAdded = 0;
             string sqlWhereClause = string.Empty;
+            bool queriesAdded = false;
 
             foreach (PropertyInfo propertyInfo in searchFilter.GetType().GetProperties())
             {
@@ -102,7 +108,7 @@ namespace DataLibrary.Models
                 {
                     string columnName = propertyInfo.Name;
 
-                    if (queriesAdded == 0)
+                    if (!queriesAdded)
                     {
                         sqlWhereClause += "where ";
                     }
@@ -114,7 +120,7 @@ namespace DataLibrary.Models
                     // Only uses the column name with a placeholder to avoid SQL injections.
                     // The column name variable is never set by user input.
                     sqlWhereClause += $"{columnName} like '%' + @{columnName} + '%'";
-                    queriesAdded++;
+                    queriesAdded = true;
                 }
             }
 
@@ -134,9 +140,10 @@ namespace DataLibrary.Models
         }
 
         // Employee CRUD
-        public int Insert(Employee employee, IDbTransaction transaction = null)
+        public void Insert(Employee employee, IDbTransaction transaction = null)
         {
-            return connection.Insert(employee, transaction).Value;
+            // Query method was used since connection.Insert was having an issue with its string ID field.
+            connection.Query("INSERT INTO Employee (Id, UserId, CurrentlyEmployed) VALUES (@Id, @UserId, @CurrentlyEmployed)", employee, transaction);
         }
 
         public void Update(Employee employee, IDbTransaction transaction = null)

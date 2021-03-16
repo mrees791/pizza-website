@@ -26,7 +26,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public Task CreateAsync(IdentityRole role)
         {
-            database.Insert(role.ToDbModel());
+            database.Insert(role.ToEntity());
             return Task.FromResult(0);
         }
 
@@ -65,7 +65,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public Task UpdateAsync(IdentityRole role)
         {
-            database.Update(role.ToDbModel());
+            database.Update(role.ToEntity());
             return Task.FromResult(0);
         }
     }

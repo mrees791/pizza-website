@@ -1,4 +1,5 @@
-﻿@model PizzaWebsite.Models.ManageListViewModel<PizzaWebsite.Models.ManageStoreLocationViewModel, DataLibrary.Models.Tables.StoreLocation>
+﻿@using PizzaWebsite.Models
+@model ManagePagedListViewModel<ManageStoreViewModel>
 
 @{
     ViewBag.Title = "Manage Stores";
@@ -7,7 +8,7 @@
 <h2>Manage Stores</h2>
 
 <div>
-    @using (Html.BeginForm("ManageStores", "ManageWebsite", FormMethod.Get))
+    @using (Html.BeginForm("Index", "ManageStores", FormMethod.Get))
     {
         <input type="hidden" name="Page" value="1" />
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
@@ -20,7 +21,7 @@
 </div>
 
 <div>
-    <a href="@Url.Action("CreateStoreLocation", "ManageWebsite")?@(Request.QueryString)">
+    <a href="@Url.Action("CreateStore")?@(Request.QueryString)">
         <input type="button" value="Create New Store" class="btn btn-default" />
     </a>
 </div>
@@ -70,7 +71,7 @@
                 @Html.DisplayFor(modelItem => item.IsActiveLocation)
             </td>
             <td>
-                <a href="@Url.Action("EditStoreLocation", "ManageWebsite")/@item.Id?@(Request.QueryString)">
+                <a href="@Url.Action("EditStore")/@item.Id?@(Request.QueryString)">
                     <input type="button" value="Edit" class="btn btn-default" />
                 </a>
             </td>

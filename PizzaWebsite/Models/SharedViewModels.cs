@@ -14,4 +14,14 @@ namespace PizzaWebsite.Models
         public int TotalNumberOfItems { get; set; }
         public NameValueCollection QueryString { get; set; }
     }
+
+    public abstract class PagedListViewModel
+    {
+        public PaginationViewModel PaginationVm { get; set; }
+
+        public PagedListViewModel()
+        {
+            PaginationVm = new PaginationViewModel();
+        }
+    }
 }

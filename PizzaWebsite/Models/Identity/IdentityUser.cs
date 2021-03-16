@@ -82,7 +82,7 @@ namespace PizzaWebsite.Models.Identity
         public bool IsBanned { get => isBanned; set => isBanned = value; }
         public int OrderConfirmationId { get => orderConfirmationId; set => orderConfirmationId = value; }
 
-        public SiteUser ToDbModel()
+        public SiteUser ToEntity()
         {
             return new SiteUser()
             {
@@ -106,7 +106,7 @@ namespace PizzaWebsite.Models.Identity
             };
         }
 
-        public void FromDbModel(SiteUser dbModel)
+        public void FromEntity(SiteUser dbModel)
         {
             AccessFailedCount = dbModel.AccessFailedCount;
             ConfirmOrderCartId = dbModel.ConfirmOrderCartId;
@@ -129,7 +129,7 @@ namespace PizzaWebsite.Models.Identity
 
         public IdentityUser(SiteUser dbModel)
         {
-            FromDbModel(dbModel);
+            FromEntity(dbModel);
         }
     }
 }

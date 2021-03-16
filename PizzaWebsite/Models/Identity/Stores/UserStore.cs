@@ -37,7 +37,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public Task CreateAsync(IdentityUser user)
         {
-            user.Id = database.Insert(user.ToDbModel());
+            user.Id = database.Insert(user.ToEntity());
             return Task.FromResult(0);
         }
 
@@ -141,7 +141,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public Task UpdateAsync(IdentityUser user)
         {
-            database.Update(user.ToDbModel());
+            database.Update(user.ToEntity());
             return Task.FromResult(0);
         }
 

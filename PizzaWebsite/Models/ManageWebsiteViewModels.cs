@@ -1,5 +1,6 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.Tables;
+using Microsoft.AspNet.Identity.Owin;
 using PizzaWebsite.Models.Geography;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Mvc;
 
 namespace PizzaWebsite.Models
 {
@@ -22,104 +24,9 @@ namespace PizzaWebsite.Models
         public string ReturnUrlAction { get; set; }
     }
 
-    public abstract class ManageViewModelBase<T> : IEntityConverter<T> where T : class, new()
+    public class ManageStoreViewModel
     {
-        public ManageViewModelBase()
-        {
-
-        }
-
-        public abstract void FromDbModel(T dbModel);
-        public abstract T ToDbModel();
-    }
-
-    // T is ViewModel class, U is DataLibrary equivalent, V is the filter class
-    // todo: Update documentation here.
-    public class ManageListViewModel<T, U> where U : class, new() where T : ManageViewModelBase<U>, new()
-    {
-        public T ItemViewModel { get; set; }
-        public List<T> ItemViewModelList { get; set; }
-        public PaginationViewModel PaginationVm { get; set; }
-
-        public ManageListViewModel()
-        {
-            ItemViewModelList = new List<T>();
-            PaginationVm = new PaginationViewModel();
-        }
-
-        public async Task LoadViewModelRecordsAsync(PizzaDatabase database, HttpRequestBase request, int? page, int? rowsPerPage, string sortColumnName, object searchFilters)
-        {
-            // Set default values
-            if (!page.HasValue)
-            {
-                page = 1;
-            }
-            if (!rowsPerPage.HasValue)
-            {
-                rowsPerPage = 10;
-            }
-
-            int totalNumberOfItems = await database.GetNumberOfRecords<U>(searchFilters);
-            int totalPages = await database.GetNumberOfPagesAsync<U>(searchFilters, rowsPerPage.Value);
-            List<U> databaseRecords = await database.GetListPagedAsync<U>(searchFilters, page.Value, rowsPerPage.Value, sortColumnName);
-
-            // Navigation pane
-            PaginationVm.QueryString = request.QueryString;
-            PaginationVm.CurrentPage = page.Value;
-            PaginationVm.RowsPerPage = rowsPerPage.Value;
-            PaginationVm.TotalPages = totalPages;
-            PaginationVm.TotalNumberOfItems = totalNumberOfItems;
-
-            foreach (U recordModel in databaseRecords)
-            {
-                T locationVm = new T();
-                locationVm.FromDbModel(recordModel);
-                ItemViewModelList.Add(locationVm);
-            }
-        }
-    }
-
-    public class ManageUserViewModel : ManageViewModelBase<SiteUser>
-    {
-        public int Id { get; set; }
-
-        [Display(Name = "User Name")]
-        public string UserName { get; set; }
-
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-
-        [Display(Name = "Banned")]
-        public bool IsBanned { get; set; }
-
-        public ManageUserViewModel()
-        {
-
-        }
-
-        public override void FromDbModel(SiteUser dbModel)
-        {
-            Id = dbModel.Id;
-            UserName = dbModel.UserName;
-            Email = dbModel.Email;
-            IsBanned = dbModel.IsBanned;
-        }
-
-        public override SiteUser ToDbModel()
-        {
-            return new SiteUser()
-            {
-                Id = Id,
-                UserName = UserName,
-                Email = Email,
-                IsBanned = IsBanned
-            };
-        }
-    }
-
-    public class ManageStoreLocationViewModel : ManageViewModelBase<StoreLocation>
-    {
-        public ManageStoreLocationViewModel()
+        public ManageStoreViewModel()
         {
             StateList = StateListCreator.CreateStateList();
         }
@@ -148,7 +55,7 @@ namespace PizzaWebsite.Models
 
         [Required]
         [Display(Name = "Zip Code")]
-        [StringLength(5,MinimumLength = 5)]
+        [StringLength(5, MinimumLength = 5)]
         public string ZipCode { get; set; }
 
         [Required]
@@ -164,7 +71,8 @@ namespace PizzaWebsite.Models
             return Id == 0;
         }
 
-        public override StoreLocation ToDbModel()
+        // todo: Remove
+        /*public override StoreLocation ToEntity()
         {
             return new StoreLocation()
             {
@@ -179,7 +87,7 @@ namespace PizzaWebsite.Models
             };
         }
 
-        public override void FromDbModel(StoreLocation dbModel)
+        public override void FromEntity(StoreLocation dbModel)
         {
             Id = dbModel.Id;
             Name = dbModel.Name;
@@ -189,6 +97,143 @@ namespace PizzaWebsite.Models
             ZipCode = dbModel.ZipCode;
             PhoneNumber = dbModel.PhoneNumber;
             IsActiveLocation = dbModel.IsActiveLocation;
+        }*/
+    }
+
+    public class ManagePagedListViewModel<TItemViewModel> : PagedListViewModel where TItemViewModel : class, new()
+    {
+        public TItemViewModel ItemViewModel { get; set; }
+        public List<TItemViewModel> ItemViewModelList { get; set; }
+
+        public ManagePagedListViewModel()
+        {
+            ItemViewModelList = new List<TItemViewModel>();
         }
     }
+
+    // todo: Update documentation here.
+    /*public class ManageListViewModel<TViewModel, TEntity> where TEntity : class, new() where TViewModel : CreateEditEntityViewModel<TEntity>, new()
+    {
+        public TViewModel ItemViewModel { get; set; }
+        public List<TViewModel> ItemViewModelList { get; set; }
+        public PaginationViewModel PaginationVm { get; set; }
+
+        public ManageListViewModel()
+        {
+            ItemViewModelList = new List<TViewModel>();
+            PaginationVm = new PaginationViewModel();
+        }
+
+        public async Task LoadViewModelRecordsAsync(PizzaDatabase database, HttpRequestBase request, int? page, int? rowsPerPage, string sortColumnName, object searchFilters)
+        {
+            // Set default values
+            if (!page.HasValue)
+            {
+                page = 1;
+            }
+            if (!rowsPerPage.HasValue)
+            {
+                rowsPerPage = 10;
+            }
+
+            int totalNumberOfItems = await database.GetNumberOfRecords<TEntity>(searchFilters);
+            int totalPages = await database.GetNumberOfPagesAsync<TEntity>(searchFilters, rowsPerPage.Value);
+            List<TEntity> databaseRecords = await database.GetListPagedAsync<TEntity>(searchFilters, page.Value, rowsPerPage.Value, sortColumnName);
+
+            // Navigation pane
+            PaginationVm.QueryString = request.QueryString;
+            PaginationVm.CurrentPage = page.Value;
+            PaginationVm.RowsPerPage = rowsPerPage.Value;
+            PaginationVm.TotalPages = totalPages;
+            PaginationVm.TotalNumberOfItems = totalNumberOfItems;
+
+            foreach (TEntity recordModel in databaseRecords)
+            {
+                TViewModel viewModel = new TViewModel();
+                viewModel.FromEntity(recordModel);
+                ItemViewModelList.Add(viewModel);
+            }
+        }
+    }
+
+    public abstract class CreateEditEntityViewModel<TEntity> : IEntityConverter<TEntity> where TEntity : class, new()
+    {
+        public CreateEditEntityViewModel()
+        {
+
+        }
+
+        public abstract void FromEntity(TEntity entity);
+        public abstract TEntity ToEntity();
+    }
+
+    public class ManageEmployeeViewModel : CreateEditEntityViewModel<Employee>
+    {
+        [Display(Name = "Employee ID")]
+        public string Id { get; set; }
+
+        [Display(Name = "Currently Employed")]
+        public bool CurrentlyEmployed { get; set; }
+
+        [Display(Name = "Is Manager")]
+        public bool IsManager { get; set; }
+
+        public ManageEmployeeViewModel()
+        {
+
+        }
+
+        public override void FromEntity(Employee entity)
+        {
+            Id = entity.Id;
+            CurrentlyEmployed = entity.CurrentlyEmployed;
+        }
+
+        public override Employee ToEntity()
+        {
+            return new Employee()
+            {
+                Id = Id,
+                CurrentlyEmployed = CurrentlyEmployed
+            };
+        }
+    }
+
+    public class ManageUserViewModel : CreateEditEntityViewModel<SiteUser>
+    {
+        public int Id { get; set; }
+
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
+
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Display(Name = "Banned")]
+        public bool IsBanned { get; set; }
+
+        public ManageUserViewModel()
+        {
+
+        }
+
+        public override void FromEntity(SiteUser dbModel)
+        {
+            Id = dbModel.Id;
+            UserName = dbModel.UserName;
+            Email = dbModel.Email;
+            IsBanned = dbModel.IsBanned;
+        }
+
+        public override SiteUser ToEntity()
+        {
+            return new SiteUser()
+            {
+                Id = Id,
+                UserName = UserName,
+                Email = Email,
+                IsBanned = IsBanned
+            };
+        }
+    }*/
 }

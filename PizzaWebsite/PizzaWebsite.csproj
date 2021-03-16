@@ -162,8 +162,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ManageStoresController.cs" />
     <Compile Include="Controllers\ManageWebsiteController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -172,7 +174,7 @@
     <Compile Include="Models\Databases\DatabaseContext.cs" />
     <Compile Include="Models\Geography\State.cs" />
     <Compile Include="Models\Geography\StateListCreator.cs" />
-    <Compile Include="Models\IDatabaseRecordConverter.cs" />
+    <Compile Include="Models\IEntityConverter.cs" />
     <Compile Include="Models\Identity\IdentityRole.cs" />
     <Compile Include="Models\Identity\IdentityUser.cs" />
     <Compile Include="Models\Identity\Stores\RoleStore.cs" />
@@ -243,16 +245,18 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\ManageWebsite\Index.cshtml" />
-    <Content Include="Views\ManageWebsite\ManageStores.cshtml" />
-    <Content Include="Views\ManageWebsite\_StoreLocationPartial.cshtml" />
-    <Content Include="Views\ManageWebsite\CreateEditStoreLocation.cshtml" />
-    <Content Include="Views\ManageWebsite\CreateEditConfirmation.cshtml" />
+    <Content Include="Views\ManageStores\Index.cshtml" />
+    <Content Include="Views\ManageStores\ManageStore.cshtml" />
+    <Content Include="Views\Shared\CreateEditConfirmation.cshtml" />
     <Content Include="Views\ManageWebsite\Error.cshtml" />
     <Content Include="Views\ManageWebsite\ManageUsers.cshtml" />
     <Content Include="Views\ManageWebsite\ManageUser.cshtml" />
+    <Content Include="Views\ManageWebsite\ManageEmployee.cshtml" />
+    <Content Include="Views\ManageWebsite\ManageEmployees.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

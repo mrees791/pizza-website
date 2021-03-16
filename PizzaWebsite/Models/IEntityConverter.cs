@@ -13,7 +13,7 @@ namespace PizzaWebsite.Models
     // todo: Update documentation here
     public interface IEntityConverter<TEntity> where TEntity : class, new()
     {
-        TEntity ToDbModel();
-        void FromDbModel(TEntity dbModel);
+        TEntity ToEntity();
+        void FromEntity(TEntity entity);
     }
 }
