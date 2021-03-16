@@ -24,9 +24,9 @@ namespace PizzaWebsite.Controllers
 
             List<StoreLocation> storeEntities = await LoadPagedEntitiesAsync<StoreLocation>(PizzaDb, Request, manageStoresVm.PaginationVm, page, rowsPerPage, "Name", searchFilters);
 
-            foreach (StoreLocation entity in storeEntities)
+            foreach (StoreLocation storeEntity in storeEntities)
             {
-                ManageStoreViewModel model = EntityToViewModel(entity);
+                ManageStoreViewModel model = EntityToViewModel(storeEntity);
                 manageStoresVm.ItemViewModelList.Add(model);
             }
 

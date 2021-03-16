@@ -70,34 +70,25 @@ namespace PizzaWebsite.Models
         {
             return Id == 0;
         }
+    }
 
-        // todo: Remove
-        /*public override StoreLocation ToEntity()
+    public class ManageUserViewModel
+    {
+        public int Id { get; set; }
+
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
+
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Display(Name = "Banned")]
+        public bool IsBanned { get; set; }
+
+        public ManageUserViewModel()
         {
-            return new StoreLocation()
-            {
-                Id = Id,
-                Name = Name,
-                StreetAddress = StreetAddress,
-                City = City,
-                State = SelectedState,
-                ZipCode = ZipCode,
-                PhoneNumber = PhoneNumber,
-                IsActiveLocation = IsActiveLocation
-            };
+
         }
-
-        public override void FromEntity(StoreLocation dbModel)
-        {
-            Id = dbModel.Id;
-            Name = dbModel.Name;
-            StreetAddress = dbModel.StreetAddress;
-            City = dbModel.City;
-            SelectedState = dbModel.State;
-            ZipCode = dbModel.ZipCode;
-            PhoneNumber = dbModel.PhoneNumber;
-            IsActiveLocation = dbModel.IsActiveLocation;
-        }*/
     }
 
     public class ManagePagedListViewModel<TItemViewModel> : PagedListViewModel where TItemViewModel : class, new()
@@ -195,44 +186,6 @@ namespace PizzaWebsite.Models
             {
                 Id = Id,
                 CurrentlyEmployed = CurrentlyEmployed
-            };
-        }
-    }
-
-    public class ManageUserViewModel : CreateEditEntityViewModel<SiteUser>
-    {
-        public int Id { get; set; }
-
-        [Display(Name = "User Name")]
-        public string UserName { get; set; }
-
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-
-        [Display(Name = "Banned")]
-        public bool IsBanned { get; set; }
-
-        public ManageUserViewModel()
-        {
-
-        }
-
-        public override void FromEntity(SiteUser dbModel)
-        {
-            Id = dbModel.Id;
-            UserName = dbModel.UserName;
-            Email = dbModel.Email;
-            IsBanned = dbModel.IsBanned;
-        }
-
-        public override SiteUser ToEntity()
-        {
-            return new SiteUser()
-            {
-                Id = Id,
-                UserName = UserName,
-                Email = Email,
-                IsBanned = IsBanned
             };
         }
     }*/

@@ -1,4 +1,5 @@
-﻿@model PizzaWebsite.Models.PagedListViewModel<PizzaWebsite.Models.ManageUserViewModel, DataLibrary.Models.Tables.SiteUser>
+﻿@using PizzaWebsite.Models
+@model ManagePagedListViewModel<ManageUserViewModel>
 
 @{
     ViewBag.Title = "Manage Users";
@@ -7,7 +8,7 @@
 <h2>Manage Users</h2>
 
 <div>
-    @using (Html.BeginForm("ManageUsers", "ManageWebsite", FormMethod.Get))
+    @using (Html.BeginForm("Index", "ManageUsers", FormMethod.Get))
     {
         <input type="hidden" name="Page" value="1" />
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
@@ -46,7 +47,7 @@
                 @Html.DisplayFor(modelItem => item.IsBanned)
             </td>
             <td>
-                <a href="@Url.Action("ManageUser", "ManageWebsite")/@item.Id?@(Request.QueryString)">
+                <a href="@Url.Action("ManageUser")/@item.Id?@(Request.QueryString)">
                     <input type="button" value="Edit" class="btn btn-default" />
                 </a>
             </td>
