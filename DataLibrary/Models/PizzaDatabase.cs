@@ -37,6 +37,12 @@ namespace DataLibrary.Models
             return list.ToList();
         }*/
 
+        public async Task<TEntity> GetAsync<TEntity>(object id, IDbTransaction transaction = null) where TEntity : class
+        {
+            TEntity entity = await connection.GetAsync<TEntity>(id, transaction);
+            return entity;
+        }
+
         public async Task<List<TEntity>> GetListAsync<TEntity>() where TEntity : class
         {
             IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>();

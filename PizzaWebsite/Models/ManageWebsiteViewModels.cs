@@ -84,11 +84,18 @@ namespace PizzaWebsite.Models
 
         [Display(Name = "Banned")]
         public bool IsBanned { get; set; }
+    }
 
-        public ManageUserViewModel()
-        {
+    public class ManageEmployeeViewModel
+    {
+        [Display(Name = "Employee ID")]
+        public string Id { get; set; }
 
-        }
+        [Display(Name = "Currently Employed")]
+        public bool CurrentlyEmployed { get; set; }
+
+        [Display(Name = "Is Manager")]
+        public bool IsManager { get; set; }
     }
 
     public class ManagePagedListViewModel<TItemViewModel> : PagedListViewModel where TItemViewModel : class, new()
@@ -101,92 +108,4 @@ namespace PizzaWebsite.Models
             ItemViewModelList = new List<TItemViewModel>();
         }
     }
-
-    // todo: Update documentation here.
-    /*public class ManageListViewModel<TViewModel, TEntity> where TEntity : class, new() where TViewModel : CreateEditEntityViewModel<TEntity>, new()
-    {
-        public TViewModel ItemViewModel { get; set; }
-        public List<TViewModel> ItemViewModelList { get; set; }
-        public PaginationViewModel PaginationVm { get; set; }
-
-        public ManageListViewModel()
-        {
-            ItemViewModelList = new List<TViewModel>();
-            PaginationVm = new PaginationViewModel();
-        }
-
-        public async Task LoadViewModelRecordsAsync(PizzaDatabase database, HttpRequestBase request, int? page, int? rowsPerPage, string sortColumnName, object searchFilters)
-        {
-            // Set default values
-            if (!page.HasValue)
-            {
-                page = 1;
-            }
-            if (!rowsPerPage.HasValue)
-            {
-                rowsPerPage = 10;
-            }
-
-            int totalNumberOfItems = await database.GetNumberOfRecords<TEntity>(searchFilters);
-            int totalPages = await database.GetNumberOfPagesAsync<TEntity>(searchFilters, rowsPerPage.Value);
-            List<TEntity> databaseRecords = await database.GetListPagedAsync<TEntity>(searchFilters, page.Value, rowsPerPage.Value, sortColumnName);
-
-            // Navigation pane
-            PaginationVm.QueryString = request.QueryString;
-            PaginationVm.CurrentPage = page.Value;
-            PaginationVm.RowsPerPage = rowsPerPage.Value;
-            PaginationVm.TotalPages = totalPages;
-            PaginationVm.TotalNumberOfItems = totalNumberOfItems;
-
-            foreach (TEntity recordModel in databaseRecords)
-            {
-                TViewModel viewModel = new TViewModel();
-                viewModel.FromEntity(recordModel);
-                ItemViewModelList.Add(viewModel);
-            }
-        }
-    }
-
-    public abstract class CreateEditEntityViewModel<TEntity> : IEntityConverter<TEntity> where TEntity : class, new()
-    {
-        public CreateEditEntityViewModel()
-        {
-
-        }
-
-        public abstract void FromEntity(TEntity entity);
-        public abstract TEntity ToEntity();
-    }
-
-    public class ManageEmployeeViewModel : CreateEditEntityViewModel<Employee>
-    {
-        [Display(Name = "Employee ID")]
-        public string Id { get; set; }
-
-        [Display(Name = "Currently Employed")]
-        public bool CurrentlyEmployed { get; set; }
-
-        [Display(Name = "Is Manager")]
-        public bool IsManager { get; set; }
-
-        public ManageEmployeeViewModel()
-        {
-
-        }
-
-        public override void FromEntity(Employee entity)
-        {
-            Id = entity.Id;
-            CurrentlyEmployed = entity.CurrentlyEmployed;
-        }
-
-        public override Employee ToEntity()
-        {
-            return new Employee()
-            {
-                Id = Id,
-                CurrentlyEmployed = CurrentlyEmployed
-            };
-        }
-    }*/
 }

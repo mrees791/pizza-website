@@ -165,6 +165,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ManageEmployeesController.cs" />
     <Compile Include="Controllers\ManageStoresController.cs" />
     <Compile Include="Controllers\ManageUsersController.cs" />
     <Compile Include="Controllers\ManageWebsiteController.cs" />
@@ -252,8 +253,8 @@
     <Content Include="Views\ManageWebsite\Error.cshtml" />
     <Content Include="Views\ManageUsers\Index.cshtml" />
     <Content Include="Views\ManageUsers\ManageUser.cshtml" />
-    <Content Include="Views\ManageWebsite\ManageEmployee.cshtml" />
-    <Content Include="Views\ManageWebsite\ManageEmployees.cshtml" />
+    <Content Include="Views\ManageEmployees\ManageEmployee.cshtml" />
+    <Content Include="Views\ManageEmployees\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
