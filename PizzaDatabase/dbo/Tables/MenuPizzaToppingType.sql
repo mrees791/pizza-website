@@ -10,8 +10,8 @@
   CategoryName NVARCHAR(50) NOT NULL,
   Description NVARCHAR(512) NOT NULL,
   HasMenuIcon BIT NOT NULL,
-  MenuIconFile NVARCHAR(50) NOT NULL,
+  MenuIconFile NVARCHAR(50),
   HasPizzaBuilderImage BIT NOT NULL,
-  PizzaBuilderImageFile NVARCHAR(50) NOT NULL,
+  PizzaBuilderImageFile NVARCHAR(50),
   PRIMARY KEY (Id)
 )

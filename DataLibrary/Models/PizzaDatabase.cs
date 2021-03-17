@@ -30,13 +30,6 @@ namespace DataLibrary.Models
         }
 
         // CRUD Table Operations
-        // todo: Remove this non async get list method
-        /*public List<TEntity> GetList<TEntity>() where TEntity : class
-        {
-            IEnumerable<TEntity> list = connection.GetList<TEntity>();
-            return list.ToList();
-        }*/
-
         public async Task<TEntity> GetAsync<TEntity>(object id, IDbTransaction transaction = null) where TEntity : class
         {
             TEntity entity = await connection.GetAsync<TEntity>(id, transaction);
@@ -140,53 +133,64 @@ namespace DataLibrary.Models
             return connection.Query<int>("INSERT INTO Cart OUTPUT Inserted.Id DEFAULT VALUES;", null, transaction).Single();
         }
 
-        public void Update(Cart cart, IDbTransaction transaction = null)
+        public void Update(Cart entity, IDbTransaction transaction = null)
         {
-            connection.Update(cart, transaction);
+            connection.Update(entity, transaction);
         }
 
         // Employee CRUD
-        public void Insert(Employee employee, IDbTransaction transaction = null)
+        public void Insert(Employee entity, IDbTransaction transaction = null)
         {
             // Query method was used since connection.Insert was having an issue with its string ID field.
-            connection.Query("INSERT INTO Employee (Id, UserId, CurrentlyEmployed) VALUES (@Id, @UserId, @CurrentlyEmployed)", employee, transaction);
+            connection.Query("INSERT INTO Employee (Id, UserId, CurrentlyEmployed) VALUES (@Id, @UserId, @CurrentlyEmployed)", entity, transaction);
         }
 
-        public void Update(Employee employee, IDbTransaction transaction = null)
+        public void Update(Employee entity, IDbTransaction transaction = null)
         {
-            connection.Update(employee, transaction);
+            connection.Update(entity, transaction);
         }
 
         // EmployeeLocation CRUD
-        public int Insert(EmployeeLocation employeeLocation, IDbTransaction transaction = null)
+        public int Insert(EmployeeLocation entity, IDbTransaction transaction = null)
         {
-            return connection.Insert(employeeLocation, transaction).Value;
+            return connection.Insert(entity, transaction).Value;
         }
 
-        public void Update(EmployeeLocation employeeLocation, IDbTransaction transaction = null)
+        public void Update(EmployeeLocation entity, IDbTransaction transaction = null)
         {
-            connection.Update(employeeLocation, transaction);
+            connection.Update(entity, transaction);
+        }
+
+        // MenuPizzaCheese CRUD
+        public int Insert(MenuPizzaCheese entity, IDbTransaction transaction = null)
+        {
+            return connection.Insert(entity, transaction).Value;
+        }
+
+        public void Update(MenuPizzaCheese entity, IDbTransaction transaction = null)
+        {
+            connection.Update(entity, transaction);
         }
 
         // SiteRole CRUD
-        public int Insert(SiteRole siteRole, IDbTransaction transaction = null)
+        public int Insert(SiteRole entity, IDbTransaction transaction = null)
         {
-            return connection.Insert(siteRole, transaction).Value;
+            return connection.Insert(entity, transaction).Value;
         }
 
-        public void Update(SiteRole siteRole, IDbTransaction transaction = null)
+        public void Update(SiteRole entity, IDbTransaction transaction = null)
         {
-            connection.Update(siteRole, transaction);
+            connection.Update(entity, transaction);
         }
         
         // SiteUser CRUD
-        public int Insert(SiteUser siteUser)
+        public int Insert(SiteUser entity)
         {
             using (var transaction = connection.BeginTransaction())
             {
-                siteUser.CurrentCartId = InsertCart(transaction);
-                siteUser.ConfirmOrderCartId = InsertCart(transaction);
-                int? userId = connection.Insert(siteUser, transaction);
+                entity.CurrentCartId = InsertCart(transaction);
+                entity.ConfirmOrderCartId = InsertCart(transaction);
+                int? userId = connection.Insert(entity, transaction);
 
                 transaction.Commit();
 
@@ -194,68 +198,68 @@ namespace DataLibrary.Models
             }
         }
 
-        public void Update(SiteUser siteUser, IDbTransaction transaction = null)
+        public void Update(SiteUser entity, IDbTransaction transaction = null)
         {
-            connection.Update(siteUser, transaction);
+            connection.Update(entity, transaction);
         }
 
         // StoreLocation CRUD
-        public int Insert(StoreLocation storeLocation, IDbTransaction transaction = null)
+        public int Insert(StoreLocation entity, IDbTransaction transaction = null)
         {
-            return connection.Insert(storeLocation, transaction).Value;
+            return connection.Insert(entity, transaction).Value;
         }
 
-        public void Update(StoreLocation storeLocation, IDbTransaction transaction = null)
+        public void Update(StoreLocation entity, IDbTransaction transaction = null)
         {
-            connection.Update(storeLocation, transaction);
+            connection.Update(entity, transaction);
         }
 
         // UserClaim CRUD
-        public int Insert(UserClaim userClaim, IDbTransaction transaction = null)
+        public int Insert(UserClaim entity, IDbTransaction transaction = null)
         {
-            return connection.Insert(userClaim, transaction).Value;
+            return connection.Insert(entity, transaction).Value;
         }
 
-        public void Update(UserClaim userClaim, IDbTransaction transaction = null)
+        public void Update(UserClaim entity, IDbTransaction transaction = null)
         {
-            connection.Update(userClaim, transaction);
+            connection.Update(entity, transaction);
         }
 
-        public void Delete(UserClaim userClaim, IDbTransaction transaction = null)
+        public void Delete(UserClaim entity, IDbTransaction transaction = null)
         {
-            connection.Delete(userClaim, transaction);
+            connection.Delete(entity, transaction);
         }
 
         // UserLogin CRUD
-        public int Insert(UserLogin userLogin, IDbTransaction transaction = null)
+        public int Insert(UserLogin entity, IDbTransaction transaction = null)
         {
-            return connection.Insert(userLogin, transaction).Value;
+            return connection.Insert(entity, transaction).Value;
         }
 
-        public void Update(UserLogin userLogin, IDbTransaction transaction = null)
+        public void Update(UserLogin entity, IDbTransaction transaction = null)
         {
-            connection.Update(userLogin, transaction);
+            connection.Update(entity, transaction);
         }
 
-        public void Delete(UserLogin userLogin, IDbTransaction transaction = null)
+        public void Delete(UserLogin entity, IDbTransaction transaction = null)
         {
-            connection.Delete(userLogin, transaction);
+            connection.Delete(entity, transaction);
         }
 
         // UserRole CRUD
-        public int Insert(UserRole userRole, IDbTransaction transaction = null)
+        public int Insert(UserRole entity, IDbTransaction transaction = null)
         {
-            return connection.Insert(userRole, transaction).Value;
+            return connection.Insert(entity, transaction).Value;
         }
 
-        public void Update(UserRole userRole, IDbTransaction transaction = null)
+        public void Update(UserRole entity, IDbTransaction transaction = null)
         {
-            connection.Update(userRole, transaction);
+            connection.Update(entity, transaction);
         }
 
-        public void Delete(UserRole userRole, IDbTransaction transaction = null)
+        public void Delete(UserRole entity, IDbTransaction transaction = null)
         {
-            connection.Delete(userRole, transaction);
+            connection.Delete(entity, transaction);
         }
     }
 }

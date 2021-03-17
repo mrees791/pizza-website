@@ -166,6 +166,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ManageEmployeesController.cs" />
+    <Compile Include="Controllers\ManageMenuController.cs" />
+    <Compile Include="Controllers\ManagePizzaCheeseMenuController.cs" />
     <Compile Include="Controllers\ManageStoresController.cs" />
     <Compile Include="Controllers\ManageUsersController.cs" />
     <Compile Include="Controllers\ManageWebsiteController.cs" />
@@ -183,6 +185,7 @@
     <Compile Include="Models\Identity\Stores\UserStore.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ManageWebsiteViewModels.cs" />
+    <Compile Include="Models\PizzaViewModels.cs" />
     <Compile Include="Models\SharedViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -255,6 +258,9 @@
     <Content Include="Views\ManageUsers\ManageUser.cshtml" />
     <Content Include="Views\ManageEmployees\ManageEmployee.cshtml" />
     <Content Include="Views\ManageEmployees\Index.cshtml" />
+    <Content Include="Views\ManagePizzaCheeseMenu\Index.cshtml" />
+    <Content Include="Views\ManageMenu\Index.cshtml" />
+    <Content Include="Views\ManagePizzaCheeseMenu\Manage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

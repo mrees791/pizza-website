@@ -72,6 +72,13 @@
     <Compile Include="Models\Tables\Cart.cs" />
     <Compile Include="Models\Tables\Employee.cs" />
     <Compile Include="Models\Tables\EmployeeLocation.cs" />
+    <Compile Include="Models\Tables\MenuPizza.cs" />
+    <Compile Include="Models\Tables\MenuPizzaCheese.cs" />
+    <Compile Include="Models\Tables\MenuPizzaCrust.cs" />
+    <Compile Include="Models\Tables\MenuPizzaCrustFlavor.cs" />
+    <Compile Include="Models\Tables\MenuPizzaSauce.cs" />
+    <Compile Include="Models\Tables\MenuPizzaTopping.cs" />
+    <Compile Include="Models\Tables\MenuPizzaToppingType.cs" />
     <Compile Include="Models\Tables\SiteRole.cs" />
     <Compile Include="Models\Tables\SiteUser.cs" />
     <Compile Include="Models\Tables\StoreLocation.cs" />
