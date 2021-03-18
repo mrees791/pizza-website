@@ -268,12 +268,15 @@
     <Content Include="Views\ManagePizzaCheeseMenu\Manage.cshtml" />
     <Content Include="Views\ManagePizzaCrustMenu\Index.cshtml" />
     <Content Include="Views\ManagePizzaCrustMenu\Manage.cshtml" />
+    <Content Include="Views\ManagePizzaCrustFlavorMenu\Index.cshtml" />
+    <Content Include="Views\ManagePizzaSauceMenu\Index.cshtml" />
+    <Content Include="Views\ManagePizzaToppingTypeMenu\Index.cshtml" />
+    <Content Include="Views\ManagePizzaCrustFlavorMenu\Manage.cshtml" />
+    <Content Include="Views\ManagePizzaSauceMenu\Manage.cshtml" />
+    <Content Include="Views\ManagePizzaToppingTypeMenu\Manage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\ManagePizzaCrustFlavorMenu\" />
-    <Folder Include="Views\ManagePizzaSauceMenu\" />
-    <Folder Include="Views\ManagePizzaToppingTypeMenu\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
