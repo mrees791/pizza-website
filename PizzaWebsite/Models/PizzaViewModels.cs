@@ -4,19 +4,22 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace PizzaWebsite.Models
 {
     public class ManageMenuPizzaCheeseViewModel
     {
+        [HiddenInput(DisplayValue = false)]
         public int Id { get; set; }
+        [HiddenInput(DisplayValue = false)]
         public int SortOrder { get; set; }
-        [Display(Name = "Available for Purchase")]
-        public bool AvailableForPurchase { get; set; }
         [Required]
         [Display(Name = "Name")]
         [MaxLength(100)]
         public string Name { get; set; }
+        [Display(Name = "Available for Purchase")]
+        public bool AvailableForPurchase { get; set; }
         [Display(Name = "Price (Light Amount)")]
         [Range(0.01, 100.0, ErrorMessage = "Price must be between $0.01 and $100.00.")]
         public decimal PriceLight { get; set; }
@@ -43,14 +46,16 @@ namespace PizzaWebsite.Models
 
     public class ManageMenuPizzaCrustViewModel
     {
+        [HiddenInput(DisplayValue = false)]
         public int Id { get; set; }
+        [HiddenInput(DisplayValue = false)]
         public int SortOrder { get; set; }
-        [Display(Name = "Available for Purchase")]
-        public bool AvailableForPurchase { get; set; }
         [Required]
         [Display(Name = "Name")]
         [MaxLength(100)]
         public string Name { get; set; }
+        [Display(Name = "Available for Purchase")]
+        public bool AvailableForPurchase { get; set; }
         [Display(Name = "Price (Small)")]
         [Range(0.01, 100.0, ErrorMessage = "Price must be between $0.01 and $100.00.")]
         public decimal PriceSmall { get; set; }
@@ -68,18 +73,26 @@ namespace PizzaWebsite.Models
         public string MenuIconFile { get; set; }
         public bool HasPizzaBuilderImage { get; set; }
         public string PizzaBuilderImageFile { get; set; }
+
+        public bool IsNewRecord()
+        {
+            return Id == 0;
+        }
     }
 
     public class ManageMenuPizzaCrustFlavorViewModel
     {
+
+        [HiddenInput(DisplayValue = false)]
         public int Id { get; set; }
+        [HiddenInput(DisplayValue = false)]
         public int SortOrder { get; set; }
-        [Display(Name = "Available for Purchase")]
-        public bool AvailableForPurchase { get; set; }
         [Required]
         [Display(Name = "Name")]
         [MaxLength(100)]
         public string Name { get; set; }
+        [Display(Name = "Available for Purchase")]
+        public bool AvailableForPurchase { get; set; }
         [Required]
         [Display(Name = "Description")]
         [MaxLength(512)]
@@ -88,18 +101,26 @@ namespace PizzaWebsite.Models
         public string MenuIconFile { get; set; }
         public bool HasPizzaBuilderImage { get; set; }
         public string PizzaBuilderImageFile { get; set; }
+
+        public bool IsNewRecord()
+        {
+            return Id == 0;
+        }
     }
 
     public class ManageMenuPizzaSauceViewModel
     {
+
+        [HiddenInput(DisplayValue = false)]
         public int Id { get; set; }
+        [HiddenInput(DisplayValue = false)]
         public int SortOrder { get; set; }
-        [Display(Name = "Available for Purchase")]
-        public bool AvailableForPurchase { get; set; }
         [Required]
         [Display(Name = "Name")]
         [MaxLength(100)]
         public string Name { get; set; }
+        [Display(Name = "Available for Purchase")]
+        public bool AvailableForPurchase { get; set; }
         [Display(Name = "Price (Light Amount)")]
         [Range(0.01, 100.0, ErrorMessage = "Price must be between $0.01 and $100.00.")]
         public decimal PriceLight { get; set; }
@@ -117,6 +138,11 @@ namespace PizzaWebsite.Models
         public string MenuIconFile { get; set; }
         public bool HasPizzaBuilderImage { get; set; }
         public string PizzaBuilderImageFile { get; set; }
+
+        public bool IsNewRecord()
+        {
+            return Id == 0;
+        }
     }
 
     public class ManageMenuPizzaToppingTypeViewModel
@@ -128,14 +154,17 @@ namespace PizzaWebsite.Models
             ToppingCategoryList = ListUtility.GetToppingCategoryList();
         }
 
+
+        [HiddenInput(DisplayValue = false)]
         public int Id { get; set; }
+        [HiddenInput(DisplayValue = false)]
         public int SortOrder { get; set; }
-        [Display(Name = "Available for Purchase")]
-        public bool AvailableForPurchase { get; set; }
         [Required]
         [Display(Name = "Name")]
         [MaxLength(100)]
         public string Name { get; set; }
+        [Display(Name = "Available for Purchase")]
+        public bool AvailableForPurchase { get; set; }
         [Display(Name = "Price (Light Amount)")]
         [Range(0.01, 100.0, ErrorMessage = "Price must be between $0.01 and $100.00.")]
         public decimal PriceLight { get; set; }
@@ -155,5 +184,10 @@ namespace PizzaWebsite.Models
         public string MenuIconFile { get; set; }
         public bool HasPizzaBuilderImage { get; set; }
         public string PizzaBuilderImageFile { get; set; }
+
+        public bool IsNewRecord()
+        {
+            return Id == 0;
+        }
     }
 }

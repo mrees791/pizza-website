@@ -169,6 +169,7 @@
     <Compile Include="Controllers\ManageEmployeesController.cs" />
     <Compile Include="Controllers\ManageMenuController.cs" />
     <Compile Include="Controllers\ManagePizzaCheeseMenuController.cs" />
+    <Compile Include="Controllers\ManagePizzaCrustMenuController.cs" />
     <Compile Include="Controllers\ManageStoresController.cs" />
     <Compile Include="Controllers\ManageUsersController.cs" />
     <Compile Include="Controllers\ManageWebsiteController.cs" />
@@ -262,6 +263,8 @@
     <Content Include="Views\ManagePizzaCheeseMenu\Index.cshtml" />
     <Content Include="Views\ManageMenu\Index.cshtml" />
     <Content Include="Views\ManagePizzaCheeseMenu\Manage.cshtml" />
+    <Content Include="Views\ManagePizzaCrustMenu\Index.cshtml" />
+    <Content Include="Views\ManagePizzaCrustMenu\Manage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
