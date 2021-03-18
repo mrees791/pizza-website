@@ -175,6 +175,7 @@ namespace PizzaWebsite.Models
         [Range(0.01, 100.0, ErrorMessage = "Price must be between $0.01 and $100.00.")]
         public decimal PriceExtra { get; set; }
         [Required]
+        [Display(Name = "Category")]
         public string CategoryName { get; set; }
         [Required]
         [Display(Name = "Description")]
