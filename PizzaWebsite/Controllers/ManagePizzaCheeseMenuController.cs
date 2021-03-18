@@ -10,81 +10,39 @@ using System.Web.Mvc;
 namespace PizzaWebsite.Controllers
 {
     [Authorize(Roles = "Admin,Manager")]
-    public class ManagePizzaCheeseMenuController : BaseController
+    public class ManagePizzaCheeseMenuController : BaseManageMenuController<MenuPizzaCheese, ManageMenuPizzaCheeseViewModel>
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
-            var viewModelList = new ManagePagedListViewModel<ManageMenuPizzaCheeseViewModel>();
-
             object searchFilters = new
             {
                 Name = name
             };
 
-            List<MenuPizzaCheese> entityList = await LoadPagedEntitiesAsync<MenuPizzaCheese>(PizzaDb, Request, viewModelList.PaginationVm, page, rowsPerPage, "Name", searchFilters);
-
-            foreach (MenuPizzaCheese entity in entityList)
-            {
-                viewModelList.ItemViewModelList.Add(EntityToViewModel(entity));
-            }
-
-            return View(viewModelList);
-        }
-
-        public ActionResult Add()
-        {
-            return View("Manage", new ManageMenuPizzaCheeseViewModel());
+            return await Index(page, rowsPerPage, searchFilters, "Name");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Add(ManageMenuPizzaCheeseViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("Manage", model);
-            }
-
-            PizzaDb.Insert(ViewModelToEntity(model));
-
-            ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
-            confirmationModel.ConfirmationMessage = $"{model.Name} has been added to the database.";
-            confirmationModel.ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}";
-
-            return View("CreateEditConfirmation", confirmationModel);
+            return Add(model, model.Name);
         }
 
-        public async Task<ActionResult> Edit(int? id)
-        {
-            List<MenuPizzaCheese> entityList = await PizzaDb.GetListAsync<MenuPizzaCheese>(new { Id = id.Value });
-            ManageMenuPizzaCheeseViewModel model = EntityToViewModel(entityList.FirstOrDefault());
-
-            return View("Manage", model);
-        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(ManageMenuPizzaCheeseViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("Manage", model);
-            }
-
-            PizzaDb.Update(ViewModelToEntity(model));
-
-            ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
-            confirmationModel.ConfirmationMessage = $"Your changes to {model.Name} have been confirmed.";
-            confirmationModel.ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}";
-
-            return View("CreateEditConfirmation", confirmationModel);
+            return Edit(model, model.Name);
         }
 
-        public ManageMenuPizzaCheeseViewModel EntityToViewModel(MenuPizzaCheese entity)
+        protected override ManageMenuPizzaCheeseViewModel EntityToViewModel(MenuPizzaCheese entity)
         {
             return new ManageMenuPizzaCheeseViewModel
             {
                 Id = entity.Id,
+                SortOrder = entity.SortOrder,
                 AvailableForPurchase = entity.AvailableForPurchase,
                 Description = entity.Description,
                 HasMenuIcon = entity.HasMenuIcon,
@@ -98,11 +56,12 @@ namespace PizzaWebsite.Controllers
             };
         }
 
-        public MenuPizzaCheese ViewModelToEntity(ManageMenuPizzaCheeseViewModel model)
+        protected override MenuPizzaCheese ViewModelToEntity(ManageMenuPizzaCheeseViewModel model)
         {
             return new MenuPizzaCheese()
             {
                 Id = model.Id,
+                SortOrder = model.SortOrder,
                 AvailableForPurchase = model.AvailableForPurchase,
                 Description = model.Description,
                 HasMenuIcon = model.HasMenuIcon,

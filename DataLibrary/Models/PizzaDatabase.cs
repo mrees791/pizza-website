@@ -126,6 +126,34 @@ namespace DataLibrary.Models
             return sqlWhereClause;
         }
 
+        // CRUD
+        public int Insert<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : class, new()
+        {
+            if (entity is Employee)
+            {
+                InsertEmployee(entity as Employee, transaction);
+                return 0; // Returns 0 since the Employee ID primary key is a string manually entered by a manager or admin.
+            }
+            else if (entity is Cart)
+            {
+                return InsertCart(transaction);
+            }
+            else if (entity is SiteUser)
+            {
+                return InsertSiteUser(entity as SiteUser);
+            }
+            return connection.Insert<TEntity>(entity, transaction).Value;
+        }
+
+        public int Update<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : class, new()
+        {
+            return connection.Update<TEntity>(entity, transaction);
+        }
+        public int Delete<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : class, new()
+        {
+            return connection.Delete<TEntity>(entity, transaction);
+        }
+
         // Cart CRUD
         private int InsertCart(IDbTransaction transaction = null)
         {
@@ -133,58 +161,15 @@ namespace DataLibrary.Models
             return connection.Query<int>("INSERT INTO Cart OUTPUT Inserted.Id DEFAULT VALUES;", null, transaction).Single();
         }
 
-        public void Update(Cart entity, IDbTransaction transaction = null)
-        {
-            connection.Update(entity, transaction);
-        }
-
         // Employee CRUD
-        public void Insert(Employee entity, IDbTransaction transaction = null)
+        private void InsertEmployee(Employee entity, IDbTransaction transaction = null)
         {
             // Query method was used since connection.Insert was having an issue with its string ID field.
             connection.Query("INSERT INTO Employee (Id, UserId, CurrentlyEmployed) VALUES (@Id, @UserId, @CurrentlyEmployed)", entity, transaction);
         }
-
-        public void Update(Employee entity, IDbTransaction transaction = null)
-        {
-            connection.Update(entity, transaction);
-        }
-
-        // EmployeeLocation CRUD
-        public int Insert(EmployeeLocation entity, IDbTransaction transaction = null)
-        {
-            return connection.Insert(entity, transaction).Value;
-        }
-
-        public void Update(EmployeeLocation entity, IDbTransaction transaction = null)
-        {
-            connection.Update(entity, transaction);
-        }
-
-        // MenuPizzaCheese CRUD
-        public int Insert(MenuPizzaCheese entity, IDbTransaction transaction = null)
-        {
-            return connection.Insert(entity, transaction).Value;
-        }
-
-        public void Update(MenuPizzaCheese entity, IDbTransaction transaction = null)
-        {
-            connection.Update(entity, transaction);
-        }
-
-        // SiteRole CRUD
-        public int Insert(SiteRole entity, IDbTransaction transaction = null)
-        {
-            return connection.Insert(entity, transaction).Value;
-        }
-
-        public void Update(SiteRole entity, IDbTransaction transaction = null)
-        {
-            connection.Update(entity, transaction);
-        }
         
         // SiteUser CRUD
-        public int Insert(SiteUser entity)
+        private int InsertSiteUser(SiteUser entity)
         {
             using (var transaction = connection.BeginTransaction())
             {
@@ -196,70 +181,6 @@ namespace DataLibrary.Models
 
                 return userId.Value;
             }
-        }
-
-        public void Update(SiteUser entity, IDbTransaction transaction = null)
-        {
-            connection.Update(entity, transaction);
-        }
-
-        // StoreLocation CRUD
-        public int Insert(StoreLocation entity, IDbTransaction transaction = null)
-        {
-            return connection.Insert(entity, transaction).Value;
-        }
-
-        public void Update(StoreLocation entity, IDbTransaction transaction = null)
-        {
-            connection.Update(entity, transaction);
-        }
-
-        // UserClaim CRUD
-        public int Insert(UserClaim entity, IDbTransaction transaction = null)
-        {
-            return connection.Insert(entity, transaction).Value;
-        }
-
-        public void Update(UserClaim entity, IDbTransaction transaction = null)
-        {
-            connection.Update(entity, transaction);
-        }
-
-        public void Delete(UserClaim entity, IDbTransaction transaction = null)
-        {
-            connection.Delete(entity, transaction);
-        }
-
-        // UserLogin CRUD
-        public int Insert(UserLogin entity, IDbTransaction transaction = null)
-        {
-            return connection.Insert(entity, transaction).Value;
-        }
-
-        public void Update(UserLogin entity, IDbTransaction transaction = null)
-        {
-            connection.Update(entity, transaction);
-        }
-
-        public void Delete(UserLogin entity, IDbTransaction transaction = null)
-        {
-            connection.Delete(entity, transaction);
-        }
-
-        // UserRole CRUD
-        public int Insert(UserRole entity, IDbTransaction transaction = null)
-        {
-            return connection.Insert(entity, transaction).Value;
-        }
-
-        public void Update(UserRole entity, IDbTransaction transaction = null)
-        {
-            connection.Update(entity, transaction);
-        }
-
-        public void Delete(UserRole entity, IDbTransaction transaction = null)
-        {
-            connection.Delete(entity, transaction);
         }
     }
 }

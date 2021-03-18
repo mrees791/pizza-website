@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLibrary.Models.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace PizzaWebsite.Models
     public class ManageMenuPizzaCheeseViewModel
     {
         public int Id { get; set; }
+        public int SortOrder { get; set; }
         [Display(Name = "Available for Purchase")]
         public bool AvailableForPurchase { get; set; }
         [Required]
@@ -42,6 +44,7 @@ namespace PizzaWebsite.Models
     public class ManageMenuPizzaCrustViewModel
     {
         public int Id { get; set; }
+        public int SortOrder { get; set; }
         [Display(Name = "Available for Purchase")]
         public bool AvailableForPurchase { get; set; }
         [Required]
@@ -70,6 +73,7 @@ namespace PizzaWebsite.Models
     public class ManageMenuPizzaCrustFlavorViewModel
     {
         public int Id { get; set; }
+        public int SortOrder { get; set; }
         [Display(Name = "Available for Purchase")]
         public bool AvailableForPurchase { get; set; }
         [Required]
@@ -89,6 +93,7 @@ namespace PizzaWebsite.Models
     public class ManageMenuPizzaSauceViewModel
     {
         public int Id { get; set; }
+        public int SortOrder { get; set; }
         [Display(Name = "Available for Purchase")]
         public bool AvailableForPurchase { get; set; }
         [Required]
@@ -120,13 +125,11 @@ namespace PizzaWebsite.Models
 
         public ManageMenuPizzaToppingTypeViewModel()
         {
-            ToppingCategoryList = new List<string>()
-            {
-                "Meats", "Veggie"
-            };
+            ToppingCategoryList = ListUtility.GetToppingCategoryList();
         }
 
         public int Id { get; set; }
+        public int SortOrder { get; set; }
         [Display(Name = "Available for Purchase")]
         public bool AvailableForPurchase { get; set; }
         [Required]
