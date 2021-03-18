@@ -169,7 +169,10 @@
     <Compile Include="Controllers\ManageEmployeesController.cs" />
     <Compile Include="Controllers\ManageMenuController.cs" />
     <Compile Include="Controllers\ManagePizzaCheeseMenuController.cs" />
+    <Compile Include="Controllers\ManagePizzaCrustFlavorMenuController.cs" />
     <Compile Include="Controllers\ManagePizzaCrustMenuController.cs" />
+    <Compile Include="Controllers\ManagePizzaSauceMenuController.cs" />
+    <Compile Include="Controllers\ManagePizzaToppingTypeMenuController.cs" />
     <Compile Include="Controllers\ManageStoresController.cs" />
     <Compile Include="Controllers\ManageUsersController.cs" />
     <Compile Include="Controllers\ManageWebsiteController.cs" />
@@ -268,6 +271,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\ManagePizzaCrustFlavorMenu\" />
+    <Folder Include="Views\ManagePizzaSauceMenu\" />
+    <Folder Include="Views\ManagePizzaToppingTypeMenu\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
