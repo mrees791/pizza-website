@@ -8,6 +8,14 @@ namespace DataLibrary.Models.Utility
 {
     public static class ListUtility
     {
+        public static List<string> GetPizzaSizeList()
+        {
+            return new List<string>()
+            {
+                "Small", "Medium", "Large"
+            };
+        }
+
         public static List<string> GetToppingCategoryList()
         {
             return new List<string>()

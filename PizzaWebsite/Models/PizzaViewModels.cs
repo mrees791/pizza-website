@@ -8,6 +8,25 @@ using System.Web.Mvc;
 
 namespace PizzaWebsite.Models
 {
+    public class ManageMenuPizzaViewModel : PizzaBuilderViewModel
+    {
+        [HiddenInput(DisplayValue = false)]
+        public int Id { get; set; }
+        [HiddenInput(DisplayValue = false)]
+        public int SortOrder { get; set; }
+        [Required]
+        [Display(Name = "Name")]
+        [MaxLength(100)]
+        public string Name { get; set; }
+        [Display(Name = "Available for Purchase")]
+        public bool AvailableForPurchase { get; set; }
+
+        public bool IsNewRecord()
+        {
+            return Id == 0;
+        }
+    }
+
     public class ManageMenuPizzaCheeseViewModel
     {
         [HiddenInput(DisplayValue = false)]

@@ -171,6 +171,7 @@
     <Compile Include="Controllers\ManagePizzaCheeseMenuController.cs" />
     <Compile Include="Controllers\ManagePizzaCrustFlavorMenuController.cs" />
     <Compile Include="Controllers\ManagePizzaCrustMenuController.cs" />
+    <Compile Include="Controllers\ManagePizzaMenuController.cs" />
     <Compile Include="Controllers\ManagePizzaSauceMenuController.cs" />
     <Compile Include="Controllers\ManagePizzaToppingTypeMenuController.cs" />
     <Compile Include="Controllers\ManageStoresController.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Models\Identity\Stores\UserStore.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ManageWebsiteViewModels.cs" />
+    <Compile Include="Models\PizzaBuilderUtility.cs" />
     <Compile Include="Models\PizzaViewModels.cs" />
     <Compile Include="Models\SharedViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -274,6 +276,9 @@
     <Content Include="Views\ManagePizzaCrustFlavorMenu\Manage.cshtml" />
     <Content Include="Views\ManagePizzaSauceMenu\Manage.cshtml" />
     <Content Include="Views\ManagePizzaToppingTypeMenu\Manage.cshtml" />
+    <Content Include="Views\ManagePizzaMenu\Index.cshtml" />
+    <Content Include="Views\ManagePizzaMenu\Manage.cshtml" />
+    <Content Include="Views\Shared\_PizzaBuilder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

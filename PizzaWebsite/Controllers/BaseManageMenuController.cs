@@ -25,7 +25,7 @@ namespace PizzaWebsite.Controllers
             return View(viewModelList);
         }
 
-        public ActionResult Add()
+        public virtual ActionResult Add()
         {
             return View("Manage", new TViewModel());
         }

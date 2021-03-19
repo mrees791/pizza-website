@@ -1,0 +1,67 @@
+﻿@using PizzaWebsite.Models
+@model ManagePagedListViewModel<ManageMenuPizzaViewModel>
+
+@{
+    ViewBag.Title = "Manage Pizza Menu";
+}
+
+<h2>Manage Pizza Menu</h2>
+
+<div>
+    @using (Html.BeginForm("Index", "ManagePizzaMenu", FormMethod.Get))
+    {
+        <input type="hidden" name="Page" value="1" />
+        @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
+        @Html.Label("Name", "Name")
+        @Html.TextBox("Name", Request["Name"], new { @class = "form-control" })
+        <input type="submit" value="Apply Search Filters" class="btn btn-default" />
+    }
+</div>
+
+<div>
+    <a href="@Url.Action("Add")?@(Request.QueryString)">
+        <input type="button" value="Add New Pizza" class="btn btn-default" />
+    </a>
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ItemViewModel.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ItemViewModel.AvailableForPurchase)
+        </th>
+        <th><!-- Empty header for edit column --></th>
+    </tr>
+
+    @foreach (var item in Model.ItemViewModelList)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AvailableForPurchase)
+            </td>
+            <td>
+                <a href="@Url.Action("Edit")/@item.Id?@(Request.QueryString)">
+                    <input type="button" value="Edit" class="btn btn-default" />
+                </a>
+            </td>
+        </tr>
+    }
+</table>
+
+<nav>
+    <ul id="managePagination" class="pagination">
+    </ul>
+</nav>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            pizzaSiteNs.createPagination('#managePagination', @Model.PaginationVm.CurrentPage, @Model.PaginationVm.RowsPerPage, @Model.PaginationVm.TotalPages, @Model.PaginationVm.TotalNumberOfItems);
+        });
+    </script>
+}

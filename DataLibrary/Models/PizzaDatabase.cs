@@ -32,8 +32,18 @@ namespace DataLibrary.Models
         // CRUD Table Operations
         public async Task<TEntity> GetAsync<TEntity>(object id, IDbTransaction transaction = null) where TEntity : class
         {
-            TEntity entity = await connection.GetAsync<TEntity>(id, transaction);
-            return entity;
+            return await connection.GetAsync<TEntity>(id, transaction);
+        }
+
+        public List<TEntity> GetList<TEntity>() where TEntity : class
+        {
+            return connection.GetList<TEntity>().ToList();
+        }
+
+        public List<TEntity> GetList<TEntity>(object parameters, string orderby) where TEntity : class
+        {
+            string conditions = GetSqlWhereConditions(parameters, orderby);
+            return connection.GetList<TEntity>(conditions, parameters).ToList();
         }
 
         public async Task<List<TEntity>> GetListAsync<TEntity>() where TEntity : class
@@ -50,20 +60,20 @@ namespace DataLibrary.Models
 
         public async Task<List<TEntity>> GetListAsync<TEntity>(object searchFilter, object parameters) where TEntity : class
         {
-            IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>(GetSqlWhereFilterClause(searchFilter), parameters);
+            IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>(GetSqlWhereFilterConditions(searchFilter), parameters);
             return list.ToList();
         }
 
         public async Task<List<TEntity>> GetListPagedAsync<TEntity>(object searchFilter, int pageNumber, int rowsPerPage, string orderby) where TEntity : class
         {
-            string conditions = GetSqlWhereFilterClause(searchFilter);
+            string conditions = GetSqlWhereFilterConditions(searchFilter);
             IEnumerable<TEntity> list = await connection.GetListPagedAsync<TEntity>(pageNumber, rowsPerPage, conditions, orderby, searchFilter);
             return list.ToList();
         }
 
         public async Task<int> GetNumberOfRecords<TEntity>(object searchFilter)
         {
-            int recordCount = await connection.RecordCountAsync<TEntity>(GetSqlWhereFilterClause(searchFilter), searchFilter);
+            int recordCount = await connection.RecordCountAsync<TEntity>(GetSqlWhereFilterConditions(searchFilter), searchFilter);
             return recordCount;
         }
 
@@ -87,15 +97,56 @@ namespace DataLibrary.Models
             return pages;
         }
 
+        internal string GetSqlWhereConditions(object parameters, string orderby)
+        {
+            string sqlWhereConditions = string.Empty;
+            bool queriesAdded = false;
+
+            foreach (PropertyInfo propertyInfo in parameters.GetType().GetProperties())
+            {
+                Type propertyType = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
+                object propertyValue = propertyInfo.GetValue(parameters);
+
+                if (propertyValue != null)
+                {
+                    string columnName = propertyInfo.Name;
+
+                    if (!queriesAdded)
+                    {
+                        sqlWhereConditions += "where ";
+                    }
+                    else
+                    {
+                        sqlWhereConditions += "and ";
+                    }
+
+                    // Only uses the column name with a placeholder to avoid SQL injections.
+                    // The column name variable is never set by user input.
+                    sqlWhereConditions += $"{columnName} = @{columnName}";
+                    queriesAdded = true;
+                }
+            }
+
+            if (queriesAdded)
+            {
+                sqlWhereConditions += " ";
+            }
+
+            // The orderby variable is never set by user input.
+            sqlWhereConditions += $"order by {orderby}";
+
+            return sqlWhereConditions;
+        }
+
         /// <summary>
         /// Creates a where clause which can be used to run queries with filters using the like operator.
         /// This is used by Simple Dapper's get list methods.
         /// </summary>
         /// <param name="searchFilter"></param>
         /// <returns>An SQL where clause.</returns>
-        internal string GetSqlWhereFilterClause(object searchFilter)
+        internal string GetSqlWhereFilterConditions(object searchFilter)
         {
-            string sqlWhereClause = string.Empty;
+            string sqlWhereConditions = string.Empty;
             bool queriesAdded = false;
 
             foreach (PropertyInfo propertyInfo in searchFilter.GetType().GetProperties())
@@ -109,21 +160,21 @@ namespace DataLibrary.Models
 
                     if (!queriesAdded)
                     {
-                        sqlWhereClause += "where ";
+                        sqlWhereConditions += "where ";
                     }
                     else
                     {
-                        sqlWhereClause += "and ";
+                        sqlWhereConditions += "and ";
                     }
 
                     // Only uses the column name with a placeholder to avoid SQL injections.
                     // The column name variable is never set by user input.
-                    sqlWhereClause += $"{columnName} like '%' + @{columnName} + '%'";
+                    sqlWhereConditions += $"{columnName} like '%' + @{columnName} + '%'";
                     queriesAdded = true;
                 }
             }
 
-            return sqlWhereClause;
+            return sqlWhereConditions;
         }
 
         // CRUD

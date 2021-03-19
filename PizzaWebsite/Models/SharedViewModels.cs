@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DataLibrary.Models.Tables;
+using DataLibrary.Models.Utility;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -22,6 +24,20 @@ namespace PizzaWebsite.Models
         public PagedListViewModel()
         {
             PaginationVm = new PaginationViewModel();
+        }
+    }
+
+    public class PizzaBuilderViewModel
+    {
+        public List<string> PizzaSizeList { get; set; }
+        public List<MenuPizzaCrust> PizzaCrustList { get; set; }
+
+        public int SelectedPizzaCrustId { get; set; }
+
+        public PizzaBuilderViewModel()
+        {
+            PizzaSizeList = new List<string>();
+            PizzaCrustList = new List<MenuPizzaCrust>();
         }
     }
 }
