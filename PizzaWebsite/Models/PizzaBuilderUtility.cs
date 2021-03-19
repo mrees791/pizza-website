@@ -11,13 +11,18 @@ namespace PizzaWebsite.Models
 {
     public static class PizzaBuilderUtility
     {
+        // todo: May make this async.
         public static void LoadPizzaBuilderLists(PizzaDatabase pizzaDb, PizzaBuilderViewModel pizzaBuilderVm)
         {
             pizzaBuilderVm.SizeList = ListUtility.GetPizzaSizeList();
+            pizzaBuilderVm.SauceAmountList = ListUtility.GetSauceAmountList();
+            pizzaBuilderVm.CheeseAmountList = ListUtility.GetCheeseAmountList();
             pizzaBuilderVm.CrustList = pizzaDb.GetList<MenuPizzaCrust>(new { AvailableForPurchase = true }, "SortOrder");
+            pizzaBuilderVm.SauceList = pizzaDb.GetList<MenuPizzaSauce>(new { AvailableForPurchase = true }, "SortOrder");
+            pizzaBuilderVm.CheeseList = pizzaDb.GetList<MenuPizzaCheese>(new { AvailableForPurchase = true }, "SortOrder");
+            pizzaBuilderVm.CrustFlavorList = pizzaDb.GetList<MenuPizzaCrustFlavor>(new { AvailableForPurchase = true }, "SortOrder");
 
-
-
+            // Create lists for toppings
             List<MenuPizzaToppingType> meatToppings = pizzaDb.GetList<MenuPizzaToppingType>(new { AvailableForPurchase = true, CategoryName = "Meats" }, "SortOrder");
             List<MenuPizzaToppingType> veggieToppings = pizzaDb.GetList<MenuPizzaToppingType>(new { AvailableForPurchase = true, CategoryName = "Veggie" }, "SortOrder");
             pizzaBuilderVm.MeatToppingList = new Dictionary<int, PizzaToppingViewModel>();

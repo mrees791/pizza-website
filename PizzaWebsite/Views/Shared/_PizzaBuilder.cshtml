@@ -22,6 +22,46 @@
     </div>
 }
 
+<div class="form-group">
+    @Html.LabelFor(model => model.SauceList, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownListFor(m => m.SelectedSauceId, new SelectList(Model.SauceList.Select(t => t), "Id", "Name"))
+        @Html.ValidationMessageFor(model => model.SauceList, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.SauceAmountList, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownListFor(m => m.SelectedSauceAmount, new SelectList(Model.SauceAmountList))
+        @Html.ValidationMessageFor(model => model.SauceAmountList, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.CheeseList, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownListFor(m => m.SelectedCheeseId, new SelectList(Model.CheeseList.Select(t => t), "Id", "Name"))
+        @Html.ValidationMessageFor(model => model.CheeseList, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.CheeseAmountList, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownListFor(m => m.SelectedCheeseAmount, new SelectList(Model.CheeseAmountList))
+        @Html.ValidationMessageFor(model => model.CheeseAmountList, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.CrustFlavorList, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownListFor(m => m.SelectedCrustFlavorId, new SelectList(Model.CrustFlavorList.Select(t => t), "Id", "Name"))
+        @Html.ValidationMessageFor(model => model.CrustFlavorList, "", new { @class = "text-danger" })
+    </div>
+</div>
+
 <h4>Toppings</h4>
 <h5>Meats</h5>
 @foreach (var toppingModelPair in Model.MeatToppingList)

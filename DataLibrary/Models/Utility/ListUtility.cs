@@ -39,5 +39,21 @@ namespace DataLibrary.Models.Utility
                 "Whole", "Left", "Right"
             };
         }
+
+        public static List<string> GetSauceAmountList()
+        {
+            return new List<string>()
+            {
+                "None", "Light", "Regular", "Extra"
+            };
+        }
+
+        public static List<string> GetCheeseAmountList()
+        {
+            return new List<string>()
+            {
+                "None", "Light", "Regular", "Extra"
+            };
+        }
     }
 }

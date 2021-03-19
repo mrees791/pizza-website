@@ -36,16 +36,21 @@ namespace PizzaWebsite.Models
         public int SelectedCrustId { get; set; }
         public List<string> SizeList { get; set; }
         public string SelectedSize { get; set; }
+        [Display(Name = "Sauce")]
         public List<MenuPizzaSauce> SauceList { get; set; }
         public int SelectedSauceId { get; set; }
+        [Display(Name = "Amount")]
         public List<string> SauceAmountList { get; set; }
         public string SelectedSauceAmount { get; set; }
+        [Display(Name = "Cheese")]
         public List<MenuPizzaCheese> CheeseList { get; set; }
-        public int SelectedCheese { get; set; }
+        public int SelectedCheeseId { get; set; }
+        [Display(Name = "Amount")]
         public List<string> CheeseAmountList { get; set; }
         public string SelectedCheeseAmount { get; set; }
+        [Display(Name = "Crust Flavor")]
         public List<MenuPizzaCrustFlavor> CrustFlavorList { get; set; }
-        public int CrustFlavorId { get; set; }
+        public int SelectedCrustFlavorId { get; set; }
         public Dictionary<int, PizzaToppingViewModel> MeatToppingList { get; set; }
         public Dictionary<int, PizzaToppingViewModel> VeggieToppingList { get; set; }
 
