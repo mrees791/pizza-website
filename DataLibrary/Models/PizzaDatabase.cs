@@ -122,14 +122,9 @@ namespace DataLibrary.Models
 
                     // Only uses the column name with a placeholder to avoid SQL injections.
                     // The column name variable is never set by user input.
-                    sqlWhereConditions += $"{columnName} = @{columnName}";
+                    sqlWhereConditions += $"{columnName} = @{columnName} ";
                     queriesAdded = true;
                 }
-            }
-
-            if (queriesAdded)
-            {
-                sqlWhereConditions += " ";
             }
 
             // The orderby variable is never set by user input.
@@ -164,7 +159,7 @@ namespace DataLibrary.Models
                     }
                     else
                     {
-                        sqlWhereConditions += "and ";
+                        sqlWhereConditions += " and ";
                     }
 
                     // Only uses the column name with a placeholder to avoid SQL injections.

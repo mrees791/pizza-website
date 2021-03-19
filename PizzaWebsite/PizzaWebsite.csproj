@@ -279,6 +279,7 @@
     <Content Include="Views\ManagePizzaMenu\Index.cshtml" />
     <Content Include="Views\ManagePizzaMenu\Manage.cshtml" />
     <Content Include="Views\Shared\_PizzaBuilder.cshtml" />
+    <Content Include="Views\Shared\_PizzaBuilderTopping.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

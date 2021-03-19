@@ -1,11 +1,35 @@
-﻿@model PizzaWebsite.Models.PizzaBuilderViewModel
+﻿@using PizzaWebsite.Models
+@model PizzaWebsite.Models.PizzaBuilderViewModel
 
 @* This partial view must be placed inside a POST form. *@
 
 <div class="form-group">
-    @Html.LabelFor(model => model.PizzaCrustList, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.CrustList, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
-        @Html.DropDownListFor(m => m.SelectedPizzaCrustId, new SelectList(Model.PizzaCrustList.Select(t => t), "Id", "Name"))
-        @Html.ValidationMessageFor(model => model.PizzaCrustList, "", new { @class = "text-danger" })
+        @Html.DropDownListFor(m => m.SelectedCrustId, new SelectList(Model.CrustList.Select(t => t), "Id", "Name"))
+        @Html.ValidationMessageFor(model => model.CrustList, "", new { @class = "text-danger" })
     </div>
 </div>
+
+@if (Model.ShowPizzaSizes)
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.SizeList, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.SelectedSize, new SelectList(Model.SizeList))
+            @Html.ValidationMessageFor(model => model.SizeList, "", new { @class = "text-danger" })
+        </div>
+    </div>
+}
+
+<h4>Toppings</h4>
+<h5>Meats</h5>
+@foreach (PizzaToppingViewModel toppingModel in Model.MeatToppingList)
+{
+    @Html.Partial("_PizzaBuilderTopping", toppingModel)
+}
+<h5>Veggies</h5>
+@foreach (PizzaToppingViewModel toppingModel in Model.VeggieToppingList)
+{
+    @Html.Partial("_PizzaBuilderTopping", toppingModel)
+}

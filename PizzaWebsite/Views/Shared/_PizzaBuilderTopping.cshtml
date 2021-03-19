@@ -1,0 +1,11 @@
+﻿@using PizzaWebsite.Models
+@model PizzaWebsite.Models.PizzaToppingViewModel
+
+<div class="form-group">
+    @Html.Hidden($"{Model.FormName}.Id", Model.Id)
+    <div class="col-md-2">
+        <label class="control-label">@Model.Name</label>
+    </div>
+    @Html.DropDownList($"{Model.FormName}.SelectedAmount", new SelectList(Model.AmountList), new { @class = "col-md-5" })
+    @Html.DropDownList($"{Model.FormName}.SelectedToppingHalf", new SelectList(Model.ToppingHalfList), new { @class = "col-md-5" })
+</div>

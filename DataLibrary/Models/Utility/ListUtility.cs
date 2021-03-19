@@ -23,5 +23,21 @@ namespace DataLibrary.Models.Utility
                 "Meats", "Veggie"
             };
         }
+
+        public static List<string> GetToppingAmountList()
+        {
+            return new List<string>()
+            {
+                "None", "Light", "Regular", "Extra"
+            };
+        }
+
+        public static List<string> GetToppingHalfList()
+        {
+            return new List<string>()
+            {
+                "Whole", "Left", "Right"
+            };
+        }
     }
 }
