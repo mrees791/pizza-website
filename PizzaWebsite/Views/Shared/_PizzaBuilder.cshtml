@@ -24,12 +24,12 @@
 
 <h4>Toppings</h4>
 <h5>Meats</h5>
-@foreach (PizzaToppingViewModel toppingModel in Model.MeatToppingList)
+@foreach (var toppingModelPair in Model.MeatToppingList)
 {
-    @Html.Partial("_PizzaBuilderTopping", toppingModel)
+    @Html.Partial("_PizzaBuilderTopping", toppingModelPair.Value)
 }
 <h5>Veggies</h5>
-@foreach (PizzaToppingViewModel toppingModel in Model.VeggieToppingList)
+@foreach (var toppingModelPair in Model.VeggieToppingList)
 {
-    @Html.Partial("_PizzaBuilderTopping", toppingModel)
+    @Html.Partial("_PizzaBuilderTopping", toppingModelPair.Value)
 }

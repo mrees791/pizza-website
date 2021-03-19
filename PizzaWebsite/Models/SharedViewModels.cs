@@ -46,8 +46,8 @@ namespace PizzaWebsite.Models
         public string SelectedCheeseAmount { get; set; }
         public List<MenuPizzaCrustFlavor> CrustFlavorList { get; set; }
         public int CrustFlavorId { get; set; }
-        public List<PizzaToppingViewModel> MeatToppingList { get; set; }
-        public List<PizzaToppingViewModel> VeggieToppingList { get; set; }
+        public Dictionary<int, PizzaToppingViewModel> MeatToppingList { get; set; }
+        public Dictionary<int, PizzaToppingViewModel> VeggieToppingList { get; set; }
 
         public bool ShowPizzaSizes { get; set; }
 
