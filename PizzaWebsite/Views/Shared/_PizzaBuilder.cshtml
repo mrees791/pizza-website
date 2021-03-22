@@ -6,7 +6,7 @@
 <div class="form-group">
     @Html.LabelFor(model => model.CrustList, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
-        @Html.DropDownListFor(m => m.SelectedCrustId, new SelectList(Model.CrustList.Select(t => t), "Id", "Name"))
+        @Html.DropDownListFor(m => m.SelectedCrustId, new SelectList(Model.CrustList.Values.Select(t => t), "Id", "Name"))
         @Html.ValidationMessageFor(model => model.CrustList, "", new { @class = "text-danger" })
     </div>
 </div>
@@ -25,7 +25,7 @@
 <div class="form-group">
     @Html.LabelFor(model => model.SauceList, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
-        @Html.DropDownListFor(m => m.SelectedSauceId, new SelectList(Model.SauceList.Select(t => t), "Id", "Name"))
+        @Html.DropDownListFor(m => m.SelectedSauceId, new SelectList(Model.SauceList.Values.Select(t => t), "Id", "Name"))
         @Html.ValidationMessageFor(model => model.SauceList, "", new { @class = "text-danger" })
     </div>
 </div>
@@ -41,7 +41,7 @@
 <div class="form-group">
     @Html.LabelFor(model => model.CheeseList, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
-        @Html.DropDownListFor(m => m.SelectedCheeseId, new SelectList(Model.CheeseList.Select(t => t), "Id", "Name"))
+        @Html.DropDownListFor(m => m.SelectedCheeseId, new SelectList(Model.CheeseList.Values.Select(t => t), "Id", "Name"))
         @Html.ValidationMessageFor(model => model.CheeseList, "", new { @class = "text-danger" })
     </div>
 </div>
@@ -57,7 +57,7 @@
 <div class="form-group">
     @Html.LabelFor(model => model.CrustFlavorList, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
-        @Html.DropDownListFor(m => m.SelectedCrustFlavorId, new SelectList(Model.CrustFlavorList.Select(t => t), "Id", "Name"))
+        @Html.DropDownListFor(m => m.SelectedCrustFlavorId, new SelectList(Model.CrustFlavorList.Values.Select(t => t), "Id", "Name"))
         @Html.ValidationMessageFor(model => model.CrustFlavorList, "", new { @class = "text-danger" })
     </div>
 </div>
