@@ -197,6 +197,10 @@ namespace DataLibrary.Models
 
         public int Update<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : class, new()
         {
+            if (entity is MenuPizza)
+            {
+                return UpdateMenuPizza(entity as MenuPizza);
+            }
             return connection.Update<TEntity>(entity, transaction);
         }
         public int Delete<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : class, new()
@@ -228,12 +232,34 @@ namespace DataLibrary.Models
                 // Insert topping records
                 foreach (MenuPizzaTopping topping in entity.Toppings)
                 {
+                    topping.MenuPizzaId = id;
                     connection.Insert<MenuPizzaTopping>(topping, transaction);
                 }
 
                 transaction.Commit();
 
                 return id;
+            }
+        }
+
+        private int UpdateMenuPizza(MenuPizza entity)
+        {
+            using (var transaction = connection.BeginTransaction())
+            {
+                // Delete previous toppings
+                connection.Query("DELETE FROM MenuPizzaTopping WHERE MenuPizzaId = @Id", entity, transaction);
+
+                // Insert new toppings
+                foreach (MenuPizzaTopping topping in entity.Toppings)
+                {
+                    connection.Insert<MenuPizzaTopping>(topping, transaction);
+                }
+
+                int rowsAffected = connection.Update<MenuPizza>(entity, transaction);
+
+                transaction.Commit();
+
+                return rowsAffected;
             }
         }
 

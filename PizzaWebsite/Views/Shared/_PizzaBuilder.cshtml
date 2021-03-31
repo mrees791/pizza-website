@@ -84,23 +84,21 @@
 </div>
 
 <h4>Toppings</h4>
-@*
-    <h5>Meats</h5>
-    @for (int iTopping = 0; iTopping < Model.ToppingList.Count; iTopping++)
+<h5>Meats</h5>
+@for (int iTopping = 0; iTopping < Model.ToppingList.Count; iTopping++)
+{
+    PizzaToppingViewModel topping = Model.ToppingList[iTopping];
+    if (topping.Category == "Meats")
     {
-        PizzaToppingViewModel topping = Model.ToppingList[iTopping];
-        if (topping.Category == "Meats")
-        {
-            @Html.Partial("_PizzaBuilderTopping", topping)
-        }
+        @Html.Partial("_PizzaBuilderTopping", topping)
     }
-    <h5>Veggies</h5>
-    @for (int iTopping = 0; iTopping < Model.ToppingList.Count; iTopping++)
+}
+<h5>Veggies</h5>
+@for (int iTopping = 0; iTopping < Model.ToppingList.Count; iTopping++)
+{
+    PizzaToppingViewModel topping = Model.ToppingList[iTopping];
+    if (topping.Category == "Veggie")
     {
-        PizzaToppingViewModel topping = Model.ToppingList[iTopping];
-        if (topping.Category == "Veggie")
-        {
-            @Html.Partial("_PizzaBuilderTopping", topping)
-        }
+        @Html.Partial("_PizzaBuilderTopping", topping)
     }
-*@
+}

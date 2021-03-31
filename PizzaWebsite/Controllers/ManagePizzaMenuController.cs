@@ -40,6 +40,8 @@ namespace PizzaWebsite.Controllers
 
         protected override ManageMenuPizzaViewModel EntityToViewModel(MenuPizza entity)
         {
+            entity.Toppings = PizzaDb.GetList<MenuPizzaTopping>(new { MenuPizzaId = entity.Id }, "Id");
+
             ManageMenuPizzaViewModel model = new ManageMenuPizzaViewModel()
             {
                 Id = entity.Id,
@@ -62,7 +64,7 @@ namespace PizzaWebsite.Controllers
             {
                 toppings.Add(new PizzaTopping()
                 {
-                    ToppingTypeId = topping.Id,
+                    ToppingTypeId = topping.MenuPizzaToppingTypeId,
                     ToppingAmount = topping.ToppingAmount,
                     ToppingHalf = topping.ToppingHalf
                 });
@@ -81,6 +83,7 @@ namespace PizzaWebsite.Controllers
                 {
                     entity.Toppings.Add(new MenuPizzaTopping()
                     {
+                        MenuPizzaId = entity.Id,
                         MenuPizzaToppingTypeId = topping.Id,
                         ToppingAmount = topping.SelectedAmount,
                         ToppingHalf = topping.SelectedToppingHalf
