@@ -17,7 +17,6 @@ namespace DataLibrary.Models.Tables
         public bool AvailableForPurchase { get; set; }
         public string PizzaName { get; set; }
         public string Description { get; set; }
-        public string Size { get; set; }
         public int MenuPizzaCrustId { get; set; }
         public int MenuPizzaSauceId { get; set; }
         public string SauceAmount { get; set; }

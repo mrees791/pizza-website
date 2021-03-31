@@ -107,7 +107,7 @@ namespace PizzaWebsite.Controllers
                 SortOrder = model.SortOrder
             };
 
-            //AddToppingsToEntity(entity, model.ToppingList);
+            AddToppingsToEntity(entity, model.ToppingList);
 
             return entity;
         }

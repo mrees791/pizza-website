@@ -6,7 +6,6 @@
   AvailableForPurchase BIT NOT NULL,
   PizzaName NVARCHAR(100) NOT NULL,
   Description NVARCHAR(512) NOT NULL,
-  Size NVARCHAR(512) NOT NULL,
   MenuPizzaCrustId INT NOT NULL,
   MenuPizzaSauceId INT NOT NULL,
   SauceAmount NVARCHAR(50) NOT NULL,

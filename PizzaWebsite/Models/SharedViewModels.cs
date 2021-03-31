@@ -33,37 +33,42 @@ namespace PizzaWebsite.Models
     {
         public PizzaBuilderViewModel()
         {
+            CrustList = new Dictionary<int, string>();
+            SauceList = new Dictionary<int, string>();
+            CheeseList = new Dictionary<int, string>();
+            CrustFlavorList = new Dictionary<int, string>();
             ToppingList = new List<PizzaToppingViewModel>();
         }
 
         [Display(Name = "Crust")]
         public Dictionary<int, string> CrustList { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a crust.")]
         public int SelectedCrustId { get; set; }
         [Display(Name = "Sauce")]
-        public List<string> SauceList { get; set; }
+        public Dictionary<int, string> SauceList { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a sauce.")]
         public int SelectedSauceId { get; set; }
         [Display(Name = "Amount")]
         public List<string> SauceAmountList { get; set; }
         public string SelectedSauceAmount { get; set; }
         [Display(Name = "Cheese")]
-        public List<string> CheeseList { get; set; }
+        public Dictionary<int, string> CheeseList { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a cheese.")]
         public int SelectedCheeseId { get; set; }
         [Display(Name = "Amount")]
         public List<string> CheeseAmountList { get; set; }
         public string SelectedCheeseAmount { get; set; }
         [Display(Name = "Crust Flavor")]
-        public List<string> CrustFlavorList { get; set; }
+        public Dictionary<int, string> CrustFlavorList { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a crust flavor.")]
         public int SelectedCrustFlavorId { get; set; }
         public List<PizzaToppingViewModel> ToppingList { get; set; }
     }
 
     public class PizzaToppingViewModel
     {
-        [HiddenInput(DisplayValue = false)]
         public int ListIndex { get; set; }
-        [HiddenInput(DisplayValue = false)]
         public int Id { get; set; }
-        [HiddenInput(DisplayValue = false)]
         public string Category { get; set; }
         public string Name { get; set; }
         public List<string> AmountList { get; set; }

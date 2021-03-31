@@ -16,16 +16,32 @@ namespace PizzaWebsite.Models
         {
             List<MenuPizzaToppingType> toppingTypeList = pizzaDb.GetList<MenuPizzaToppingType>(new { AvailableForPurchase = true }, "SortOrder");
             List<MenuPizzaCrust> crustList = pizzaDb.GetList<MenuPizzaCrust>(new { AvailableForPurchase = true }, "SortOrder");
+            List<MenuPizzaCrustFlavor> crustFlavorList = pizzaDb.GetList<MenuPizzaCrustFlavor>(new { AvailableForPurchase = true }, "SortOrder").ToList();
+            List<MenuPizzaSauce> pizzaSauceList = pizzaDb.GetList<MenuPizzaSauce>(new { AvailableForPurchase = true }, "SortOrder").ToList();
+            List<MenuPizzaCheese> pizzaCheeseList = pizzaDb.GetList<MenuPizzaCheese>(new { AvailableForPurchase = true }, "SortOrder").ToList();
+
+            // Save to view model
             pizzaBuilderVm.SauceAmountList = ListUtility.GetSauceAmountList();
             pizzaBuilderVm.CheeseAmountList = ListUtility.GetCheeseAmountList();
-            pizzaBuilderVm.CrustList = new Dictionary<int, string>();
-            pizzaBuilderVm.CrustFlavorList = pizzaDb.GetList<MenuPizzaCrustFlavor>(new { AvailableForPurchase = true }, "SortOrder").Select(f => f.Name).ToList();
-            pizzaBuilderVm.SauceList = pizzaDb.GetList<MenuPizzaSauce>(new { AvailableForPurchase = true }, "SortOrder").Select(s => s.Name).ToList();
-            pizzaBuilderVm.CheeseList = pizzaDb.GetList<MenuPizzaCheese>(new { AvailableForPurchase = true }, "SortOrder").Select(c => c.Name).ToList();
 
             foreach (MenuPizzaCrust crust in crustList)
             {
                 pizzaBuilderVm.CrustList.Add(crust.Id, crust.Name);
+            }
+
+            foreach (MenuPizzaCrustFlavor crustFlavor in crustFlavorList)
+            {
+                pizzaBuilderVm.CrustFlavorList.Add(crustFlavor.Id, crustFlavor.Name);
+            }
+
+            foreach (MenuPizzaSauce sauce in pizzaSauceList)
+            {
+                pizzaBuilderVm.SauceList.Add(sauce.Id, sauce.Name);
+            }
+
+            foreach (MenuPizzaCheese cheese in pizzaCheeseList)
+            {
+                pizzaBuilderVm.CheeseList.Add(cheese.Id, cheese.Name);
             }
 
             // Create view models for toppings
