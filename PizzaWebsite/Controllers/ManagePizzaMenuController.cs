@@ -1,4 +1,6 @@
-﻿using DataLibrary.Models.Tables;
+﻿using DataLibrary.Models;
+using DataLibrary.Models.Tables;
+using DataLibrary.Models.Utility;
 using PizzaWebsite.Models;
 using System;
 using System.Collections.Generic;
@@ -16,24 +18,16 @@ namespace PizzaWebsite.Controllers
         {
             object searchFilters = new
             {
-                Name = name
+                PizzaName = name
             };
 
             return await Index(page, rowsPerPage, searchFilters, "PizzaName");
-        }
-
-        public override ActionResult Add()
-        {
-            ManageMenuPizzaViewModel model = new ManageMenuPizzaViewModel();
-            PizzaBuilderUtility.LoadPizzaBuilderLists(PizzaDb, model);
-            return View("Manage", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Add(ManageMenuPizzaViewModel model)
         {
-            PizzaBuilderUtility.LoadPizzaBuilderLists(PizzaDb, model);
             return Add(model, model.Name);
         }
 
@@ -46,16 +40,76 @@ namespace PizzaWebsite.Controllers
 
         protected override ManageMenuPizzaViewModel EntityToViewModel(MenuPizza entity)
         {
-            throw new NotImplementedException();
-            /*ManageMenuPizzaViewModel model = new ManageMenuPizzaViewModel();
-            PizzaBuilderUtility.LoadPizzaBuilderLists(PizzaDb, model);
+            ManageMenuPizzaViewModel model = new ManageMenuPizzaViewModel()
+            {
+                Id = entity.Id,
+                Name = entity.PizzaName,
+                AvailableForPurchase = entity.AvailableForPurchase,
+                SelectedCategory = entity.CategoryName,
+                Description = entity.Description,
+                SelectedCheeseAmount = entity.CheeseAmount,
+                SelectedCheeseId = entity.MenuPizzaCheeseId,
+                SelectedCrustFlavorId = entity.MenuPizzaCrustFlavorId,
+                SelectedCrustId = entity.MenuPizzaCrustId,
+                SelectedSauceId = entity.MenuPizzaSauceId,
+                SelectedSauceAmount = entity.SauceAmount,
+                CategoryList = ListUtility.GetPizzaCategoryList()
+            };
 
-            return model;*/
+            List<PizzaTopping> toppings = new List<PizzaTopping>();
+
+            foreach (MenuPizzaTopping topping in entity.Toppings)
+            {
+                toppings.Add(new PizzaTopping()
+                {
+                    ToppingTypeId = topping.Id,
+                    ToppingAmount = topping.ToppingAmount,
+                    ToppingHalf = topping.ToppingHalf
+                });
+            }
+
+            PizzaBuilderUtility.LoadNewPizzaBuilderLists(PizzaDb, toppings, model);
+
+            return model;
+        }
+
+        private void AddToppingsToEntity(MenuPizza entity, List<PizzaToppingViewModel> toppings)
+        {
+            foreach (PizzaToppingViewModel topping in toppings)
+            {
+                if (topping.SelectedAmount != "None")
+                {
+                    entity.Toppings.Add(new MenuPizzaTopping()
+                    {
+                        MenuPizzaToppingTypeId = topping.Id,
+                        ToppingAmount = topping.SelectedAmount,
+                        ToppingHalf = topping.SelectedToppingHalf
+                    });
+                }
+            }
         }
 
         protected override MenuPizza ViewModelToEntity(ManageMenuPizzaViewModel model)
         {
-            throw new NotImplementedException();
+            MenuPizza entity = new MenuPizza()
+            {
+                Id = model.Id,
+                AvailableForPurchase = model.AvailableForPurchase,
+                CategoryName = model.SelectedCategory,
+                PizzaName = model.Name,
+                CheeseAmount = model.SelectedCheeseAmount,
+                Description = model.Description,
+                MenuPizzaCheeseId = model.SelectedCheeseId,
+                MenuPizzaCrustFlavorId = model.SelectedCrustFlavorId,
+                MenuPizzaCrustId = model.SelectedCrustId,
+                MenuPizzaSauceId = model.SelectedSauceId,
+                SauceAmount = model.SelectedSauceAmount,
+                SortOrder = model.SortOrder
+            };
+
+            //AddToppingsToEntity(entity, model.ToppingList);
+
+            return entity;
         }
     }
 }

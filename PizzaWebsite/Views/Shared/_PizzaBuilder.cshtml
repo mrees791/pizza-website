@@ -6,26 +6,25 @@
 <div class="form-group">
     @Html.LabelFor(model => model.CrustList, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
-        @Html.DropDownListFor(m => m.SelectedCrustId, new SelectList(Model.CrustList.Values.Select(t => t), "Id", "Name"))
+        @for (int i = 0; i < Model.CrustList.Count; i++)
+        {
+            var crustPair = Model.CrustList.ElementAt(i);
+            <input type="hidden" name="CrustList[@i].Key" value="@crustPair.Key" />
+            <input type="hidden" name="CrustList[@i].Value" value="@crustPair.Value" />
+        }
+        @Html.DropDownListFor(m => m.SelectedCrustId, new SelectList(Model.CrustList, "Key", "Value"))
         @Html.ValidationMessageFor(model => model.CrustList, "", new { @class = "text-danger" })
     </div>
 </div>
 
-@if (Model.ShowPizzaSizes)
-{
-    <div class="form-group">
-        @Html.LabelFor(model => model.SizeList, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(m => m.SelectedSize, new SelectList(Model.SizeList))
-            @Html.ValidationMessageFor(model => model.SizeList, "", new { @class = "text-danger" })
-        </div>
-    </div>
-}
-
 <div class="form-group">
     @Html.LabelFor(model => model.SauceList, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
-        @Html.DropDownListFor(m => m.SelectedSauceId, new SelectList(Model.SauceList.Values.Select(t => t), "Id", "Name"))
+        @for (int i = 0; i < Model.SauceList.Count; i++)
+        {
+            <input type="hidden" name="SauceList[@i]" value="@Model.SauceList[i]" />
+        }
+        @Html.DropDownListFor(m => m.SelectedSauceId, new SelectList(Model.SauceList))
         @Html.ValidationMessageFor(model => model.SauceList, "", new { @class = "text-danger" })
     </div>
 </div>
@@ -33,6 +32,10 @@
 <div class="form-group">
     @Html.LabelFor(model => model.SauceAmountList, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
+        @for (int i = 0; i < Model.SauceAmountList.Count; i++)
+        {
+            <input type="hidden" name="SauceAmountList[@i]" value="@Model.SauceAmountList[i]" />
+        }
         @Html.DropDownListFor(m => m.SelectedSauceAmount, new SelectList(Model.SauceAmountList))
         @Html.ValidationMessageFor(model => model.SauceAmountList, "", new { @class = "text-danger" })
     </div>
@@ -41,7 +44,11 @@
 <div class="form-group">
     @Html.LabelFor(model => model.CheeseList, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
-        @Html.DropDownListFor(m => m.SelectedCheeseId, new SelectList(Model.CheeseList.Values.Select(t => t), "Id", "Name"))
+        @for (int i = 0; i < Model.CheeseList.Count; i++)
+        {
+            <input type="hidden" name="CheeseList[@i]" value="@Model.CheeseList[i]" />
+        }
+        @Html.DropDownListFor(m => m.SelectedCheeseId, new SelectList(Model.CheeseList))
         @Html.ValidationMessageFor(model => model.CheeseList, "", new { @class = "text-danger" })
     </div>
 </div>
@@ -49,6 +56,10 @@
 <div class="form-group">
     @Html.LabelFor(model => model.CheeseAmountList, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
+        @for (int i = 0; i < Model.CheeseAmountList.Count; i++)
+        {
+            <input type="hidden" name="CheeseAmountList[@i]" value="@Model.CheeseAmountList[i]" />
+        }
         @Html.DropDownListFor(m => m.SelectedCheeseAmount, new SelectList(Model.CheeseAmountList))
         @Html.ValidationMessageFor(model => model.CheeseAmountList, "", new { @class = "text-danger" })
     </div>
@@ -57,19 +68,31 @@
 <div class="form-group">
     @Html.LabelFor(model => model.CrustFlavorList, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
-        @Html.DropDownListFor(m => m.SelectedCrustFlavorId, new SelectList(Model.CrustFlavorList.Values.Select(t => t), "Id", "Name"))
+        @for (int i = 0; i < Model.CrustFlavorList.Count; i++)
+        {
+            <input type="hidden" name="CrustFlavorList[@i]" value="@Model.CrustFlavorList[i]" />
+        }
+        @Html.DropDownListFor(m => m.SelectedCrustFlavorId, new SelectList(Model.CrustFlavorList))
         @Html.ValidationMessageFor(model => model.CrustFlavorList, "", new { @class = "text-danger" })
     </div>
 </div>
 
 <h4>Toppings</h4>
 <h5>Meats</h5>
-@foreach (var toppingModelPair in Model.MeatToppingList)
+@for (int iTopping = 0; iTopping < Model.ToppingList.Count; iTopping++)
 {
-    @Html.Partial("_PizzaBuilderTopping", toppingModelPair.Value)
+    PizzaToppingViewModel topping = Model.ToppingList[iTopping];
+    if (topping.Category == "Meats")
+    {
+        @Html.Partial("_PizzaBuilderTopping", topping)
+    }
 }
 <h5>Veggies</h5>
-@foreach (var toppingModelPair in Model.VeggieToppingList)
+@for (int iTopping = 0; iTopping < Model.ToppingList.Count; iTopping++)
 {
-    @Html.Partial("_PizzaBuilderTopping", toppingModelPair.Value)
+    PizzaToppingViewModel topping = Model.ToppingList[iTopping];
+    if (topping.Category == "Veggie")
+    {
+        @Html.Partial("_PizzaBuilderTopping", topping)
+    }
 }

@@ -27,7 +27,7 @@ namespace PizzaWebsite.Controllers
 
         public virtual ActionResult Add()
         {
-            return View("Manage", new TViewModel());
+            return View("Manage", EntityToViewModel(new TEntity()));
         }
 
         [HttpPost]

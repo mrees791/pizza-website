@@ -188,6 +188,10 @@ namespace DataLibrary.Models
             {
                 return InsertSiteUser(entity as SiteUser);
             }
+            else if (entity is MenuPizza)
+            {
+                return InsertMenuPizza(entity as MenuPizza);
+            }
             return connection.Insert<TEntity>(entity, transaction).Value;
         }
 
@@ -213,7 +217,26 @@ namespace DataLibrary.Models
             // Query method was used since connection.Insert was having an issue with its string ID field.
             connection.Query("INSERT INTO Employee (Id, UserId, CurrentlyEmployed) VALUES (@Id, @UserId, @CurrentlyEmployed)", entity, transaction);
         }
-        
+
+        // MenuPizza CRUD
+        private int InsertMenuPizza(MenuPizza entity)
+        {
+            using (var transaction = connection.BeginTransaction())
+            {
+                int id = connection.Insert<MenuPizza>(entity, transaction).Value;
+
+                // Insert topping records
+                foreach (MenuPizzaTopping topping in entity.Toppings)
+                {
+                    connection.Insert<MenuPizzaTopping>(topping, transaction);
+                }
+
+                transaction.Commit();
+
+                return id;
+            }
+        }
+
         // SiteUser CRUD
         private int InsertSiteUser(SiteUser entity)
         {

@@ -20,6 +20,14 @@ namespace PizzaWebsite.Models
         public string Name { get; set; }
         [Display(Name = "Available for Purchase")]
         public bool AvailableForPurchase { get; set; }
+        public List<string> CategoryList { get; set; }
+        [Required]
+        [Display(Name = "Category")]
+        public string SelectedCategory { get; set; }
+        [Required]
+        [Display(Name = "Description")]
+        [MaxLength(512)]
+        public string Description { get; set; }
 
         public bool IsNewRecord()
         {
@@ -170,9 +178,8 @@ namespace PizzaWebsite.Models
 
         public ManageMenuPizzaToppingTypeViewModel()
         {
-            ToppingCategoryList = ListUtility.GetToppingCategoryList();
+            ToppingCategoryList = new List<string>();
         }
-
 
         [HiddenInput(DisplayValue = false)]
         public int Id { get; set; }

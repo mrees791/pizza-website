@@ -24,5 +24,11 @@ namespace DataLibrary.Models.Tables
         public int MenuPizzaCheeseId { get; set; }
         public string CheeseAmount { get; set; }
         public int MenuPizzaCrustFlavorId { get; set; }
+        public List<MenuPizzaTopping> Toppings { get; set; }
+
+        public MenuPizza()
+        {
+            Toppings = new List<MenuPizzaTopping>();
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DataLibrary.Models.Tables;
+using DataLibrary.Models.Utility;
 using PizzaWebsite.Models;
 using System;
 using System.Collections.Generic;
@@ -52,7 +53,8 @@ namespace PizzaWebsite.Controllers
                 SortOrder = entity.SortOrder,
                 PriceLight = entity.PriceLight,
                 PriceRegular = entity.PriceRegular,
-                PriceExtra = entity.PriceExtra
+                PriceExtra = entity.PriceExtra,
+                ToppingCategoryList = ListUtility.GetToppingCategoryList()
             };
         }
 

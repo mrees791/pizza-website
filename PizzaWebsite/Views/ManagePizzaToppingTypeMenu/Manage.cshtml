@@ -68,7 +68,11 @@
         <div class="form-group">
             @Html.LabelFor(model => model.CategoryName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(m => m.CategoryName, new SelectList(Model.ToppingCategoryList.Select(t => t)), "Category")
+                @for (int i = 0; i < Model.ToppingCategoryList.Count; i++)
+                {
+                    <input type="hidden" name="ToppingCategoryList[@i]" value="@Model.ToppingCategoryList[i]" />
+                }
+                @Html.DropDownListFor(m => m.CategoryName, new SelectList(Model.ToppingCategoryList), "Category")
                 @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
             </div>
         </div>

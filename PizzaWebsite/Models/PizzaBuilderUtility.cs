@@ -12,71 +12,52 @@ namespace PizzaWebsite.Models
     public static class PizzaBuilderUtility
     {
         // todo: May make this async.
-        public static void LoadPizzaBuilderLists(PizzaDatabase pizzaDb, PizzaBuilderViewModel pizzaBuilderVm)
+        public static void LoadNewPizzaBuilderLists(PizzaDatabase pizzaDb, List<PizzaTopping> toppings, PizzaBuilderViewModel pizzaBuilderVm)
         {
-            pizzaBuilderVm.CrustList = new Dictionary<int, MenuPizzaCrust>();
-            pizzaBuilderVm.CrustFlavorList = new Dictionary<int, MenuPizzaCrustFlavor>();
-            pizzaBuilderVm.SauceList = new Dictionary<int, MenuPizzaSauce>();
-            pizzaBuilderVm.CheeseList = new Dictionary<int, MenuPizzaCheese>();
-            pizzaBuilderVm.MeatToppingList = new Dictionary<int, PizzaToppingViewModel>();
-            pizzaBuilderVm.VeggieToppingList = new Dictionary<int, PizzaToppingViewModel>();
-
-            pizzaBuilderVm.SizeList = ListUtility.GetPizzaSizeList();
+            List<MenuPizzaToppingType> toppingTypeList = pizzaDb.GetList<MenuPizzaToppingType>(new { AvailableForPurchase = true }, "SortOrder");
+            List<MenuPizzaCrust> crustList = pizzaDb.GetList<MenuPizzaCrust>(new { AvailableForPurchase = true }, "SortOrder");
             pizzaBuilderVm.SauceAmountList = ListUtility.GetSauceAmountList();
             pizzaBuilderVm.CheeseAmountList = ListUtility.GetCheeseAmountList();
+            pizzaBuilderVm.CrustList = new Dictionary<int, string>();
+            pizzaBuilderVm.CrustFlavorList = pizzaDb.GetList<MenuPizzaCrustFlavor>(new { AvailableForPurchase = true }, "SortOrder").Select(f => f.Name).ToList();
+            pizzaBuilderVm.SauceList = pizzaDb.GetList<MenuPizzaSauce>(new { AvailableForPurchase = true }, "SortOrder").Select(s => s.Name).ToList();
+            pizzaBuilderVm.CheeseList = pizzaDb.GetList<MenuPizzaCheese>(new { AvailableForPurchase = true }, "SortOrder").Select(c => c.Name).ToList();
 
-            List<MenuPizzaCrust> menuCrustList = pizzaDb.GetList<MenuPizzaCrust>(new { AvailableForPurchase = true }, "SortOrder");
-            List<MenuPizzaCrustFlavor> menuCrustFlavorList = pizzaDb.GetList<MenuPizzaCrustFlavor>(new { AvailableForPurchase = true }, "SortOrder");
-            List<MenuPizzaSauce> menuSauceList = pizzaDb.GetList<MenuPizzaSauce>(new { AvailableForPurchase = true }, "SortOrder");
-            List<MenuPizzaCheese> menuCheeseList = pizzaDb.GetList<MenuPizzaCheese>(new { AvailableForPurchase = true }, "SortOrder");
-            List<MenuPizzaToppingType> meatToppings = pizzaDb.GetList<MenuPizzaToppingType>(new { AvailableForPurchase = true, CategoryName = "Meats" }, "SortOrder");
-            List<MenuPizzaToppingType> veggieToppings = pizzaDb.GetList<MenuPizzaToppingType>(new { AvailableForPurchase = true, CategoryName = "Veggie" }, "SortOrder");
-
-            // Create dictionaries for ingredients
-            foreach (MenuPizzaCrust crust in menuCrustList)
+            foreach (MenuPizzaCrust crust in crustList)
             {
-                pizzaBuilderVm.CrustList.Add(crust.Id, crust);
-            }
-            foreach (MenuPizzaCrustFlavor crustFlavor in menuCrustFlavorList)
-            {
-                pizzaBuilderVm.CrustFlavorList.Add(crustFlavor.Id, crustFlavor);
-            }
-            foreach (MenuPizzaSauce sauce in menuSauceList)
-            {
-                pizzaBuilderVm.SauceList.Add(sauce.Id, sauce);
-            }
-            foreach (MenuPizzaCheese cheese in menuCheeseList)
-            {
-                pizzaBuilderVm.CheeseList.Add(cheese.Id, cheese);
+                pizzaBuilderVm.CrustList.Add(crust.Id, crust.Name);
             }
 
-            // Create dictionaries for toppings
-
-            foreach (MenuPizzaToppingType topping in meatToppings)
+            // Create view models for toppings
+            for (int iTopping = 0; iTopping < toppingTypeList.Count; iTopping++)
             {
-                pizzaBuilderVm.MeatToppingList.Add(
-                    topping.Id,
-                    new PizzaToppingViewModel()
+                MenuPizzaToppingType toppingType = toppingTypeList[iTopping];
+
+                PizzaTopping currentTopping = toppings.Where(t => t.ToppingTypeId == toppingType.Id).FirstOrDefault();
+
+                if (currentTopping == null)
                 {
-                    FormName = $"MeatToppingList[{topping.Id}]",
-                    Id = topping.Id,
-                    Name = topping.Name,
-                    AmountList = ListUtility.GetToppingAmountList(),
-                    ToppingHalfList = ListUtility.GetToppingHalfList()
-                });
-            }
-            foreach (MenuPizzaToppingType topping in veggieToppings)
-            {
-                pizzaBuilderVm.VeggieToppingList.Add(
-                    topping.Id,
-                    new PizzaToppingViewModel()
+                    currentTopping = new PizzaTopping()
+                    {
+                        ToppingTypeId = toppingType.Id,
+                        ToppingHalf = "Whole",
+                        ToppingAmount = "None"
+                    };
+                }
+
+                PizzaToppingViewModel toppingModel = new PizzaToppingViewModel()
                 {
-                    FormName = $"VeggieToppingList[{topping.Id}]",
-                    Id = topping.Id,
-                    Name = topping.Name,
+                    ListIndex = iTopping,
+                    Category = toppingType.CategoryName,
+                    Id = toppingType.Id,
+                    Name = toppingType.Name,
                     AmountList = ListUtility.GetToppingAmountList(),
-                    ToppingHalfList = ListUtility.GetToppingHalfList()
-                });
+                    ToppingHalfList = ListUtility.GetToppingHalfList(),
+                    SelectedAmount = currentTopping.ToppingAmount,
+                    SelectedToppingHalf = currentTopping.ToppingHalf
+                };
+
+                pizzaBuilderVm.ToppingList.Add(toppingModel);
             }
         }
     }
