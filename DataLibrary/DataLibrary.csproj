@@ -71,6 +71,9 @@
     <Compile Include="Models\PizzaDatabase.cs" />
     <Compile Include="Models\PizzaTopping.cs" />
     <Compile Include="Models\Tables\Cart.cs" />
+    <Compile Include="Models\Tables\CartItem.cs" />
+    <Compile Include="Models\Tables\CartPizza.cs" />
+    <Compile Include="Models\Tables\CartPizzaTopping.cs" />
     <Compile Include="Models\Tables\Employee.cs" />
     <Compile Include="Models\Tables\EmployeeLocation.cs" />
     <Compile Include="Models\Tables\MenuPizza.cs" />

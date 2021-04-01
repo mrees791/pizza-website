@@ -193,6 +193,10 @@ namespace DataLibrary.Models
             {
                 return InsertMenuPizza(entity as MenuPizza);
             }
+            else if (entity is CartPizza)
+            {
+                return InsertCartPizza(entity as CartPizza);
+            }
             return connection.Insert<TEntity>(entity, transaction).Value;
         }
 
@@ -215,6 +219,31 @@ namespace DataLibrary.Models
         {
             // We had to use Query<int> instead of Insert because the Insert method will not work with DEFAULT VALUES.
             return connection.Query<int>("INSERT INTO Cart OUTPUT Inserted.Id DEFAULT VALUES;", null, transaction).Single();
+        }
+
+        // CartPizza CRUD
+        private int InsertCartPizza(CartPizza entity)
+        {
+            using (var transaction = connection.BeginTransaction())
+            {
+                int id = connection.Insert<CartItem>(entity, transaction).Value;
+
+                entity.CartItemId = id;
+                connection.Query(@"INSERT INTO
+                                   CartPizza (CartItemId, Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId)
+                                   VALUES (@CartItemId, @Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId)", entity, transaction);
+
+                // Insert toppings
+                foreach (CartPizzaTopping topping in entity.Toppings)
+                {
+                    topping.CartItemId = id;
+                    connection.Insert<CartPizzaTopping>(topping, transaction);
+                }
+
+                transaction.Commit();
+
+                return id;
+            }
         }
 
         // Employee CRUD

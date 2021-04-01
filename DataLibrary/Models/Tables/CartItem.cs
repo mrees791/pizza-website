@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Tables
 {
-    [Table("Cart")]
-    public class Cart
+    [Table("CartItem")]
+    public class CartItem
     {
         [Key]
         public int Id { get; set; }
+        public int CartId { get; set; }
+        public decimal PricePerItem { get; set; }
+        public int Quantity { get; set; }
     }
 }
