@@ -40,9 +40,9 @@ namespace DataLibrary.Models
             return connection.GetList<TEntity>().ToList();
         }
 
-        public List<TEntity> GetList<TEntity>(object parameters, string orderby) where TEntity : class
+        public List<TEntity> GetList<TEntity>(object parameters, string orderByColumn) where TEntity : class
         {
-            string conditions = GetSqlWhereConditions(parameters, orderby);
+            string conditions = GetSqlWhereConditions(parameters, orderByColumn);
             return connection.GetList<TEntity>(conditions, parameters).ToList();
         }
 
@@ -97,12 +97,13 @@ namespace DataLibrary.Models
             return pages;
         }
 
-        internal string GetSqlWhereConditions(object parameters, string orderby)
+        internal string GetSqlWhereConditions(object parameters, string orderByColumn)
         {
             string sqlWhereConditions = string.Empty;
             bool queriesAdded = false;
+            PropertyInfo[] properties = parameters.GetType().GetProperties();
 
-            foreach (PropertyInfo propertyInfo in parameters.GetType().GetProperties())
+            foreach (PropertyInfo propertyInfo in properties)
             {
                 Type propertyType = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
                 object propertyValue = propertyInfo.GetValue(parameters);
@@ -127,8 +128,8 @@ namespace DataLibrary.Models
                 }
             }
 
-            // The orderby variable is never set by user input.
-            sqlWhereConditions += $"order by {orderby}";
+            // Order by column is never set by user input to avoid SQL injections.
+            sqlWhereConditions += $"order by {orderByColumn}";
 
             return sqlWhereConditions;
         }
@@ -142,8 +143,9 @@ namespace DataLibrary.Models
         {
             string sqlWhereConditions = string.Empty;
             bool queriesAdded = false;
+            PropertyInfo[] properties = searchFilter.GetType().GetProperties();
 
-            foreach (PropertyInfo propertyInfo in searchFilter.GetType().GetProperties())
+            foreach (PropertyInfo propertyInfo in properties)
             {
                 Type propertyType = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
                 object propertyValue = propertyInfo.GetValue(searchFilter);
@@ -202,6 +204,7 @@ namespace DataLibrary.Models
             }
             return connection.Update<TEntity>(entity, transaction);
         }
+
         public int Delete<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : class, new()
         {
             return connection.Delete<TEntity>(entity, transaction);

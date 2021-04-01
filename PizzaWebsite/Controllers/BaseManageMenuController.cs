@@ -50,8 +50,8 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> Edit(int? id)
         {
-            List<TEntity> entityList = await PizzaDb.GetListAsync<TEntity>(new { Id = id.Value });
-            TViewModel model = EntityToViewModel(entityList.FirstOrDefault());
+            TEntity entity = await PizzaDb.GetAsync<TEntity>(id.Value);
+            TViewModel model = EntityToViewModel(entity);
 
             return View("Manage", model);
         }
