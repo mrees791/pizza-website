@@ -135,7 +135,6 @@ namespace DataLibrary.Models
 
         /// <summary>
         /// Creates a where clause which can be used to run queries with filters using the like operator.
-        /// This is used by Simple Dapper's get list methods.
         /// </summary>
         /// <param name="searchFilter"></param>
         /// <returns>An SQL where clause.</returns>
@@ -229,7 +228,7 @@ namespace DataLibrary.Models
             {
                 int id = connection.Insert<MenuPizza>(entity, transaction).Value;
 
-                // Insert topping records
+                // Insert toppings
                 foreach (MenuPizzaTopping topping in entity.Toppings)
                 {
                     topping.MenuPizzaId = id;
@@ -247,7 +246,7 @@ namespace DataLibrary.Models
             using (var transaction = connection.BeginTransaction())
             {
                 // Delete previous toppings
-                connection.Query("DELETE FROM MenuPizzaTopping WHERE MenuPizzaId = @Id", entity, transaction);
+                connection.DeleteList<MenuPizzaTopping>(new { MenuPizzaId = entity.Id }, transaction);
 
                 // Insert new toppings
                 foreach (MenuPizzaTopping topping in entity.Toppings)
@@ -255,6 +254,7 @@ namespace DataLibrary.Models
                     connection.Insert<MenuPizzaTopping>(topping, transaction);
                 }
 
+                // Update pizza record
                 int rowsAffected = connection.Update<MenuPizza>(entity, transaction);
 
                 transaction.Commit();

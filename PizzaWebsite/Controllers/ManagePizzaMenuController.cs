@@ -40,7 +40,8 @@ namespace PizzaWebsite.Controllers
 
         protected override ManageMenuPizzaViewModel EntityToViewModel(MenuPizza entity)
         {
-            entity.Toppings = PizzaDb.GetList<MenuPizzaTopping>(new { MenuPizzaId = entity.Id }, "Id");
+            // todo: See if we can get the GetList<MenuPizza> method to automatically load the toppings.
+            //entity.Toppings = PizzaDb.GetList<MenuPizzaTopping>(new { MenuPizzaId = entity.Id }, "Id");
 
             ManageMenuPizzaViewModel model = new ManageMenuPizzaViewModel()
             {
