@@ -30,44 +30,72 @@ namespace DataLibrary.Models
         }
 
         // CRUD Table Operations
-        public async Task<TEntity> GetAsync<TEntity>(object id, IDbTransaction transaction = null) where TEntity : class
+        public async Task<TEntity> GetAsync<TEntity>(object id, IDbTransaction transaction = null) where TEntity : class, new()
         {
-            return await connection.GetAsync<TEntity>(id, transaction);
+            TEntity entity = await connection.GetAsync<TEntity>(id, transaction);
+            MapEntityListProperties(entity);
+            return entity;
         }
 
-        public List<TEntity> GetList<TEntity>() where TEntity : class
+        public List<TEntity> GetList<TEntity>() where TEntity : class, new()
         {
-            return connection.GetList<TEntity>().ToList();
+            List<TEntity> list = connection.GetList<TEntity>().ToList();
+            foreach (TEntity entity in list)
+            {
+                MapEntityListProperties(entity);
+            }
+            return list;
         }
 
-        public List<TEntity> GetList<TEntity>(object parameters, string orderByColumn) where TEntity : class
+        public List<TEntity> GetList<TEntity>(object parameters, string orderByColumn) where TEntity : class, new()
         {
             string conditions = GetSqlWhereConditions(parameters, orderByColumn);
-            return connection.GetList<TEntity>(conditions, parameters).ToList();
+            List<TEntity> list = connection.GetList<TEntity>(conditions, parameters).ToList();
+            foreach (TEntity entity in list)
+            {
+                MapEntityListProperties(entity);
+            }
+            return list;
         }
 
-        public async Task<List<TEntity>> GetListAsync<TEntity>() where TEntity : class
+        public async Task<List<TEntity>> GetListAsync<TEntity>() where TEntity : class, new()
         {
             IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>();
+            foreach (TEntity entity in list)
+            {
+                MapEntityListProperties(entity);
+            }
             return list.ToList();
         }
 
-        public async Task<List<TEntity>> GetListAsync<TEntity>(object whereConditions) where TEntity : class
+        public async Task<List<TEntity>> GetListAsync<TEntity>(object whereConditions) where TEntity : class, new()
         {
             IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>(whereConditions);
+            foreach (TEntity entity in list)
+            {
+                MapEntityListProperties(entity);
+            }
             return list.ToList();
         }
 
-        public async Task<List<TEntity>> GetListAsync<TEntity>(object searchFilter, object parameters) where TEntity : class
+        public async Task<List<TEntity>> GetListAsync<TEntity>(object searchFilter, object parameters) where TEntity : class, new()
         {
             IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>(GetSqlWhereFilterConditions(searchFilter), parameters);
+            foreach (TEntity entity in list)
+            {
+                MapEntityListProperties(entity);
+            }
             return list.ToList();
         }
 
-        public async Task<List<TEntity>> GetListPagedAsync<TEntity>(object searchFilter, int pageNumber, int rowsPerPage, string orderby) where TEntity : class
+        public async Task<List<TEntity>> GetListPagedAsync<TEntity>(object searchFilter, int pageNumber, int rowsPerPage, string orderby) where TEntity : class, new()
         {
             string conditions = GetSqlWhereFilterConditions(searchFilter);
             IEnumerable<TEntity> list = await connection.GetListPagedAsync<TEntity>(pageNumber, rowsPerPage, conditions, orderby, searchFilter);
+            foreach (TEntity entity in list)
+            {
+                MapEntityListProperties(entity);
+            }
             return list.ToList();
         }
 
@@ -212,6 +240,21 @@ namespace DataLibrary.Models
         public int Delete<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : class, new()
         {
             return connection.Delete<TEntity>(entity, transaction);
+        }
+
+        // Properly maps a table's list properties.
+        internal void MapEntityListProperties<TEntity>(TEntity entity) where TEntity : class, new()
+        {
+            if (entity is MenuPizza)
+            {
+                MenuPizza menuPizza = entity as MenuPizza;
+                menuPizza.Toppings = GetList<MenuPizzaTopping>(new { MenuPizzaId = menuPizza.Id }, "Id");
+            }
+            else if (entity is CartPizza)
+            {
+                CartPizza cartPizza = entity as CartPizza;
+                cartPizza.Toppings = GetList<CartPizzaTopping>(new { CartItemId = cartPizza.Id }, "Id");
+            }
         }
 
         // Cart CRUD

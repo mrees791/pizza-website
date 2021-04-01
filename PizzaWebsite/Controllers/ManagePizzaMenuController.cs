@@ -42,7 +42,8 @@ namespace PizzaWebsite.Controllers
         {
             // Load pizza toppings
             List<PizzaTopping> toppings = new List<PizzaTopping>();
-            entity.Toppings = PizzaDb.GetList<MenuPizzaTopping>(new { MenuPizzaId = entity.Id }, "Id");
+            // todo: Remove
+            //entity.Toppings = PizzaDb.GetList<MenuPizzaTopping>(new { MenuPizzaId = entity.Id }, "Id");
 
             ManageMenuPizzaViewModel model = new ManageMenuPizzaViewModel()
             {

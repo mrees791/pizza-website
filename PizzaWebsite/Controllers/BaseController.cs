@@ -53,7 +53,7 @@ namespace PizzaWebsite.Controllers
         }
 
         protected async Task<List<TEntity>> LoadPagedEntitiesAsync<TEntity>(PizzaDatabase database, HttpRequestBase request, PaginationViewModel paginationVm,
-            int? page, int? rowsPerPage, string sortColumnName, object searchFilters) where TEntity : class
+            int? page, int? rowsPerPage, string sortColumnName, object searchFilters) where TEntity : class, new()
         {
             // Set default values
             if (!page.HasValue)
