@@ -1,4 +1,5 @@
 ﻿using DataLibrary.Models;
+using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity.Owin;
 using PizzaWebsite.Models;
 using System;
@@ -77,6 +78,12 @@ namespace PizzaWebsite.Controllers
             paginationVm.TotalNumberOfItems = totalNumberOfItems;
 
             return entities;
+        }
+
+        protected async Task<SiteUser> GetCurrentUser()
+        {
+            List<SiteUser> users = await PizzaDb.GetListAsync<SiteUser>(new { UserName = User.Identity.Name });
+            return users.FirstOrDefault();
         }
 
         protected override void Dispose(bool disposing)

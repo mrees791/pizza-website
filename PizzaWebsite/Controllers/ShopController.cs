@@ -12,17 +12,12 @@ using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
+    [Authorize]
     public class ShopController : BaseController
     {
         public async Task<ActionResult> Cart()
         {
-            // IF USER IS NOT SIGNED IN
-            // todo: Implement
-
-            // IF USER IS SIGNED IN
-            List<SiteUser> users = await PizzaDb.GetListAsync<SiteUser>(new { UserName = User.Identity.Name });
-            SiteUser user = users.First();
-
+            SiteUser user = await GetCurrentUser();
             List<CartItem> cartItemList = await PizzaDb.GetListAsync<CartItem>(new { CartId = user.CurrentCartId });
 
             CartViewModel cartVm = new CartViewModel();
