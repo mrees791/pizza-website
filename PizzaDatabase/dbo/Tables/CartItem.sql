@@ -4,6 +4,9 @@
   CartId INT NOT NULL,
   PricePerItem DECIMAL(20,2) NOT NULL,
   Quantity INT NOT NULL,
+  Name NVARCHAR(100) NOT NULL,
+  Details NVARCHAR(1024) NOT NULL,
+  ProductCategory NVARCHAR(50) NOT NULL,
   PRIMARY KEY (Id),
   CONSTRAINT FK_CartItem_Cart FOREIGN KEY (CartId) REFERENCES Cart(Id)
 )

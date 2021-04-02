@@ -40,11 +40,6 @@ namespace PizzaWebsite.Controllers
 
         protected override ManageMenuPizzaViewModel EntityToViewModel(MenuPizza entity)
         {
-            // Load pizza toppings
-            List<PizzaTopping> toppings = new List<PizzaTopping>();
-            // todo: Remove
-            //entity.Toppings = PizzaDb.GetList<MenuPizzaTopping>(new { MenuPizzaId = entity.Id }, "Id");
-
             ManageMenuPizzaViewModel model = new ManageMenuPizzaViewModel()
             {
                 Id = entity.Id,
@@ -60,6 +55,8 @@ namespace PizzaWebsite.Controllers
                 SelectedSauceAmount = entity.SauceAmount,
                 CategoryList = ListUtility.GetPizzaCategoryList()
             };
+
+            List<PizzaTopping> toppings = new List<PizzaTopping>();
 
             foreach (MenuPizzaTopping topping in entity.Toppings)
             {

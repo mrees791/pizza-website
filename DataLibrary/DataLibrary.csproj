@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="Models\PizzaDatabase.cs" />
     <Compile Include="Models\PizzaTopping.cs" />
+    <Compile Include="Models\ProductCategory.cs" />
     <Compile Include="Models\Tables\Cart.cs" />
     <Compile Include="Models\Tables\CartItem.cs" />
     <Compile Include="Models\Tables\CartPizza.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Models\Tables\UserClaim.cs" />
     <Compile Include="Models\Tables\UserLogin.cs" />
     <Compile Include="Models\Tables\UserRole.cs" />
+    <Compile Include="Models\Utility\CartItemUtility.cs" />
     <Compile Include="Models\Utility\ListUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

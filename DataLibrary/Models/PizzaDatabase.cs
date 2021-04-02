@@ -37,6 +37,13 @@ namespace DataLibrary.Models
             return entity;
         }
 
+        public TEntity Get<TEntity>(object id, IDbTransaction transaction = null) where TEntity : class, new()
+        {
+            TEntity entity = connection.Get<TEntity>(id, transaction);
+            MapEntityListProperties(entity);
+            return entity;
+        }
+
         public List<TEntity> GetList<TEntity>() where TEntity : class, new()
         {
             List<TEntity> list = connection.GetList<TEntity>().ToList();
@@ -221,11 +228,33 @@ namespace DataLibrary.Models
             {
                 return InsertMenuPizza(entity as MenuPizza);
             }
-            else if (entity is CartPizza)
-            {
-                return InsertCartPizza(entity as CartPizza);
-            }
             return connection.Insert<TEntity>(entity, transaction).Value;
+        }
+
+        public int Insert(CartItem cartItem, CartPizza cartPizza)
+        {
+            int cartItemId = 0;
+
+            using (var transaction = connection.BeginTransaction())
+            {
+                cartItemId = connection.Insert<CartItem>(cartItem, transaction).Value;
+
+                cartPizza.CartItemId = cartItemId;
+                connection.Query(@"INSERT INTO
+                                   CartPizza (CartItemId, Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId)
+                                   VALUES (@CartItemId, @Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId)",
+                                   cartPizza, transaction);
+
+                foreach (CartPizzaTopping topping in cartPizza.Toppings)
+                {
+                    topping.CartItemId = cartPizza.CartItemId;
+                    connection.Insert<CartPizzaTopping>(topping, transaction);
+                }
+
+                transaction.Commit();
+            }
+
+            return cartItemId;
         }
 
         public int Update<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : class, new()
@@ -253,40 +282,15 @@ namespace DataLibrary.Models
             else if (entity is CartPizza)
             {
                 CartPizza cartPizza = entity as CartPizza;
-                cartPizza.Toppings = GetList<CartPizzaTopping>(new { CartItemId = cartPizza.Id }, "Id");
+                cartPizza.Toppings = GetList<CartPizzaTopping>(new { CartItemId = cartPizza.CartItemId }, "Id");
             }
         }
 
         // Cart CRUD
         private int InsertCart(IDbTransaction transaction = null)
         {
-            // We had to use Query<int> instead of Insert because the Insert method will not work with DEFAULT VALUES.
+            // We had to use Query<int> instead of Insert because the Insert method will not work with SQL DEFAULT VALUES.
             return connection.Query<int>("INSERT INTO Cart OUTPUT Inserted.Id DEFAULT VALUES;", null, transaction).Single();
-        }
-
-        // CartPizza CRUD
-        private int InsertCartPizza(CartPizza entity)
-        {
-            using (var transaction = connection.BeginTransaction())
-            {
-                int id = connection.Insert<CartItem>(entity, transaction).Value;
-
-                entity.CartItemId = id;
-                connection.Query(@"INSERT INTO
-                                   CartPizza (CartItemId, Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId)
-                                   VALUES (@CartItemId, @Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId)", entity, transaction);
-
-                // Insert toppings
-                foreach (CartPizzaTopping topping in entity.Toppings)
-                {
-                    topping.CartItemId = id;
-                    connection.Insert<CartPizzaTopping>(topping, transaction);
-                }
-
-                transaction.Commit();
-
-                return id;
-            }
         }
 
         // Employee CRUD
