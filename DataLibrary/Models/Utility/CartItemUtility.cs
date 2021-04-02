@@ -10,6 +10,16 @@ namespace DataLibrary.Models.Utility
     // todo: Will move somewhere else.
     public static class CartItemUtility
     {
+        public static ProductCategory FindProductCategory(string productCategory)
+        {
+            switch (productCategory)
+            {
+                case "Pizza":
+                    return ProductCategory.Pizza;
+            }
+            throw new Exception($"Product category not found: {productCategory}");
+        }
+
         // CartPizza
         public static decimal CalculatePrice(CartPizza cartPizza, PizzaDatabase pizzaDb)
         {

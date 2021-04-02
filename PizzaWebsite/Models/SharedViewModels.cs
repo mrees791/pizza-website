@@ -1,4 +1,5 @@
-﻿using DataLibrary.Models.Tables;
+﻿using DataLibrary.Models;
+using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
 using System;
 using System.Collections.Generic;
@@ -75,5 +76,29 @@ namespace PizzaWebsite.Models
         public string SelectedAmount { get; set; }
         public List<string> ToppingHalfList { get; set; }
         public string SelectedToppingHalf { get; set; }
+    }
+
+    public class CartItemViewModel
+    {
+        public int CartItemId { get; set; }
+        public string Name { get; set; }
+        public string Price { get; set; }
+        public int Quantity { get; set; }
+        public ProductCategory ProductCategory { get; set; }
+    }
+
+    public class CartViewModel
+    {
+        public List<CartItemViewModel> CartItemList { get; set; }
+
+        public CartViewModel()
+        {
+            CartItemList = new List<CartItemViewModel>();
+        }
+
+        public bool IsEmpty()
+        {
+            return !CartItemList.Any();
+        }
     }
 }

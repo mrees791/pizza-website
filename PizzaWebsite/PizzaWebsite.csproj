@@ -281,10 +281,10 @@
     <Content Include="Views\ManagePizzaMenu\Manage.cshtml" />
     <Content Include="Views\Shared\_PizzaBuilder.cshtml" />
     <Content Include="Views\Shared\_PizzaBuilderTopping.cshtml" />
+    <Content Include="Views\Shop\Cart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Shop\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

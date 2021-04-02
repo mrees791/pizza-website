@@ -1,0 +1,28 @@
+﻿@using PizzaWebsite.Models
+@model PizzaWebsite.Models.CartViewModel
+
+@{
+    ViewBag.Title = "Cart";
+}
+
+<h2>Cart</h2>
+
+@if (!Model.IsEmpty())
+{
+    <table class="table">
+        <tr>
+            <th>Item</th>
+            <th>Price</th>
+            @* Empty table header for controls. *@
+            <th></th>
+        </tr>
+        @foreach (CartItemViewModel cartItem in Model.CartItemList)
+        {
+            <tr>
+                <td>@cartItem.Name</td>
+                <td>@cartItem.Price</td>
+                <td></td>
+            </tr>
+        }
+    </table>
+}
