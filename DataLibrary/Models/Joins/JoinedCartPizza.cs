@@ -1,6 +1,8 @@
-﻿using DataLibrary.Models.Tables;
+﻿using DataLibrary.Models.Interfaces;
+using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,10 +10,36 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Joins
 {
     // Used for when you need to join the CartItem table with the CartPizza table.
-    public class JoinedCartPizza
+    public class JoinedCartPizza : IJoinBase
     {
         public CartItem CartItem { get; set; }
         public CartPizza CartPizza { get; set; }
+
+        public void AddInsertItems(List<IInsertable> itemsList)
+        {
+            CartItem.AddInsertItems(itemsList);
+            CartPizza.AddInsertItems(itemsList);
+        }
+
+        public dynamic GetId()
+        {
+            return CartItem.Id;
+        }
+
+        public void Insert(IDbConnection connection, IDbTransaction transaction = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MapEntity(PizzaDatabase pizzaDb)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Update(PizzaDatabase pizzaDb)
+        {
+            throw new NotImplementedException();
+        }
 
         /* todo: Remove
         // CartItem columns.

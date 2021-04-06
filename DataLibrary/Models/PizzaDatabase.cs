@@ -221,7 +221,7 @@ namespace DataLibrary.Models
 
         // CRUD
         // todo: Remove TOP and set proper name.
-        public dynamic InsertTOP(IInsertable entity)
+        public dynamic Insert(IInsertable entity)
         {
             List<IInsertable> itemsList = new List<IInsertable>();
             entity.AddInsertItems(itemsList);
