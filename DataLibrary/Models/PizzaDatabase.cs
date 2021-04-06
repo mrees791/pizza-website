@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataLibrary.Models.Joins;
 using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
@@ -228,10 +229,15 @@ namespace DataLibrary.Models
             {
                 return InsertMenuPizza(entity as MenuPizza);
             }
+            else if (entity is JoinedCartPizza)
+            {
+                return InsertCartPizza(entity as JoinedCartPizza, transaction);
+            }
             return connection.Insert<TEntity>(entity, transaction).Value;
         }
 
-        public int Insert(CartItem cartItem, CartPizza cartPizza)
+        // todo: Remove
+        /*public int Insert(CartItem cartItem, CartPizza cartPizza)
         {
             int cartItemId = 0;
 
@@ -255,7 +261,7 @@ namespace DataLibrary.Models
             }
 
             return cartItemId;
-        }
+        }*/
 
         public int Update<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : class, new()
         {
@@ -291,6 +297,40 @@ namespace DataLibrary.Models
         {
             // We had to use Query<int> instead of Insert because the Insert method will not work with SQL DEFAULT VALUES.
             return connection.Query<int>("INSERT INTO Cart OUTPUT Inserted.Id DEFAULT VALUES;", null, transaction).Single();
+        }
+
+        // CartPizza CRUD
+        private int InsertCartPizza(JoinedCartPizza joinedCartPizza, IDbTransaction transaction = null)
+        {
+            bool isNewTransaction = transaction == null;
+
+            if (isNewTransaction)
+            {
+                transaction = connection.BeginTransaction();
+            }
+
+            joinedCartPizza.CartItem.Id = Insert(joinedCartPizza.CartItem, transaction);
+            joinedCartPizza.CartPizza.CartItemId = joinedCartPizza.CartItem.Id;
+            /*connection.Query(@"INSERT INTO
+                                   CartPizza (CartItemId, Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId)
+                                   VALUES (@CartItemId, @Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId)",
+                                   joinedCartPizza.CartPizza, transaction);*/
+            Insert(joinedCartPizza.CartPizza, transaction);
+
+            foreach (CartPizzaTopping topping in joinedCartPizza.CartPizza.Toppings)
+            {
+                topping.CartItemId = joinedCartPizza.CartPizza.CartItemId;
+                connection.Insert<CartPizzaTopping>(topping, transaction);
+            }
+
+            transaction.Commit();
+
+            if (isNewTransaction)
+            {
+                transaction.Dispose();
+            }
+
+            return joinedCartPizza.CartPizza.CartItemId;
         }
 
         // Employee CRUD
