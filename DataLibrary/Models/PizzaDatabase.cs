@@ -311,11 +311,10 @@ namespace DataLibrary.Models
 
             joinedCartPizza.CartItem.Id = Insert(joinedCartPizza.CartItem, transaction);
             joinedCartPizza.CartPizza.CartItemId = joinedCartPizza.CartItem.Id;
-            /*connection.Query(@"INSERT INTO
+            connection.Query(@"INSERT INTO
                                    CartPizza (CartItemId, Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId)
                                    VALUES (@CartItemId, @Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId)",
-                                   joinedCartPizza.CartPizza, transaction);*/
-            Insert(joinedCartPizza.CartPizza, transaction);
+                                   joinedCartPizza.CartPizza, transaction);
 
             foreach (CartPizzaTopping topping in joinedCartPizza.CartPizza.Toppings)
             {

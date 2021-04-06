@@ -28,7 +28,6 @@ namespace PizzaWebsite.Controllers
                 {
                     CartItemId = cartItem.Id,
                     ProductCategory = CartItemUtility.FindProductCategory(cartItem.ProductCategory),
-                    Name = cartItem.Name,
                     Price = cartItem.PricePerItem.ToString("C", CultureInfo.CurrentCulture),
                     Quantity = cartItem.Quantity
                 };
