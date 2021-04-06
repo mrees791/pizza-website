@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataLibrary.Models.Interfaces;
 using DataLibrary.Models.Joins;
 using DataLibrary.Models.Tables;
 using System;
@@ -17,6 +18,15 @@ namespace DataLibrary.Models
     {
         private IDbConnection connection;
 
+        // todo: Remove
+        internal IDbConnection Connection
+        {
+            get
+            {
+                return connection;
+            }
+        }
+
         public PizzaDatabase(string connectionName = "PizzaDatabase")
         {
             string connectionString = ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
@@ -31,78 +41,78 @@ namespace DataLibrary.Models
         }
 
         // CRUD Table Operations
-        public async Task<TEntity> GetAsync<TEntity>(object id, IDbTransaction transaction = null) where TEntity : class, new()
+        public async Task<TEntity> GetAsync<TEntity>(object id, IDbTransaction transaction = null) where TEntity : class, IRecord, new()
         {
             TEntity entity = await connection.GetAsync<TEntity>(id, transaction);
-            MapEntityListProperties(entity);
+            entity.MapEntity(this);
             return entity;
         }
 
-        public TEntity Get<TEntity>(object id, IDbTransaction transaction = null) where TEntity : class, new()
+        public TEntity Get<TEntity>(object id, IDbTransaction transaction = null) where TEntity : class, IRecord, new()
         {
             TEntity entity = connection.Get<TEntity>(id, transaction);
-            MapEntityListProperties(entity);
+            entity.MapEntity(this);
             return entity;
         }
 
-        public List<TEntity> GetList<TEntity>() where TEntity : class, new()
+        public List<TEntity> GetList<TEntity>() where TEntity : IRecord
         {
             List<TEntity> list = connection.GetList<TEntity>().ToList();
             foreach (TEntity entity in list)
             {
-                MapEntityListProperties(entity);
+                entity.MapEntity(this);
             }
             return list;
         }
 
-        public List<TEntity> GetList<TEntity>(object parameters, string orderByColumn) where TEntity : class, new()
+        public List<TEntity> GetList<TEntity>(object parameters, string orderByColumn) where TEntity : IRecord
         {
             string conditions = GetSqlWhereConditions(parameters, orderByColumn);
             List<TEntity> list = connection.GetList<TEntity>(conditions, parameters).ToList();
             foreach (TEntity entity in list)
             {
-                MapEntityListProperties(entity);
+                entity.MapEntity(this);
             }
             return list;
         }
 
-        public async Task<List<TEntity>> GetListAsync<TEntity>() where TEntity : class, new()
+        public async Task<List<TEntity>> GetListAsync<TEntity>() where TEntity : IRecord
         {
             IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>();
             foreach (TEntity entity in list)
             {
-                MapEntityListProperties(entity);
+                entity.MapEntity(this);
             }
             return list.ToList();
         }
 
-        public async Task<List<TEntity>> GetListAsync<TEntity>(object whereConditions) where TEntity : class, new()
+        public async Task<List<TEntity>> GetListAsync<TEntity>(object whereConditions) where TEntity : IRecord
         {
             IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>(whereConditions);
             foreach (TEntity entity in list)
             {
-                MapEntityListProperties(entity);
+                entity.MapEntity(this);
             }
             return list.ToList();
         }
 
-        public async Task<List<TEntity>> GetListAsync<TEntity>(object searchFilter, object parameters) where TEntity : class, new()
+        public async Task<List<TEntity>> GetListAsync<TEntity>(object searchFilter, object parameters) where TEntity : IRecord
         {
             IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>(GetSqlWhereFilterConditions(searchFilter), parameters);
             foreach (TEntity entity in list)
             {
-                MapEntityListProperties(entity);
+                entity.MapEntity(this);
             }
             return list.ToList();
         }
 
-        public async Task<List<TEntity>> GetListPagedAsync<TEntity>(object searchFilter, int pageNumber, int rowsPerPage, string orderby) where TEntity : class, new()
+        public async Task<List<TEntity>> GetListPagedAsync<TEntity>(object searchFilter, int pageNumber, int rowsPerPage, string orderby) where TEntity : IRecord
         {
             string conditions = GetSqlWhereFilterConditions(searchFilter);
             IEnumerable<TEntity> list = await connection.GetListPagedAsync<TEntity>(pageNumber, rowsPerPage, conditions, orderby, searchFilter);
             foreach (TEntity entity in list)
             {
-                MapEntityListProperties(entity);
+                entity.MapEntity(this);
             }
             return list.ToList();
         }
@@ -210,190 +220,45 @@ namespace DataLibrary.Models
         }
 
         // CRUD
-        public int Insert<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : class, new()
+        // todo: Remove TOP and set proper name.
+        public dynamic InsertTOP(IInsertable entity)
         {
-            if (entity is Employee)
+            List<IInsertable> itemsList = new List<IInsertable>();
+            entity.AddInsertItems(itemsList);
+
+            if (itemsList.Count == 1)
             {
-                InsertEmployee(entity as Employee, transaction);
-                return 0; // Returns 0 since the Employee ID primary key is a string manually entered by a manager or admin.
+                entity.Insert(connection);
             }
-            else if (entity is Cart)
+            else if (itemsList.Count > 1)
             {
-                return InsertCart(transaction);
+                // Create a transaction since there is more than one record to insert.
+                using (var transaction = connection.BeginTransaction())
+                {
+                    InsertMultipleItems(itemsList, transaction);
+                    transaction.Commit();
+                }
             }
-            else if (entity is SiteUser)
-            {
-                return InsertSiteUser(entity as SiteUser);
-            }
-            else if (entity is MenuPizza)
-            {
-                return InsertMenuPizza(entity as MenuPizza);
-            }
-            else if (entity is JoinedCartPizza)
-            {
-                return InsertCartPizza(entity as JoinedCartPizza, transaction);
-            }
-            return connection.Insert<TEntity>(entity, transaction).Value;
+
+            return entity.GetId();
         }
 
-        // todo: Remove
-        /*public int Insert(CartItem cartItem, CartPizza cartPizza)
+        private void InsertMultipleItems(List<IInsertable> itemsList, IDbTransaction transaction)
         {
-            int cartItemId = 0;
-
-            using (var transaction = connection.BeginTransaction())
+            foreach (IInsertable item in itemsList)
             {
-                cartItemId = connection.Insert<CartItem>(cartItem, transaction).Value;
-
-                cartPizza.CartItemId = cartItemId;
-                connection.Query(@"INSERT INTO
-                                   CartPizza (CartItemId, Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId)
-                                   VALUES (@CartItemId, @Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId)",
-                                   cartPizza, transaction);
-
-                foreach (CartPizzaTopping topping in cartPizza.Toppings)
-                {
-                    topping.CartItemId = cartPizza.CartItemId;
-                    connection.Insert<CartPizzaTopping>(topping, transaction);
-                }
-
-                transaction.Commit();
+                item.Insert(connection, transaction);
             }
+        }
 
-            return cartItemId;
-        }*/
-
-        public int Update<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : class, new()
+        public int Update(IUpdatable entity)
         {
-            if (entity is MenuPizza)
-            {
-                return UpdateMenuPizza(entity as MenuPizza);
-            }
-            return connection.Update<TEntity>(entity, transaction);
+            return entity.Update(this);
         }
 
         public int Delete<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : class, new()
         {
             return connection.Delete<TEntity>(entity, transaction);
-        }
-
-        // Properly maps a table's list properties.
-        internal void MapEntityListProperties<TEntity>(TEntity entity) where TEntity : class, new()
-        {
-            if (entity is MenuPizza)
-            {
-                MenuPizza menuPizza = entity as MenuPizza;
-                menuPizza.Toppings = GetList<MenuPizzaTopping>(new { MenuPizzaId = menuPizza.Id }, "Id");
-            }
-            else if (entity is CartPizza)
-            {
-                CartPizza cartPizza = entity as CartPizza;
-                cartPizza.Toppings = GetList<CartPizzaTopping>(new { CartItemId = cartPizza.CartItemId }, "Id");
-            }
-        }
-
-        // Cart CRUD
-        private int InsertCart(IDbTransaction transaction = null)
-        {
-            // We had to use Query<int> instead of Insert because the Insert method will not work with SQL DEFAULT VALUES.
-            return connection.Query<int>("INSERT INTO Cart OUTPUT Inserted.Id DEFAULT VALUES;", null, transaction).Single();
-        }
-
-        // CartPizza CRUD
-        private int InsertCartPizza(JoinedCartPizza joinedCartPizza, IDbTransaction transaction = null)
-        {
-            bool isNewTransaction = transaction == null;
-
-            if (isNewTransaction)
-            {
-                transaction = connection.BeginTransaction();
-            }
-
-            joinedCartPizza.CartItem.Id = Insert(joinedCartPizza.CartItem, transaction);
-            joinedCartPizza.CartPizza.CartItemId = joinedCartPizza.CartItem.Id;
-            connection.Query(@"INSERT INTO
-                                   CartPizza (CartItemId, Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId)
-                                   VALUES (@CartItemId, @Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId)",
-                                   joinedCartPizza.CartPizza, transaction);
-
-            foreach (CartPizzaTopping topping in joinedCartPizza.CartPizza.Toppings)
-            {
-                topping.CartItemId = joinedCartPizza.CartPizza.CartItemId;
-                connection.Insert<CartPizzaTopping>(topping, transaction);
-            }
-
-            transaction.Commit();
-
-            if (isNewTransaction)
-            {
-                transaction.Dispose();
-            }
-
-            return joinedCartPizza.CartPizza.CartItemId;
-        }
-
-        // Employee CRUD
-        private void InsertEmployee(Employee entity, IDbTransaction transaction = null)
-        {
-            // Query method was used since connection.Insert was having an issue with its string ID field.
-            connection.Query("INSERT INTO Employee (Id, UserId, CurrentlyEmployed) VALUES (@Id, @UserId, @CurrentlyEmployed)", entity, transaction);
-        }
-
-        // MenuPizza CRUD
-        private int InsertMenuPizza(MenuPizza entity)
-        {
-            using (var transaction = connection.BeginTransaction())
-            {
-                int id = connection.Insert<MenuPizza>(entity, transaction).Value;
-
-                // Insert toppings
-                foreach (MenuPizzaTopping topping in entity.Toppings)
-                {
-                    topping.MenuPizzaId = id;
-                    connection.Insert<MenuPizzaTopping>(topping, transaction);
-                }
-
-                transaction.Commit();
-
-                return id;
-            }
-        }
-
-        private int UpdateMenuPizza(MenuPizza entity)
-        {
-            using (var transaction = connection.BeginTransaction())
-            {
-                // Delete previous toppings
-                connection.DeleteList<MenuPizzaTopping>(new { MenuPizzaId = entity.Id }, transaction);
-
-                // Insert new toppings
-                foreach (MenuPizzaTopping topping in entity.Toppings)
-                {
-                    connection.Insert<MenuPizzaTopping>(topping, transaction);
-                }
-
-                // Update pizza record
-                int rowsAffected = connection.Update<MenuPizza>(entity, transaction);
-
-                transaction.Commit();
-
-                return rowsAffected;
-            }
-        }
-
-        // SiteUser CRUD
-        private int InsertSiteUser(SiteUser entity)
-        {
-            using (var transaction = connection.BeginTransaction())
-            {
-                entity.CurrentCartId = InsertCart(transaction);
-                entity.ConfirmOrderCartId = InsertCart(transaction);
-                int? userId = connection.Insert(entity, transaction);
-
-                transaction.Commit();
-
-                return userId.Value;
-            }
         }
     }
 }

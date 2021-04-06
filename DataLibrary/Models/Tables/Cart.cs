@@ -1,6 +1,8 @@
 ﻿using Dapper;
+using DataLibrary.Models.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +10,34 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("Cart")]
-    public class Cart
+    public class Cart : ITableBase
     {
         [Key]
         public int Id { get; set; }
+
+        public void AddInsertItems(List<IInsertable> itemsList)
+        {
+            itemsList.Add(this);
+        }
+
+        public dynamic GetId()
+        {
+            return Id;
+        }
+
+        public void Insert(IDbConnection connection, IDbTransaction transaction = null)
+        {
+            // We had to use Query<int> instead of Insert because the Insert method will not work with SQL DEFAULT VALUES.
+            Id = connection.Query<int>("INSERT INTO Cart OUTPUT Inserted.Id DEFAULT VALUES;", null, transaction).Single();
+        }
+
+        public void MapEntity(PizzaDatabase pizzaDb)
+        {
+        }
+
+        public int Update(PizzaDatabase pizzaDb)
+        {
+            return pizzaDb.Connection.Update(this);
+        }
     }
 }
