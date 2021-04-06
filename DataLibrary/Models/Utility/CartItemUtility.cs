@@ -10,14 +10,14 @@ namespace DataLibrary.Models.Utility
     // todo: Will move somewhere else.
     public static class CartItemUtility
     {
-        public static ProductCategory FindProductCategory(string productCategory)
+        public static ProductCategory FindProductCategory(string name)
         {
-            switch (productCategory)
+            switch (name)
             {
                 case "Pizza":
                     return ProductCategory.Pizza;
             }
-            throw new Exception($"Product category not found: {productCategory}");
+            throw new Exception($"Product category not found: {name}");
         }
 
         // CartPizza
@@ -98,7 +98,7 @@ namespace DataLibrary.Models.Utility
             return total;
         }
 
-        public static string CreateItemDetails(CartPizza cartPizza, PizzaDatabase pizzaDb)
+        public static string CreateHtmlItemDetails(CartPizza cartPizza, PizzaDatabase pizzaDb)
         {
             MenuPizzaCheese cheese = pizzaDb.Get<MenuPizzaCheese>(cartPizza.MenuPizzaCheeseId);
             MenuPizzaSauce sauce = pizzaDb.Get<MenuPizzaSauce>(cartPizza.MenuPizzaSauceId);
@@ -114,7 +114,7 @@ namespace DataLibrary.Models.Utility
 
             if (cartPizza.Toppings.Any())
             {
-                details += $"<br />Toppings:<br />";
+                details += $"<br />Toppings<br />";
 
                 foreach (CartPizzaTopping topping in cartPizza.Toppings)
                 {
