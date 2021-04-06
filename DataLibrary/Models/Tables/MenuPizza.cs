@@ -44,6 +44,11 @@ namespace DataLibrary.Models.Tables
         public void Insert(IDbConnection connection, IDbTransaction transaction = null)
         {
             Id = connection.Insert(this, transaction).Value;
+
+            foreach (MenuPizzaTopping topping in Toppings)
+            {
+                topping.MenuPizzaId = Id;
+            }
         }
 
         public dynamic GetId()

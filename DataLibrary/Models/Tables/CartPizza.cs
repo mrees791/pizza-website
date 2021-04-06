@@ -20,6 +20,7 @@ namespace DataLibrary.Models.Tables
         public int MenuPizzaCheeseId { get; set; }
         public string CheeseAmount { get; set; }
         public int MenuPizzaCrustFlavorId { get; set; }
+        public CartItem CartItem { get; set; }
         public List<CartPizzaTopping> Toppings { get; set; }
 
         public CartPizza()
@@ -29,6 +30,7 @@ namespace DataLibrary.Models.Tables
 
         public void AddInsertItems(List<IInsertable> itemsList)
         {
+            itemsList.Add(CartItem);
             itemsList.Add(this);
             foreach (var topping in Toppings)
             {
@@ -38,6 +40,8 @@ namespace DataLibrary.Models.Tables
 
         public void Insert(IDbConnection connection, IDbTransaction transaction = null)
         {
+            CartItemId = CartItem.Id;
+
             connection.Query(@"INSERT INTO
                                    CartPizza (CartItemId, Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId)
                                    VALUES (@CartItemId, @Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId)",

@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using DataLibrary.Models.Interfaces;
-using DataLibrary.Models.Joins;
 using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
@@ -18,7 +17,6 @@ namespace DataLibrary.Models
     {
         private IDbConnection connection;
 
-        // todo: Remove
         internal IDbConnection Connection
         {
             get
