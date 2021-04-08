@@ -11,5 +11,6 @@ namespace DataLibrary.Models.Interfaces
     {
         void AddInsertItems(List<IInsertable> itemsList);
         void Insert(IDbConnection connection, IDbTransaction transaction = null);
+        bool InsertRequiresTransaction();
     }
 }

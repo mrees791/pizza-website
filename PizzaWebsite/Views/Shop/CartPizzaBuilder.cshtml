@@ -1,0 +1,120 @@
+﻿@model PizzaWebsite.Models.CartPizzaBuilderViewModel
+
+@{
+    ViewBag.Title = "Pizza Builder";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        @Html.Partial("_PizzaBuilder", Model)
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @*if (Model.IsNewRecord())
+                    {
+                        <input type="submit" value="Add New Pizza" class="btn btn-default" />
+                    }
+                    else
+                    {
+                        <input type="submit" value="Apply Changes" class="btn btn-default" />
+                    }*@
+            </div>
+        </div>
+    </div>
+}
+
+@* todo: Remove old code/ *@
+@*<h2>Pizza Builder</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.SelectedCrustId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SelectedCrustId, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SelectedCrustId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SelectedSauceId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SelectedSauceId, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SelectedSauceId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SelectedSauceAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SelectedSauceAmount, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SelectedSauceAmount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SelectedCheeseId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SelectedCheeseId, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SelectedCheeseId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SelectedCheeseAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SelectedCheeseAmount, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SelectedCheeseAmount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SelectedCrustFlavorId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SelectedCrustFlavorId, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SelectedCrustFlavorId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SelectedSize, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SelectedSize, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SelectedSize, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+*@

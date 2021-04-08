@@ -282,6 +282,7 @@
     <Content Include="Views\Shared\_PizzaBuilder.cshtml" />
     <Content Include="Views\Shared\_PizzaBuilderTopping.cshtml" />
     <Content Include="Views\Shop\Cart.cshtml" />
+    <Content Include="Views\Shop\CartPizzaBuilder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

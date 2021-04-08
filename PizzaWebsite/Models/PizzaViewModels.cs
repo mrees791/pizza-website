@@ -8,6 +8,19 @@ using System.Web.Mvc;
 
 namespace PizzaWebsite.Models
 {
+    public class CartPizzaBuilderViewModel : PizzaBuilderViewModel
+    {
+        [HiddenInput(DisplayValue = false)]
+        public int Id { get; set; }
+        [Required]
+        [Display(Name = "Quantity")]
+        public int Quantity { get; set; }
+        public List<string> SizeList { get; set; }
+        [Required]
+        [Display(Name = "Size")]
+        public string SelectedSize { get; set; }
+    }
+
     public class ManageMenuPizzaViewModel : PizzaBuilderViewModel
     {
         [HiddenInput(DisplayValue = false)]

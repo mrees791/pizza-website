@@ -70,7 +70,7 @@
   <ItemGroup>
     <Compile Include="Models\Interfaces\IInsertable.cs" />
     <Compile Include="Models\Interfaces\IRecord.cs" />
-    <Compile Include="Models\Interfaces\ITableBase.cs" />
+    <Compile Include="Models\Interfaces\ITable.cs" />
     <Compile Include="Models\Interfaces\IUpdatable.cs" />
     <Compile Include="Models\PizzaDatabase.cs" />
     <Compile Include="Models\PizzaTopping.cs" />

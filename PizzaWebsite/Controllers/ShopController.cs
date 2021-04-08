@@ -16,6 +16,22 @@ namespace PizzaWebsite.Controllers
     [Authorize]
     public class ShopController : BaseController
     {
+        public ActionResult CustomizePizza()
+        {
+            CartPizzaBuilderViewModel cartPizzaVm = new CartPizzaBuilderViewModel();
+            List<PizzaTopping> toppings = new List<PizzaTopping>();
+            PizzaBuilderUtility.LoadNewPizzaBuilderLists(PizzaDb, toppings, cartPizzaVm);
+            LoadCartPizzaBuilderLists(cartPizzaVm);
+
+            return View("CartPizzaBuilder", cartPizzaVm);
+        }
+
+        private void LoadCartPizzaBuilderLists(CartPizzaBuilderViewModel cartPizzaVm)
+        {
+            // FINISH
+            // LOAD SIZES LIST
+        }
+
         public async Task<ActionResult> Cart()
         {
             SiteUser user = await GetCurrentUser();

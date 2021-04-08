@@ -218,30 +218,55 @@ namespace DataLibrary.Models
         }
 
         // CRUD
-        // todo: Remove TOP and set proper name.
         public dynamic Insert(IInsertable entity)
         {
             List<IInsertable> itemsList = new List<IInsertable>();
             entity.AddInsertItems(itemsList);
+            bool requiresTransaction = RequiresTransaction(itemsList);
 
-            if (itemsList.Count == 1)
+            if (requiresTransaction)
             {
-                entity.Insert(connection);
-            }
-            else if (itemsList.Count > 1)
-            {
-                // Create a transaction since there is more than one record to insert.
                 using (var transaction = connection.BeginTransaction())
                 {
                     InsertMultipleItems(itemsList, transaction);
                     transaction.Commit();
                 }
             }
+            else
+            {
+                InsertMultipleItems(itemsList);
+            }
 
             return entity.GetId();
         }
 
-        private void InsertMultipleItems(List<IInsertable> itemsList, IDbTransaction transaction)
+        private bool RequiresTransaction(List<IInsertable> itemsList)
+        {
+            foreach (IInsertable item in itemsList)
+            {
+                if (item.InsertRequiresTransaction())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool RequiresTransaction(List<IUpdatable> itemsList)
+        {
+            foreach (IUpdatable item in itemsList)
+            {
+                if (item.UpdateRequiresTransaction())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void InsertMultipleItems(List<IInsertable> itemsList, IDbTransaction transaction = null)
         {
             foreach (IInsertable item in itemsList)
             {

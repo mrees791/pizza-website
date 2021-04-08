@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("SiteUser")]
-    public class SiteUser : ITableBase
+    public class SiteUser : ITable
     {
         [Key]
         public int Id { get; set; }
@@ -65,9 +65,19 @@ namespace DataLibrary.Models.Tables
             ConfirmOrderCart = pizzaDb.Get<Cart>(ConfirmOrderCartId);
         }
 
-        public int Update(PizzaDatabase pizzaDb)
+        public bool InsertRequiresTransaction()
         {
-            return pizzaDb.Connection.Update(this);
+            return true;
+        }
+
+        public int Update(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        {
+            return pizzaDb.Connection.Update(this, transaction);
+        }
+
+        public bool UpdateRequiresTransaction()
+        {
+            return false;
         }
     }
 }

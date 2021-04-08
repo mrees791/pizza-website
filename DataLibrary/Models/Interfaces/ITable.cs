@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Interfaces
 {
-    public interface ITableBase : IInsertable, IUpdatable, IRecord
+    public interface ITable : IInsertable, IUpdatable, IRecord
     {
     }
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("MenuPizzaTopping")]
-    public class MenuPizzaTopping : ITableBase
+    public class MenuPizzaTopping : ITable
     {
         [Key]
         public int Id { get; set; }
@@ -34,13 +34,23 @@ namespace DataLibrary.Models.Tables
             Id = connection.Insert(this, transaction).Value;
         }
 
+        public bool InsertRequiresTransaction()
+        {
+            return false;
+        }
+
         public void MapEntity(PizzaDatabase pizzaDb)
         {
         }
 
-        public int Update(PizzaDatabase pizzaDb)
+        public int Update(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            return pizzaDb.Connection.Update(this);
+            return pizzaDb.Connection.Update(this, transaction);
+        }
+
+        public bool UpdateRequiresTransaction()
+        {
+            return false;
         }
     }
 }

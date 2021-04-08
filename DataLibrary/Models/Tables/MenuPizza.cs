@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("MenuPizza")]
-    public class MenuPizza : ITableBase
+    public class MenuPizza : ITable
     {
         [Key]
         public int Id { get; set; }
@@ -61,26 +61,31 @@ namespace DataLibrary.Models.Tables
             Toppings = pizzaDb.GetList<MenuPizzaTopping>(new { MenuPizzaId = Id }, "Id");
         }
 
-        public int Update(PizzaDatabase pizzaDb)
+        public int Update(PizzaDatabase pizzaDb, IDbTransaction transaction)
         {
-            using (var transaction = pizzaDb.Connection.BeginTransaction())
+            // Delete previous toppings
+            pizzaDb.Connection.DeleteList<MenuPizzaTopping>(new { MenuPizzaId = Id }, transaction);
+
+            // Insert new toppings
+            foreach (MenuPizzaTopping topping in Toppings)
             {
-                // Delete previous toppings
-                pizzaDb.Connection.DeleteList<MenuPizzaTopping>(new { MenuPizzaId = Id }, transaction);
-
-                // Insert new toppings
-                foreach (MenuPizzaTopping topping in Toppings)
-                {
-                    pizzaDb.Connection.Insert(topping, transaction);
-                }
-
-                // Update pizza record
-                int rowsAffected = pizzaDb.Connection.Update(this);
-
-                transaction.Commit();
-
-                return rowsAffected;
+                pizzaDb.Connection.Insert(topping, transaction);
             }
+
+            // Update pizza record
+            int rowsAffected = pizzaDb.Connection.Update(this, transaction);
+
+            return rowsAffected;
+        }
+
+        public bool InsertRequiresTransaction()
+        {
+            return false;
+        }
+
+        public bool UpdateRequiresTransaction()
+        {
+            return true;
         }
     }
 }
