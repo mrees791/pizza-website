@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("MenuPizza")]
-    public class MenuPizza : ITable
+    public class MenuPizza : IRecord
     {
         [Key]
         public int Id { get; set; }
@@ -31,7 +31,7 @@ namespace DataLibrary.Models.Tables
             Toppings = new List<MenuPizzaTopping>();
         }
 
-        public void AddInsertItems(List<IInsertable> itemsList)
+        public void AddInsertItems(List<IRecord> itemsList)
         {
             itemsList.Add(this);
             foreach (MenuPizzaTopping topping in Toppings)
@@ -79,8 +79,12 @@ namespace DataLibrary.Models.Tables
 
         public CartPizza CreateCartPizza(PizzaDatabase pizzaDb, int cartId, int quantity, string size, int menuCrustId)
         {
-            CartPizza cartPizza = new CartPizza()
+            // todo: Implement
+            throw new NotImplementedException();
+            /*CartPizza cartPizza = new CartPizza()
             {
+                CartId = cartId,
+                Quantity = quantity,
                 CheeseAmount = CheeseAmount,
                 MenuPizzaCheeseId = MenuPizzaCheeseId,
                 MenuPizzaCrustFlavorId = MenuPizzaCrustFlavorId,
@@ -95,24 +99,14 @@ namespace DataLibrary.Models.Tables
                 cartPizza.Toppings.Add(menuTopping.CreateCartTopping());
             }
 
-            decimal pricePerItem = cartPizza.CalculatePrice(pizzaDb);
+            cartPizza.PricePerItem = cartPizza.CalculatePrice(pizzaDb);
 
-            CartItem cartItem = new CartItem()
-            {
-                CartId = cartId,
-                PricePerItem = pricePerItem,
-                ProductCategory = ProductCategory.Pizza,
-                Quantity = quantity
-            };
-
-            cartPizza.CartItem = cartItem;
-
-            return cartPizza;
+            return cartPizza;*/
         }
 
         public bool InsertRequiresTransaction()
         {
-            return false;
+            return true;
         }
 
         public bool UpdateRequiresTransaction()

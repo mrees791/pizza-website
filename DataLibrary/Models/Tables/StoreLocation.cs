@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("StoreLocation")]
-    public class StoreLocation : ITable
+    public class StoreLocation : IRecord
     {
         [Key]
         public int Id { get; set; }
@@ -22,7 +22,7 @@ namespace DataLibrary.Models.Tables
         public string PhoneNumber { get; set; }
         public bool IsActiveLocation { get; set; }
 
-        public void AddInsertItems(List<IInsertable> itemsList)
+        public void AddInsertItems(List<IRecord> itemsList)
         {
             itemsList.Add(this);
         }

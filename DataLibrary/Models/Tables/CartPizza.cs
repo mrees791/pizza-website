@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Tables
 {
-    public class CartPizza : ITable, ICartItemType
+    public class CartPizza : IRecordCartItemType
     {
         [Key]
         public int CartItemId { get; set; }
@@ -20,17 +20,17 @@ namespace DataLibrary.Models.Tables
         public int MenuPizzaCheeseId { get; set; }
         public string CheeseAmount { get; set; }
         public int MenuPizzaCrustFlavorId { get; set; }
-        public CartItem CartItem { get; set; }
         public List<CartPizzaTopping> Toppings { get; set; }
+        public CartItem CartItem { get; set; }
 
         public CartPizza()
         {
             Toppings = new List<CartPizzaTopping>();
         }
 
-        public void AddInsertItems(List<IInsertable> itemsList)
+        public void AddInsertItems(List<IRecord> itemsList)
         {
-            itemsList.Add(CartItem);
+            CartItem.AddInsertItems(itemsList);
             itemsList.Add(this);
             foreach (var topping in Toppings)
             {
@@ -60,7 +60,6 @@ namespace DataLibrary.Models.Tables
 
         public void MapEntity(PizzaDatabase pizzaDb)
         {
-            CartItem = pizzaDb.Get<CartItem>(CartItemId);
             Toppings = pizzaDb.GetList<CartPizzaTopping>(new { CartItemId = CartItemId }, "Id");
         }
 
@@ -83,7 +82,7 @@ namespace DataLibrary.Models.Tables
 
         public bool InsertRequiresTransaction()
         {
-            return false;
+            return true;
         }
 
         public bool UpdateRequiresTransaction()
@@ -202,6 +201,11 @@ namespace DataLibrary.Models.Tables
         public string GetName(PizzaDatabase pizzaDb)
         {
             return $"{Size} Pizza";
+        }
+
+        public int CompareTo(IRecordCartItemType other)
+        {
+            return CartItemId.CompareTo(other.GetId());
         }
     }
 }

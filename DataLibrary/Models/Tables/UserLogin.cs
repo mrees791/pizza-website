@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("UserLogin")]
-    public class UserLogin : ITable
+    public class UserLogin : IRecord
     {
         [Key]
         public int Id { get; set; }
@@ -18,7 +18,7 @@ namespace DataLibrary.Models.Tables
         public string LoginProvider { get; set; }
         public string ProviderKey { get; set; }
 
-        public void AddInsertItems(List<IInsertable> itemsList)
+        public void AddInsertItems(List<IRecord> itemsList)
         {
             itemsList.Add(this);
         }

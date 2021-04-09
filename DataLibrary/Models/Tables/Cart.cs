@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("Cart")]
-    public class Cart : ITable
+    public class Cart : IRecord
     {
         [Key]
         public int Id { get; set; }
 
-        public void AddInsertItems(List<IInsertable> itemsList)
+        public void AddInsertItems(List<IRecord> itemsList)
         {
             itemsList.Add(this);
         }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("MenuPizzaToppingType")]
-    public class MenuPizzaToppingType : ITable
+    public class MenuPizzaToppingType : IRecord
     {
         [Key]
         public int Id { get; set; }
@@ -27,7 +27,7 @@ namespace DataLibrary.Models.Tables
         public bool HasPizzaBuilderImage { get; set; }
         public string PizzaBuilderImageFile { get; set; }
 
-        public void AddInsertItems(List<IInsertable> itemsList)
+        public void AddInsertItems(List<IRecord> itemsList)
         {
             itemsList.Add(this);
         }

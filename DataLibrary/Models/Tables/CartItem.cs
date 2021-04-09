@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("CartItem")]
-    public class CartItem : ITable
+    public class CartItem : IRecord
     {
         [Key]
         public int Id { get; set; }
@@ -19,7 +19,7 @@ namespace DataLibrary.Models.Tables
         public int Quantity { get; set; }
         public ProductCategory ProductCategory { get; set; }
 
-        public void AddInsertItems(List<IInsertable> itemsList)
+        public void AddInsertItems(List<IRecord> itemsList)
         {
             itemsList.Add(this);
         }

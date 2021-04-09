@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("MenuPizzaTopping")]
-    public class MenuPizzaTopping : ITable
+    public class MenuPizzaTopping : IRecord
     {
         [Key]
         public int Id { get; set; }
@@ -19,7 +19,7 @@ namespace DataLibrary.Models.Tables
         public string ToppingAmount { get; set; }
         public int MenuPizzaToppingTypeId { get; set; }
 
-        public void AddInsertItems(List<IInsertable> itemsList)
+        public void AddInsertItems(List<IRecord> itemsList)
         {
             itemsList.Add(this);
         }

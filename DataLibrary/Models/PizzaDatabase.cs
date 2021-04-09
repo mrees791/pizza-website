@@ -25,6 +25,45 @@ namespace DataLibrary.Models
             }
         }
 
+        // todo: Remove
+        public void TestJoin()
+        {
+            List<IRecordCartItemType> cartItems = GetJoinedCartItems(1);
+        }
+
+        private IEnumerable<CartPizza> GetJoinedPizzaCartItems(int cartId)
+        {
+            string joinQuerySql = @"select c.Id, c.Quantity, p.CartItemId, p.size
+	                            from CartItem c
+	                            inner join CartPizza p on c.Id = p.CartItemId";
+
+            IEnumerable<CartPizza> cartPizzaList = connection.Query<CartItem, CartPizza, CartPizza> (
+                joinQuerySql,
+                (cartItem, cartPizza) =>
+                {
+                    cartPizza.CartItem = cartItem;
+                    return cartPizza;
+                },
+                splitOn: "CartItemId");
+
+            foreach (CartPizza cartPizza in cartPizzaList)
+            {
+                cartPizza.MapEntity(this);
+            }
+
+            return cartPizzaList;
+        }
+
+        public List<IRecordCartItemType> GetJoinedCartItems(int cartId)
+        {
+            List<IRecordCartItemType> items = new List<IRecordCartItemType>();
+
+            items.AddRange(GetJoinedPizzaCartItems(cartId));
+            items.Sort();
+
+            return items;
+        }
+
         public PizzaDatabase(string connectionName = "PizzaDatabase")
         {
             string connectionString = ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
@@ -229,11 +268,11 @@ namespace DataLibrary.Models
         }
 
         // CRUD
-        public dynamic Insert(IInsertable entity)
+        public dynamic Insert(IRecord entity)
         {
-            List<IInsertable> itemsList = new List<IInsertable>();
+            List<IRecord> itemsList = new List<IRecord>();
             entity.AddInsertItems(itemsList);
-            bool requiresTransaction = RequiresTransaction(itemsList);
+            bool requiresTransaction = InsertRequiresTransaction(itemsList);
 
             if (requiresTransaction)
             {
@@ -251,9 +290,9 @@ namespace DataLibrary.Models
             return entity.GetId();
         }
 
-        private bool RequiresTransaction(List<IInsertable> itemsList)
+        private bool InsertRequiresTransaction(List<IRecord> itemsList)
         {
-            foreach (IInsertable item in itemsList)
+            foreach (IRecord item in itemsList)
             {
                 if (item.InsertRequiresTransaction())
                 {
@@ -264,9 +303,9 @@ namespace DataLibrary.Models
             return false;
         }
 
-        private bool RequiresTransaction(List<IUpdatable> itemsList)
+        private bool UpdateRequiresTransaction(List<IRecord> itemsList)
         {
-            foreach (IUpdatable item in itemsList)
+            foreach (IRecord item in itemsList)
             {
                 if (item.UpdateRequiresTransaction())
                 {
@@ -277,17 +316,17 @@ namespace DataLibrary.Models
             return false;
         }
 
-        private void InsertMultipleItems(List<IInsertable> itemsList, IDbTransaction transaction = null)
+        private void InsertMultipleItems(List<IRecord> itemsList, IDbTransaction transaction = null)
         {
-            foreach (IInsertable item in itemsList)
+            foreach (IRecord item in itemsList)
             {
                 item.Insert(connection, transaction);
             }
         }
 
-        public int Update(IUpdatable entity)
+        public int Update(IRecord entity, IDbTransaction transaction = null)
         {
-            return entity.Update(this);
+            return entity.Update(this, transaction);
         }
 
         public int Delete<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : class, new()

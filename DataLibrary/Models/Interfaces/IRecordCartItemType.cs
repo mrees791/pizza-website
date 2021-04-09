@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Interfaces
 {
-    public interface ICartItemType
+    public interface IRecordCartItemType : IRecord, IComparable<IRecordCartItemType>
     {
         decimal CalculatePrice(PizzaDatabase pizzaDb);
         string GetName(PizzaDatabase pizzaDb);

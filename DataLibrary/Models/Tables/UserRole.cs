@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("UserRole")]
-    public class UserRole : ITable
+    public class UserRole : IRecord
     {
         [Key]
         public int Id { get; set; }
         public int UserId { get; set; }
         public int RoleId { get; set; }
 
-        public void AddInsertItems(List<IInsertable> itemsList)
+        public void AddInsertItems(List<IRecord> itemsList)
         {
             itemsList.Add(this);
         }

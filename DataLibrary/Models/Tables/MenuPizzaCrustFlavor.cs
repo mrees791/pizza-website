@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("MenuPizzaCrustFlavor")]
-    public class MenuPizzaCrustFlavor : ITable
+    public class MenuPizzaCrustFlavor : IRecord
     {
         [Key]
         public int Id { get; set; }
@@ -23,7 +23,7 @@ namespace DataLibrary.Models.Tables
         public bool HasPizzaBuilderImage { get; set; }
         public string PizzaBuilderImageFile { get; set; }
 
-        public void AddInsertItems(List<IInsertable> itemsList)
+        public void AddInsertItems(List<IRecord> itemsList)
         {
             itemsList.Add(this);
         }
@@ -46,6 +46,7 @@ namespace DataLibrary.Models.Tables
         public void MapEntity(PizzaDatabase pizzaDb)
         {
         }
+
 
         public int Update(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {

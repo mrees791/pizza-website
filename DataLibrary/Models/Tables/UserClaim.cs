@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("UserClaim")]
-    public class UserClaim : ITable
+    public class UserClaim : IRecord
     {
         [Key]
         public int Id { get; set; }
@@ -18,7 +18,7 @@ namespace DataLibrary.Models.Tables
         public string ClaimType { get; set; }
         public string ClaimValue { get; set; }
 
-        public void AddInsertItems(List<IInsertable> itemsList)
+        public void AddInsertItems(List<IRecord> itemsList)
         {
             itemsList.Add(this);
         }

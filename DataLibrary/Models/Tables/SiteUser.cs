@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("SiteUser")]
-    public class SiteUser : ITable
+    public class SiteUser : IRecord
     {
         [Key]
         public int Id { get; set; }
@@ -40,7 +40,7 @@ namespace DataLibrary.Models.Tables
             ConfirmOrderCart = new Cart();
         }
 
-        public void AddInsertItems(List<IInsertable> insertItems)
+        public void AddInsertItems(List<IRecord> insertItems)
         {
             CurrentCart.AddInsertItems(insertItems);
             ConfirmOrderCart.AddInsertItems(insertItems);
