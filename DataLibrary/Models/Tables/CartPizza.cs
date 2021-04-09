@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Tables
 {
-    public class CartPizza : ITable
+    public class CartPizza : ITable, ICartItemType
     {
         [Key]
         public int CartItemId { get; set; }
@@ -90,13 +90,13 @@ namespace DataLibrary.Models.Tables
             return true;
         }
 
-        public async Task<decimal> CalculatePriceAsync(PizzaDatabase pizzaDb)
+        public decimal CalculatePrice(PizzaDatabase pizzaDb)
         {
             decimal total = 0.0m;
 
-            MenuPizzaCheese cheese = await pizzaDb.GetAsync<MenuPizzaCheese>(MenuPizzaCheeseId);
-            MenuPizzaSauce sauce = await pizzaDb.GetAsync<MenuPizzaSauce>(MenuPizzaSauceId);
-            MenuPizzaCrust crust = await pizzaDb.GetAsync<MenuPizzaCrust>(MenuPizzaCrustId);
+            MenuPizzaCheese cheese = pizzaDb.Get<MenuPizzaCheese>(MenuPizzaCheeseId);
+            MenuPizzaSauce sauce = pizzaDb.Get<MenuPizzaSauce>(MenuPizzaSauceId);
+            MenuPizzaCrust crust = pizzaDb.Get<MenuPizzaCrust>(MenuPizzaCrustId);
 
             switch (CheeseAmount)
             {
@@ -139,7 +139,7 @@ namespace DataLibrary.Models.Tables
 
             foreach (CartPizzaTopping topping in Toppings)
             {
-                MenuPizzaToppingType toppingType = await pizzaDb.GetAsync<MenuPizzaToppingType>(topping.MenuPizzaToppingTypeId);
+                MenuPizzaToppingType toppingType = pizzaDb.Get<MenuPizzaToppingType>(topping.MenuPizzaToppingTypeId);
 
                 decimal toppingAmount = 0.0m;
 
@@ -165,6 +165,42 @@ namespace DataLibrary.Models.Tables
             }
 
             return total;
+        }
+
+        public string GetDescriptionHtml(PizzaDatabase pizzaDb)
+        {
+            MenuPizzaCheese cheese = pizzaDb.Get<MenuPizzaCheese>(MenuPizzaCheeseId);
+            MenuPizzaSauce sauce = pizzaDb.Get<MenuPizzaSauce>(MenuPizzaSauceId);
+            MenuPizzaCrust crust = pizzaDb.Get<MenuPizzaCrust>(MenuPizzaCrustId);
+            MenuPizzaCrustFlavor crustFlavor = pizzaDb.Get<MenuPizzaCrustFlavor>(MenuPizzaCrustFlavorId);
+
+            string details = string.Empty;
+
+            if (Toppings.Any())
+            {
+                details += $"Toppings<br />";
+
+                foreach (CartPizzaTopping topping in Toppings)
+                {
+                    MenuPizzaToppingType toppingType = pizzaDb.Get<MenuPizzaToppingType>(topping.MenuPizzaToppingTypeId);
+                    details += $"{toppingType.Name}: {topping.ToppingAmount}, {topping.ToppingHalf}<br />";
+                }
+
+                details += "<br />";
+            }
+
+            details += $"Size: {Size}<br />";
+            details += $"Cheese: {cheese.Name}<br />";
+            details += $"Sauce: {sauce.Name}<br />";
+            details += $"Crust: {crust.Name}<br />";
+            details += $"Crust Flavor: {crustFlavor.Name}<br />";
+
+            return details;
+        }
+
+        public string GetName(PizzaDatabase pizzaDb)
+        {
+            return $"{Size} Pizza";
         }
     }
 }

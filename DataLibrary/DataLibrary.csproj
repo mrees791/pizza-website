@@ -68,6 +68,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Interfaces\ICartItemType.cs" />
     <Compile Include="Models\Interfaces\IInsertable.cs" />
     <Compile Include="Models\Interfaces\IRecord.cs" />
     <Compile Include="Models\Interfaces\ITable.cs" />
@@ -94,7 +95,6 @@
     <Compile Include="Models\Tables\UserClaim.cs" />
     <Compile Include="Models\Tables\UserLogin.cs" />
     <Compile Include="Models\Tables\UserRole.cs" />
-    <Compile Include="Models\Utility\CartItemUtility.cs" />
     <Compile Include="Models\Utility\ListUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

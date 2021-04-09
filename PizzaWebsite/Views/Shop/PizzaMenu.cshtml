@@ -12,27 +12,14 @@
     @Html.Partial("_MenuPizzaView", menuPizza)
 }
 <h3>Meat Pizzas</h3>
+@foreach (MenuPizzaViewModel menuPizza in Model.MeatsPizzaList)
+{
+    @Html.Partial("_MenuPizzaView", menuPizza)
+}
 <h3>Veggie Pizzas</h3>
+@foreach (MenuPizzaViewModel menuPizza in Model.VeggiePizzaList)
+{
+    @Html.Partial("_MenuPizzaView", menuPizza)
+}
 <h3>Custom Pizza</h3>
-
-@*
-    <p>
-            @Html.ActionLink("Create New", "Create")
-        </p>
-        <table class="table">
-            <tr>
-                <th></th>
-            </tr>
-
-        @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                </td>
-            </tr>
-        }
-
-        </table>
-*@
+@Html.ActionLink("Create a custom pizza", "CreateCustomPizza", "Shop")

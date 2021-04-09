@@ -77,7 +77,7 @@ namespace DataLibrary.Models.Tables
             return rowsAffected;
         }
 
-        public async Task<CartPizza> CreateCartPizzaAsync(PizzaDatabase pizzaDb, int cartId, int quantity, string size, int menuCrustId)
+        public CartPizza CreateCartPizza(PizzaDatabase pizzaDb, int cartId, int quantity, string size, int menuCrustId)
         {
             CartPizza cartPizza = new CartPizza()
             {
@@ -95,7 +95,7 @@ namespace DataLibrary.Models.Tables
                 cartPizza.Toppings.Add(menuTopping.CreateCartTopping());
             }
 
-            decimal pricePerItem = await cartPizza.CalculatePriceAsync(pizzaDb);
+            decimal pricePerItem = cartPizza.CalculatePrice(pizzaDb);
 
             CartItem cartItem = new CartItem()
             {

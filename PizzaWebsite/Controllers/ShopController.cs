@@ -36,15 +36,15 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> AddMenuPizzaToCurrentCart(int id, int selectedQuantity, string selectedSize, int selectedCrustId)
         {
             SiteUser currentUser = await GetCurrentUserAsync();
-            await AddMenuPizzaToCart(id, currentUser.CurrentCartId, selectedQuantity, selectedSize, selectedCrustId);
+            AddMenuPizzaToCart(id, currentUser.CurrentCartId, selectedQuantity, selectedSize, selectedCrustId);
             return RedirectToAction("Cart");
         }
 
         [Authorize]
-        public async Task AddMenuPizzaToCart(int menuPizzaId, int cartId, int selectedQuantity, string selectedSize, int selectedCrustId)
+        public void AddMenuPizzaToCart(int menuPizzaId, int cartId, int selectedQuantity, string selectedSize, int selectedCrustId)
         {
-            MenuPizza menuPizza = await PizzaDb.GetAsync<MenuPizza>(menuPizzaId);
-            CartPizza cartPizza = await menuPizza.CreateCartPizzaAsync(PizzaDb, cartId, selectedQuantity, selectedSize, selectedCrustId);
+            MenuPizza menuPizza = PizzaDb.Get<MenuPizza>(menuPizzaId);
+            CartPizza cartPizza = menuPizza.CreateCartPizza(PizzaDb, cartId, selectedQuantity, selectedSize, selectedCrustId);
             PizzaDb.Insert(cartPizza);
         }
 
@@ -139,8 +139,8 @@ namespace PizzaWebsite.Controllers
                 {
                     case ProductCategory.Pizza:
                         CartPizza cartPizza = PizzaDb.Get<CartPizza>(cartItem.Id);
-                        cartItemVm.Name = CartItemUtility.CreateItemName(cartPizza);
-                        cartItemVm.Description = CartItemUtility.CreateHtmlItemDetails(cartPizza, PizzaDb);
+                        cartItemVm.Name = cartPizza.GetName(PizzaDb);
+                        cartItemVm.Description = cartPizza.GetDescriptionHtml(PizzaDb);
                         break;
                     default:
                         throw new Exception($"Product category not implemented: {cartItem.ProductCategory}");
