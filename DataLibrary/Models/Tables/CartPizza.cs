@@ -89,5 +89,82 @@ namespace DataLibrary.Models.Tables
         {
             return true;
         }
+
+        public async Task<decimal> CalculatePriceAsync(PizzaDatabase pizzaDb)
+        {
+            decimal total = 0.0m;
+
+            MenuPizzaCheese cheese = await pizzaDb.GetAsync<MenuPizzaCheese>(MenuPizzaCheeseId);
+            MenuPizzaSauce sauce = await pizzaDb.GetAsync<MenuPizzaSauce>(MenuPizzaSauceId);
+            MenuPizzaCrust crust = await pizzaDb.GetAsync<MenuPizzaCrust>(MenuPizzaCrustId);
+
+            switch (CheeseAmount)
+            {
+                case "Light":
+                    total += cheese.PriceLight;
+                    break;
+                case "Regular":
+                    total += cheese.PriceRegular;
+                    break;
+                case "Extra":
+                    total += cheese.PriceExtra;
+                    break;
+            }
+
+            switch (SauceAmount)
+            {
+                case "Light":
+                    total += sauce.PriceLight;
+                    break;
+                case "Regular":
+                    total += sauce.PriceRegular;
+                    break;
+                case "Extra":
+                    total += sauce.PriceExtra;
+                    break;
+            }
+
+            switch (Size)
+            {
+                case "Small":
+                    total += crust.PriceSmall;
+                    break;
+                case "Medium":
+                    total += crust.PriceMedium;
+                    break;
+                case "Large":
+                    total += crust.PriceLarge;
+                    break;
+            }
+
+            foreach (CartPizzaTopping topping in Toppings)
+            {
+                MenuPizzaToppingType toppingType = await pizzaDb.GetAsync<MenuPizzaToppingType>(topping.MenuPizzaToppingTypeId);
+
+                decimal toppingAmount = 0.0m;
+
+                switch (topping.ToppingAmount)
+                {
+                    case "Light":
+                        toppingAmount = toppingType.PriceLight;
+                        break;
+                    case "Regular":
+                        toppingAmount = toppingType.PriceRegular;
+                        break;
+                    case "Extra":
+                        toppingAmount = toppingType.PriceExtra;
+                        break;
+                }
+
+                if (topping.ToppingHalf != "Whole")
+                {
+                    toppingAmount /= 2.0m;
+                }
+
+                total += toppingAmount;
+            }
+
+            return total;
+        }
     }
 }

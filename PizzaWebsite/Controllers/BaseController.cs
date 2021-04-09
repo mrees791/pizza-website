@@ -81,7 +81,7 @@ namespace PizzaWebsite.Controllers
             return entities;
         }
 
-        protected async Task<SiteUser> GetCurrentUser()
+        protected async Task<SiteUser> GetCurrentUserAsync()
         {
             List<SiteUser> users = await PizzaDb.GetListAsync<SiteUser>(new { UserName = User.Identity.Name });
             return users.FirstOrDefault();

@@ -15,7 +15,6 @@ namespace PizzaWebsite.Models
         public static void LoadNewPizzaBuilderLists(PizzaDatabase pizzaDb, List<PizzaTopping> toppings, PizzaBuilderViewModel pizzaBuilderVm)
         {
             List<MenuPizzaToppingType> toppingTypeList = pizzaDb.GetList<MenuPizzaToppingType>(new { AvailableForPurchase = true }, "SortOrder");
-            List<MenuPizzaCrust> crustList = pizzaDb.GetList<MenuPizzaCrust>(new { AvailableForPurchase = true }, "SortOrder");
             List<MenuPizzaCrustFlavor> crustFlavorList = pizzaDb.GetList<MenuPizzaCrustFlavor>(new { AvailableForPurchase = true }, "SortOrder").ToList();
             List<MenuPizzaSauce> pizzaSauceList = pizzaDb.GetList<MenuPizzaSauce>(new { AvailableForPurchase = true }, "SortOrder").ToList();
             List<MenuPizzaCheese> pizzaCheeseList = pizzaDb.GetList<MenuPizzaCheese>(new { AvailableForPurchase = true }, "SortOrder").ToList();
@@ -23,11 +22,6 @@ namespace PizzaWebsite.Models
             // Save to view model
             pizzaBuilderVm.SauceAmountList = ListUtility.GetSauceAmountList();
             pizzaBuilderVm.CheeseAmountList = ListUtility.GetCheeseAmountList();
-
-            foreach (MenuPizzaCrust crust in crustList)
-            {
-                pizzaBuilderVm.CrustList.Add(crust.Id, crust.Name);
-            }
 
             foreach (MenuPizzaCrustFlavor crustFlavor in crustFlavorList)
             {

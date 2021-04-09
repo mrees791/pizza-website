@@ -13,28 +13,114 @@ using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
-    [Authorize]
     public class ShopController : BaseController
     {
-        public ActionResult CustomizePizza()
+        [Authorize]
+        public async Task<ActionResult> CustomizePizza()
         {
             CartPizzaBuilderViewModel cartPizzaVm = new CartPizzaBuilderViewModel();
             List<PizzaTopping> toppings = new List<PizzaTopping>();
             PizzaBuilderUtility.LoadNewPizzaBuilderLists(PizzaDb, toppings, cartPizzaVm);
-            LoadCartPizzaBuilderLists(cartPizzaVm);
+            await LoadCartPizzaBuilderListsAsync(cartPizzaVm);
 
             return View("CartPizzaBuilder", cartPizzaVm);
         }
 
-        private void LoadCartPizzaBuilderLists(CartPizzaBuilderViewModel cartPizzaVm)
+        private async Task LoadCartPizzaBuilderListsAsync(CartPizzaBuilderViewModel cartPizzaVm)
         {
-            // FINISH
-            // LOAD SIZES LIST
+            cartPizzaVm.SizeList = ListUtility.GetPizzaSizeList();
+            cartPizzaVm.CrustList = await CreateCrustDictionaryAsync();
         }
 
+        [Authorize]
+        public async Task<ActionResult> AddMenuPizzaToCurrentCart(int id, int selectedQuantity, string selectedSize, int selectedCrustId)
+        {
+            SiteUser currentUser = await GetCurrentUserAsync();
+            await AddMenuPizzaToCart(id, currentUser.CurrentCartId, selectedQuantity, selectedSize, selectedCrustId);
+            return RedirectToAction("Cart");
+        }
+
+        [Authorize]
+        public async Task AddMenuPizzaToCart(int menuPizzaId, int cartId, int selectedQuantity, string selectedSize, int selectedCrustId)
+        {
+            MenuPizza menuPizza = await PizzaDb.GetAsync<MenuPizza>(menuPizzaId);
+            CartPizza cartPizza = await menuPizza.CreateCartPizzaAsync(PizzaDb, cartId, selectedQuantity, selectedSize, selectedCrustId);
+            PizzaDb.Insert(cartPizza);
+        }
+
+        private async Task<Dictionary<int, string>> CreateCrustDictionaryAsync()
+        {
+            List<MenuPizzaCrust> crustList = await PizzaDb.GetListAsync<MenuPizzaCrust>(new { AvailableForPurchase = true }, "SortOrder");
+            Dictionary<int, string> crustListDictionary = new Dictionary<int, string>();
+
+            foreach (MenuPizzaCrust crust in crustList)
+            {
+                crustListDictionary.Add(crust.Id, crust.Name);
+            }
+
+            return crustListDictionary;
+        }
+
+        public async Task<ActionResult> PizzaMenu()
+        {
+            PizzaMenuPageViewModel pizzaMenuVm = new PizzaMenuPageViewModel();
+
+            List<int> quantityList = CreateQuantityList();
+            List<string> sizeList = ListUtility.GetPizzaSizeList();
+            Dictionary<int, string> crustListDictionary = await CreateCrustDictionaryAsync();
+
+            // Load all menu pizzas
+            List<MenuPizza> popularMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>(new { AvailableForPurchase = true, CategoryName = "Popular" }, "SortOrder");
+            List<MenuPizza> meatsMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>(new { AvailableForPurchase = true, CategoryName = "Meats" }, "SortOrder");
+            List<MenuPizza> veggieMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>(new { AvailableForPurchase = true, CategoryName = "Veggie" }, "SortOrder");
+            // Separate into categories
+            pizzaMenuVm.PopularPizzaList = CreateMenuPizzaViewModels(popularMenuPizzas, quantityList, sizeList, crustListDictionary);
+            pizzaMenuVm.MeatsPizzaList = CreateMenuPizzaViewModels(meatsMenuPizzas, quantityList, sizeList, crustListDictionary);
+            pizzaMenuVm.VeggiePizzaList = CreateMenuPizzaViewModels(veggieMenuPizzas, quantityList, sizeList, crustListDictionary);
+
+            return View(pizzaMenuVm);
+        }
+
+        private List<MenuPizzaViewModel> CreateMenuPizzaViewModels(List<MenuPizza> menuPizzaList, List<int> quantityList, List<string> sizeList, Dictionary<int, string> crustListDictionary)
+        {
+            List<MenuPizzaViewModel> viewModelList = new List<MenuPizzaViewModel>();
+
+            foreach (MenuPizza menuPizza in menuPizzaList)
+            {
+                MenuPizzaViewModel viewModel = new MenuPizzaViewModel()
+                {
+                    Id = menuPizza.Id,
+                    Name = menuPizza.PizzaName,
+                    QuantityList = quantityList,
+                    SelectedQuantity = 1,
+                    SizeList = sizeList,
+                    SelectedSize = "Medium",
+                    CrustList = crustListDictionary
+                };
+
+                viewModelList.Add(viewModel);
+            }
+
+            return viewModelList;
+        }
+
+        private List<int> CreateQuantityList()
+        {
+            List<int> quantityList = new List<int>();
+            int maxQuantity = 10;
+
+            for (int i = 1; i <= maxQuantity; i++)
+            {
+                quantityList.Add(i);
+            }
+
+            return quantityList;
+        }
+
+        [Authorize]
         public async Task<ActionResult> Cart()
         {
-            SiteUser user = await GetCurrentUser();
+            SiteUser user = await GetCurrentUserAsync();
             List<CartItem> cartItemList = await PizzaDb.GetListAsync<CartItem>(new { CartId = user.CurrentCartId });
 
             CartViewModel cartVm = new CartViewModel();

@@ -50,7 +50,6 @@ namespace PizzaWebsite.Controllers
                 SelectedCheeseAmount = entity.CheeseAmount,
                 SelectedCheeseId = entity.MenuPizzaCheeseId,
                 SelectedCrustFlavorId = entity.MenuPizzaCrustFlavorId,
-                SelectedCrustId = entity.MenuPizzaCrustId,
                 SelectedSauceId = entity.MenuPizzaSauceId,
                 SelectedSauceAmount = entity.SauceAmount,
                 CategoryList = ListUtility.GetPizzaCategoryList()
@@ -102,7 +101,6 @@ namespace PizzaWebsite.Controllers
                 Description = model.Description,
                 MenuPizzaCheeseId = model.SelectedCheeseId,
                 MenuPizzaCrustFlavorId = model.SelectedCrustFlavorId,
-                MenuPizzaCrustId = model.SelectedCrustId,
                 MenuPizzaSauceId = model.SelectedSauceId,
                 SauceAmount = model.SelectedSauceAmount,
                 SortOrder = model.SortOrder

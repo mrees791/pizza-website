@@ -13,6 +13,20 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
 
+        <div class="form-group">
+            @Html.LabelFor(model => model.CrustList, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @for (int i = 0; i < Model.CrustList.Count; i++)
+                {
+                    var crustPair = Model.CrustList.ElementAt(i);
+                    <input type="hidden" name="CrustList[@i].Key" value="@crustPair.Key" />
+                    <input type="hidden" name="CrustList[@i].Value" value="@crustPair.Value" />
+                }
+                @Html.DropDownListFor(m => m.SelectedCrustId, new SelectList(Model.CrustList, "Key", "Value"))
+                @Html.ValidationMessageFor(model => model.SelectedCrustId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
         @Html.Partial("_PizzaBuilder", Model)
 
         <div class="form-group">

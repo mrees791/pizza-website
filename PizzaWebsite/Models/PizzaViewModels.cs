@@ -19,6 +19,10 @@ namespace PizzaWebsite.Models
         [Required]
         [Display(Name = "Size")]
         public string SelectedSize { get; set; }
+        [Display(Name = "Crust")]
+        public Dictionary<int, string> CrustList { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a crust.")]
+        public int SelectedCrustId { get; set; }
     }
 
     public class ManageMenuPizzaViewModel : PizzaBuilderViewModel

@@ -195,6 +195,7 @@
     <Compile Include="Models\PizzaBuilderUtility.cs" />
     <Compile Include="Models\PizzaViewModels.cs" />
     <Compile Include="Models\SharedViewModels.cs" />
+    <Compile Include="Models\ShopViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -283,6 +284,9 @@
     <Content Include="Views\Shared\_PizzaBuilderTopping.cshtml" />
     <Content Include="Views\Shop\Cart.cshtml" />
     <Content Include="Views\Shop\CartPizzaBuilder.cshtml" />
+    <Content Include="Views\Shop\PizzaMenu.cshtml" />
+    <Content Include="Views\Shop\_MenuPizzaView.cshtml" />
+    <Content Include="Views\Home\NavTest1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

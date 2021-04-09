@@ -19,7 +19,6 @@ namespace DataLibrary.Models.Tables
         public bool AvailableForPurchase { get; set; }
         public string PizzaName { get; set; }
         public string Description { get; set; }
-        public int MenuPizzaCrustId { get; set; }
         public int MenuPizzaSauceId { get; set; }
         public string SauceAmount { get; set; }
         public int MenuPizzaCheeseId { get; set; }
@@ -76,6 +75,39 @@ namespace DataLibrary.Models.Tables
             int rowsAffected = pizzaDb.Connection.Update(this, transaction);
 
             return rowsAffected;
+        }
+
+        public async Task<CartPizza> CreateCartPizzaAsync(PizzaDatabase pizzaDb, int cartId, int quantity, string size, int menuCrustId)
+        {
+            CartPizza cartPizza = new CartPizza()
+            {
+                CheeseAmount = CheeseAmount,
+                MenuPizzaCheeseId = MenuPizzaCheeseId,
+                MenuPizzaCrustFlavorId = MenuPizzaCrustFlavorId,
+                MenuPizzaCrustId = menuCrustId,
+                MenuPizzaSauceId = MenuPizzaSauceId,
+                SauceAmount = SauceAmount,
+                Size = size
+            };
+
+            foreach (MenuPizzaTopping menuTopping in Toppings)
+            {
+                cartPizza.Toppings.Add(menuTopping.CreateCartTopping());
+            }
+
+            decimal pricePerItem = await cartPizza.CalculatePriceAsync(pizzaDb);
+
+            CartItem cartItem = new CartItem()
+            {
+                CartId = cartId,
+                PricePerItem = pricePerItem,
+                ProductCategory = ProductCategory.Pizza,
+                Quantity = quantity
+            };
+
+            cartPizza.CartItem = cartItem;
+
+            return cartPizza;
         }
 
         public bool InsertRequiresTransaction()

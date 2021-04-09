@@ -74,6 +74,17 @@ namespace DataLibrary.Models
             return list;
         }
 
+        public async Task<List<TEntity>> GetListAsync<TEntity>(object parameters, string orderByColumn) where TEntity : IRecord
+        {
+            string conditions = GetSqlWhereConditions(parameters, orderByColumn);
+            IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>(conditions, parameters);
+            foreach (TEntity entity in list)
+            {
+                entity.MapEntity(this);
+            }
+            return list.ToList();
+        }
+
         public async Task<List<TEntity>> GetListAsync<TEntity>() where TEntity : IRecord
         {
             IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>();

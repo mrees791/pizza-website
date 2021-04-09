@@ -34,17 +34,11 @@ namespace PizzaWebsite.Models
     {
         public PizzaBuilderViewModel()
         {
-            CrustList = new Dictionary<int, string>();
             SauceList = new Dictionary<int, string>();
             CheeseList = new Dictionary<int, string>();
             CrustFlavorList = new Dictionary<int, string>();
             ToppingList = new List<PizzaToppingViewModel>();
         }
-
-        [Display(Name = "Crust")]
-        public Dictionary<int, string> CrustList { get; set; }
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a crust.")]
-        public int SelectedCrustId { get; set; }
         [Display(Name = "Sauce")]
         public Dictionary<int, string> SauceList { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "You must select a sauce.")]
