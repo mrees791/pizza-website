@@ -4,7 +4,7 @@
 @* This partial view must be placed inside a POST form. *@
 
 <div class="form-group">
-    @Html.LabelFor(model => model.SauceList, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.SelectedSauceId, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
         @for (int i = 0; i < Model.SauceList.Count; i++)
         {
@@ -18,7 +18,7 @@
 </div>
 
 <div class="form-group">
-    @Html.LabelFor(model => model.SauceAmountList, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.SelectedSauceAmount, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
         @for (int i = 0; i < Model.SauceAmountList.Count; i++)
         {
@@ -30,7 +30,7 @@
 </div>
 
 <div class="form-group">
-    @Html.LabelFor(model => model.CheeseList, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.SelectedCheeseId, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
         @for (int i = 0; i < Model.CheeseList.Count; i++)
         {
@@ -44,7 +44,7 @@
 </div>
 
 <div class="form-group">
-    @Html.LabelFor(model => model.CheeseAmountList, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.SelectedCheeseAmount, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
         @for (int i = 0; i < Model.CheeseAmountList.Count; i++)
         {
@@ -56,7 +56,7 @@
 </div>
 
 <div class="form-group">
-    @Html.LabelFor(model => model.CrustFlavorList, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.SelectedCrustFlavorId, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
         @for (int i = 0; i < Model.CrustFlavorList.Count; i++)
         {

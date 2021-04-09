@@ -286,7 +286,6 @@
     <Content Include="Views\Shop\CartPizzaBuilder.cshtml" />
     <Content Include="Views\Shop\PizzaMenu.cshtml" />
     <Content Include="Views\Shop\_MenuPizzaView.cshtml" />
-    <Content Include="Views\Home\NavTest1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

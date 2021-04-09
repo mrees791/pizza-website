@@ -39,22 +39,23 @@ namespace PizzaWebsite.Models
             CrustFlavorList = new Dictionary<int, string>();
             ToppingList = new List<PizzaToppingViewModel>();
         }
-        [Display(Name = "Sauce")]
+
         public Dictionary<int, string> SauceList { get; set; }
+        [Display(Name = "Sauce")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a sauce.")]
         public int SelectedSauceId { get; set; }
-        [Display(Name = "Amount")]
         public List<string> SauceAmountList { get; set; }
+        [Display(Name = "Amount")]
         public string SelectedSauceAmount { get; set; }
-        [Display(Name = "Cheese")]
         public Dictionary<int, string> CheeseList { get; set; }
+        [Display(Name = "Cheese")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a cheese.")]
         public int SelectedCheeseId { get; set; }
-        [Display(Name = "Amount")]
         public List<string> CheeseAmountList { get; set; }
+        [Display(Name = "Amount")]
         public string SelectedCheeseAmount { get; set; }
-        [Display(Name = "Crust Flavor")]
         public Dictionary<int, string> CrustFlavorList { get; set; }
+        [Display(Name = "Crust Flavor")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a crust flavor.")]
         public int SelectedCrustFlavorId { get; set; }
         public List<PizzaToppingViewModel> ToppingList { get; set; }
