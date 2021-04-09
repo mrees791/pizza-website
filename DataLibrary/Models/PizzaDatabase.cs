@@ -31,11 +31,18 @@ namespace DataLibrary.Models
             List<IRecordCartItemType> cartItems = GetJoinedCartItems(1);
         }
 
+        // todo: Finish
         private IEnumerable<CartPizza> GetJoinedPizzaCartItems(int cartId)
         {
-            string joinQuerySql = @"select c.Id, c.Quantity, p.CartItemId, p.size
+            string joinQuerySql = @"select c.CartId, c.Id, c.Quantity, p.CartItemId, p.size
 	                            from CartItem c
-	                            inner join CartPizza p on c.Id = p.CartItemId";
+	                            inner join CartPizza p on c.Id = p.CartItemId
+                                where c.CartId = @CartId";
+
+            object queryParameters = new
+            {
+                CartId = cartId
+            };
 
             IEnumerable<CartPizza> cartPizzaList = connection.Query<CartItem, CartPizza, CartPizza> (
                 joinQuerySql,
@@ -43,8 +50,7 @@ namespace DataLibrary.Models
                 {
                     cartPizza.CartItem = cartItem;
                     return cartPizza;
-                },
-                splitOn: "CartItemId");
+                },queryParameters);
 
             foreach (CartPizza cartPizza in cartPizzaList)
             {

@@ -68,7 +68,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Interfaces\IJoinedRecord.cs" />
     <Compile Include="Models\Interfaces\IRecord.cs" />
     <Compile Include="Models\Interfaces\IRecordCartItemType.cs" />
     <Compile Include="Models\PizzaDatabase.cs" />
