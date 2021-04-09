@@ -8,11 +8,6 @@ namespace PizzaWebsite.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult NavTest1()
-        {
-            return View();
-        }
-
         public ActionResult Index()
         {
             return View();
