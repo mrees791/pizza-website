@@ -60,6 +60,7 @@ namespace DataLibrary.Models.Tables
 
         public void MapEntity(PizzaDatabase pizzaDb)
         {
+            CartItem = pizzaDb.Get<CartItem>(CartItemId);
             Toppings = pizzaDb.GetList<CartPizzaTopping>(new { CartItemId = CartItemId }, "Id");
         }
 
