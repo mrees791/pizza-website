@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="Models\Interfaces\IRecord.cs" />
     <Compile Include="Models\Interfaces\IRecordCartItemType.cs" />
+    <Compile Include="Models\Joins\CartItemJoin.cs" />
     <Compile Include="Models\PizzaDatabase.cs" />
     <Compile Include="Models\PizzaTopping.cs" />
     <Compile Include="Models\ProductCategory.cs" />

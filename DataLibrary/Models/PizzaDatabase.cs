@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using DataLibrary.Models.Interfaces;
+using DataLibrary.Models.Joins;
 using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
@@ -25,16 +26,22 @@ namespace DataLibrary.Models
             }
         }
 
-        // todo: Remove
-        public void TestJoin()
+        public List<CartItemJoin> GetJoinedCartItems(int cartId)
         {
-            List<IRecordCartItemType> cartItems = GetJoinedCartItems(1);
+            List<CartItemJoin> items = new List<CartItemJoin>();
+
+            // One join is required for each product category.
+            items.AddRange(GetJoinedPizzaCartItems(cartId));
+            items.Sort();
+
+            return items;
         }
 
         // todo: Finish
-        private IEnumerable<CartPizza> GetJoinedPizzaCartItems(int cartId)
+        private IEnumerable<CartItemJoin> GetJoinedPizzaCartItems(int cartId)
         {
-            string joinQuerySql = @"select c.CartId, c.Id, c.Quantity, p.CartItemId, p.size
+            string joinQuerySql = @"select c.Id, c.CartId, c.PricePerItem, c.Quantity, c.ProductCategory, c.Quantity,
+                                    p.CartItemId, p.CheeseAmount, p.MenuPizzaCheeseId, p.MenuPizzaCrustFlavorId, p.MenuPizzaCrustId, p.MenuPizzaSauceId, p.SauceAmount, p.size
 	                            from CartItem c
 	                            inner join CartPizza p on c.Id = p.CartItemId
                                 where c.CartId = @CartId";
@@ -44,30 +51,22 @@ namespace DataLibrary.Models
                 CartId = cartId
             };
 
-            IEnumerable<CartPizza> cartPizzaList = connection.Query<CartItem, CartPizza, CartPizza> (
+            IEnumerable<CartItemJoin> cartPizzaList = connection.Query<CartItem, CartPizza, CartItemJoin> (
                 joinQuerySql,
                 (cartItem, cartPizza) =>
                 {
-                    cartPizza.CartItem = cartItem;
-                    return cartPizza;
-                },queryParameters);
+                    CartItemJoin cartPizzaJoin = new CartItemJoin();
+                    cartPizzaJoin.CartItem = cartItem;
+                    cartPizzaJoin.CartItemType = cartPizza;
+                    return cartPizzaJoin;
+                }, param: queryParameters, splitOn: "CartItemId");
 
-            foreach (CartPizza cartPizza in cartPizzaList)
+            foreach (CartItemJoin cartPizza in cartPizzaList)
             {
                 cartPizza.MapEntity(this);
             }
 
             return cartPizzaList;
-        }
-
-        public List<IRecordCartItemType> GetJoinedCartItems(int cartId)
-        {
-            List<IRecordCartItemType> items = new List<IRecordCartItemType>();
-
-            items.AddRange(GetJoinedPizzaCartItems(cartId));
-            items.Sort();
-
-            return items;
         }
 
         public PizzaDatabase(string connectionName = "PizzaDatabase")

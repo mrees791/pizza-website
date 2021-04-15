@@ -21,7 +21,6 @@ namespace DataLibrary.Models.Tables
         public string CheeseAmount { get; set; }
         public int MenuPizzaCrustFlavorId { get; set; }
         public List<CartPizzaTopping> Toppings { get; set; }
-        public CartItem CartItem { get; set; }
 
         public CartPizza()
         {
@@ -30,8 +29,6 @@ namespace DataLibrary.Models.Tables
 
         public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            CartItemId = CartItem.Id;
-
             pizzaDb.Connection.Query(@"INSERT INTO
                                    CartPizza (CartItemId, Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId)
                                    VALUES (@CartItemId, @Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId)",
@@ -197,6 +194,11 @@ namespace DataLibrary.Models.Tables
         public int CompareTo(IRecordCartItemType other)
         {
             return CartItemId.CompareTo(other.GetId());
+        }
+
+        public void SetCartItemId(int cartItemId)
+        {
+            this.CartItemId = cartItemId;
         }
     }
 }

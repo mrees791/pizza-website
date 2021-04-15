@@ -11,5 +11,6 @@ namespace DataLibrary.Models.Interfaces
         decimal CalculatePrice(PizzaDatabase pizzaDb);
         string GetName(PizzaDatabase pizzaDb);
         string GetDescriptionHtml(PizzaDatabase pizzaDb);
+        void SetCartItemId(int cartItemId);
     }
 }
