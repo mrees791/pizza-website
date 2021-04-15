@@ -276,63 +276,40 @@ namespace DataLibrary.Models
         // CRUD
         public dynamic Insert(IRecord entity)
         {
-            List<IRecord> itemsList = new List<IRecord>();
-            entity.AddInsertItems(itemsList);
-            bool requiresTransaction = InsertRequiresTransaction(itemsList);
-
-            if (requiresTransaction)
+            if (entity.InsertRequiresTransaction())
             {
                 using (var transaction = connection.BeginTransaction())
                 {
-                    InsertMultipleItems(itemsList, transaction);
+                    entity.Insert(this, transaction);
                     transaction.Commit();
                 }
             }
             else
             {
-                InsertMultipleItems(itemsList);
+                entity.Insert(this);
             }
 
             return entity.GetId();
         }
 
-        private bool InsertRequiresTransaction(List<IRecord> itemsList)
+        public int Update(IRecord entity)
         {
-            foreach (IRecord item in itemsList)
+            int rowsUpdated = 0;
+
+            if (entity.UpdateRequiresTransaction())
             {
-                if (item.InsertRequiresTransaction())
+                using (var transaction = connection.BeginTransaction())
                 {
-                    return true;
+                    rowsUpdated = entity.Update(this, transaction);
+                    transaction.Commit();
                 }
             }
-
-            return false;
-        }
-
-        private bool UpdateRequiresTransaction(List<IRecord> itemsList)
-        {
-            foreach (IRecord item in itemsList)
+            else
             {
-                if (item.UpdateRequiresTransaction())
-                {
-                    return true;
-                }
+                rowsUpdated = entity.Update(this);
             }
 
-            return false;
-        }
-
-        private void InsertMultipleItems(List<IRecord> itemsList, IDbTransaction transaction = null)
-        {
-            foreach (IRecord item in itemsList)
-            {
-                item.Insert(connection, transaction);
-            }
-        }
-
-        public int Update(IRecord entity, IDbTransaction transaction = null)
-        {
-            return entity.Update(this, transaction);
+            return rowsUpdated;
         }
 
         public int Delete<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : class, new()

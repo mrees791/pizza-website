@@ -13,12 +13,9 @@ namespace DataLibrary.Models.Interfaces
         // Used for mapping complex objects and lists from the database.
         void MapEntity(PizzaDatabase pizzaDb);
 
+        void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null);
         int Update(PizzaDatabase pizzaDb, IDbTransaction transaction = null);
-        bool UpdateRequiresTransaction();
-
-
-        void AddInsertItems(List<IRecord> itemsList);
-        void Insert(IDbConnection connection, IDbTransaction transaction = null);
         bool InsertRequiresTransaction();
+        bool UpdateRequiresTransaction();
     }
 }

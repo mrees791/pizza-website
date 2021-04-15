@@ -17,20 +17,15 @@ namespace DataLibrary.Models.Tables
         public int UserId { get; set; }
         public bool CurrentlyEmployed { get; set; }
 
-        public void AddInsertItems(List<IRecord> itemsList)
-        {
-            itemsList.Add(this);
-        }
-
         public dynamic GetId()
         {
             return Id;
         }
 
-        public void Insert(IDbConnection connection, IDbTransaction transaction = null)
+        public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
             // Query method was used since connection.Insert was having an issue with its string ID field.
-            connection.Query("INSERT INTO Employee (Id, UserId, CurrentlyEmployed) VALUES (@Id, @UserId, @CurrentlyEmployed)", this, transaction);
+            pizzaDb.Connection.Query("INSERT INTO Employee (Id, UserId, CurrentlyEmployed) VALUES (@Id, @UserId, @CurrentlyEmployed)", this, transaction);
         }
 
         public bool InsertRequiresTransaction()

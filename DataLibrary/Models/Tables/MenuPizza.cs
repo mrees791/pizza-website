@@ -31,22 +31,14 @@ namespace DataLibrary.Models.Tables
             Toppings = new List<MenuPizzaTopping>();
         }
 
-        public void AddInsertItems(List<IRecord> itemsList)
+        public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            itemsList.Add(this);
-            foreach (MenuPizzaTopping topping in Toppings)
-            {
-                topping.AddInsertItems(itemsList);
-            }
-        }
-
-        public void Insert(IDbConnection connection, IDbTransaction transaction = null)
-        {
-            Id = connection.Insert(this, transaction).Value;
+            Id = pizzaDb.Connection.Insert(this, transaction).Value;
 
             foreach (MenuPizzaTopping topping in Toppings)
             {
                 topping.MenuPizzaId = Id;
+                topping.Insert(pizzaDb, transaction);
             }
         }
 

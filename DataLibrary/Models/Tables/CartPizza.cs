@@ -28,21 +28,11 @@ namespace DataLibrary.Models.Tables
             Toppings = new List<CartPizzaTopping>();
         }
 
-        public void AddInsertItems(List<IRecord> itemsList)
-        {
-            CartItem.AddInsertItems(itemsList);
-            itemsList.Add(this);
-            foreach (var topping in Toppings)
-            {
-                topping.AddInsertItems(itemsList);
-            }
-        }
-
-        public void Insert(IDbConnection connection, IDbTransaction transaction = null)
+        public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
             CartItemId = CartItem.Id;
 
-            connection.Query(@"INSERT INTO
+            pizzaDb.Connection.Query(@"INSERT INTO
                                    CartPizza (CartItemId, Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId)
                                    VALUES (@CartItemId, @Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId)",
                                       this, transaction);
@@ -50,6 +40,7 @@ namespace DataLibrary.Models.Tables
             foreach (CartPizzaTopping topping in Toppings)
             {
                 topping.CartItemId = CartItemId;
+                topping.Insert(pizzaDb, transaction);
             }
         }
 

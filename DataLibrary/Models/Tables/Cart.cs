@@ -15,20 +15,15 @@ namespace DataLibrary.Models.Tables
         [Key]
         public int Id { get; set; }
 
-        public void AddInsertItems(List<IRecord> itemsList)
-        {
-            itemsList.Add(this);
-        }
-
         public dynamic GetId()
         {
             return Id;
         }
 
-        public void Insert(IDbConnection connection, IDbTransaction transaction = null)
+        public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
             // We had to use Query<int> instead of Insert because the Insert method will not work with SQL DEFAULT VALUES.
-            Id = connection.Query<int>("INSERT INTO Cart OUTPUT Inserted.Id DEFAULT VALUES;", null, transaction).Single();
+            Id = pizzaDb.Connection.Query<int>("INSERT INTO Cart OUTPUT Inserted.Id DEFAULT VALUES;", null, transaction).Single();
         }
 
         public bool InsertRequiresTransaction()

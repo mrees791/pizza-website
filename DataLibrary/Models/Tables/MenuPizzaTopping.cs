@@ -19,19 +19,14 @@ namespace DataLibrary.Models.Tables
         public string ToppingAmount { get; set; }
         public int MenuPizzaToppingTypeId { get; set; }
 
-        public void AddInsertItems(List<IRecord> itemsList)
-        {
-            itemsList.Add(this);
-        }
-
         public dynamic GetId()
         {
             return Id;
         }
 
-        public void Insert(IDbConnection connection, IDbTransaction transaction = null)
+        public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            Id = connection.Insert(this, transaction).Value;
+            Id = pizzaDb.Connection.Insert(this, transaction).Value;
         }
 
         public bool InsertRequiresTransaction()

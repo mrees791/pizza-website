@@ -40,18 +40,13 @@ namespace DataLibrary.Models.Tables
             ConfirmOrderCart = new Cart();
         }
 
-        public void AddInsertItems(List<IRecord> insertItems)
+        public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            CurrentCart.AddInsertItems(insertItems);
-            ConfirmOrderCart.AddInsertItems(insertItems);
-            insertItems.Add(this);
-        }
-
-        public void Insert(IDbConnection connection, IDbTransaction transaction = null)
-        {
+            CurrentCart.Insert(pizzaDb, transaction);
+            ConfirmOrderCart.Insert(pizzaDb, transaction);
             CurrentCartId = CurrentCart.Id;
             ConfirmOrderCartId = ConfirmOrderCart.Id;
-            Id = connection.Insert(this, transaction).Value;
+            Id = pizzaDb.Connection.Insert(this, transaction).Value;
         }
 
         public dynamic GetId()
