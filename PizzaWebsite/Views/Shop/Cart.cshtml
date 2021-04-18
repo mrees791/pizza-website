@@ -7,6 +7,57 @@
 
 <h2>Cart</h2>
 
+@* Testing AJAX todo: Remove *@
+<select id="countryDropDownList" class="form-control">
+    <option value="Select">Select</option>
+</select>
+<select id="stateDropDownList" class="form-control">
+    <option value="Select">Select</option>
+</select>
+@section Scripts {
+    <script type="text/javascript">
+        // todo: Move AjaxCall to shared JavaScript file so it can be used anywhere.
+        function AjaxCall(url, data, type) {
+            return $.ajax({
+                url: url,
+                type: type ? type : 'get',
+                data: data,
+                contentType: 'application/json'
+            });
+        }
+        AjaxCall('/Shop/GetCountries', null).done(function (response) {
+            if (response.length > 0) {
+                $('#countryDropDownList').html('');
+                var options = '';
+                options += '<option value="Select">Select</option>';
+                for (var i = 0; i < response.length; i++) {
+                    options += '<option value="' + response[i] + '">' + response[i] + '</option>';
+                }
+                $('#countryDropDownList').append(options);
+            }
+        }).fail(function (error) {
+            alert(error.statusText);
+        });
+        $('#countryDropDownList').on("change", function () {
+            var country = $('#countryDropDownList').val();
+            var obj = { country: country };
+            AjaxCall('/Shop/GetStates', JSON.stringify(obj), 'POST').done(function (response) {
+                if (response) {
+                    $('#stateDropDownList').html('');
+                    var options = '';
+                    options += '<option value="Select">Select</option>';
+                    for (var i = 0; i < response.length; i++) {
+                        options += '<option value="' + response[i] + '">' + response[i] + '</option>';
+                    }
+                    $("#stateDropDownList").append(options);
+                }
+            }).fail(function (error) {
+                alert(error.statusText);
+            });
+        });
+    </script>
+}
+
 @if (!Model.IsEmpty())
 {
     <table class="table">
@@ -25,9 +76,7 @@
                 <td>@Html.Raw(cartItemVm.Description)</td>
                 <td>@cartItemVm.Price</td>
                 <td>
-                    <div class="table form-group">
-                        @Html.DropDownListFor(m => cartItemVm.Quantity, new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity))
-                    </div>
+                    @Html.DropDownListFor(m => cartItemVm.Quantity, new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity), new { @class = "form-control" })
                 </td>
                 <td></td>
             </tr>

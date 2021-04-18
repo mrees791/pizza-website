@@ -144,5 +144,38 @@ namespace PizzaWebsite.Controllers
 
             return View(cartVm);
         }
+
+        // Testing AJAX
+        // todo: Remove
+        public JsonResult GetCountries()
+        {
+            var countries = new List<string>();
+            countries.Add("USA");
+            countries.Add("Canada");
+
+            return Json(countries, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult GetStates(string country)
+        {
+            var states = new List<string>();
+
+            switch (country)
+            {
+                case "USA":
+                    states.Add("Alabama");
+                    states.Add("Nevada");
+                    states.Add("Ohio");
+                    break;
+                case "Canada":
+                    states.Add("British Columbia");
+                    states.Add("Ontario");
+                    states.Add("Quebec");
+                    break;
+            }
+
+            return Json(states, JsonRequestBehavior.AllowGet);
+        }
     }
 }
