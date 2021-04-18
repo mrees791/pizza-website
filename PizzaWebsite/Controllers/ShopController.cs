@@ -1,4 +1,5 @@
 ﻿using DataLibrary.Models;
+using DataLibrary.Models.Joins;
 using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
 using PizzaWebsite.Models;
@@ -44,8 +45,8 @@ namespace PizzaWebsite.Controllers
         public void AddMenuPizzaToCart(int menuPizzaId, int cartId, int selectedQuantity, string selectedSize, int selectedCrustId)
         {
             MenuPizza menuPizza = PizzaDb.Get<MenuPizza>(menuPizzaId);
-            CartPizza cartPizza = menuPizza.CreateCartPizza(PizzaDb, cartId, selectedQuantity, selectedSize, selectedCrustId);
-            PizzaDb.Insert(cartPizza);
+            CartItemJoin cartItemJoin = menuPizza.CreateCartRecords(PizzaDb, cartId, selectedQuantity, selectedSize, selectedCrustId);
+            PizzaDb.Insert(cartItemJoin);
         }
 
         private async Task<Dictionary<int, string>> CreateCrustDictionaryAsync()

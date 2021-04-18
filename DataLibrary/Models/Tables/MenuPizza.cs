@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using DataLibrary.Models.Interfaces;
+using DataLibrary.Models.Joins;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -69,14 +70,10 @@ namespace DataLibrary.Models.Tables
             return rowsAffected;
         }
 
-        public CartPizza CreateCartPizza(PizzaDatabase pizzaDb, int cartId, int quantity, string size, int menuCrustId)
+        public CartItemJoin CreateCartRecords(PizzaDatabase pizzaDb, int cartId, int quantity, string size, int menuCrustId)
         {
-            // todo: Implement
-            throw new NotImplementedException();
-            /*CartPizza cartPizza = new CartPizza()
+            CartPizza cartPizza = new CartPizza()
             {
-                CartId = cartId,
-                Quantity = quantity,
                 CheeseAmount = CheeseAmount,
                 MenuPizzaCheeseId = MenuPizzaCheeseId,
                 MenuPizzaCrustFlavorId = MenuPizzaCrustFlavorId,
@@ -91,9 +88,21 @@ namespace DataLibrary.Models.Tables
                 cartPizza.Toppings.Add(menuTopping.CreateCartTopping());
             }
 
-            cartPizza.PricePerItem = cartPizza.CalculatePrice(pizzaDb);
+            CartItem cartItem = new CartItem()
+            {
+                CartId = cartId,
+                Quantity = quantity,
+                ProductCategory = ProductCategory.Pizza,
+                PricePerItem = cartPizza.CalculatePrice(pizzaDb)
+            };
 
-            return cartPizza;*/
+            CartItemJoin cartItemJoin = new CartItemJoin()
+            {
+                CartItem = cartItem,
+                CartItemType = cartPizza
+            };
+
+            return cartItemJoin;
         }
 
         public bool InsertRequiresTransaction()
