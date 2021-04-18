@@ -81,6 +81,7 @@ namespace PizzaWebsite.Models
         public string Price { get; set; }
         public int Quantity { get; set; }
         public ProductCategory ProductCategory { get; set; }
+        public List<int> QuantityList { get; set; }
     }
 
     public class CartViewModel

@@ -26,19 +26,29 @@ namespace DataLibrary.Models
             }
         }
 
-        public List<CartItemJoin> GetJoinedCartItems(int cartId)
+        public async Task<List<CartItemJoin>> GetJoinedCartItemsAsync(int cartId)
         {
             List<CartItemJoin> items = new List<CartItemJoin>();
 
             // One join is required for each product category.
-            items.AddRange(GetJoinedPizzaCartItems(cartId));
+            List<Task<IEnumerable<CartItemJoin>>> joinQueryTasks = new List<Task<IEnumerable<CartItemJoin>>>()
+            {
+                GetJoinedPizzaCartItemsAsync(cartId)
+            };
+
+            while (joinQueryTasks.Any())
+            {
+                Task<IEnumerable<CartItemJoin>> finishedTask = await Task.WhenAny(joinQueryTasks);
+                items.AddRange(finishedTask.Result);
+                joinQueryTasks.Remove(finishedTask);
+            }
+
             items.Sort();
 
             return items;
         }
 
-        // todo: Finish
-        private IEnumerable<CartItemJoin> GetJoinedPizzaCartItems(int cartId)
+        private async Task<IEnumerable<CartItemJoin>> GetJoinedPizzaCartItemsAsync(int cartId)
         {
             string joinQuerySql = @"select c.Id, c.CartId, c.PricePerItem, c.Quantity, c.ProductCategory, c.Quantity,
                                     p.CartItemId, p.CheeseAmount, p.MenuPizzaCheeseId, p.MenuPizzaCrustFlavorId, p.MenuPizzaCrustId, p.MenuPizzaSauceId, p.SauceAmount, p.size
@@ -51,7 +61,7 @@ namespace DataLibrary.Models
                 CartId = cartId
             };
 
-            IEnumerable<CartItemJoin> cartPizzaList = connection.Query<CartItem, CartPizza, CartItemJoin> (
+            IEnumerable<CartItemJoin> cartPizzaList = await connection.QueryAsync<CartItem, CartPizza, CartItemJoin> (
                 joinQuerySql,
                 (cartItem, cartPizza) =>
                 {

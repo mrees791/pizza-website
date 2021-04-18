@@ -121,31 +121,23 @@ namespace PizzaWebsite.Controllers
         [Authorize]
         public async Task<ActionResult> Cart()
         {
-            SiteUser user = await GetCurrentUserAsync();
-            List<CartItem> cartItemList = await PizzaDb.GetListAsync<CartItem>(new { CartId = user.CurrentCartId });
-
             CartViewModel cartVm = new CartViewModel();
+            List<int> quantityList = CreateQuantityList();
+            SiteUser user = await GetCurrentUserAsync();
+            List<CartItemJoin> cartItemList = await PizzaDb.GetJoinedCartItemsAsync(user.CurrentCartId);
 
-            foreach (CartItem cartItem in cartItemList)
+            foreach (CartItemJoin cartItemJoin in cartItemList)
             {
                 CartItemViewModel cartItemVm = new CartItemViewModel()
                 {
-                    CartItemId = cartItem.Id,
-                    ProductCategory = cartItem.ProductCategory,
-                    Price = cartItem.PricePerItem.ToString("C", CultureInfo.CurrentCulture),
-                    Quantity = cartItem.Quantity
+                    CartItemId = cartItemJoin.CartItem.Id,
+                    ProductCategory = cartItemJoin.CartItem.ProductCategory,
+                    Price = cartItemJoin.CartItem.PricePerItem.ToString("C", CultureInfo.CurrentCulture),
+                    Quantity = cartItemJoin.CartItem.Quantity,
+                    QuantityList = quantityList,
+                    Name = cartItemJoin.CartItemType.GetName(PizzaDb),
+                    Description = cartItemJoin.CartItemType.GetDescriptionHtml(PizzaDb)
                 };
-
-                switch (cartItem.ProductCategory)
-                {
-                    case ProductCategory.Pizza:
-                        CartPizza cartPizza = PizzaDb.Get<CartPizza>(cartItem.Id);
-                        cartItemVm.Name = cartPizza.GetName(PizzaDb);
-                        cartItemVm.Description = cartPizza.GetDescriptionHtml(PizzaDb);
-                        break;
-                    default:
-                        throw new Exception($"Product category not implemented: {cartItem.ProductCategory}");
-                }
 
                 cartVm.CartItemList.Add(cartItemVm);
             }
