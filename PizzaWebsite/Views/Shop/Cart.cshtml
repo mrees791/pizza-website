@@ -25,12 +25,8 @@
                 <td>@Html.Raw(cartItemVm.Description)</td>
                 <td>@cartItemVm.Price</td>
                 <td>
-                    <div>@cartItemVm.Quantity</div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => cartItemVm.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.DropDownListFor(m => cartItemVm.Quantity, new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity))
-                        </div>
+                    <div class="table form-group">
+                        @Html.DropDownListFor(m => cartItemVm.Quantity, new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity))
                     </div>
                 </td>
                 <td></td>
