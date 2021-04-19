@@ -50,17 +50,7 @@
                 $(quantitySelectId).on("change", function () {
                     var quantity = $(quantitySelectId).val();
                     var params = { cartItemId: @cartItemVm.CartItemId, quantity: quantity };
-                    pizzaSiteNs.ajaxCall('/Shop/UpdateCartItemQuantity', JSON.stringify(params), 'POST').done(function (response) {
-			            if (response) {
-				            /*$('#stateDropDownList').html('');
-				            var options = '';
-				            options += '<option value="Select">Select</option>';
-				            for (var i = 0; i < response.length; i++) {
-					            options += '<option value="' + response[i] + '">' + response[i] + '</option>';
-				            }
-				            $("#stateDropDownList").append(options);*/
-			            }
-		            }).fail(function (error) {
+                    pizzaSiteNs.ajaxCall('/Shop/UpdateCartItemQuantity', JSON.stringify(params), 'POST').fail(function (error) {
 			            alert(error.statusText);
 		            });
 	            });
