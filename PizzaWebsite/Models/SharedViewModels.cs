@@ -80,7 +80,7 @@ namespace PizzaWebsite.Models
         public string Description { get; set; }
         public string Price { get; set; }
         public int Quantity { get; set; }
-        public ProductCategory ProductCategory { get; set; }
+        public string ProductCategory { get; set; }
         public string CartItemQuantitySelectId { get; set; }
         public string CartItemRowId { get; set; }
         public List<int> QuantityList { get; set; }

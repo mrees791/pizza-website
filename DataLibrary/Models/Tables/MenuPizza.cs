@@ -92,7 +92,7 @@ namespace DataLibrary.Models.Tables
             {
                 CartId = cartId,
                 Quantity = quantity,
-                ProductCategory = ProductCategory.Pizza,
+                ProductCategory = ProductCategory.Pizza.ToString(),
                 PricePerItem = cartPizza.CalculatePrice(pizzaDb)
             };
 
