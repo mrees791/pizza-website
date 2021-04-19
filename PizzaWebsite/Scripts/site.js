@@ -1,4 +1,13 @@
-﻿const pizzaSiteNs = {
+﻿// Pizza Site Namespace
+const pizzaSiteNs = {
+    ajaxCall: (url, data, type) => {
+        return $.ajax({
+            url: url,
+            type: type ? type : 'get',
+            data: data,
+            contentType: 'application/json'
+        });
+    },
     createPagination: (paginationSelector, currentPage, rowsPerPage, totalPages, totalNumberOfItems) => {
         var maxPages = 5;
         var isOnLastPage = currentPage === totalPages;

@@ -61,7 +61,7 @@ namespace DataLibrary.Models
                 CartId = cartId
             };
 
-            IEnumerable<CartItemJoin> cartPizzaList = await connection.QueryAsync<CartItem, CartPizza, CartItemJoin> (
+            IEnumerable<CartItemJoin> cartPizzaList = await connection.QueryAsync<CartItem, CartPizza, CartItemJoin>(
                 joinQuerySql,
                 (cartItem, cartPizza) =>
                 {
@@ -280,6 +280,20 @@ namespace DataLibrary.Models
             }
 
             return sqlWhereConditions;
+        }
+
+        // Special commands (confirm order, update cart item quantity, etc)
+        public int CmdUpdateCartItemQuantity(int cartItemId, int quantity)
+        {
+            string updateQuerySql = @"update dbo.CartItem set quantity = @Quantity where Id = @Id;";
+
+            object queryParameters = new
+            {
+                Id = cartItemId,
+                Quantity = quantity
+            };
+
+            return connection.Execute(updateQuerySql, queryParameters);
         }
 
         // CRUD
