@@ -136,7 +136,9 @@ namespace PizzaWebsite.Controllers
                     Quantity = cartItemJoin.CartItem.Quantity,
                     QuantityList = quantityList,
                     Name = cartItemJoin.CartItemType.GetName(PizzaDb),
-                    Description = cartItemJoin.CartItemType.GetDescriptionHtml(PizzaDb)
+                    Description = cartItemJoin.CartItemType.GetDescriptionHtml(PizzaDb),
+                    CartItemQuantitySelectId = $"cartItemQuantitySelect-{cartItemJoin.CartItem.Id}",
+                    CartItemRowId = $"cartItemRow-{cartItemJoin.CartItem.Id}"
                 };
 
                 cartVm.CartItemList.Add(cartItemVm);
@@ -145,37 +147,11 @@ namespace PizzaWebsite.Controllers
             return View(cartVm);
         }
 
-        // Testing AJAX
-        // todo: Remove
-        public JsonResult GetCountries()
-        {
-            var countries = new List<string>();
-            countries.Add("USA");
-            countries.Add("Canada");
-
-            return Json(countries, JsonRequestBehavior.AllowGet);
-        }
-
         [HttpPost]
-        public JsonResult GetStates(string country)
+        public async Task UpdateCartItemQuantity(int cartItemId, int quantity)
         {
-            var states = new List<string>();
-
-            switch (country)
-            {
-                case "USA":
-                    states.Add("Alabama");
-                    states.Add("Nevada");
-                    states.Add("Ohio");
-                    break;
-                case "Canada":
-                    states.Add("British Columbia");
-                    states.Add("Ontario");
-                    states.Add("Quebec");
-                    break;
-            }
-
-            return Json(states, JsonRequestBehavior.AllowGet);
+            SiteUser currentUser = await GetCurrentUserAsync();
+            await PizzaDb.CmdUpdateCartItemQuantityAsync(currentUser, cartItemId, quantity);
         }
     }
 }

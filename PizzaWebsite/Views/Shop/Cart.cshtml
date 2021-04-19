@@ -7,50 +7,6 @@
 
 <h2>Cart</h2>
 
-@* Testing AJAX todo: Remove *@
-<select id="countryDropDownList" class="form-control">
-    <option value="Select">Select</option>
-</select>
-<select id="stateDropDownList" class="form-control">
-    <option value="Select">Select</option>
-</select>
-@section Scripts {
-    <script type="text/javascript">
-        $(function () {
-            pizzaSiteNs.ajaxCall('/Shop/GetCountries', null).done(function (response) {
-                if (response.length > 0) {
-                    $('#countryDropDownList').html('');
-                    var options = '';
-                    options += '<option value="Select">Select</option>';
-                    for (var i = 0; i < response.length; i++) {
-                        options += '<option value="' + response[i] + '">' + response[i] + '</option>';
-                    }
-                    $('#countryDropDownList').append(options);
-                }
-            }).fail(function (error) {
-                alert(error.statusText);
-            });
-            $('#countryDropDownList').on("change", function () {
-                var country = $('#countryDropDownList').val();
-                var obj = { country: country };
-                pizzaSiteNs.ajaxCall('/Shop/GetStates', JSON.stringify(obj), 'POST').done(function (response) {
-                    if (response) {
-                        $('#stateDropDownList').html('');
-                        var options = '';
-                        options += '<option value="Select">Select</option>';
-                        for (var i = 0; i < response.length; i++) {
-                            options += '<option value="' + response[i] + '">' + response[i] + '</option>';
-                        }
-                        $("#stateDropDownList").append(options);
-                    }
-                }).fail(function (error) {
-                    alert(error.statusText);
-                });
-            });
-        });
-    </script>
-}
-
 @if (!Model.IsEmpty())
 {
     <table class="table">
@@ -64,15 +20,51 @@
         </tr>
         @foreach (CartItemViewModel cartItemVm in Model.CartItemList)
         {
-            <tr>
+            <tr id="@cartItemVm.CartItemRowId">
                 <td>@cartItemVm.Name</td>
                 <td>@Html.Raw(cartItemVm.Description)</td>
                 <td>@cartItemVm.Price</td>
                 <td>
-                    @Html.DropDownListFor(m => cartItemVm.Quantity, new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity), new { @class = "form-control" })
+                    @Html.DropDownList("Quantity", new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity),
+                        new
+                        {
+                            @class = "form-control",
+                            id = cartItemVm.CartItemQuantitySelectId,
+                            name = "Quantity"
+                        })
                 </td>
                 <td></td>
             </tr>
         }
     </table>
+}
+
+@section Scripts {
+    @foreach (CartItemViewModel cartItemVm in Model.CartItemList)
+    {
+        <script type="text/javascript">
+            $(function () {
+                var rowId = '#@cartItemVm.CartItemRowId';
+                var quantitySelectId = '#@cartItemVm.CartItemQuantitySelectId';
+                // Update cart item quantity.
+                $(quantitySelectId).on("change", function () {
+                    var quantity = $(quantitySelectId).val();
+                    var params = { cartItemId: @cartItemVm.CartItemId, quantity: quantity };
+                    pizzaSiteNs.ajaxCall('/Shop/UpdateCartItemQuantity', JSON.stringify(params), 'POST').done(function (response) {
+			            if (response) {
+				            /*$('#stateDropDownList').html('');
+				            var options = '';
+				            options += '<option value="Select">Select</option>';
+				            for (var i = 0; i < response.length; i++) {
+					            options += '<option value="' + response[i] + '">' + response[i] + '</option>';
+				            }
+				            $("#stateDropDownList").append(options);*/
+			            }
+		            }).fail(function (error) {
+			            alert(error.statusText);
+		            });
+	            });
+            });
+        </script>
+    }
 }

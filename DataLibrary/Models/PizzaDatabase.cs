@@ -283,8 +283,30 @@ namespace DataLibrary.Models
         }
 
         // Special commands (confirm order, update cart item quantity, etc)
-        public int CmdUpdateCartItemQuantity(int cartItemId, int quantity)
+        public async Task<bool> CmdUserOwnsCartItemAsync(SiteUser user, int cartItemId)
         {
+            List<CartItem> cartItems = await GetListAsync<CartItem>(new { CartId = user.CurrentCartId });
+
+            foreach (CartItem cartItem in cartItems)
+            {
+                if (cartItem.Id == cartItemId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public async Task<int> CmdUpdateCartItemQuantityAsync(SiteUser user, int cartItemId, int quantity)
+        {
+            bool authorized = await CmdUserOwnsCartItemAsync(user, cartItemId);
+
+            if (!authorized)
+            {
+                throw new Exception($"User with ID {user.Id} is not allowed to modify cart item ID {cartItemId}.");
+            }
+
             string updateQuerySql = @"update dbo.CartItem set quantity = @Quantity where Id = @Id;";
 
             object queryParameters = new
