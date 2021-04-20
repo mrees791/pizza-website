@@ -7,41 +7,67 @@
 
 <h2>Cart</h2>
 
-@if (!Model.IsEmpty())
-{
-    <table class="table">
-        <tr>
-            <th>Item</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            @* Empty table header for controls. *@
-            <th></th>
-        </tr>
-        @foreach (CartItemViewModel cartItemVm in Model.CartItemList)
-        {
-            <tr id="@cartItemVm.CartItemRowId">
-                <td>@cartItemVm.Name</td>
-                <td>@Html.Raw(cartItemVm.Description)</td>
-                <td>@cartItemVm.Price</td>
-                <td>
-                    @Html.DropDownList("Quantity", new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity),
-                        new
-                        {
-                            @class = "form-control",
-                            id = cartItemVm.CartItemQuantitySelectId,
-                            name = "Quantity"
-                        })
-                </td>
-                <td>
-                    <input type="button" value="Delete" id="@cartItemVm.CartItemDeleteButtonId" class="form-control"/>
-                </td>
+<div id="emptyCartBlock" style="display: none;">
+    <p>Your cart is empty.</p>
+</div>
+<div id="cartBlock" style="display: none;">
+    <table class="table" id="cartTable">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                @* Empty table header for controls. *@
+                <th></th>
             </tr>
-        }
+        </thead>
+        <tbody id="cartTableBody">
+            @foreach (CartItemViewModel cartItemVm in Model.CartItemList)
+            {
+                <tr id="@cartItemVm.CartItemRowId">
+                    <td>@cartItemVm.Name</td>
+                    <td>@Html.Raw(cartItemVm.Description)</td>
+                    <td>@cartItemVm.Price</td>
+                    <td>
+                        @Html.DropDownList("Quantity", new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity),
+                            new
+                            {
+                                @class = "form-control",
+                                id = cartItemVm.CartItemQuantitySelectId,
+                                name = "Quantity"
+                            })
+                    </td>
+                    <td>
+                        <input type="button" value="Delete" id="@cartItemVm.CartItemDeleteButtonId" class="form-control" />
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
-}
+</div>
 
 @section Scripts {
+    <script type="text/javascript">
+        const pizzaSiteCartNs = {
+            updateCartElementVisibility: () => {
+                // Get number of rows in table
+                var numberOfCartItems = $('#cartTableBody').children().length;
+                var cartIsEmpty = numberOfCartItems === 0;
+                if (cartIsEmpty) {
+                    $('#emptyCartBlock').show();
+                    $('#cartBlock').hide();
+                } else {
+                    $('#emptyCartBlock').hide();
+                    $('#cartBlock').show();
+                }
+            }
+        };
+        $(function () {
+            pizzaSiteCartNs.updateCartElementVisibility();
+        });
+    </script>
+    @* Cart item controls. *@
     @foreach (CartItemViewModel cartItemVm in Model.CartItemList)
     {
         <script type="text/javascript">
@@ -49,7 +75,7 @@
                 var rowId = '#@cartItemVm.CartItemRowId';
                 var quantitySelectId = '#@cartItemVm.CartItemQuantitySelectId';
                 var deleteButtonId = '#@cartItemVm.CartItemDeleteButtonId';
-                // Update cart item quantity
+                @* Update cart item quantity *@
                 $(quantitySelectId).on("change", function () {
                     var quantity = $(quantitySelectId).val();
                     var params = { cartItemId: @cartItemVm.CartItemId, quantity: quantity };
@@ -57,7 +83,7 @@
 			            alert(error.statusText);
 		            });
                 });
-                // Delete cart item
+                @* Delete cart item *@
                 $(deleteButtonId).on("click", function () {
                     var params = { cartItemId: @cartItemVm.CartItemId };
                     pizzaSiteNs.ajaxCall('/Shop/DeleteCartItem', JSON.stringify(params), 'POST').
@@ -66,6 +92,7 @@
                         }).
                         done(function () {
                             $(rowId).remove();
+                            pizzaSiteCartNs.updateCartElementVisibility();
                         });
                 });
             });
