@@ -49,20 +49,6 @@
 
 @section Scripts {
     <script type="text/javascript">
-        const pizzaSiteCartNs = {
-            updateCartElementVisibility: () => {
-                // Get number of rows in table
-                var numberOfCartItems = $('#cartTableBody').children().length;
-                var cartIsEmpty = numberOfCartItems === 0;
-                if (cartIsEmpty) {
-                    $('#emptyCartBlock').show();
-                    $('#cartBlock').hide();
-                } else {
-                    $('#emptyCartBlock').hide();
-                    $('#cartBlock').show();
-                }
-            }
-        };
         $(function () {
             pizzaSiteCartNs.updateCartElementVisibility();
         });
@@ -75,7 +61,7 @@
                 var rowId = '#@cartItemVm.CartItemRowId';
                 var quantitySelectId = '#@cartItemVm.CartItemQuantitySelectId';
                 var deleteButtonId = '#@cartItemVm.CartItemDeleteButtonId';
-                @* Update cart item quantity *@
+                // Update cart item quantity
                 $(quantitySelectId).on("change", function () {
                     var quantity = $(quantitySelectId).val();
                     var params = { cartItemId: @cartItemVm.CartItemId, quantity: quantity };
@@ -83,7 +69,7 @@
 			            alert(error.statusText);
 		            });
                 });
-                @* Delete cart item *@
+                // Delete cart item
                 $(deleteButtonId).on("click", function () {
                     var params = { cartItemId: @cartItemVm.CartItemId };
                     pizzaSiteNs.ajaxCall('/Shop/DeleteCartItem', JSON.stringify(params), 'POST').
