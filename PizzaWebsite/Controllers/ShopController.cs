@@ -16,8 +16,9 @@ namespace PizzaWebsite.Controllers
 {
     public class ShopController : BaseController
     {
+
         [Authorize]
-        public async Task<ActionResult> CustomizePizza()
+        public async Task<ActionResult> CreateCustomPizza()
         {
             CartPizzaBuilderViewModel cartPizzaVm = new CartPizzaBuilderViewModel();
             List<PizzaTopping> toppings = new List<PizzaTopping>();
@@ -27,10 +28,33 @@ namespace PizzaWebsite.Controllers
             return View("CartPizzaBuilder", cartPizzaVm);
         }
 
+        [HttpPost]
+        [Authorize]
+        public ActionResult CreateCustomPizza(CartPizzaBuilderViewModel model)
+        {
+            // todo: Finish implementation
+            if (ModelState.IsValid)
+            {
+                // todo: Add to cart or submit changes depending on if it's a new record.
+                return RedirectToAction("Cart");
+            }
+            else
+            {
+                return View("CartPizzaBuilder", model);
+            }
+            /*CartPizzaBuilderViewModel cartPizzaVm = new CartPizzaBuilderViewModel();
+            List<PizzaTopping> toppings = new List<PizzaTopping>();
+            PizzaBuilderUtility.LoadNewPizzaBuilderLists(PizzaDb, toppings, cartPizzaVm);
+            await LoadCartPizzaBuilderListsAsync(cartPizzaVm);
+
+            */
+        }
+
         private async Task LoadCartPizzaBuilderListsAsync(CartPizzaBuilderViewModel cartPizzaVm)
         {
             cartPizzaVm.SizeList = ListUtility.GetPizzaSizeList();
             cartPizzaVm.CrustList = await CreateCrustDictionaryAsync();
+            cartPizzaVm.QuantityList = CreateQuantityList();
         }
 
         [Authorize]

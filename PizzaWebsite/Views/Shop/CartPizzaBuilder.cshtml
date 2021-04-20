@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Pizza Builder";
 }
+<h2>Pizza Builder</h2>
 
 @using (Html.BeginForm())
 {
@@ -12,6 +13,29 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
+        
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SelectedQuantity, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @for (int i = 0; i < Model.QuantityList.Count; i++)
+                {
+                    <input type="hidden" name="QuantityList[@i]" value="@(i+1)">
+                }
+                @Html.DropDownListFor(m => m.SelectedQuantity, new SelectList(Model.QuantityList, Model.SelectedQuantity))
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.SelectedSize, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @for (int i = 0; i < Model.SizeList.Count; i++)
+                {
+                    <input type="hidden" name="SizeList[@i]" value="@Model.SizeList[i]" />
+                }
+                @Html.DropDownListFor(m => m.SelectedSize, new SelectList(Model.SizeList, Model.SelectedSize))
+            </div>
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.CrustList, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -31,14 +55,14 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                @*if (Model.IsNewRecord())
-                    {
-                        <input type="submit" value="Add New Pizza" class="btn btn-default" />
-                    }
-                    else
-                    {
-                        <input type="submit" value="Apply Changes" class="btn btn-default" />
-                    }*@
+                @if (Model.IsNewRecord())
+                {
+                    <input type="submit" value="Add to Cart" class="btn btn-default" />
+                }
+                else
+                {
+                    <input type="submit" value="Apply Changes" class="btn btn-default" />
+                }
             </div>
         </div>
     </div>
