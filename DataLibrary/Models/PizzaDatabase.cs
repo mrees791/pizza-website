@@ -52,9 +52,9 @@ namespace DataLibrary.Models
         {
             string joinQuerySql = @"select c.Id, c.CartId, c.PricePerItem, c.Quantity, c.ProductCategory, c.Quantity,
                                     p.CartItemId, p.CheeseAmount, p.MenuPizzaCheeseId, p.MenuPizzaCrustFlavorId, p.MenuPizzaCrustId, p.MenuPizzaSauceId, p.SauceAmount, p.size
-	                            from CartItem c
-	                            inner join CartPizza p on c.Id = p.CartItemId
-                                where c.CartId = @CartId";
+	                                from CartItem c
+	                                inner join CartPizza p on c.Id = p.CartItemId
+                                    where c.CartId = @CartId";
 
             object queryParameters = new
             {
@@ -298,15 +298,14 @@ namespace DataLibrary.Models
             return false;
         }
 
-        public async Task<int> CmdUpdateCartItemQuantityAsync(SiteUser user, int cartItemId, int quantity)
+        public int CmdDeleteCartItem(int cartItemId, IDbTransaction transaction = null)
         {
-            bool authorized = await CmdUserOwnsCartItemAsync(user, cartItemId);
+            string deleteQuerySql = @"delete from dbo.CartItem where Id = @Id;";
+            return connection.Execute(deleteQuerySql, new { Id = cartItemId }, transaction);
+        }
 
-            if (!authorized)
-            {
-                throw new Exception($"User with ID {user.Id} is not allowed to modify cart item ID {cartItemId}.");
-            }
-
+        public int CmdUpdateCartItemQuantity(int cartItemId, int quantity, IDbTransaction transaction = null)
+        {
             string updateQuerySql = @"update dbo.CartItem set quantity = @Quantity where Id = @Id;";
 
             object queryParameters = new
@@ -315,7 +314,7 @@ namespace DataLibrary.Models
                 Quantity = quantity
             };
 
-            return connection.Execute(updateQuerySql, queryParameters);
+            return connection.Execute(updateQuerySql, queryParameters, transaction);
         }
 
         // CRUD

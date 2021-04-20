@@ -82,6 +82,7 @@ namespace PizzaWebsite.Models
         public int Quantity { get; set; }
         public string ProductCategory { get; set; }
         public string CartItemQuantitySelectId { get; set; }
+        public string CartItemDeleteButtonId { get; set; }
         public string CartItemRowId { get; set; }
         public List<int> QuantityList { get; set; }
     }

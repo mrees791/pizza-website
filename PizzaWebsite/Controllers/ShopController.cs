@@ -138,6 +138,7 @@ namespace PizzaWebsite.Controllers
                     Name = cartItemJoin.CartItemType.GetName(PizzaDb),
                     Description = cartItemJoin.CartItemType.GetDescriptionHtml(PizzaDb),
                     CartItemQuantitySelectId = $"cartItemQuantitySelect-{cartItemJoin.CartItem.Id}",
+                    CartItemDeleteButtonId = $"cartItemDeleteButton-{cartItemJoin.CartItem.Id}",
                     CartItemRowId = $"cartItemRow-{cartItemJoin.CartItem.Id}"
                 };
 
@@ -148,10 +149,31 @@ namespace PizzaWebsite.Controllers
         }
 
         [HttpPost]
+        public async Task DeleteCartItem(int cartItemId)
+        {
+            SiteUser currentUser = await GetCurrentUserAsync();
+            bool authorized = await PizzaDb.CmdUserOwnsCartItemAsync(currentUser, cartItemId);
+
+            if (!authorized)
+            {
+                throw new Exception($"User with ID {currentUser.Id} is not allowed to delete cart item ID {cartItemId}.");
+            }
+
+            PizzaDb.CmdDeleteCartItem(cartItemId);
+        }
+
+        [HttpPost]
         public async Task UpdateCartItemQuantity(int cartItemId, int quantity)
         {
             SiteUser currentUser = await GetCurrentUserAsync();
-            await PizzaDb.CmdUpdateCartItemQuantityAsync(currentUser, cartItemId, quantity);
+            bool authorized = await PizzaDb.CmdUserOwnsCartItemAsync(currentUser, cartItemId);
+
+            if (!authorized)
+            {
+                throw new Exception($"User with ID {currentUser.Id} is not allowed to modify cart item ID {cartItemId}.");
+            }
+
+            PizzaDb.CmdUpdateCartItemQuantity(cartItemId, quantity);
         }
     }
 }

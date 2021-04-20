@@ -33,7 +33,9 @@
                             name = "Quantity"
                         })
                 </td>
-                <td></td>
+                <td>
+                    <input type="button" value="Delete" id="@cartItemVm.CartItemDeleteButtonId" class="form-control"/>
+                </td>
             </tr>
         }
     </table>
@@ -46,14 +48,26 @@
             $(function () {
                 var rowId = '#@cartItemVm.CartItemRowId';
                 var quantitySelectId = '#@cartItemVm.CartItemQuantitySelectId';
-                // Update cart item quantity.
+                var deleteButtonId = '#@cartItemVm.CartItemDeleteButtonId';
+                // Update cart item quantity
                 $(quantitySelectId).on("change", function () {
                     var quantity = $(quantitySelectId).val();
                     var params = { cartItemId: @cartItemVm.CartItemId, quantity: quantity };
                     pizzaSiteNs.ajaxCall('/Shop/UpdateCartItemQuantity', JSON.stringify(params), 'POST').fail(function (error) {
 			            alert(error.statusText);
 		            });
-	            });
+                });
+                // Delete cart item
+                $(deleteButtonId).on("click", function () {
+                    var params = { cartItemId: @cartItemVm.CartItemId };
+                    pizzaSiteNs.ajaxCall('/Shop/DeleteCartItem', JSON.stringify(params), 'POST').
+                        fail(function (error) {
+                            alert(error.statusText);
+                        }).
+                        done(function () {
+                            $(rowId).remove();
+                        });
+                });
             });
         </script>
     }
