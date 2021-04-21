@@ -26,7 +26,14 @@
             @foreach (CartItemViewModel cartItemVm in Model.CartItemList)
             {
                 <tr id="@cartItemVm.CartItemRowId">
-                    <td>@cartItemVm.Name</td>
+                    <td>
+                        @using (Html.BeginForm("ModifyCartPizza", "Shop", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input name="cartItemId" type="hidden" value="@cartItemVm.CartItemId" />
+                            <input type="submit" value="@cartItemVm.Name" class="form-control" />
+                        }
+                    </td>
                     <td>@Html.Raw(cartItemVm.Description)</td>
                     <td>@cartItemVm.Price</td>
                     <td>

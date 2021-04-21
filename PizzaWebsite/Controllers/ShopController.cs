@@ -16,21 +16,80 @@ namespace PizzaWebsite.Controllers
 {
     public class ShopController : BaseController
     {
+        private async Task<bool> AuthorizedToModifyCartItemAsync(int cartItemId)
+        {
+            return await PizzaDb.CmdUserOwnsCartItemAsync(await GetCurrentUserAsync(), cartItemId);
+        }
+
+        private async Task<CartPizzaBuilderViewModel> CreatePizzaBuilderVm()
+        {
+            CartPizzaBuilderViewModel pizzaBuilderVm = new CartPizzaBuilderViewModel();
+            List<PizzaTopping> toppings = new List<PizzaTopping>();
+            PizzaBuilderUtility.LoadNewPizzaBuilderLists(PizzaDb, toppings, pizzaBuilderVm);
+            await LoadCartPizzaBuilderListsAsync(pizzaBuilderVm);
+
+            return pizzaBuilderVm;
+        }
+
+        private async Task<CartPizzaBuilderViewModel> CreatePizzaBuilderVm(int cartItemId)
+        {
+            CartItem cartItem = await PizzaDb.GetAsync<CartItem>(cartItemId);
+            CartPizza cartPizza = await PizzaDb.GetAsync<CartPizza>(cartItemId);
+
+            // Create view model
+            CartPizzaBuilderViewModel pizzaBuilderVm = new CartPizzaBuilderViewModel();
+            List<PizzaTopping> toppings = new List<PizzaTopping>();
+            foreach (CartPizzaTopping cartTopping in cartPizza.Toppings)
+            {
+                toppings.Add(new PizzaTopping()
+                {
+                    ToppingTypeId = cartTopping.MenuPizzaToppingTypeId,
+                    ToppingAmount = cartTopping.ToppingAmount,
+                    ToppingHalf = cartTopping.ToppingHalf
+                });
+            }
+            PizzaBuilderUtility.LoadNewPizzaBuilderLists(PizzaDb, toppings, pizzaBuilderVm);
+            await LoadCartPizzaBuilderListsAsync(pizzaBuilderVm);
+
+            pizzaBuilderVm.Id = cartItem.Id;
+            pizzaBuilderVm.SelectedQuantity = cartItem.Quantity;
+            pizzaBuilderVm.SelectedCheeseAmount = cartPizza.CheeseAmount;
+            pizzaBuilderVm.SelectedCheeseId = cartPizza.MenuPizzaCheeseId;
+            pizzaBuilderVm.SelectedCrustFlavorId = cartPizza.MenuPizzaCrustFlavorId;
+            pizzaBuilderVm.SelectedCrustId = cartPizza.MenuPizzaCrustId;
+            pizzaBuilderVm.SelectedSauceAmount = cartPizza.SauceAmount;
+            pizzaBuilderVm.SelectedSauceId = cartPizza.MenuPizzaSauceId;
+            pizzaBuilderVm.SelectedSize = cartPizza.Size;
+
+            return pizzaBuilderVm;
+        }
 
         [Authorize]
-        public async Task<ActionResult> CreateCustomPizza()
+        public async Task<ActionResult> BuildPizza()
         {
-            CartPizzaBuilderViewModel cartPizzaVm = new CartPizzaBuilderViewModel();
-            List<PizzaTopping> toppings = new List<PizzaTopping>();
-            PizzaBuilderUtility.LoadNewPizzaBuilderLists(PizzaDb, toppings, cartPizzaVm);
-            await LoadCartPizzaBuilderListsAsync(cartPizzaVm);
+            CartPizzaBuilderViewModel cartPizzaVm = await CreatePizzaBuilderVm();
+            return View("CartPizzaBuilder", cartPizzaVm);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<ActionResult> ModifyCartPizza(int cartItemId)
+        {
+            bool authorized = await AuthorizedToModifyCartItemAsync(cartItemId);
+
+            if (!authorized)
+            {
+                throw new Exception($"Current user is not allowed to modify cart item ID {cartItemId}.");
+            }
+
+            CartPizzaBuilderViewModel cartPizzaVm = await CreatePizzaBuilderVm(cartItemId);
 
             return View("CartPizzaBuilder", cartPizzaVm);
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> CreateCustomPizza(CartPizzaBuilderViewModel model)
+        public async Task<ActionResult> BuildPizza(CartPizzaBuilderViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -39,6 +98,7 @@ namespace PizzaWebsite.Controllers
 
                 CartItem cartItem = new CartItem()
                 {
+                    Id = model.Id,
                     PricePerItem = cartPizza.CalculatePrice(PizzaDb),
                     CartId = currentUser.CurrentCartId,
                     ProductCategory = ProductCategory.Pizza.ToString(),
@@ -72,6 +132,7 @@ namespace PizzaWebsite.Controllers
         {
             CartPizza cartPizza = new CartPizza()
             {
+                CartItemId = model.Id,
                 CheeseAmount = model.SelectedCheeseAmount,
                 MenuPizzaCheeseId = model.SelectedCheeseId,
                 MenuPizzaCrustFlavorId = model.SelectedCrustFlavorId,
@@ -222,12 +283,11 @@ namespace PizzaWebsite.Controllers
         [HttpPost]
         public async Task DeleteCartItem(int cartItemId)
         {
-            SiteUser currentUser = await GetCurrentUserAsync();
-            bool authorized = await PizzaDb.CmdUserOwnsCartItemAsync(currentUser, cartItemId);
+            bool authorized = await AuthorizedToModifyCartItemAsync(cartItemId);
 
             if (!authorized)
             {
-                throw new Exception($"User with ID {currentUser.Id} is not allowed to delete cart item ID {cartItemId}.");
+                throw new Exception($"Current user is not allowed to delete cart item ID {cartItemId}.");
             }
 
             PizzaDb.CmdDeleteCartItem(cartItemId);
@@ -236,12 +296,11 @@ namespace PizzaWebsite.Controllers
         [HttpPost]
         public async Task UpdateCartItemQuantity(int cartItemId, int quantity)
         {
-            SiteUser currentUser = await GetCurrentUserAsync();
-            bool authorized = await PizzaDb.CmdUserOwnsCartItemAsync(currentUser, cartItemId);
+            bool authorized = await AuthorizedToModifyCartItemAsync(cartItemId);
 
             if (!authorized)
             {
-                throw new Exception($"User with ID {currentUser.Id} is not allowed to modify cart item ID {cartItemId}.");
+                throw new Exception($"Current user is not allowed to modify cart item ID {cartItemId}.");
             }
 
             PizzaDb.CmdUpdateCartItemQuantity(cartItemId, quantity);

@@ -40,7 +40,7 @@ namespace DataLibrary.Models.Tables
 
         public int Update(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            return pizzaDb.Connection.Update(this);
+            return pizzaDb.Connection.Update(this, transaction);
         }
 
         public bool UpdateRequiresTransaction()

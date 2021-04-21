@@ -19,11 +19,6 @@ namespace DataLibrary.Models.Tables
         public string ToppingAmount { get; set; }
         public int MenuPizzaToppingTypeId { get; set; }
 
-        public void AddInsertItems(List<IRecord> itemsList)
-        {
-            itemsList.Add(this);
-        }
-
         public dynamic GetId()
         {
             return Id;

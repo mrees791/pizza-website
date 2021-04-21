@@ -59,7 +59,8 @@ namespace DataLibrary.Models.Tables
             // Insert new toppings
             foreach (CartPizzaTopping topping in Toppings)
             {
-                pizzaDb.Connection.Insert(topping, transaction);
+                topping.CartItemId = CartItemId;
+                topping.Insert(pizzaDb, transaction);
             }
 
             // Update pizza record
