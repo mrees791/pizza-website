@@ -30,24 +30,71 @@ namespace PizzaWebsite.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult CreateCustomPizza(CartPizzaBuilderViewModel model)
+        public async Task<ActionResult> CreateCustomPizza(CartPizzaBuilderViewModel model)
         {
-            // todo: Finish implementation
             if (ModelState.IsValid)
             {
-                // todo: Add to cart or submit changes depending on if it's a new record.
+                SiteUser currentUser = await GetCurrentUserAsync();
+                CartPizza cartPizza = CreateCartPizzaFromBuilder(model);
+
+                CartItem cartItem = new CartItem()
+                {
+                    PricePerItem = cartPizza.CalculatePrice(PizzaDb),
+                    CartId = currentUser.CurrentCartId,
+                    ProductCategory = ProductCategory.Pizza.ToString(),
+                    Quantity = model.SelectedQuantity
+                };
+
+                CartItemJoin cartItemJoin = new CartItemJoin()
+                {
+                    CartItem = cartItem,
+                    CartItemType = cartPizza
+                };
+
+                if (model.IsNewRecord())
+                {
+                    PizzaDb.Insert(cartItemJoin);
+                }
+                else
+                {
+                    PizzaDb.Update(cartItemJoin);
+                }
+
                 return RedirectToAction("Cart");
             }
             else
             {
                 return View("CartPizzaBuilder", model);
             }
-            /*CartPizzaBuilderViewModel cartPizzaVm = new CartPizzaBuilderViewModel();
-            List<PizzaTopping> toppings = new List<PizzaTopping>();
-            PizzaBuilderUtility.LoadNewPizzaBuilderLists(PizzaDb, toppings, cartPizzaVm);
-            await LoadCartPizzaBuilderListsAsync(cartPizzaVm);
+        }
 
-            */
+        private CartPizza CreateCartPizzaFromBuilder(CartPizzaBuilderViewModel model)
+        {
+            CartPizza cartPizza = new CartPizza()
+            {
+                CheeseAmount = model.SelectedCheeseAmount,
+                MenuPizzaCheeseId = model.SelectedCheeseId,
+                MenuPizzaCrustFlavorId = model.SelectedCrustFlavorId,
+                MenuPizzaCrustId = model.SelectedCrustId,
+                MenuPizzaSauceId = model.SelectedSauceId,
+                SauceAmount = model.SelectedSauceAmount,
+                Size = model.SelectedSize
+            };
+
+            foreach (PizzaToppingViewModel toppingVm in model.ToppingList)
+            {
+                if (toppingVm.SelectedAmount != "None")
+                {
+                    cartPizza.Toppings.Add(new CartPizzaTopping()
+                    {
+                        MenuPizzaToppingTypeId = toppingVm.Id,
+                        ToppingAmount = toppingVm.SelectedAmount,
+                        ToppingHalf = toppingVm.SelectedToppingHalf
+                    });
+                }
+            }
+
+            return cartPizza;
         }
 
         private async Task LoadCartPizzaBuilderListsAsync(CartPizzaBuilderViewModel cartPizzaVm)
