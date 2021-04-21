@@ -2,6 +2,7 @@
 using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
 using PizzaWebsite.Models;
+using PizzaWebsite.Models.PizzaBuilders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ using System.Web.Mvc;
 namespace PizzaWebsite.Controllers
 {
     [Authorize(Roles = "Admin,Manager")]
-    public class ManagePizzaMenuController : BaseManageMenuController<MenuPizza, ManageMenuPizzaViewModel>
+    public class ManagePizzaMenuController : BaseManageMenuController<MenuPizza, MenuPizzaBuilderViewModel>
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
@@ -26,21 +27,21 @@ namespace PizzaWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add(ManageMenuPizzaViewModel model)
+        public ActionResult Add(MenuPizzaBuilderViewModel model)
         {
             return Add(model, model.Name);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(ManageMenuPizzaViewModel model)
+        public ActionResult Edit(MenuPizzaBuilderViewModel model)
         {
             return Edit(model, model.Name);
         }
 
-        protected override ManageMenuPizzaViewModel EntityToViewModel(MenuPizza entity)
+        protected override MenuPizzaBuilderViewModel EntityToViewModel(MenuPizza entity)
         {
-            ManageMenuPizzaViewModel model = new ManageMenuPizzaViewModel()
+            MenuPizzaBuilderViewModel model = new MenuPizzaBuilderViewModel()
             {
                 Id = entity.Id,
                 Name = entity.PizzaName,
@@ -89,7 +90,7 @@ namespace PizzaWebsite.Controllers
             }
         }
 
-        protected override MenuPizza ViewModelToEntity(ManageMenuPizzaViewModel model)
+        protected override MenuPizza ViewModelToEntity(MenuPizzaBuilderViewModel model)
         {
             MenuPizza entity = new MenuPizza()
             {

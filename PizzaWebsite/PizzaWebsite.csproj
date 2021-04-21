@@ -192,6 +192,10 @@
     <Compile Include="Models\Identity\Stores\UserStore.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ManageWebsiteViewModels.cs" />
+    <Compile Include="Models\PizzaBuilders\CartPizzaBuilderViewModel.cs" />
+    <Compile Include="Models\PizzaBuilders\MenuPizzaBuilderViewModel.cs" />
+    <Compile Include="Models\PizzaBuilders\PizzaBuilderViewModel.cs" />
+    <Compile Include="Models\PizzaBuilders\PizzaToppingViewModel.cs" />
     <Compile Include="Models\PizzaBuilderUtility.cs" />
     <Compile Include="Models\PizzaViewModels.cs" />
     <Compile Include="Models\SharedViewModels.cs" />

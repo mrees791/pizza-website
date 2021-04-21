@@ -8,56 +8,6 @@ using System.Web.Mvc;
 
 namespace PizzaWebsite.Models
 {
-    public class CartPizzaBuilderViewModel : PizzaBuilderViewModel
-    {
-        [HiddenInput(DisplayValue = false)]
-        public int Id { get; set; }
-        [Required]
-        [Display(Name = "Quantity")]
-        public int SelectedQuantity { get; set; }
-        public List<int> QuantityList { get; set; }
-        public List<string> SizeList { get; set; }
-        [Required]
-        [Display(Name = "Size")]
-        public string SelectedSize { get; set; }
-        [Display(Name = "Crust")]
-        public Dictionary<int, string> CrustList { get; set; }
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a crust.")]
-        public int SelectedCrustId { get; set; }
-
-        public bool IsNewRecord()
-        {
-            return Id == 0;
-        }
-    }
-
-    public class ManageMenuPizzaViewModel : PizzaBuilderViewModel
-    {
-        [HiddenInput(DisplayValue = false)]
-        public int Id { get; set; }
-        [HiddenInput(DisplayValue = false)]
-        public int SortOrder { get; set; }
-        [Required]
-        [Display(Name = "Name")]
-        [MaxLength(100)]
-        public string Name { get; set; }
-        [Display(Name = "Available for Purchase")]
-        public bool AvailableForPurchase { get; set; }
-        public List<string> CategoryList { get; set; }
-        [Required]
-        [Display(Name = "Category")]
-        public string SelectedCategory { get; set; }
-        [Required]
-        [Display(Name = "Description")]
-        [MaxLength(512)]
-        public string Description { get; set; }
-
-        public bool IsNewRecord()
-        {
-            return Id == 0;
-        }
-    }
-
     public class ManageMenuPizzaCheeseViewModel
     {
         [HiddenInput(DisplayValue = false)]
