@@ -1,4 +1,7 @@
-﻿using System;
+﻿using DataLibrary.Models;
+using DataLibrary.Models.Tables;
+using DataLibrary.Models.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,7 +9,7 @@ using System.Web;
 
 namespace PizzaWebsite.Models.PizzaBuilders
 {
-    public class PizzaBuilderViewModel
+    public abstract class PizzaBuilderViewModel
     {
         public PizzaBuilderViewModel()
         {
@@ -35,5 +38,62 @@ namespace PizzaWebsite.Models.PizzaBuilders
         [Range(1, int.MaxValue, ErrorMessage = "You must select a crust flavor.")]
         public int SelectedCrustFlavorId { get; set; }
         public List<PizzaToppingViewModel> ToppingList { get; set; }
+
+        protected virtual void LoadBuilderLists(PizzaDatabase pizzaDb, List<PizzaTopping> toppings)
+        {
+            SauceAmountList = ListUtility.GetSauceAmountList();
+            CheeseAmountList = ListUtility.GetCheeseAmountList();
+            List<MenuPizzaToppingType> toppingTypeList = pizzaDb.GetList<MenuPizzaToppingType>(new { AvailableForPurchase = true }, "SortOrder");
+            List<MenuPizzaCrustFlavor> crustFlavorList = pizzaDb.GetList<MenuPizzaCrustFlavor>(new { AvailableForPurchase = true }, "SortOrder").ToList();
+            List<MenuPizzaSauce> pizzaSauceList = pizzaDb.GetList<MenuPizzaSauce>(new { AvailableForPurchase = true }, "SortOrder").ToList();
+            List<MenuPizzaCheese> pizzaCheeseList = pizzaDb.GetList<MenuPizzaCheese>(new { AvailableForPurchase = true }, "SortOrder").ToList();
+
+            foreach (MenuPizzaCrustFlavor crustFlavor in crustFlavorList)
+            {
+                CrustFlavorList.Add(crustFlavor.Id, crustFlavor.Name);
+            }
+
+            foreach (MenuPizzaSauce sauce in pizzaSauceList)
+            {
+                SauceList.Add(sauce.Id, sauce.Name);
+            }
+
+            foreach (MenuPizzaCheese cheese in pizzaCheeseList)
+            {
+                CheeseList.Add(cheese.Id, cheese.Name);
+            }
+
+            // Create view models for toppings
+            for (int iTopping = 0; iTopping < toppingTypeList.Count; iTopping++)
+            {
+                MenuPizzaToppingType toppingType = toppingTypeList[iTopping];
+
+                PizzaTopping currentTopping = toppings.Where(t => t.ToppingTypeId == toppingType.Id).FirstOrDefault();
+
+                if (currentTopping == null)
+                {
+                    currentTopping = new PizzaTopping()
+                    {
+                        ToppingTypeId = toppingType.Id,
+                        ToppingHalf = "Whole",
+                        ToppingAmount = "None"
+                    };
+                }
+
+                PizzaToppingViewModel toppingModel = new PizzaToppingViewModel()
+                {
+                    ListIndex = iTopping,
+                    Category = toppingType.CategoryName,
+                    Id = toppingType.Id,
+                    Name = toppingType.Name,
+                    AmountList = ListUtility.GetToppingAmountList(),
+                    ToppingHalfList = ListUtility.GetToppingHalfList(),
+                    SelectedAmount = currentTopping.ToppingAmount,
+                    SelectedToppingHalf = currentTopping.ToppingHalf
+                };
+                
+                ToppingList.Add(toppingModel);
+            }
+        }
     }
 }

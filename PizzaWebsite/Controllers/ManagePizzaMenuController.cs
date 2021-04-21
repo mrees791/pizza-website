@@ -41,34 +41,8 @@ namespace PizzaWebsite.Controllers
 
         protected override MenuPizzaBuilderViewModel EntityToViewModel(MenuPizza entity)
         {
-            MenuPizzaBuilderViewModel model = new MenuPizzaBuilderViewModel()
-            {
-                Id = entity.Id,
-                Name = entity.PizzaName,
-                AvailableForPurchase = entity.AvailableForPurchase,
-                SelectedCategory = entity.CategoryName,
-                Description = entity.Description,
-                SelectedCheeseAmount = entity.CheeseAmount,
-                SelectedCheeseId = entity.MenuPizzaCheeseId,
-                SelectedCrustFlavorId = entity.MenuPizzaCrustFlavorId,
-                SelectedSauceId = entity.MenuPizzaSauceId,
-                SelectedSauceAmount = entity.SauceAmount,
-                CategoryList = ListUtility.GetPizzaCategoryList()
-            };
-
-            List<PizzaTopping> toppings = new List<PizzaTopping>();
-
-            foreach (MenuPizzaTopping topping in entity.Toppings)
-            {
-                toppings.Add(new PizzaTopping()
-                {
-                    ToppingTypeId = topping.MenuPizzaToppingTypeId,
-                    ToppingAmount = topping.ToppingAmount,
-                    ToppingHalf = topping.ToppingHalf
-                });
-            }
-
-            PizzaBuilderUtility.LoadNewPizzaBuilderLists(PizzaDb, toppings, model);
+            MenuPizzaBuilderViewModel model = new MenuPizzaBuilderViewModel();
+            model.CreateFromEntity(PizzaDb, entity);
 
             return model;
         }

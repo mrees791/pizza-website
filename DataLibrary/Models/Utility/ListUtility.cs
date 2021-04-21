@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLibrary.Models.Tables;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,32 @@ namespace DataLibrary.Models.Utility
 {
     public static class ListUtility
     {
+        public static Dictionary<int, string> CreateCrustDictionary(PizzaDatabase pizzaDb)
+        {
+            List<MenuPizzaCrust> crustList = pizzaDb.GetList<MenuPizzaCrust>(new { AvailableForPurchase = true }, "SortOrder");
+            Dictionary<int, string> crustListDictionary = new Dictionary<int, string>();
+
+            foreach (MenuPizzaCrust crust in crustList)
+            {
+                crustListDictionary.Add(crust.Id, crust.Name);
+            }
+
+            return crustListDictionary;
+        }
+
+        public static List<int> CreateQuantityList()
+        {
+            List<int> quantityList = new List<int>();
+            int maxQuantity = 10;
+
+            for (int i = 1; i <= maxQuantity; i++)
+            {
+                quantityList.Add(i);
+            }
+
+            return quantityList;
+        }
+
         public static List<string> GetPizzaCategoryList()
         {
             return new List<string>()

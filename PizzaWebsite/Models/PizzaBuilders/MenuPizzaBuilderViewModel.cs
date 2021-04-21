@@ -1,4 +1,7 @@
-﻿using System;
+﻿using DataLibrary.Models;
+using DataLibrary.Models.Tables;
+using DataLibrary.Models.Utility;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -31,6 +34,41 @@ namespace PizzaWebsite.Models.PizzaBuilders
         public bool IsNewRecord()
         {
             return Id == 0;
+        }
+
+        protected override void LoadBuilderLists(PizzaDatabase pizzaDb, List<PizzaTopping> toppings)
+        {
+            base.LoadBuilderLists(pizzaDb, toppings);
+
+            CategoryList = ListUtility.GetPizzaCategoryList();
+        }
+
+        public void CreateFromEntity(PizzaDatabase pizzaDb, MenuPizza menuPizza)
+        {
+            Id = menuPizza.Id;
+            Name = menuPizza.PizzaName;
+            AvailableForPurchase = menuPizza.AvailableForPurchase;
+            SelectedCategory = menuPizza.CategoryName;
+            Description = menuPizza.Description;
+            SelectedCheeseAmount = menuPizza.CheeseAmount;
+            SelectedCheeseId = menuPizza.MenuPizzaCheeseId;
+            SelectedCrustFlavorId = menuPizza.MenuPizzaCrustFlavorId;
+            SelectedSauceId = menuPizza.MenuPizzaSauceId;
+            SelectedSauceAmount = menuPizza.SauceAmount;
+
+            List<PizzaTopping> toppings = new List<PizzaTopping>();
+
+            foreach (MenuPizzaTopping topping in menuPizza.Toppings)
+            {
+                toppings.Add(new PizzaTopping()
+                {
+                    ToppingTypeId = topping.MenuPizzaToppingTypeId,
+                    ToppingAmount = topping.ToppingAmount,
+                    ToppingHalf = topping.ToppingHalf
+                });
+            }
+
+            LoadBuilderLists(pizzaDb, toppings);
         }
     }
 }
