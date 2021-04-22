@@ -87,7 +87,6 @@ namespace PizzaWebsite.Models.Identity
             return new SiteUser()
             {
                 AccessFailedCount = accessFailedCount,
-                ConfirmOrderCartId = ConfirmOrderCartId,
                 CurrentCartId = CurrentCartId,
                 Email = Email,
                 EmailConfirmed = EmailConfirmed,
@@ -109,7 +108,6 @@ namespace PizzaWebsite.Models.Identity
         public void FromEntity(SiteUser dbModel)
         {
             AccessFailedCount = dbModel.AccessFailedCount;
-            ConfirmOrderCartId = dbModel.ConfirmOrderCartId;
             CurrentCartId = dbModel.CurrentCartId;
             Email = dbModel.Email;
             EmailConfirmed = dbModel.EmailConfirmed;

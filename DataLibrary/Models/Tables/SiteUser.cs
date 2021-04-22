@@ -15,7 +15,6 @@ namespace DataLibrary.Models.Tables
         [Key]
         public int Id { get; set; }
         public int CurrentCartId { get; set; }
-        public int ConfirmOrderCartId { get; set; }
         public int OrderConfirmationId { get; set; }
         public bool IsBanned { get; set; }
         public string ZipCode { get; set; }
@@ -31,21 +30,15 @@ namespace DataLibrary.Models.Tables
         public int AccessFailedCount { get; set; }
         public string UserName { get; set; }
 
-        public Cart CurrentCart { get; set; }
-        public Cart ConfirmOrderCart { get; set; }
-
         public SiteUser()
         {
-            CurrentCart = new Cart();
-            ConfirmOrderCart = new Cart();
         }
 
         public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            CurrentCart.Insert(pizzaDb, transaction);
-            ConfirmOrderCart.Insert(pizzaDb, transaction);
-            CurrentCartId = CurrentCart.Id;
-            ConfirmOrderCartId = ConfirmOrderCart.Id;
+            Cart currentCart = new Cart();
+            currentCart.Insert(pizzaDb, transaction);
+            CurrentCartId = currentCart.Id;
             Id = pizzaDb.Connection.Insert(this, transaction).Value;
         }
 
@@ -56,8 +49,6 @@ namespace DataLibrary.Models.Tables
 
         public void MapEntity(PizzaDatabase pizzaDb)
         {
-            CurrentCart = pizzaDb.Get<Cart>(CurrentCartId);
-            ConfirmOrderCart = pizzaDb.Get<Cart>(ConfirmOrderCartId);
         }
 
         public bool InsertRequiresTransaction()
