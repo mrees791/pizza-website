@@ -298,6 +298,45 @@ namespace DataLibrary.Models
             return false;
         }
 
+        private int CmdDeleteAllCartItems(int cartId, IDbTransaction transaction)
+        {
+            // todo: Needs tested in DataTest1
+            throw new NotImplementedException();
+
+            string deleteQuerySql = @"delete from dbo.CartItem where CartId = @CartId;";
+            return connection.Execute(deleteQuerySql, new { CartId = cartId }, transaction);
+        }
+
+        private async Task CmdCloneCartItems(int sourceCartId, int destinationCartId, IDbTransaction transaction)
+        {
+            // todo: Needs tested in DataTest1
+            throw new NotImplementedException();
+
+            List<CartItem> cartItems = await GetListAsync<CartItem>(new { CartId = sourceCartId  });
+
+            foreach (CartItem cartItem in cartItems)
+            {
+                cartItem.CartId = destinationCartId;
+                cartItem.Insert(this, transaction);
+            }
+        }
+
+        private int CmdMoveCartItems(int sourceCartId, int destinationCartId, IDbTransaction transaction = null)
+        {
+            // todo: Needs tested in DataTest1
+            throw new NotImplementedException();
+
+            string updateQuerySql = @"update dbo.CartItem set CartId = @DestinationCartId where CartId = @SourceCartId";
+
+            object queryParameters = new
+            {
+                SourceCartId = sourceCartId,
+                DestinationCartId = destinationCartId
+            };
+
+            return connection.Execute(updateQuerySql, queryParameters, transaction);
+        }
+
         public int CmdDeleteCartItem(int cartItemId, IDbTransaction transaction = null)
         {
             string deleteQuerySql = @"delete from dbo.CartItem where Id = @Id;";
@@ -306,7 +345,7 @@ namespace DataLibrary.Models
 
         public int CmdUpdateCartItemQuantity(int cartItemId, int quantity, IDbTransaction transaction = null)
         {
-            string updateQuerySql = @"update dbo.CartItem set quantity = @Quantity where Id = @Id;";
+            string updateQuerySql = @"update dbo.CartItem set Quantity = @Quantity where Id = @Id;";
 
             object queryParameters = new
             {
