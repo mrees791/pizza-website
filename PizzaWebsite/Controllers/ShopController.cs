@@ -17,6 +17,13 @@ namespace PizzaWebsite.Controllers
 {
     public class ShopController : BaseController
     {
+        public ActionResult Checkout()
+        {
+            // Run checkout cart command from DataLibrary.
+            // todo: Finish
+            throw new NotImplementedException();
+        }
+
         private async Task<bool> AuthorizedToModifyCartItemAsync(int cartItemId)
         {
             return await PizzaDb.CmdUserOwnsCartItemAsync(await GetCurrentUserAsync(), cartItemId);

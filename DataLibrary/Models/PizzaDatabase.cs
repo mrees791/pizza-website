@@ -18,7 +18,7 @@ namespace DataLibrary.Models
     {
         private IDbConnection connection;
 
-        internal IDbConnection Connection
+        public IDbConnection Connection
         {
             get
             {
@@ -283,6 +283,15 @@ namespace DataLibrary.Models
         }
 
         // Special commands (confirm order, update cart item quantity, etc)
+        public void CmdCheckoutCart(SiteUser siteUser)
+        {
+            // todo: Finish
+            throw new NotImplementedException();
+            // WITHIN TRANSACTION
+            // Increment OrderConfirmationId
+            // Clone cart items to order confirmation cart
+        }
+
         public async Task<bool> CmdUserOwnsCartItemAsync(SiteUser user, int cartItemId)
         {
             List<CartItem> cartItems = await GetListAsync<CartItem>(new { CartId = user.CurrentCartId });
@@ -298,34 +307,35 @@ namespace DataLibrary.Models
             return false;
         }
 
-        private int CmdDeleteAllCartItems(int cartId, IDbTransaction transaction)
+        public int CmdDeleteAllCartItems(int cartId, IDbTransaction transaction)
         {
-            // todo: Needs tested in DataTest1
-            throw new NotImplementedException();
-
             string deleteQuerySql = @"delete from dbo.CartItem where CartId = @CartId;";
             return connection.Execute(deleteQuerySql, new { CartId = cartId }, transaction);
         }
 
-        private async Task CmdCloneCartItems(int sourceCartId, int destinationCartId, IDbTransaction transaction)
+        public async Task CmdCloneCartItemsAsync(int sourceCartId, int destinationCartId)
         {
-            // todo: Needs tested in DataTest1
-            throw new NotImplementedException();
+            List<CartItemJoin> cartItems = await GetJoinedCartItemsAsync(sourceCartId);
 
-            List<CartItem> cartItems = await GetListAsync<CartItem>(new { CartId = sourceCartId  });
-
-            foreach (CartItem cartItem in cartItems)
+            using (var transaction = Connection.BeginTransaction())
             {
-                cartItem.CartId = destinationCartId;
+                CmdCloneCartItems(cartItems, destinationCartId, transaction);
+                transaction.Commit();
+            }
+        }
+
+        public void CmdCloneCartItems(List<CartItemJoin> cartItems, int destinationCartId, IDbTransaction transaction)
+        {
+            foreach (CartItemJoin cartItem in cartItems)
+            {
+                cartItem.CartItem.Id = 0;
+                cartItem.CartItem.CartId = destinationCartId;
                 cartItem.Insert(this, transaction);
             }
         }
 
-        private int CmdMoveCartItems(int sourceCartId, int destinationCartId, IDbTransaction transaction = null)
+        public int CmdMoveCartItems(int sourceCartId, int destinationCartId, IDbTransaction transaction = null)
         {
-            // todo: Needs tested in DataTest1
-            throw new NotImplementedException();
-
             string updateQuerySql = @"update dbo.CartItem set CartId = @DestinationCartId where CartId = @SourceCartId";
 
             object queryParameters = new
