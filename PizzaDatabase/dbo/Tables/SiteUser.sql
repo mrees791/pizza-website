@@ -2,6 +2,7 @@
 (
   Id INT NOT NULL IDENTITY,
   CurrentCartId INT NOT NULL,
+  ConfirmOrderCartId INT NOT NULL,
   OrderConfirmationId INT NOT NULL,
   IsBanned BIT NOT NULL,
   ZipCode NVARCHAR(5),
@@ -17,5 +18,6 @@
   AccessFailedCount INT NOT NULL,
   UserName NVARCHAR(256) NOT NULL,
   PRIMARY KEY (Id),
-  CONSTRAINT FK_SiteUser_Cart_Current FOREIGN KEY (CurrentCartId) REFERENCES Cart(Id)
+  CONSTRAINT FK_SiteUser_Cart_Current FOREIGN KEY (CurrentCartId) REFERENCES Cart(Id),
+  CONSTRAINT FK_SiteUser_Cart_Confirm_Order FOREIGN KEY (ConfirmOrderCartId) REFERENCES Cart(Id)
 )

@@ -15,6 +15,7 @@ namespace DataLibrary.Models.Tables
         [Key]
         public int Id { get; set; }
         public int CurrentCartId { get; set; }
+        public int ConfirmOrderCartId { get; set; }
         public int OrderConfirmationId { get; set; }
         public bool IsBanned { get; set; }
         public string ZipCode { get; set; }
@@ -37,8 +38,11 @@ namespace DataLibrary.Models.Tables
         public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
             Cart currentCart = new Cart();
+            Cart confirmOrderCart = new Cart();
             currentCart.Insert(pizzaDb, transaction);
+            confirmOrderCart.Insert(pizzaDb, transaction);
             CurrentCartId = currentCart.Id;
+            ConfirmOrderCartId = confirmOrderCart.Id;
             Id = pizzaDb.Connection.Insert(this, transaction).Value;
         }
 
