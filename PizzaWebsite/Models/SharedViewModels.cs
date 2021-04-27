@@ -58,4 +58,14 @@ namespace PizzaWebsite.Models
             return !CartItemList.Any();
         }
     }
+
+    public class ManageDeliveryAddressViewModel
+    {
+        public int Id { get; set; }
+
+        public bool IsNewAddress()
+        {
+            return Id == 0;
+        }
+    }
 }
