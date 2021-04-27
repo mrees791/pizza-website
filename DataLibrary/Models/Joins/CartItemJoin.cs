@@ -9,15 +9,10 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Joins
 {
-    public class CartItemJoin : IRecord, IComparable<CartItemJoin>
+    public class CartItemJoin : IRecord
     {
         public CartItem CartItem { get; set; }
         public IRecordCartItemType CartItemType { get; set; }
-
-        public int CompareTo(CartItemJoin other)
-        {
-            return CartItem.Id.CompareTo(other.CartItem.Id);
-        }
 
         public dynamic GetId()
         {

@@ -12,6 +12,7 @@ namespace DataLibrary.Models.Tables
     [Table("DeliveryInfo")]
     public class DeliveryInfo : IRecord
     {
+        [Key]
         public int Id { get; set; }
         public DateTime DateOfDelivery { get; set; }
         public string DeliveryAddressType { get; set; }

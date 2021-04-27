@@ -12,6 +12,7 @@ namespace DataLibrary.Models.Tables
     [Table("CustomerOrder")]
     public class CustomerOrder : IRecord
     {
+        [Key]
         public int Id { get; set; }
         public int UserId { get; set; }
         public int StoreId { get; set; }

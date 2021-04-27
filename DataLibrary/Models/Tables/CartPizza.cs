@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Tables
 {
+    [Table("CartPizza")]
     public class CartPizza : IRecordCartItemType
     {
         [Key]
@@ -192,14 +193,9 @@ namespace DataLibrary.Models.Tables
             return $"{Size} Pizza";
         }
 
-        public int CompareTo(IRecordCartItemType other)
-        {
-            return CartItemId.CompareTo(other.GetId());
-        }
-
         public void SetCartItemId(int cartItemId)
         {
-            this.CartItemId = cartItemId;
+            CartItemId = cartItemId;
         }
     }
 }

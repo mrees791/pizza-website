@@ -71,6 +71,7 @@
     <Compile Include="Models\Interfaces\IRecord.cs" />
     <Compile Include="Models\Interfaces\IRecordCartItemType.cs" />
     <Compile Include="Models\Joins\CartItemJoin.cs" />
+    <Compile Include="Models\Joins\CustomerOrderJoin.cs" />
     <Compile Include="Models\PizzaDatabase.cs" />
     <Compile Include="Models\PizzaTopping.cs" />
     <Compile Include="Models\ProductCategory.cs" />
@@ -78,6 +79,9 @@
     <Compile Include="Models\Tables\CartItem.cs" />
     <Compile Include="Models\Tables\CartPizza.cs" />
     <Compile Include="Models\Tables\CartPizzaTopping.cs" />
+    <Compile Include="Models\Tables\CustomerOrder.cs" />
+    <Compile Include="Models\Tables\DeliveryAddress.cs" />
+    <Compile Include="Models\Tables\DeliveryInfo.cs" />
     <Compile Include="Models\Tables\Employee.cs" />
     <Compile Include="Models\Tables\EmployeeLocation.cs" />
     <Compile Include="Models\Tables\MenuPizza.cs" />
