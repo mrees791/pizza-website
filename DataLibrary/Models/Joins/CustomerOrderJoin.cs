@@ -31,7 +31,7 @@ namespace DataLibrary.Models.Joins
 
         public bool InsertRequiresTransaction()
         {
-            return false;
+            return true;
         }
 
         public void MapEntity(PizzaDatabase pizzaDb)
@@ -58,7 +58,7 @@ namespace DataLibrary.Models.Joins
 
         public bool UpdateRequiresTransaction()
         {
-            return false;
+            return true;
         }
     }
 }
