@@ -1,0 +1,40 @@
+﻿@using PizzaWebsite.Models
+@model ManageAddressesViewModel
+@{
+    ViewBag.Title = "Manage Addresses";
+}
+
+<h2>Manage Addresses</h2>
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address Type</th>
+            <th>Street Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zip Code</th>
+            <th>Phone</th>
+            <th>@*Edit button*@</th>
+            <th>@*Delete button*@</th>
+        </tr>
+    </thead>
+    @foreach (DeliveryAddressViewModel addressVm in Model.AddressList)
+    {
+        <tr>
+            <td>@addressVm.Name</td>
+            <td>@addressVm.AddressType</td>
+            <td>@addressVm.StreetAddress</td>
+            <td>@addressVm.City</td>
+            <td>@addressVm.State</td>
+            <td>@addressVm.ZipCode</td>
+            <td>@addressVm.PhoneNumber</td>
+            <td><input type="button" value="Edit" class="form-control" /></td>
+            <td><input type="button" value="Delete" class="form-control" /></td>
+        </tr>
+    }
+</table>
+
+<p>@Html.ActionLink("Back", "Index")</p>

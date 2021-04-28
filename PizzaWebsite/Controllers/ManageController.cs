@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -11,43 +13,24 @@ using PizzaWebsite.Models;
 namespace PizzaWebsite.Controllers
 {
     [Authorize]
-    public class ManageController : Controller
+    public class ManageController : BaseController
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
-
         public ManageController()
         {
         }
 
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public async Task<ActionResult> ManageAddresses()
         {
-            UserManager = userManager;
-            SignInManager = signInManager;
-        }
+            SiteUser currentUser = await GetCurrentUserAsync();
+            List<DeliveryAddress> addressList = await PizzaDb.GetListAsync<DeliveryAddress>(new { UserId = currentUser.Id });
+            ManageAddressesViewModel viewModel = new ManageAddressesViewModel();
 
-        public ApplicationSignInManager SignInManager
-        {
-            get
+            foreach (DeliveryAddress address in addressList)
             {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+                viewModel.AddressList.Add(new DeliveryAddressViewModel(address));
             }
-            private set 
-            { 
-                _signInManager = value; 
-            }
-        }
 
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
+            return View(viewModel);
         }
 
         //
@@ -320,17 +303,6 @@ namespace PizzaWebsite.Controllers
             }
             var result = await UserManager.AddLoginAsync(User.Identity.GetUserId<int>(), loginInfo.Login);
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && _userManager != null)
-            {
-                _userManager.Dispose();
-                _userManager = null;
-            }
-
-            base.Dispose(disposing);
         }
 
 #region Helpers

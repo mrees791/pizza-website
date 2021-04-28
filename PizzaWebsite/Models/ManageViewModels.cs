@@ -5,6 +5,17 @@ using Microsoft.Owin.Security;
 
 namespace PizzaWebsite.Models
 {
+    // todo: Finish
+    public class ManageAddressesViewModel
+    {
+        public List<DeliveryAddressViewModel> AddressList { get; set; }
+
+        public ManageAddressesViewModel()
+        {
+            AddressList = new List<DeliveryAddressViewModel>();
+        }
+    }
+
     public class IndexViewModel
     {
         public bool HasPassword { get; set; }
