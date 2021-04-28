@@ -12,7 +12,7 @@ namespace DataLibrary.Models.Joins
     public class CustomerOrderJoin : IRecord
     {
         public CustomerOrder CustomerOrder { get; set; }
-        public DeliveryAddress DeliveryAddress { get; set; }
+        public DeliveryInfo DeliveryInfo { get; set; }
 
         public dynamic GetId()
         {
@@ -21,11 +21,12 @@ namespace DataLibrary.Models.Joins
 
         public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            CustomerOrder.Insert(pizzaDb, transaction);
-            if (DeliveryAddress != null)
+            if (DeliveryInfo != null)
             {
-                DeliveryAddress.Insert(pizzaDb, transaction);
+                DeliveryInfo.Insert(pizzaDb, transaction);
+                CustomerOrder.DeliveryInfoId = DeliveryInfo.Id;
             }
+            CustomerOrder.Insert(pizzaDb, transaction);
         }
 
         public bool InsertRequiresTransaction()
@@ -35,22 +36,22 @@ namespace DataLibrary.Models.Joins
 
         public void MapEntity(PizzaDatabase pizzaDb)
         {
-            CustomerOrder.MapEntity(pizzaDb);
-            if (DeliveryAddress != null)
+            if (DeliveryInfo != null)
             {
-                DeliveryAddress.MapEntity(pizzaDb);
+                DeliveryInfo.MapEntity(pizzaDb);
             }
+            CustomerOrder.MapEntity(pizzaDb);
         }
 
         public int Update(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
             int rowsUpdated = 0;
 
-            rowsUpdated += CustomerOrder.Update(pizzaDb, transaction);
-            if (DeliveryAddress != null)
+            if (DeliveryInfo != null)
             {
-                rowsUpdated += DeliveryAddress.Update(pizzaDb, transaction);
+                rowsUpdated += DeliveryInfo.Update(pizzaDb, transaction);
             }
+            rowsUpdated += CustomerOrder.Update(pizzaDb, transaction);
 
             return rowsUpdated;
         }

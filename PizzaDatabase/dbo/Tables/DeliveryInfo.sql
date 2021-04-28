@@ -1,7 +1,7 @@
 ﻿CREATE TABLE dbo.DeliveryInfo
 (
   Id INT NOT NULL IDENTITY,
-  DateOfDelivery DATETIME NOT NULL,
+  DateOfDelivery DATETIME,
   DeliveryAddressType NVARCHAR(50) NOT NULL,
   DeliveryAddressName NVARCHAR(50) NOT NULL,
   DeliveryStreetAddress NVARCHAR(50) NOT NULL,

@@ -21,7 +21,7 @@ namespace DataLibrary.Models.Tables
         public decimal OrderSubtotal { get; set; }
         public decimal OrderTax { get; set; }
         public decimal OrderTotal { get; set; }
-        public int OrderPhase { get; set; }
+        public OrderPhase OrderPhase { get; set; }
         public bool OrderCompleted { get; set; }
         public DateTime DateOfOrder { get; set; }
         public bool IsDelivery { get; set; }

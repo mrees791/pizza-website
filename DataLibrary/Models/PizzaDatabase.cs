@@ -26,7 +26,17 @@ namespace DataLibrary.Models
             }
         }
 
-        public async Task<List<CartItemJoin>> GetJoinedCartItemsAsync(int cartId)
+        public async Task<List<CustomerOrderJoin>> GetJoinedCustomerOrderListAsync(int userId)
+        {
+            List<CustomerOrderJoin> customerOrders = new List<CustomerOrderJoin>();
+
+            // todo: Finish
+            throw new NotImplementedException();
+
+            return customerOrders;
+        }
+
+        public async Task<List<CartItemJoin>> GetJoinedCartItemListAsync(int cartId)
         {
             List<CartItemJoin> items = new List<CartItemJoin>();
 
@@ -315,7 +325,7 @@ namespace DataLibrary.Models
 
         public async Task CmdCloneCartItemsAsync(int sourceCartId, int destinationCartId)
         {
-            List<CartItemJoin> cartItems = await GetJoinedCartItemsAsync(sourceCartId);
+            List<CartItemJoin> cartItems = await GetJoinedCartItemListAsync(sourceCartId);
 
             using (var transaction = Connection.BeginTransaction())
             {
