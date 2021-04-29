@@ -33,6 +33,24 @@ namespace PizzaWebsite.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
+        public async Task DeleteDeliveryAddress(int addressId)
+        {
+            bool authorized = await AuthorizedToModifyDeliveryAddress(addressId);
+
+            if (!authorized)
+            {
+                throw new Exception($"Current user is not allowed to delete delivery address ID {addressId}.");
+            }
+
+            PizzaDb.Delete<DeliveryAddress>(addressId);
+        }
+
+        private async Task<bool> AuthorizedToModifyDeliveryAddress(int addressId)
+        {
+            return await PizzaDb.CmdUserOwnsDeliveryAddressAsync(await GetCurrentUserAsync(), addressId);
+        }
+
         //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)

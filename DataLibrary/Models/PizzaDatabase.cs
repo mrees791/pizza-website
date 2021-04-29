@@ -302,6 +302,21 @@ namespace DataLibrary.Models
             // Clone cart items to order confirmation cart
         }
 
+        public async Task<bool> CmdUserOwnsDeliveryAddressAsync(SiteUser user, int deliveryAddressId)
+        {
+            DeliveryAddress address = await GetAsync<DeliveryAddress>(deliveryAddressId);
+
+            if (address != null)
+            {
+                if (address.UserId == user.Id)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public async Task<bool> CmdUserOwnsCartItemAsync(SiteUser user, int cartItemId)
         {
             List<CartItem> cartItems = await GetListAsync<CartItem>(new { CartId = user.CurrentCartId });
@@ -357,11 +372,12 @@ namespace DataLibrary.Models
             return connection.Execute(updateQuerySql, queryParameters, transaction);
         }
 
-        public int CmdDeleteCartItem(int cartItemId, IDbTransaction transaction = null)
+        // todo: Remove
+        /*public int CmdDeleteCartItem(int cartItemId, IDbTransaction transaction = null)
         {
             string deleteQuerySql = @"delete from dbo.CartItem where Id = @Id;";
             return connection.Execute(deleteQuerySql, new { Id = cartItemId }, transaction);
-        }
+        }*/
 
         public int CmdUpdateCartItemQuantity(int cartItemId, int quantity, IDbTransaction transaction = null)
         {
@@ -415,9 +431,14 @@ namespace DataLibrary.Models
             return rowsUpdated;
         }
 
-        public int Delete<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : class, new()
+        public int Delete<TEntity>(object id, IDbTransaction transaction = null) where TEntity : IRecord
         {
-            return connection.Delete<TEntity>(entity, transaction);
+            return connection.Delete<TEntity>(id, transaction);
+        }
+
+        public int Delete<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : IRecord
+        {
+            return connection.Delete(entity, transaction);
         }
     }
 }

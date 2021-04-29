@@ -205,7 +205,7 @@ namespace PizzaWebsite.Controllers
                 throw new Exception($"Current user is not allowed to delete cart item ID {cartItemId}.");
             }
 
-            PizzaDb.CmdDeleteCartItem(cartItemId);
+            PizzaDb.Delete<CartItem>(cartItemId);
         }
 
         [HttpPost]

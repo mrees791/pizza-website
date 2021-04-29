@@ -23,7 +23,7 @@
     </thead>
     @foreach (DeliveryAddressViewModel addressVm in Model.AddressList)
     {
-        <tr>
+        <tr id="@addressVm.AddressRowId">
             <td>@addressVm.Name</td>
             <td>@addressVm.AddressType</td>
             <td>@addressVm.StreetAddress</td>
@@ -31,10 +31,35 @@
             <td>@addressVm.State</td>
             <td>@addressVm.ZipCode</td>
             <td>@addressVm.PhoneNumber</td>
-            <td><input type="button" value="Edit" class="form-control" /></td>
-            <td><input type="button" value="Delete" class="form-control" /></td>
+            <td><input id="@addressVm.EditButtonId" type="button" value="Edit" class="form-control" /></td>
+            <td><input id="@addressVm.DeleteButtonId" type="button" value="Delete" class="form-control" /></td>
         </tr>
     }
 </table>
 
 <p>@Html.ActionLink("Back", "Index")</p>
+
+@section Scripts {
+    @* Delivery address controls. *@
+    @foreach (DeliveryAddressViewModel addressVm in Model.AddressList)
+    {
+        <script type="text/javascript">
+            $(function () {
+                var rowId = '#@addressVm.AddressRowId';
+                var deleteButtonId = '#@addressVm.DeleteButtonId';
+                // Delete delivery address
+                $(deleteButtonId).on("click", function () {
+                    var params = { addressId: @addressVm.Id };
+                    pizzaSiteNs.ajaxCall('/Manage/DeleteDeliveryAddress', JSON.stringify(params), 'POST').
+                        fail(function (error) {
+                            alert(error.statusText);
+                        }).
+                        done(function () {
+                            $(rowId).remove();
+                            //pizzaSiteCartNs.updateCartElementVisibility();
+                        });
+                });
+            });
+        </script>
+    }
+}
