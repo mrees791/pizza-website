@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using PizzaWebsite.Models;
+using PizzaWebsite.Models.Manage;
 
 namespace PizzaWebsite.Controllers
 {
