@@ -194,7 +194,7 @@
     <Compile Include="Models\ManageWebsiteViewModels.cs" />
     <Compile Include="Models\Manage\DeliveryAddressViewModel.cs" />
     <Compile Include="Models\Manage\ManageAddressesViewModel.cs" />
-    <Compile Include="Models\Manage\ModifyDeliveryAddressViewModel.cs" />
+    <Compile Include="Models\Manage\ManageDeliveryAddressViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\CartPizzaBuilderViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\MenuPizzaBuilderViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\PizzaBuilderViewModel.cs" />
@@ -296,6 +296,7 @@
     <Content Include="Views\Shop\PizzaMenu.cshtml" />
     <Content Include="Views\Shop\_MenuPizzaView.cshtml" />
     <Content Include="Views\Manage\ManageAddresses.cshtml" />
+    <Content Include="Views\Manage\ManageDeliveryAddress.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

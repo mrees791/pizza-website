@@ -6,7 +6,8 @@
 }
 
 <h2>Manage Addresses</h2>
-<hr />
+
+<p>@Html.ActionLink("Add New Address", "AddNewAddress")</p>
 
 <div id="emptyAddressListBlock" style="display: none;">
     <p>You currently have no delivery addresses.</p>
@@ -37,7 +38,16 @@
                     <td>@addressVm.State</td>
                     <td>@addressVm.ZipCode</td>
                     <td>@addressVm.PhoneNumber</td>
+                    @* todo: Implement Edit button functionality. *@
                     <td><input id="@addressVm.EditButtonId" type="button" value="Edit" class="form-control" /></td>
+                    @*<td>
+                            @using (Html.BeginForm("ModifyDeliveryAddress", "Manage", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input name="addressId" type="hidden" value="@addressVm.Id" />
+                                <input type="submit" value="Edit" class="form-control" />
+                            }
+                        </td>*@
                     <td><input id="@addressVm.DeleteButtonId" type="button" value="Delete" class="form-control" /></td>
                 </tr>
             }

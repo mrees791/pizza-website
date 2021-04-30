@@ -302,13 +302,13 @@ namespace DataLibrary.Models
             // Clone cart items to order confirmation cart
         }
 
-        public async Task<bool> CmdUserOwnsDeliveryAddressAsync(SiteUser user, int deliveryAddressId)
+        public async Task<bool> CmdUserOwnsDeliveryAddressAsync(int userId, int deliveryAddressId)
         {
             DeliveryAddress address = await GetAsync<DeliveryAddress>(deliveryAddressId);
 
             if (address != null)
             {
-                if (address.UserId == user.Id)
+                if (address.UserId == userId)
                 {
                     return true;
                 }
@@ -319,9 +319,9 @@ namespace DataLibrary.Models
 
         public async Task<bool> CmdUserOwnsCartItemAsync(SiteUser user, int cartItemId)
         {
-            List<CartItem> cartItems = await GetListAsync<CartItem>(new { CartId = user.CurrentCartId });
+            List<CartItem> userCartItems = await GetListAsync<CartItem>(new { CartId = user.CurrentCartId });
 
-            foreach (CartItem cartItem in cartItems)
+            foreach (CartItem cartItem in userCartItems)
             {
                 if (cartItem.Id == cartItemId)
                 {

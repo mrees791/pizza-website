@@ -9,6 +9,14 @@ namespace DataLibrary.Models.Utility
 {
     public static class ListUtility
     {
+        public static List<string> CreateDeliveryAddressTypeList()
+        {
+            return new List<string>()
+            {
+                "House", "Business", "Apartment", "Other"
+            };
+        }
+
         public static Dictionary<int, string> CreateCrustDictionary(PizzaDatabase pizzaDb)
         {
             List<MenuPizzaCrust> crustList = pizzaDb.GetList<MenuPizzaCrust>(new { AvailableForPurchase = true }, "SortOrder");

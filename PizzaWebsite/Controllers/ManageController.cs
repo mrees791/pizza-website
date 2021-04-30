@@ -22,8 +22,7 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> ManageAddresses()
         {
-            SiteUser currentUser = await GetCurrentUserAsync();
-            List<DeliveryAddress> addressList = await PizzaDb.GetListAsync<DeliveryAddress>(new { UserId = currentUser.Id });
+            List<DeliveryAddress> addressList = await PizzaDb.GetListAsync<DeliveryAddress>(new { UserId = User.Identity.GetUserId<int>() });
             ManageAddressesViewModel viewModel = new ManageAddressesViewModel();
 
             foreach (DeliveryAddress address in addressList)
@@ -34,7 +33,39 @@ namespace PizzaWebsite.Controllers
             return View(viewModel);
         }
 
+        public ActionResult AddNewAddress()
+        {
+            return View("ManageDeliveryAddress", new ManageDeliveryAddressViewModel());
+        }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddNewAddress(ManageDeliveryAddressViewModel addressVm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("ManageDeliveryAddress", addressVm);
+            }
+
+            // Add delivery address to database
+            DeliveryAddress address = new DeliveryAddress()
+            {
+                UserId = User.Identity.GetUserId<int>(),
+                Name = addressVm.Name,
+                AddressType = addressVm.SelectedAddressType,
+                City = addressVm.City,
+                PhoneNumber = addressVm.PhoneNumber,
+                State = addressVm.SelectedState,
+                StreetAddress = addressVm.StreetAddress,
+                ZipCode = addressVm.ZipCode
+            };
+            PizzaDb.Insert(address);
+
+            return RedirectToAction("ManageAddresses");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task DeleteDeliveryAddress(int addressId)
         {
             bool authorized = await AuthorizedToModifyDeliveryAddress(addressId);
@@ -49,7 +80,7 @@ namespace PizzaWebsite.Controllers
 
         private async Task<bool> AuthorizedToModifyDeliveryAddress(int addressId)
         {
-            return await PizzaDb.CmdUserOwnsDeliveryAddressAsync(await GetCurrentUserAsync(), addressId);
+            return await PizzaDb.CmdUserOwnsDeliveryAddressAsync(User.Identity.GetUserId<int>(), addressId);
         }
 
         //
