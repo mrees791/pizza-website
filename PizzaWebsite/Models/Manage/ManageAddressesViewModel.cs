@@ -7,11 +7,11 @@ namespace PizzaWebsite.Models.Manage
 {
     public class ManageAddressesViewModel
     {
-        public List<DeliveryAddressViewModel> AddressList { get; set; }
+        public List<DeliveryAddressListItemViewModel> AddressList { get; set; }
 
         public ManageAddressesViewModel()
         {
-            AddressList = new List<DeliveryAddressViewModel>();
+            AddressList = new List<DeliveryAddressListItemViewModel>();
         }
     }
 }

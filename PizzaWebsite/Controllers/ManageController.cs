@@ -27,7 +27,7 @@ namespace PizzaWebsite.Controllers
 
             foreach (DeliveryAddress address in addressList)
             {
-                viewModel.AddressList.Add(new DeliveryAddressViewModel(address));
+                viewModel.AddressList.Add(new DeliveryAddressListItemViewModel(address));
             }
 
             return View(viewModel);

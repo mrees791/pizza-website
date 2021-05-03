@@ -7,7 +7,7 @@ using System.Web;
 namespace PizzaWebsite.Models.Manage
 {
 
-    public class DeliveryAddressViewModel
+    public class DeliveryAddressListItemViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -20,12 +20,12 @@ namespace PizzaWebsite.Models.Manage
         public string DeleteButtonId { get; set; }
         public string AddressRowId { get; set; }
 
-        public DeliveryAddressViewModel()
+        public DeliveryAddressListItemViewModel()
         {
 
         }
 
-        public DeliveryAddressViewModel(DeliveryAddress deliveryAddress)
+        public DeliveryAddressListItemViewModel(DeliveryAddress deliveryAddress)
         {
             Id = deliveryAddress.Id;
             Name = deliveryAddress.Name;

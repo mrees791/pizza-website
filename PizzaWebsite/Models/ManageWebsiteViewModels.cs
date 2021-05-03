@@ -60,7 +60,8 @@ namespace PizzaWebsite.Models
 
         [Required]
         [Display(Name = "Phone Number")]
-        [StringLength(10, MinimumLength = 10)]
+        [Range(0, int.MaxValue, ErrorMessage = "Your phone number must only contain numbers, no symbols or letters.")]
+        [StringLength(10, MinimumLength = 10, ErrorMessage = "Your phone number must be 10 characters long.")]
         public string PhoneNumber { get; set; }
 
         [Display(Name = "Is Active")]

@@ -28,7 +28,7 @@
             </tr>
         </thead>
         <tbody id="addressTableBody">
-            @foreach (DeliveryAddressViewModel addressVm in Model.AddressList)
+            @foreach (DeliveryAddressListItemViewModel addressVm in Model.AddressList)
             {
                 <tr id="@addressVm.AddressRowId">
                     <td>@addressVm.Name</td>
@@ -64,7 +64,7 @@
         });
     </script>
     @* Delivery address controls. *@
-    @foreach (DeliveryAddressViewModel addressVm in Model.AddressList)
+    @foreach (DeliveryAddressListItemViewModel addressVm in Model.AddressList)
     {
         <script type="text/javascript">
             $(function () {
