@@ -54,7 +54,7 @@ namespace PizzaWebsite.Models.Manage
         [StringLength(10, MinimumLength = 10)]
         public string PhoneNumber { get; set; }
 
-        public bool IsNewAddress()
+        public bool IsNewRecord()
         {
             return Id == 0;
         }

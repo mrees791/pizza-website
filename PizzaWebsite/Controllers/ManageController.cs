@@ -40,16 +40,16 @@ namespace PizzaWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddNewAddress(ManageDeliveryAddressViewModel addressVm)
+        public async Task<ActionResult> SubmitDeliveryAddress(ManageDeliveryAddressViewModel addressVm)
         {
             if (!ModelState.IsValid)
             {
                 return View("ManageDeliveryAddress", addressVm);
             }
 
-            // Add delivery address to database
             DeliveryAddress address = new DeliveryAddress()
             {
+                Id = addressVm.Id,
                 UserId = User.Identity.GetUserId<int>(),
                 Name = addressVm.Name,
                 AddressType = addressVm.SelectedAddressType,
@@ -59,16 +59,57 @@ namespace PizzaWebsite.Controllers
                 StreetAddress = addressVm.StreetAddress,
                 ZipCode = addressVm.ZipCode
             };
-            PizzaDb.Insert(address);
+
+            if (addressVm.IsNewRecord())
+            {
+                PizzaDb.Insert(address);
+            }
+            else
+            {
+                bool authorized = await AuthorizedToModifyDeliveryAddressAsync(addressVm.Id);
+
+                if (!authorized)
+                {
+                    throw new Exception($"Current user is not allowed to modify delivery address ID {addressVm.Id}.");
+                }
+
+                PizzaDb.Update(address);
+            }
 
             return RedirectToAction("ManageAddresses");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ModifyDeliveryAddress(int addressId)
+        {
+            bool authorized = await AuthorizedToModifyDeliveryAddressAsync(addressId);
+
+            if (!authorized)
+            {
+                throw new Exception($"Current user is not allowed to modify delivery address ID {addressId}.");
+            }
+
+            DeliveryAddress deliveryAddress = await PizzaDb.GetAsync<DeliveryAddress>(addressId);
+
+            ManageDeliveryAddressViewModel viewModel = new ManageDeliveryAddressViewModel()
+            {
+                Id = addressId,
+                Name = deliveryAddress.Name,
+                City = deliveryAddress.City,
+                PhoneNumber = deliveryAddress.PhoneNumber,
+                SelectedAddressType = deliveryAddress.AddressType,
+                SelectedState = deliveryAddress.State,
+                StreetAddress = deliveryAddress.StreetAddress,
+                ZipCode = deliveryAddress.ZipCode
+            };
+
+            return View("ManageDeliveryAddress", viewModel);
+        }
+
         public async Task DeleteDeliveryAddress(int addressId)
         {
-            bool authorized = await AuthorizedToModifyDeliveryAddress(addressId);
+            bool authorized = await AuthorizedToModifyDeliveryAddressAsync(addressId);
 
             if (!authorized)
             {
@@ -78,7 +119,7 @@ namespace PizzaWebsite.Controllers
             PizzaDb.Delete<DeliveryAddress>(addressId);
         }
 
-        private async Task<bool> AuthorizedToModifyDeliveryAddress(int addressId)
+        private async Task<bool> AuthorizedToModifyDeliveryAddressAsync(int addressId)
         {
             return await PizzaDb.CmdUserOwnsDeliveryAddressAsync(User.Identity.GetUserId<int>(), addressId);
         }

@@ -1,6 +1,6 @@
 ﻿@model PizzaWebsite.Models.Manage.ManageDeliveryAddressViewModel
 
-@if (Model.IsNewAddress())
+@if (Model.IsNewRecord())
 {
     ViewBag.Title = "Add New Delivery Address";
     <h2>Add New Delivery Address</h2>
@@ -11,7 +11,7 @@ else
     <h2>Manage Delivery Address</h2>
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("SubmitDeliveryAddress", "Manage", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
@@ -78,7 +78,7 @@ else
         
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                @if (Model.IsNewAddress())
+                @if (Model.IsNewRecord())
                 {
                     <input type="submit" value="Submit" class="btn btn-default" />
                 }
