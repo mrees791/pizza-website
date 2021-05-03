@@ -28,12 +28,45 @@ namespace DataLibrary.Models
 
         public async Task<List<CustomerOrderJoin>> GetJoinedCustomerOrderListAsync(int userId)
         {
-            List<CustomerOrderJoin> customerOrders = new List<CustomerOrderJoin>();
+            string whereClause = "where c.UserId = @UserId";
 
-            // todo: Finish
-            throw new NotImplementedException();
+            object parameters = new
+            {
+                UserId = userId
+            };
 
-            return customerOrders;
+            return await GetJoinedCustomerOrderListAsync(whereClause, parameters);
+        }
+
+        // todo: Test
+        private async Task<List<CustomerOrderJoin>> GetJoinedCustomerOrderListAsync(string whereClause, object parameters)
+        {
+            string joinQuery = @"select c.Id, c.UserId, c.StoreId, c.CartId, c.IsCancelled, 
+                                 c.OrderSubtotal, c.OrderTax, c.OrderTotal, c.OrderPhase,
+                                 c.OrderCompleted, c.DateOfOrder, c.IsDelivery, c.DeliveryInfoId,
+                                 d.Id, d.DateOfDelivery, d.DeliveryAddressType, d.DeliveryAddressName,
+                                 d.DeliveryStreetAddress, d.DeliveryCity, d.DeliveryState, d.DeliveryZipCode,
+                                 d.DeliveryPhoneNumber
+                                 from CustomerOrder c
+                                 left join DeliveryInfo d on c.DeliveryInfoId = d.Id " +
+                                 whereClause;
+
+            IEnumerable<CustomerOrderJoin> customerOrderList = await connection.QueryAsync<CustomerOrder, DeliveryInfo, CustomerOrderJoin>(
+                joinQuery,
+                (customerOrder, deliveryInfo) =>
+                {
+                    CustomerOrderJoin customerOrderJoin = new CustomerOrderJoin();
+                    customerOrderJoin.CustomerOrder = customerOrder;
+                    customerOrderJoin.DeliveryInfo = deliveryInfo;
+                    return customerOrderJoin;
+                }, param: parameters, splitOn: "Id");
+
+            foreach (CustomerOrderJoin customerOrder in customerOrderList)
+            {
+                customerOrder.MapEntity(this);
+            }
+
+            return customerOrderList.ToList();
         }
 
         public async Task<List<CartItemJoin>> GetJoinedCartItemListAsync(int cartId)
@@ -60,7 +93,7 @@ namespace DataLibrary.Models
 
         private async Task<IEnumerable<CartItemJoin>> GetJoinedPizzaCartItemsAsync(int cartId)
         {
-            string joinQuerySql = @"select c.Id, c.CartId, c.PricePerItem, c.Quantity, c.ProductCategory, c.Quantity,
+            string joinQuery = @"select c.Id, c.CartId, c.PricePerItem, c.Quantity, c.ProductCategory, c.Quantity,
                                     p.CartItemId, p.CheeseAmount, p.MenuPizzaCheeseId, p.MenuPizzaCrustFlavorId, p.MenuPizzaCrustId, p.MenuPizzaSauceId, p.SauceAmount, p.size
 	                                from CartItem c
 	                                inner join CartPizza p on c.Id = p.CartItemId
@@ -72,7 +105,7 @@ namespace DataLibrary.Models
             };
 
             IEnumerable<CartItemJoin> cartPizzaList = await connection.QueryAsync<CartItem, CartPizza, CartItemJoin>(
-                joinQuerySql,
+                joinQuery,
                 (cartItem, cartPizza) =>
                 {
                     CartItemJoin cartPizzaJoin = new CartItemJoin();
@@ -216,6 +249,12 @@ namespace DataLibrary.Models
             return pages;
         }
 
+        /// <summary>
+        /// Create a where clause for a parameters object.
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <param name="orderByColumn"></param>
+        /// <returns></returns>
         internal string GetSqlWhereConditions(object parameters, string orderByColumn)
         {
             string sqlWhereConditions = string.Empty;
