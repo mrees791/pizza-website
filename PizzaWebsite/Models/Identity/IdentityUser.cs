@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using DataLibrary.Models.Tables;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,24 +11,23 @@ namespace PizzaWebsite.Models.Identity
 {
     public class IdentityUser : IUser<int>, IRecordConverter<SiteUser>
     {
-        private int id;
-        private string userName;
-        private string passwordHash;
-        private string email;
-        private bool emailConfirmed;
-        private string securityStamp;
-        private string phoneNumber;
-        private bool phoneNumberConfirmed;
-        private bool twoFactorEnabled;
-        private DateTimeOffset lockoutEndDateUtc;
-        private int accessFailedCount;
-        private bool lockoutEnabled;
-
-        private string zipCode;
-        private int confirmOrderCartId;
-        private int currentCartId;
-        private bool isBanned;
-        private int orderConfirmationId;
+        public int Id { get; set; }
+        public string UserName { get; set; }
+        public string PasswordHash { get; set; }
+        public string Email { get; set; }
+        public bool EmailConfirmed { get; set; }
+        public string SecurityStamp { get; set; }
+        public string PhoneNumber { get; set; }
+        public bool PhoneNumberConfirmed { get; set; }
+        public bool TwoFactorEnabled { get; set; }
+        public DateTimeOffset LockoutEndDateUtc { get; set; }
+        public int AccessFailedCount { get; set; }
+        public bool LockoutEnabled { get; set; }
+        public string ZipCode { get; set; }
+        public int CurrentCartId { get; set; }
+        public int ConfirmOrderCardId { get; set; }
+        public bool IsBanned { get; set; }
+        public int OrderConfirmationId { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
         {
@@ -40,52 +40,34 @@ namespace PizzaWebsite.Models.Identity
         // This constructor will be used when users use external logins (UserLogin)
         public IdentityUser()
         {
-            lockoutEndDateUtc = DateTimeOffset.Now;
+            LockoutEndDateUtc = DateTimeOffset.Now;
         }
 
         public bool HasPassword()
         {
-            return !(string.IsNullOrEmpty(passwordHash));
+            return !(string.IsNullOrEmpty(PasswordHash));
         }
 
         public bool HasEmail()
         {
-            return !(string.IsNullOrEmpty(email));
+            return !(string.IsNullOrEmpty(Email));
         }
 
         public int IncrementAccessFailedCount()
         {
-            return ++accessFailedCount;
+            return ++AccessFailedCount;
         }
 
         public void ResetAccessFailedCount()
         {
-            accessFailedCount = 0;
+            AccessFailedCount = 0;
         }
-
-        public int Id { get => id; set => id = value; }
-        public string UserName { get => userName; set => userName = value; }
-        public string PasswordHash { get => passwordHash; set => passwordHash = value; }
-        public string Email { get => email; set => email = value; }
-        public bool EmailConfirmed { get => emailConfirmed; set => emailConfirmed = value; }
-        public string SecurityStamp { get => securityStamp; set => securityStamp = value; }
-        public string PhoneNumber { get => phoneNumber; set => phoneNumber = value; }
-        public bool PhoneNumberConfirmed { get => phoneNumberConfirmed; set => phoneNumberConfirmed = value; }
-        public bool TwoFactorEnabled { get => twoFactorEnabled; set => twoFactorEnabled = value; }
-        public DateTimeOffset LockoutEndDateUtc { get => lockoutEndDateUtc; set => lockoutEndDateUtc = value; }
-        public int AccessFailedCount { get => accessFailedCount; set => accessFailedCount = value; }
-        public bool LockoutEnabled { get => lockoutEnabled; set => lockoutEnabled = value; }
-        public string ZipCode { get => zipCode; set => zipCode = value; }
-        public int ConfirmOrderCartId { get => confirmOrderCartId; set => confirmOrderCartId = value; }
-        public int CurrentCartId { get => currentCartId; set => currentCartId = value; }
-        public bool IsBanned { get => isBanned; set => isBanned = value; }
-        public int OrderConfirmationId { get => orderConfirmationId; set => orderConfirmationId = value; }
 
         public SiteUser ToRecord()
         {
             return new SiteUser()
             {
-                AccessFailedCount = accessFailedCount,
+                AccessFailedCount = AccessFailedCount,
                 CurrentCartId = CurrentCartId,
                 Email = Email,
                 EmailConfirmed = EmailConfirmed,

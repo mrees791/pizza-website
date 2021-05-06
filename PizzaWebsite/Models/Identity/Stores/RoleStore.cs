@@ -47,16 +47,14 @@ namespace PizzaWebsite.Models.Identity.Stores
         public async Task<IdentityRole> FindByIdAsync(int roleId)
         {
             List<SiteRole> siteRoles = new List<SiteRole>(await pizzaDb.GetListAsync<SiteRole>(new { Id = roleId }));
-            List<IdentityRole> identityRoles = siteRoles.Select(sr => new IdentityRole(sr)).ToList();
-            IdentityRole currentRole = identityRoles.FirstOrDefault();
-
-            return currentRole;
+            List<IdentityRole> identityRoles = new List<IdentityRole>(siteRoles.Select(siteRole => new IdentityRole(siteRole)));
+            return identityRoles.FirstOrDefault();
         }
 
         public async Task<IdentityRole> FindByNameAsync(string roleName)
         {
             List<SiteRole> siteRoles = new List<SiteRole>(await pizzaDb.GetListAsync<SiteRole>(new { Name = roleName }));
-            List<IdentityRole> identityRoles = siteRoles.Select(sr => new IdentityRole(sr)).ToList();
+            List<IdentityRole> identityRoles = new List<IdentityRole>(siteRoles.Select(siteRole => new IdentityRole(siteRole)));
             IdentityRole currentRole = identityRoles.FirstOrDefault();
 
             return currentRole;
