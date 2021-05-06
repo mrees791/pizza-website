@@ -1,5 +1,5 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.OldTables;
+using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity;
 using PizzaWebsite.Models.Databases;
 using System;
@@ -28,22 +28,21 @@ namespace PizzaWebsite.Models.Identity.Stores
         IUserTwoFactorStore<IdentityUser, int>,
         IUserLockoutStore<IdentityUser, int>
     {
-        private PizzaDatabase database;
+        private PizzaDatabase pizzaDb;
 
-        public UserStore(PizzaDatabase database)
+        public UserStore(PizzaDatabase pizzaDb)
         {
-            this.database = database;
+            this.pizzaDb = pizzaDb;
         }
 
-        public Task CreateAsync(IdentityUser user)
+        public async Task CreateAsync(IdentityUser user)
         {
-            user.Id = database.Insert(user.ToEntity());
-            return Task.FromResult(0);
+            user.Id = await pizzaDb.InsertAsync(user.ToRecord());
         }
 
         public async Task AddToRoleAsync(IdentityUser user, string roleName)
         {
-            List<SiteRole> siteRoles = await database.GetListAsync<SiteRole>(new { Name = roleName });
+            List<SiteRole> siteRoles = new List<SiteRole>(await pizzaDb.GetListAsync<SiteRole>(new { Name = roleName }));
             SiteRole siteRole = siteRoles.FirstOrDefault();
 
             if (siteRole == null)
@@ -55,7 +54,7 @@ namespace PizzaWebsite.Models.Identity.Stores
             userRole.UserId = user.Id;
             userRole.RoleId = siteRole.Id;
 
-            database.Insert(userRole);
+            await pizzaDb.InsertAsync(userRole);
         }
 
         /// <summary>
@@ -70,12 +69,12 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public void Dispose()
         {
-            database.Dispose();
+            pizzaDb.Dispose();
         }
 
         public async Task<IdentityUser> FindByIdAsync(int userId)
         {
-            List<SiteUser> siteUsers = await database.GetListAsync<SiteUser>(new { Id = userId });
+            List<SiteUser> siteUsers = new List<SiteUser>(await pizzaDb.GetListAsync<SiteUser>(new { Id = userId }));
             SiteUser siteUser = siteUsers.FirstOrDefault();
 
             if (siteUser == null)
@@ -88,7 +87,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IdentityUser> FindByNameAsync(string userName)
         {
-            List<SiteUser> siteUsers = await database.GetListAsync<SiteUser>(new { UserName = userName });
+            List<SiteUser> siteUsers = new List<SiteUser>(await pizzaDb.GetListAsync<SiteUser>(new { UserName = userName }));
             SiteUser siteUser = siteUsers.FirstOrDefault();
 
             if (siteUser == null)
@@ -101,8 +100,8 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IList<string>> GetRolesAsync(IdentityUser user)
         {
-            List<SiteRole> siteRoles = await database.GetListAsync<SiteRole>();
-            List<UserRole> currentUserRoles = await database.GetListAsync<UserRole>(new { UserId = user.Id });
+            List<SiteRole> siteRoles = new List<SiteRole>(await pizzaDb.GetListAsync<SiteRole>());
+            List<UserRole> currentUserRoles = new List<UserRole>(await pizzaDb.GetListAsync<UserRole>(new { UserId = user.Id }));
             IList<string> currentUserRoleNames = new List<string>();
 
             foreach (UserRole userRole in currentUserRoles)
@@ -118,75 +117,74 @@ namespace PizzaWebsite.Models.Identity.Stores
         {
             IList<string> currentUserRoles = await GetRolesAsync(user);
             bool isInRole = currentUserRoles.Contains(roleName);
+
             return isInRole;
         }
 
         public async Task RemoveFromRoleAsync(IdentityUser user, string roleName)
         {
-            List<SiteRole> siteRoles = await database.GetListAsync<SiteRole>(new { Name = roleName });
+            List<SiteRole> siteRoles = new List<SiteRole>(await pizzaDb.GetListAsync<SiteRole>(new { Name = roleName }));
             SiteRole currentRole = siteRoles.FirstOrDefault();
 
             if (currentRole == null)
             {
-                throw new ArgumentException("Invalid role name: roleName");
+                throw new ArgumentException($"Invalid roleName: {roleName}");
             }
 
-            UserRole currentUserRole = (await database.GetListAsync<UserRole>(new { UserId = user.Id, RoleId = currentRole.Id })).FirstOrDefault();
+            UserRole currentUserRole = (await pizzaDb.GetListAsync<UserRole>(new { UserId = user.Id, RoleId = currentRole.Id })).FirstOrDefault();
 
             if (currentUserRole != null)
             {
-                database.Delete(currentUserRole);
+                await pizzaDb.DeleteAsync(currentUserRole);
             }
         }
 
-        public Task UpdateAsync(IdentityUser user)
+        public async Task UpdateAsync(IdentityUser user)
         {
-            database.Update(user.ToEntity());
-            return Task.FromResult(0);
+            await pizzaDb.UpdateAsync(user.ToRecord());
         }
 
-        public Task SetPasswordHashAsync(IdentityUser user, string passwordHash)
+        public async Task SetPasswordHashAsync(IdentityUser user, string passwordHash)
         {
             user.PasswordHash = passwordHash;
-            return Task.FromResult(0);
+            await Task.FromResult(0);
         }
 
-        public Task<string> GetPasswordHashAsync(IdentityUser user)
+        public async Task<string> GetPasswordHashAsync(IdentityUser user)
         {
-            return Task.FromResult(user.PasswordHash);
+            return await Task.FromResult(user.PasswordHash);
         }
 
-        public Task<bool> HasPasswordAsync(IdentityUser user)
+        public async Task<bool> HasPasswordAsync(IdentityUser user)
         {
-            return Task.FromResult(user.HasPassword());
+            return await Task.FromResult(user.HasPassword());
         }
 
-        public Task SetEmailAsync(IdentityUser user, string email)
+        public async Task SetEmailAsync(IdentityUser user, string email)
         {
             user.Email = email;
-            return Task.FromResult(0);
+            await Task.FromResult(0);
         }
 
-        public Task<string> GetEmailAsync(IdentityUser user)
+        public async Task<string> GetEmailAsync(IdentityUser user)
         {
-            return Task.FromResult(user.Email);
+            return await Task.FromResult(user.Email);
         }
 
-        public Task<bool> GetEmailConfirmedAsync(IdentityUser user)
+        public async Task<bool> GetEmailConfirmedAsync(IdentityUser user)
         {
-            return Task.FromResult(user.EmailConfirmed);
+            return await Task.FromResult(user.EmailConfirmed);
         }
 
-        public Task SetEmailConfirmedAsync(IdentityUser user, bool confirmed)
+        public async Task SetEmailConfirmedAsync(IdentityUser user, bool confirmed)
         {
             user.EmailConfirmed = confirmed;
-            return Task.FromResult(0);
+            await Task.FromResult(0);
         }
 
         public async Task<IdentityUser> FindByEmailAsync(string email)
         {
-            List<SiteUser> siteUsers = await database.GetListAsync<SiteUser>(new { Email = email });
-            SiteUser siteUser = siteUsers.FirstOrDefault();
+            SiteUser siteUser = await pizzaDb.GetSiteUserByEmailAsync(email);
 
             if (siteUser == null)
             {
@@ -198,12 +196,12 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IList<Claim>> GetClaimsAsync(IdentityUser user)
         {
-            List<UserClaim> userClaims = await database.GetListAsync<UserClaim>(new { UserId = user.Id });
-            IList<Claim> claims = userClaims.Select(uc => new Claim(uc.ClaimType, uc.ClaimValue)).ToList();
+            List<UserClaim> userClaims = new List<UserClaim>(await pizzaDb.GetListAsync<UserClaim>(new { UserId = user.Id }));
+            IList<Claim> claims = new List<Claim>(userClaims.Select(uc => new Claim(uc.ClaimType, uc.ClaimValue)));
             return claims;
         }
 
-        public Task AddClaimAsync(IdentityUser user, Claim claim)
+        public async Task AddClaimAsync(IdentityUser user, Claim claim)
         {
             UserClaim userClaim = new UserClaim()
             {
@@ -211,22 +209,21 @@ namespace PizzaWebsite.Models.Identity.Stores
                 ClaimType = claim.Type,
                 ClaimValue = claim.Value
             };
-            database.Insert(userClaim);
-            return Task.FromResult(0);
+            await pizzaDb.InsertAsync(userClaim);
         }
 
         public async Task RemoveClaimAsync(IdentityUser user, Claim claim)
         {
-            List<UserClaim> userClaims = await database.GetListAsync<UserClaim>(new { UserId = user.Id });
+            List<UserClaim> userClaims = new List<UserClaim>(await pizzaDb.GetListAsync<UserClaim>(new { UserId = user.Id }));
             UserClaim currentClaim = userClaims.Where(uc => uc.ClaimType == claim.Type && uc.ClaimValue == claim.Value).FirstOrDefault();
 
             if (currentClaim != null)
             {
-                database.Delete(currentClaim);
+                await pizzaDb.DeleteAsync(currentClaim);
             }
         }
 
-        public Task AddLoginAsync(IdentityUser user, UserLoginInfo login)
+        public async Task AddLoginAsync(IdentityUser user, UserLoginInfo login)
         {
             UserLogin userLogin = new UserLogin()
             {
@@ -234,32 +231,31 @@ namespace PizzaWebsite.Models.Identity.Stores
                 LoginProvider = login.LoginProvider,
                 ProviderKey = login.ProviderKey
             };
-            database.Insert(userLogin);
-            return Task.FromResult(0);
+            await pizzaDb.InsertAsync(userLogin);
         }
 
         public async Task RemoveLoginAsync(IdentityUser user, UserLoginInfo login)
         {
-            List<UserLogin> userLogins = await database.GetListAsync<UserLogin>(new { UserId = user.Id, LoginProvider = login.LoginProvider, ProviderKey = login.ProviderKey });
+            List<UserLogin> userLogins = new List<UserLogin>(await pizzaDb.GetListAsync<UserLogin>(
+                new { UserId = user.Id, LoginProvider = login.LoginProvider, ProviderKey = login.ProviderKey }));
             UserLogin currentUserLogin = userLogins.FirstOrDefault();
 
             if (currentUserLogin != null)
             {
-                database.Delete(currentUserLogin);
+                await pizzaDb.DeleteAsync(currentUserLogin);
             }
         }
 
         public async Task<IList<UserLoginInfo>> GetLoginsAsync(IdentityUser user)
         {
-            List<UserLogin> userLogins = await database.GetListAsync<UserLogin>(new { UserId = user.Id });
-            IList<UserLoginInfo> loginInfoList = userLogins.Select(ul => new UserLoginInfo(ul.LoginProvider, ul.ProviderKey)).ToList();
+            List<UserLogin> userLogins = new List<UserLogin>(await pizzaDb.GetListAsync<UserLogin>(new { UserId = user.Id }));
+            IList<UserLoginInfo> loginInfoList = new List<UserLoginInfo>(userLogins.Select(ul => new UserLoginInfo(ul.LoginProvider, ul.ProviderKey)));
             return loginInfoList;
         }
 
         public async Task<IdentityUser> FindAsync(UserLoginInfo login)
         {
-            List<UserLogin> userLogins = await database.GetListAsync<UserLogin>(new { LoginProvider = login.LoginProvider, ProviderKey = login.ProviderKey });
-            UserLogin currentUserLogin = userLogins.FirstOrDefault();
+            UserLogin currentUserLogin = await pizzaDb.GetUserLoginAsync(login.LoginProvider, login.ProviderKey);
 
             if (currentUserLogin == null)
             {
@@ -280,87 +276,87 @@ namespace PizzaWebsite.Models.Identity.Stores
             return login1.LoginProvider == login2.LoginProvider && login1.ProviderKey == login2.ProviderKey;
         }
 
-        public Task SetSecurityStampAsync(IdentityUser user, string stamp)
+        public async Task SetSecurityStampAsync(IdentityUser user, string stamp)
         {
             user.SecurityStamp = stamp;
-            return Task.FromResult(0);
+            await Task.FromResult(0);
         }
 
-        public Task<string> GetSecurityStampAsync(IdentityUser user)
+        public async Task<string> GetSecurityStampAsync(IdentityUser user)
         {
-            return Task.FromResult(user.SecurityStamp);
+            return await Task.FromResult(user.SecurityStamp);
         }
 
-        public Task SetPhoneNumberAsync(IdentityUser user, string phoneNumber)
+        public async Task SetPhoneNumberAsync(IdentityUser user, string phoneNumber)
         {
             user.PhoneNumber = phoneNumber;
-            return Task.FromResult(0);
+            await Task.FromResult(0);
         }
 
-        public Task<string> GetPhoneNumberAsync(IdentityUser user)
+        public async Task<string> GetPhoneNumberAsync(IdentityUser user)
         {
-            return Task.FromResult(user.PhoneNumber);
+            return await Task.FromResult(user.PhoneNumber);
         }
 
-        public Task<bool> GetPhoneNumberConfirmedAsync(IdentityUser user)
+        public async Task<bool> GetPhoneNumberConfirmedAsync(IdentityUser user)
         {
-            return Task.FromResult(user.PhoneNumberConfirmed);
+            return await Task.FromResult(user.PhoneNumberConfirmed);
         }
 
-        public Task SetPhoneNumberConfirmedAsync(IdentityUser user, bool confirmed)
+        public async Task SetPhoneNumberConfirmedAsync(IdentityUser user, bool confirmed)
         {
             user.PhoneNumberConfirmed = confirmed;
-            return Task.FromResult(0);
+            await Task.FromResult(0);
         }
 
-        public Task SetTwoFactorEnabledAsync(IdentityUser user, bool enabled)
+        public async Task SetTwoFactorEnabledAsync(IdentityUser user, bool enabled)
         {
             user.TwoFactorEnabled = enabled;
-            return Task.FromResult(0);
+            await Task.FromResult(0);
         }
 
-        public Task<bool> GetTwoFactorEnabledAsync(IdentityUser user)
+        public async Task<bool> GetTwoFactorEnabledAsync(IdentityUser user)
         {
-            return Task.FromResult(user.TwoFactorEnabled);
+            return await Task.FromResult(user.TwoFactorEnabled);
         }
 
-        public Task<DateTimeOffset> GetLockoutEndDateAsync(IdentityUser user)
+        public async Task<DateTimeOffset> GetLockoutEndDateAsync(IdentityUser user)
         {
-            return Task.FromResult(user.LockoutEndDateUtc);
+            return await Task.FromResult(user.LockoutEndDateUtc);
         }
 
-        public Task SetLockoutEndDateAsync(IdentityUser user, DateTimeOffset lockoutEnd)
+        public async Task SetLockoutEndDateAsync(IdentityUser user, DateTimeOffset lockoutEnd)
         {
             user.LockoutEndDateUtc = lockoutEnd;
-            return Task.FromResult(0);
+            await Task.FromResult(0);
         }
 
-        public Task<int> IncrementAccessFailedCountAsync(IdentityUser user)
+        public async Task<int> IncrementAccessFailedCountAsync(IdentityUser user)
         {
             int accessFailedCount = user.IncrementAccessFailedCount();
-            return Task.FromResult(accessFailedCount);
+            return await Task.FromResult(accessFailedCount);
         }
 
-        public Task ResetAccessFailedCountAsync(IdentityUser user)
+        public async Task ResetAccessFailedCountAsync(IdentityUser user)
         {
             user.ResetAccessFailedCount();
-            return Task.FromResult(0);
+            await Task.FromResult(0);
         }
 
-        public Task<int> GetAccessFailedCountAsync(IdentityUser user)
+        public async Task<int> GetAccessFailedCountAsync(IdentityUser user)
         {
-            return Task.FromResult(user.AccessFailedCount);
+            return await Task.FromResult(user.AccessFailedCount);
         }
 
-        public Task<bool> GetLockoutEnabledAsync(IdentityUser user)
+        public async Task<bool> GetLockoutEnabledAsync(IdentityUser user)
         {
-            return Task.FromResult(user.LockoutEnabled);
+            return await Task.FromResult(user.LockoutEnabled);
         }
 
-        public Task SetLockoutEnabledAsync(IdentityUser user, bool enabled)
+        public async Task SetLockoutEnabledAsync(IdentityUser user, bool enabled)
         {
             user.LockoutEnabled = enabled;
-            return Task.FromResult(0);
+            await Task.FromResult(0);
         }
     }
 }

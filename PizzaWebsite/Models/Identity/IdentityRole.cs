@@ -1,4 +1,4 @@
-﻿using DataLibrary.Models.OldTables;
+﻿using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Identity
 {
-    public class IdentityRole : IRole<int>, IEntityConverter<SiteRole>
+    public class IdentityRole : IRole<int>, IRecordConverter<SiteRole>
     {
         private int id;
 
@@ -16,9 +16,9 @@ namespace PizzaWebsite.Models.Identity
             Name = name;
         }
 
-        public IdentityRole(SiteRole dbModel)
+        public IdentityRole(SiteRole siteRole)
         {
-            FromEntity(dbModel);
+            FromRecord(siteRole);
         }
 
         public string Name { get; set; }
@@ -37,7 +37,7 @@ namespace PizzaWebsite.Models.Identity
             }
         }
 
-        public SiteRole ToEntity()
+        public SiteRole ToRecord()
         {
             return new SiteRole()
             {
@@ -46,10 +46,10 @@ namespace PizzaWebsite.Models.Identity
             };
         }
 
-        public void FromEntity(SiteRole dbModel)
+        public void FromRecord(SiteRole siteRole)
         {
-            Id = dbModel.Id;
-            Name = dbModel.Name;
+            Id = siteRole.Id;
+            Name = siteRole.Name;
         }
     }
 }

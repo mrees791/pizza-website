@@ -1,4 +1,5 @@
-﻿using DataLibrary.Models.OldTables;
+﻿using DataLibrary.Models.QueryFilters;
+using DataLibrary.Models.Tables;
 using PizzaWebsite.Models;
 using System;
 using System.Collections.Generic;
@@ -16,21 +17,21 @@ namespace PizzaWebsite.Controllers
         {
             var manageEmployeesVm = new ManagePagedListViewModel<ManageEmployeeViewModel>();
 
-            object searchFilters = new
+            EmployeeFilter searchFilter = new EmployeeFilter()
             {
                 Id = employeeId
             };
 
-            List<Employee> employeeEntities = await LoadPagedEntitiesAsync<Employee>(PizzaDb, Request, manageEmployeesVm.PaginationVm, page, rowsPerPage, "Id", searchFilters);
+            List<Employee> employeeList = await LoadPagedRecordsAsync<Employee>(page, rowsPerPage, "Id", searchFilter, PizzaDb, Request, manageEmployeesVm.PaginationVm);
 
-            foreach (Employee employeeEntity in employeeEntities)
+            foreach (Employee employee in employeeList)
             {
-                bool isManager = await UserManager.IsInRoleAsync(employeeEntity.UserId, "Manager");
+                bool isManager = await UserManager.IsInRoleAsync(employee.UserId, "Manager");
 
                 ManageEmployeeViewModel model = new ManageEmployeeViewModel()
                 {
-                    Id = employeeEntity.Id,
-                    CurrentlyEmployed = employeeEntity.CurrentlyEmployed,
+                    Id = employee.Id,
+                    CurrentlyEmployed = employee.CurrentlyEmployed,
                     IsManager = isManager
                 };
                 manageEmployeesVm.ItemViewModelList.Add(model);
@@ -41,13 +42,13 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> ManageEmployee(string id)
         {
-            Employee employeeEntity = await PizzaDb.GetAsync<Employee>(id);
-            bool isManager = await UserManager.IsInRoleAsync(employeeEntity.UserId, "Manager");
+            Employee employee = await PizzaDb.GetAsync<Employee>(id);
+            bool isManager = await UserManager.IsInRoleAsync(employee.UserId, "Manager");
 
             ManageEmployeeViewModel model = new ManageEmployeeViewModel()
             {
-                Id = employeeEntity.Id,
-                CurrentlyEmployed = employeeEntity.CurrentlyEmployed,
+                Id = employee.Id,
+                CurrentlyEmployed = employee.CurrentlyEmployed,
                 IsManager = isManager
             };
 
@@ -63,17 +64,17 @@ namespace PizzaWebsite.Controllers
                 return View(model);
             }
 
-            Employee employeeEntity = await PizzaDb.GetAsync<Employee>(model.Id);
-            employeeEntity.CurrentlyEmployed = model.CurrentlyEmployed;
-            PizzaDb.Update(employeeEntity);
+            Employee employee = await PizzaDb.GetAsync<Employee>(model.Id);
+            employee.CurrentlyEmployed = model.CurrentlyEmployed;
+            await PizzaDb.UpdateAsync(employee);
 
             if (model.IsManager)
             {
-                await UserManager.AddToRoleAsync(employeeEntity.UserId, "Manager");
+                await UserManager.AddToRoleAsync(employee.UserId, "Manager");
             }
             else
             {
-                await UserManager.RemoveFromRoleAsync(employeeEntity.UserId, "Manager");
+                await UserManager.RemoveFromRoleAsync(employee.UserId, "Manager");
             }
 
             ConfirmationViewModel confirmationModel = new ConfirmationViewModel();

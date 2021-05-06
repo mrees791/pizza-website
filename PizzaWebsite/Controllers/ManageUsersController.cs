@@ -1,4 +1,5 @@
-﻿using DataLibrary.Models.OldTables;
+﻿using DataLibrary.Models.QueryFilters;
+using DataLibrary.Models.Tables;
 using PizzaWebsite.Models;
 using System;
 using System.Collections.Generic;
@@ -16,22 +17,22 @@ namespace PizzaWebsite.Controllers
         {
             var manageUsersVm = new ManagePagedListViewModel<ManageUserViewModel>();
 
-            object searchFilters = new
+            SiteUserFilter searchFilter = new SiteUserFilter()
             {
                 UserName = userName,
                 Email = email
             };
 
-            List<SiteUser> userEntities = await LoadPagedEntitiesAsync<SiteUser>(PizzaDb, Request, manageUsersVm.PaginationVm, page, rowsPerPage, "UserName", searchFilters);
+            List<SiteUser> userList = await LoadPagedRecordsAsync<SiteUser>(page, rowsPerPage, "UserName", searchFilter, PizzaDb, Request, manageUsersVm.PaginationVm);
 
-            foreach (SiteUser userEntity in userEntities)
+            foreach (SiteUser user in userList)
             {
                 ManageUserViewModel model = new ManageUserViewModel()
                 {
-                    Id = userEntity.Id,
-                    Email = userEntity.Email,
-                    IsBanned = userEntity.IsBanned,
-                    UserName = userEntity.UserName
+                    Id = user.Id,
+                    Email = user.Email,
+                    IsBanned = user.IsBanned,
+                    UserName = user.UserName
                 };
                 manageUsersVm.ItemViewModelList.Add(model);
             }
@@ -41,15 +42,15 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> ManageUser(int? id)
         {
-            List<SiteUser> userEntities = await PizzaDb.GetListAsync<SiteUser>(new { Id = id.Value });
-            SiteUser userEntity = userEntities.FirstOrDefault();
+            List<SiteUser> userList = new List<SiteUser>(await PizzaDb.GetListAsync<SiteUser>(new { Id = id.Value }));
+            SiteUser user = userList.FirstOrDefault();
 
             ManageUserViewModel manageUserVm = new ManageUserViewModel()
             {
-                Id = userEntity.Id,
-                Email = userEntity.Email,
-                IsBanned = userEntity.IsBanned,
-                UserName = userEntity.UserName
+                Id = user.Id,
+                Email = user.Email,
+                IsBanned = user.IsBanned,
+                UserName = user.UserName
             };
             
             return View("ManageUser", manageUserVm);
@@ -64,12 +65,12 @@ namespace PizzaWebsite.Controllers
                 return View("ManageUser", model);
             }
 
-            List<SiteUser> userEntities = await PizzaDb.GetListAsync<SiteUser>(new { Id = model.Id });
-            SiteUser userEntity = userEntities.FirstOrDefault();
+            List<SiteUser> userList = new List<SiteUser>(await PizzaDb.GetListAsync<SiteUser>(new { Id = model.Id }));
+            SiteUser user = userList.FirstOrDefault();
 
             // Update user record
-            userEntity.IsBanned = model.IsBanned;
-            PizzaDb.Update(userEntity);
+            user.IsBanned = model.IsBanned;
+            await PizzaDb.UpdateAsync(user);
 
             ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
             confirmationModel.ConfirmationMessage = $"Your changes to {model.UserName} have been confirmed.";

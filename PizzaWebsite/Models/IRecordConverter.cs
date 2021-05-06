@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLibrary.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,12 +9,11 @@ namespace PizzaWebsite.Models
 {
     /// <summary>
     /// Converts a PizzaWebsite model to its DataLibrary equivalent.
-    /// This is used for creating view models for TEntity database records.
     /// </summary>
     // todo: Update documentation here
-    public interface IEntityConverter<TEntity> where TEntity : class, new()
+    public interface IRecordConverter<TRecord> where TRecord : Record, new()
     {
-        TEntity ToEntity();
-        void FromEntity(TEntity entity);
+        TRecord ToRecord();
+        void FromRecord(TRecord record);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.OldTables;
+using DataLibrary.Models.QueryFilters;
+using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
 using PizzaWebsite.Models;
 using PizzaWebsite.Models.PizzaBuilders;
@@ -17,45 +18,45 @@ namespace PizzaWebsite.Controllers
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
-            object searchFilters = new
+            MenuPizzaFilter searchFilter = new MenuPizzaFilter()
             {
                 PizzaName = name
             };
 
-            return await Index(page, rowsPerPage, searchFilters, "PizzaName");
+            return await Index(page, rowsPerPage, "PizzaName", searchFilter);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add(MenuPizzaBuilderViewModel model)
+        public async Task<ActionResult> Add(MenuPizzaBuilderViewModel model)
         {
-            return Add(model, model.Name);
+            return await Add(model, model.Name);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(MenuPizzaBuilderViewModel model)
+        public async Task<ActionResult> Edit(MenuPizzaBuilderViewModel model)
         {
-            return Edit(model, model.Name);
+            return await Edit(model, model.Name);
         }
 
-        protected override MenuPizzaBuilderViewModel EntityToViewModel(MenuPizza entity)
+        protected override async Task<MenuPizzaBuilderViewModel> RecordToViewModelAsync(MenuPizza record)
         {
             MenuPizzaBuilderViewModel model = new MenuPizzaBuilderViewModel();
-            model.CreateFromEntity(PizzaDb, entity);
+            await model.CreateFromEntityAsync(PizzaDb, record);
 
             return model;
         }
 
-        private void AddToppingsToEntity(MenuPizza entity, List<PizzaToppingViewModel> toppings)
+        private void AddToppingsToRecord(MenuPizza record, List<PizzaToppingViewModel> toppings)
         {
             foreach (PizzaToppingViewModel topping in toppings)
             {
                 if (topping.SelectedAmount != "None")
                 {
-                    entity.Toppings.Add(new MenuPizzaTopping()
+                    record.Toppings.Add(new MenuPizzaTopping()
                     {
-                        MenuPizzaId = entity.Id,
+                        MenuPizzaId = record.Id,
                         MenuPizzaToppingTypeId = topping.Id,
                         ToppingAmount = topping.SelectedAmount,
                         ToppingHalf = topping.SelectedToppingHalf
@@ -64,7 +65,7 @@ namespace PizzaWebsite.Controllers
             }
         }
 
-        protected override MenuPizza ViewModelToEntity(MenuPizzaBuilderViewModel model)
+        protected override MenuPizza ViewModelToRecord(MenuPizzaBuilderViewModel model)
         {
             MenuPizza entity = new MenuPizza()
             {
@@ -81,7 +82,7 @@ namespace PizzaWebsite.Controllers
                 SortOrder = model.SortOrder
             };
 
-            AddToppingsToEntity(entity, model.ToppingList);
+            AddToppingsToRecord(entity, model.ToppingList);
 
             return entity;
         }

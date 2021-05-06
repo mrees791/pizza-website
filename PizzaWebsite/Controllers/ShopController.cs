@@ -1,6 +1,5 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.OldJoins;
-using DataLibrary.Models.OldTables;
+using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
 using PizzaWebsite.Models;
 using PizzaWebsite.Models.Identity.Stores;
@@ -26,7 +25,7 @@ namespace PizzaWebsite.Controllers
 
         private async Task<bool> AuthorizedToModifyCartItemAsync(int cartItemId)
         {
-            return await PizzaDb.CmdUserOwnsCartItemAsync(await GetCurrentUserAsync(), cartItemId);
+            return await PizzaDb.Commands.UserOwnsCartItemAsync(await GetCurrentUserAsync(), cartItemId);
         }
 
         private async Task<CartPizzaBuilderViewModel> CreatePizzaBuilderVm(int cartItemId)

@@ -1,4 +1,5 @@
-﻿using DataLibrary.Models.OldTables;
+﻿using DataLibrary.Models.QueryFilters;
+using DataLibrary.Models.Tables;
 using PizzaWebsite.Models;
 using System;
 using System.Collections.Generic;
@@ -16,17 +17,17 @@ namespace PizzaWebsite.Controllers
         {
             var manageStoresVm = new ManagePagedListViewModel<ManageStoreViewModel>();
 
-            object searchFilters = new
+            StoreLocationFilter searchFilter = new StoreLocationFilter()
             {
                 Name = storeName,
                 PhoneNumber = phoneNumber
             };
 
-            List<StoreLocation> storeEntities = await LoadPagedEntitiesAsync<StoreLocation>(PizzaDb, Request, manageStoresVm.PaginationVm, page, rowsPerPage, "Name", searchFilters);
+            List<StoreLocation> storeList = await LoadPagedRecordsAsync<StoreLocation>(page, rowsPerPage, "Name", searchFilter, PizzaDb, Request, manageStoresVm.PaginationVm);
 
-            foreach (StoreLocation storeEntity in storeEntities)
+            foreach (StoreLocation store in storeList)
             {
-                ManageStoreViewModel model = EntityToViewModel(storeEntity);
+                ManageStoreViewModel model = RecordToViewModel(store);
                 manageStoresVm.ItemViewModelList.Add(model);
             }
 
@@ -41,15 +42,15 @@ namespace PizzaWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateStore(ManageStoreViewModel model)
+        public async Task<ActionResult> CreateStore(ManageStoreViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View("ManageStore", model);
             }
 
-            StoreLocation storeEntity = ViewModelToEntity(model);
-            PizzaDb.Insert(storeEntity);
+            StoreLocation store = ViewModelToEntity(model);
+            await PizzaDb.InsertAsync(store);
 
             ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
             confirmationModel.ConfirmationMessage = $"{model.Name} has been added to the database.";
@@ -60,23 +61,23 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> EditStore(int? id)
         {
-            List<StoreLocation> storeEntities = await PizzaDb.GetListAsync<StoreLocation>(new { Id = id.Value });
-            StoreLocation storeEntity = storeEntities.FirstOrDefault();
-            ManageStoreViewModel model = EntityToViewModel(storeEntity);
+            List<StoreLocation> storeList = new List<StoreLocation>(await PizzaDb.GetListAsync<StoreLocation>(new { Id = id.Value }));
+            StoreLocation store = storeList.FirstOrDefault();
+            ManageStoreViewModel model = RecordToViewModel(store);
 
             return View("ManageStore", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditStore(ManageStoreViewModel model)
+        public async Task<ActionResult> EditStore(ManageStoreViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View("ManageStore", model);
             }
 
-            PizzaDb.Update(ViewModelToEntity(model));
+            await PizzaDb.UpdateAsync(ViewModelToEntity(model));
 
             ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
             confirmationModel.ConfirmationMessage = $"Your changes to {model.Name} have been confirmed.";
@@ -85,18 +86,18 @@ namespace PizzaWebsite.Controllers
             return View("CreateEditConfirmation", confirmationModel);
         }
 
-        public ManageStoreViewModel EntityToViewModel(StoreLocation entity)
+        public ManageStoreViewModel RecordToViewModel(StoreLocation record)
         {
             return new ManageStoreViewModel()
             {
-                Id = entity.Id,
-                City = entity.City,
-                IsActiveLocation = entity.IsActiveLocation,
-                Name = entity.Name,
-                PhoneNumber = entity.PhoneNumber,
-                SelectedState = entity.State,
-                StreetAddress = entity.StreetAddress,
-                ZipCode = entity.ZipCode
+                Id = record.Id,
+                City = record.City,
+                IsActiveLocation = record.IsActiveLocation,
+                Name = record.Name,
+                PhoneNumber = record.PhoneNumber,
+                SelectedState = record.State,
+                StreetAddress = record.StreetAddress,
+                ZipCode = record.ZipCode
             };
         }
 

@@ -1,4 +1,5 @@
-﻿using DataLibrary.Models.OldTables;
+﻿using DataLibrary.Models.QueryFilters;
+using DataLibrary.Models.Tables;
 using PizzaWebsite.Models;
 using System;
 using System.Collections.Generic;
@@ -14,45 +15,45 @@ namespace PizzaWebsite.Controllers
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
-            object searchFilters = new
+            MenuPizzaCrustFlavorFilter searchFilter = new MenuPizzaCrustFlavorFilter()
             {
                 Name = name
             };
 
-            return await Index(page, rowsPerPage, searchFilters, "Name");
+            return await Index(page, rowsPerPage, "Name", searchFilter);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add(ManageMenuPizzaCrustFlavorViewModel model)
+        public async Task<ActionResult> Add(ManageMenuPizzaCrustFlavorViewModel model)
         {
-            return Add(model, model.Name);
+            return await Add(model, model.Name);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(ManageMenuPizzaCrustFlavorViewModel model)
+        public async Task<ActionResult> Edit(ManageMenuPizzaCrustFlavorViewModel model)
         {
-            return Edit(model, model.Name);
+            return await Edit(model, model.Name);
         }
 
-        protected override ManageMenuPizzaCrustFlavorViewModel EntityToViewModel(MenuPizzaCrustFlavor entity)
+        protected override async Task<ManageMenuPizzaCrustFlavorViewModel> RecordToViewModelAsync(MenuPizzaCrustFlavor record)
         {
-            return new ManageMenuPizzaCrustFlavorViewModel
+            return await Task.FromResult(new ManageMenuPizzaCrustFlavorViewModel
             {
-                Id = entity.Id,
-                AvailableForPurchase = entity.AvailableForPurchase,
-                Description = entity.Description,
-                HasMenuIcon = entity.HasMenuIcon,
-                HasPizzaBuilderImage = entity.HasPizzaBuilderImage,
-                Name = entity.Name,
-                MenuIconFile = entity.MenuIconFile,
-                PizzaBuilderImageFile = entity.PizzaBuilderImageFile,
-                SortOrder = entity.SortOrder
-            };
+                Id = record.Id,
+                AvailableForPurchase = record.AvailableForPurchase,
+                Description = record.Description,
+                HasMenuIcon = record.HasMenuIcon,
+                HasPizzaBuilderImage = record.HasPizzaBuilderImage,
+                Name = record.Name,
+                MenuIconFile = record.MenuIconFile,
+                PizzaBuilderImageFile = record.PizzaBuilderImageFile,
+                SortOrder = record.SortOrder
+            });
         }
 
-        protected override MenuPizzaCrustFlavor ViewModelToEntity(ManageMenuPizzaCrustFlavorViewModel model)
+        protected override MenuPizzaCrustFlavor ViewModelToRecord(ManageMenuPizzaCrustFlavorViewModel model)
         {
             return new MenuPizzaCrustFlavor()
             {

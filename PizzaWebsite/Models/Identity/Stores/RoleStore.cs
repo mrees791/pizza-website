@@ -1,5 +1,5 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.OldTables;
+using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity;
 using PizzaWebsite.Models.Databases;
 using System;
@@ -17,17 +17,16 @@ namespace PizzaWebsite.Models.Identity.Stores
     /// </summary>
     public class RoleStore : IRoleStore<IdentityRole, int>
     {
-        private PizzaDatabase database;
+        private PizzaDatabase pizzaDb;
 
-        public RoleStore(PizzaDatabase database)
+        public RoleStore(PizzaDatabase pizzaDb)
         {
-            this.database = database;
+            this.pizzaDb = pizzaDb;
         }
 
-        public Task CreateAsync(IdentityRole role)
+        public async Task CreateAsync(IdentityRole role)
         {
-            database.Insert(role.ToEntity());
-            return Task.FromResult(0);
+            await pizzaDb.InsertAsync(role.ToRecord());
         }
 
         /// <summary>
@@ -42,12 +41,12 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public void Dispose()
         {
-            database.Dispose();
+            pizzaDb.Dispose();
         }
 
         public async Task<IdentityRole> FindByIdAsync(int roleId)
         {
-            List<SiteRole> siteRoles = await database.GetListAsync<SiteRole>(new { Id = roleId });
+            List<SiteRole> siteRoles = new List<SiteRole>(await pizzaDb.GetListAsync<SiteRole>(new { Id = roleId }));
             List<IdentityRole> identityRoles = siteRoles.Select(sr => new IdentityRole(sr)).ToList();
             IdentityRole currentRole = identityRoles.FirstOrDefault();
 
@@ -56,17 +55,16 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IdentityRole> FindByNameAsync(string roleName)
         {
-            List<SiteRole> siteRoles = await database.GetListAsync<SiteRole>(new { Name = roleName });
+            List<SiteRole> siteRoles = new List<SiteRole>(await pizzaDb.GetListAsync<SiteRole>(new { Name = roleName }));
             List<IdentityRole> identityRoles = siteRoles.Select(sr => new IdentityRole(sr)).ToList();
             IdentityRole currentRole = identityRoles.FirstOrDefault();
 
             return currentRole;
         }
 
-        public Task UpdateAsync(IdentityRole role)
+        public async Task UpdateAsync(IdentityRole role)
         {
-            database.Update(role.ToEntity());
-            return Task.FromResult(0);
+            await pizzaDb.UpdateAsync(role.ToRecord());
         }
     }
 }

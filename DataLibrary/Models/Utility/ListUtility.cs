@@ -1,4 +1,4 @@
-﻿using DataLibrary.Models.OldTables;
+﻿using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +17,9 @@ namespace DataLibrary.Models.Utility
             };
         }
 
-        public static Dictionary<int, string> CreateCrustDictionary(PizzaDatabase pizzaDb)
+        public static async Task<Dictionary<int, string>> CreateCrustDictionaryAsync(PizzaDatabase pizzaDb)
         {
-            List<MenuPizzaCrust> crustList = pizzaDb.GetListAsync<MenuPizzaCrust>(new { AvailableForPurchase = true }, "SortOrder").Result;
+            List<MenuPizzaCrust> crustList = new List<MenuPizzaCrust>(await pizzaDb.GetListAsync<MenuPizzaCrust>("order by SortOrder", new { AvailableForPurchase = true }));
             Dictionary<int, string> crustListDictionary = new Dictionary<int, string>();
 
             foreach (MenuPizzaCrust crust in crustList)

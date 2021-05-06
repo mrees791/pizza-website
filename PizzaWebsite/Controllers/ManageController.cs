@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using DataLibrary.Models.OldTables;
+using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -22,8 +22,8 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> ManageAddresses()
         {
-            List<DeliveryAddress> addressList = await PizzaDb.GetListAsync<DeliveryAddress>(new { UserId = User.Identity.GetUserId<int>() });
             ManageAddressesViewModel viewModel = new ManageAddressesViewModel();
+            List<DeliveryAddress> addressList = new List<DeliveryAddress>(await PizzaDb.GetListAsync<DeliveryAddress>(new { UserId = User.Identity.GetUserId<int>() }));
 
             foreach (DeliveryAddress address in addressList)
             {
@@ -62,7 +62,7 @@ namespace PizzaWebsite.Controllers
 
             if (addressVm.IsNewRecord())
             {
-                PizzaDb.Insert(address);
+                await PizzaDb.InsertAsync(address);
             }
             else
             {
@@ -73,7 +73,7 @@ namespace PizzaWebsite.Controllers
                     throw new Exception($"Current user is not allowed to modify delivery address ID {addressVm.Id}.");
                 }
 
-                PizzaDb.Update(address);
+                await PizzaDb.UpdateAsync(address);
             }
 
             return RedirectToAction("ManageAddresses");
@@ -116,12 +116,12 @@ namespace PizzaWebsite.Controllers
                 throw new Exception($"Current user is not allowed to delete delivery address ID {addressId}.");
             }
 
-            PizzaDb.Delete<DeliveryAddress>(addressId);
+            await PizzaDb.DeleteAsync<DeliveryAddress>(addressId);
         }
 
         private async Task<bool> AuthorizedToModifyDeliveryAddressAsync(int addressId)
         {
-            return await PizzaDb.CmdUserOwnsDeliveryAddressAsync(User.Identity.GetUserId<int>(), addressId);
+            return await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId<int>(), addressId);
         }
 
         //

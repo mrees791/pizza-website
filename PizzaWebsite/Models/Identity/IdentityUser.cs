@@ -1,5 +1,4 @@
-﻿using DataLibrary.Models.OldTables;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Identity
 {
-    public class IdentityUser : IUser<int>, IEntityConverter<SiteUser>
+    public class IdentityUser : IUser<int>, IRecordConverter<SiteUser>
     {
         private int id;
         private string userName;
@@ -82,7 +81,7 @@ namespace PizzaWebsite.Models.Identity
         public bool IsBanned { get => isBanned; set => isBanned = value; }
         public int OrderConfirmationId { get => orderConfirmationId; set => orderConfirmationId = value; }
 
-        public SiteUser ToEntity()
+        public SiteUser ToRecord()
         {
             return new SiteUser()
             {
@@ -105,7 +104,7 @@ namespace PizzaWebsite.Models.Identity
             };
         }
 
-        public void FromEntity(SiteUser dbModel)
+        public void FromRecord(SiteUser dbModel)
         {
             AccessFailedCount = dbModel.AccessFailedCount;
             CurrentCartId = dbModel.CurrentCartId;
@@ -127,7 +126,7 @@ namespace PizzaWebsite.Models.Identity
 
         public IdentityUser(SiteUser dbModel)
         {
-            FromEntity(dbModel);
+            FromRecord(dbModel);
         }
     }
 }

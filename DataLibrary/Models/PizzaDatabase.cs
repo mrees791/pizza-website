@@ -1,9 +1,8 @@
 ﻿using Dapper;
-using DataLibrary.Models.BaseClasses;
-using DataLibrary.Models.Interfaces;
-using DataLibrary.Models.OldJoins;
-using DataLibrary.Models.OldTables;
+using DataLibrary.Models.Joins;
 using DataLibrary.Models.QueryFilters;
+using DataLibrary.Models.Tables;
+using DataLibrary.Models.Utility;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -73,7 +72,7 @@ namespace DataLibrary.Models
 
             foreach (CustomerOrderJoin customerOrder in customerOrderList)
             {
-                customerOrder.MapEntity(this);
+                await customerOrder.MapEntityAsync(this);
             }
 
             return customerOrderList.ToList();
@@ -115,7 +114,7 @@ namespace DataLibrary.Models
 
             foreach (CartItemJoin cartPizza in cartPizzaList)
             {
-                cartPizza.MapEntity(this);
+                await cartPizza.MapEntityAsync(this);
             }
 
             return cartPizzaList;
@@ -128,9 +127,49 @@ namespace DataLibrary.Models
             return record;
         }
 
+        public async Task<SiteUser> GetSiteUserByEmailAsync(string email, IDbTransaction transaction = null)
+        {
+            string sql = SqlUtility.GetSiteUserSelectSql() + "where Email = @Email";
+            object parameters = new
+            {
+                Email = email
+            };
+
+            SiteUser user = await connection.QuerySingleOrDefaultAsync<SiteUser>(sql, parameters, transaction);
+            if (user != null)
+            {
+                await user.MapEntityAsync(this, transaction);
+            }
+
+            return user;
+        }
+
+        public async Task<UserLogin> GetUserLoginAsync(string loginProvider, string providerKey, IDbTransaction transaction = null)
+        {
+            string sql = SqlUtility.GetUserLoginSelectSql() + "where LoginProvider = @LoginProvider and ProviderKey = @ProviderKey";
+            object parameters = new
+            {
+                LoginProvider = loginProvider,
+                ProviderKey = providerKey
+            };
+
+            UserLogin userLogin = await connection.QuerySingleOrDefaultAsync<UserLogin>(sql, parameters, transaction);
+            if (userLogin != null)
+            {
+                await userLogin.MapEntityAsync(this, transaction);
+            }
+
+            return userLogin;
+        }
+
         public async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(IDbTransaction transaction = null) where TRecord : Record
         {
             return await GetListAsync<TRecord>(new { }, transaction);
+        }
+
+        internal async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(string conditions, object parameters, IDbTransaction transaction = null) where TRecord : Record
+        {
+            return await connection.GetListAsync<TRecord>(conditions, parameters, transaction);
         }
 
         public async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(object whereConditions, IDbTransaction transaction = null) where TRecord : Record
@@ -223,14 +262,14 @@ namespace DataLibrary.Models
             return rowsUpdated;
         }
 
-        internal async Task<int> DeleteAsync<TRecord>(object id, IDbTransaction transaction = null) where TRecord : Record
-        {
-            return await connection.DeleteAsync<TRecord>(id, transaction);
-        }
-
-        public async Task<int> DeleteAsync<TRecord>(object id) where TRecord : Record
+        public async Task<int> DeleteByIdAsync<TRecord>(object id, IDbTransaction transaction = null) where TRecord : Record
         {
             return await connection.DeleteAsync<TRecord>(id, null);
+        }
+
+        public async Task<int> DeleteAsync(Record record, IDbTransaction transaction = null)
+        {
+            return await connection.DeleteAsync(record, transaction);
         }
 
         internal async Task<int> DeleteListAsync<TRecord>(object whereConditions, IDbTransaction transaction = null) where TRecord : Record

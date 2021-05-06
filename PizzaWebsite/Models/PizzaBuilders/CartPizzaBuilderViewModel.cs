@@ -1,5 +1,5 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.OldTables;
+using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
 using System;
 using System.Collections.Generic;
@@ -37,7 +37,7 @@ namespace PizzaWebsite.Models.PizzaBuilders
         {
             await base.LoadBuilderListsAsync(pizzaDb, toppings);
 
-            CrustList = ListUtility.CreateCrustDictionary(pizzaDb);
+            CrustList = await ListUtility.CreateCrustDictionaryAsync(pizzaDb);
             SizeList = ListUtility.GetPizzaSizeList();
             QuantityList = ListUtility.CreateQuantityList();
         }
@@ -81,7 +81,7 @@ namespace PizzaWebsite.Models.PizzaBuilders
             await LoadBuilderListsAsync(pizzaDb, new List<PizzaTopping>());
         }
 
-        public async Task CreateFromEntitiesAsync(PizzaDatabase pizzaDb, CartItem cartItem, CartPizza cartPizza)
+        public async Task CreateFromRecordsAsync(PizzaDatabase pizzaDb, CartItem cartItem, CartPizza cartPizza)
         {
             Id = cartItem.Id;
             SelectedQuantity = cartItem.Quantity;

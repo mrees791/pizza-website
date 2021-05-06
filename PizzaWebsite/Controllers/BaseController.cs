@@ -1,6 +1,6 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.Interfaces;
-using DataLibrary.Models.OldTables;
+using DataLibrary.Models.QueryFilters;
+using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity.Owin;
 using PizzaWebsite.Models;
 using System;
@@ -54,8 +54,8 @@ namespace PizzaWebsite.Controllers
             }
         }
 
-        protected async Task<List<TEntity>> LoadPagedEntitiesAsync<TEntity>(PizzaDatabase database, HttpRequestBase request, PaginationViewModel paginationVm,
-            int? page, int? rowsPerPage, string sortColumnName, object searchFilters) where TEntity : IRecord
+        protected async Task<List<TRecord>> LoadPagedRecordsAsync<TRecord>(int? page, int? rowsPerPage, string orderByColumn,
+            QueryFilterBase searchFilter, PizzaDatabase database, HttpRequestBase request, PaginationViewModel paginationVm) where TRecord : Record
         {
             // Set default values
             if (!page.HasValue)
@@ -67,9 +67,10 @@ namespace PizzaWebsite.Controllers
                 rowsPerPage = 10;
             }
 
-            int totalNumberOfItems = await database.GetNumberOfRecords<TEntity>(searchFilters);
-            int totalPages = await database.GetNumberOfPagesAsync<TEntity>(searchFilters, rowsPerPage.Value);
-            List<TEntity> entities = await database.GetListPagedAsync<TEntity>(searchFilters, page.Value, rowsPerPage.Value, sortColumnName);
+            List<TRecord> recordList = new List<TRecord>();
+            int totalNumberOfItems = await database.GetNumberOfRecordsAsync<TRecord>(searchFilter);
+            int totalPages = await database.GetNumberOfPagesAsync<TRecord>(searchFilter, rowsPerPage.Value);
+            recordList.AddRange(await database.GetPagedListAsync<TRecord>(page.Value, rowsPerPage.Value, orderByColumn, searchFilter));
 
             // Navigation pane
             paginationVm.QueryString = request.QueryString;
@@ -78,13 +79,12 @@ namespace PizzaWebsite.Controllers
             paginationVm.TotalPages = totalPages;
             paginationVm.TotalNumberOfItems = totalNumberOfItems;
 
-            return entities;
+            return recordList;
         }
 
         protected async Task<SiteUser> GetCurrentUserAsync()
         {
-            List<SiteUser> users = await PizzaDb.GetListAsync<SiteUser>(new { UserName = User.Identity.Name });
-            return users.FirstOrDefault();
+            return await PizzaDb.GetAsync<SiteUser>(new { UserName = User.Identity.Name });
         }
 
         protected override void Dispose(bool disposing)

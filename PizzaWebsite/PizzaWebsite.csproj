@@ -185,7 +185,7 @@
     <Compile Include="Models\Databases\DatabaseContext.cs" />
     <Compile Include="Models\Geography\State.cs" />
     <Compile Include="Models\Geography\StateListCreator.cs" />
-    <Compile Include="Models\IEntityConverter.cs" />
+    <Compile Include="Models\IRecordConverter.cs" />
     <Compile Include="Models\Identity\IdentityRole.cs" />
     <Compile Include="Models\Identity\IdentityUser.cs" />
     <Compile Include="Models\Identity\Stores\RoleStore.cs" />

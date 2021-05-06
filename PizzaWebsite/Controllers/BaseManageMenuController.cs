@@ -1,4 +1,5 @@
-﻿using DataLibrary.Models.Interfaces;
+﻿using DataLibrary.Models;
+using DataLibrary.Models.QueryFilters;
 using PizzaWebsite.Models;
 using System;
 using System.Collections.Generic;
@@ -10,17 +11,17 @@ using System.Web.Mvc;
 namespace PizzaWebsite.Controllers
 {
     [Authorize(Roles = "Admin,Manager")]
-    public abstract class BaseManageMenuController<TEntity, TViewModel> : BaseController where TEntity : class, IRecord, new() where TViewModel : class, new()
+    public abstract class BaseManageMenuController<TRecord, TViewModel> : BaseController where TRecord : Record, new() where TViewModel : class, new()
     {
-        protected async Task<ActionResult> Index(int? page, int? rowsPerPage, object searchFilters, string sortColumn)
+        protected async Task<ActionResult> Index(int? page, int? rowsPerPage, string orderByColumn, QueryFilterBase searchFilter)
         {
             var viewModelList = new ManagePagedListViewModel<TViewModel>();
 
-            List<TEntity> entityList = await LoadPagedEntitiesAsync<TEntity>(PizzaDb, Request, viewModelList.PaginationVm, page, rowsPerPage, sortColumn, searchFilters);
+            List<TRecord> recordList = await LoadPagedRecordsAsync<TRecord>(page, rowsPerPage, orderByColumn, searchFilter, PizzaDb, Request, viewModelList.PaginationVm);
 
-            foreach (TEntity entity in entityList)
+            foreach (TRecord record in recordList)
             {
-                viewModelList.ItemViewModelList.Add(EntityToViewModel(entity));
+                viewModelList.ItemViewModelList.Add(await RecordToViewModelAsync(record));
             }
 
             return View(viewModelList);
@@ -28,19 +29,19 @@ namespace PizzaWebsite.Controllers
 
         public virtual ActionResult Add()
         {
-            return View("Manage", EntityToViewModel(new TEntity()));
+            return View("Manage", RecordToViewModelAsync(new TRecord()));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        protected ActionResult Add(TViewModel model, string modelName)
+        protected async Task<ActionResult> Add(TViewModel model, string modelName)
         {
             if (!ModelState.IsValid)
             {
                 return View("Manage", model);
             }
 
-            PizzaDb.Insert(ViewModelToEntity(model));
+            await PizzaDb.InsertAsync(ViewModelToRecord(model));
 
             ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
             confirmationModel.ConfirmationMessage = $"{modelName} has been added to the database.";
@@ -51,22 +52,22 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> Edit(int? id)
         {
-            TEntity entity = await PizzaDb.GetAsync<TEntity>(id.Value);
-            TViewModel model = EntityToViewModel(entity);
+            TRecord record = await PizzaDb.GetAsync<TRecord>(id.Value);
+            TViewModel model = await RecordToViewModelAsync(record);
 
             return View("Manage", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        protected ActionResult Edit(TViewModel model, string modelName)
+        protected async Task<ActionResult> Edit(TViewModel model, string modelName)
         {
             if (!ModelState.IsValid)
             {
                 return View("Manage", model);
             }
 
-            PizzaDb.Update(ViewModelToEntity(model));
+            await PizzaDb.UpdateAsync(ViewModelToRecord(model));
 
             ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
             confirmationModel.ConfirmationMessage = $"Your changes to {modelName} have been confirmed.";
@@ -75,7 +76,7 @@ namespace PizzaWebsite.Controllers
             return View("CreateEditConfirmation", confirmationModel);
         }
 
-        protected abstract TViewModel EntityToViewModel(TEntity entity);
-        protected abstract TEntity ViewModelToEntity(TViewModel model);
+        protected abstract Task<TViewModel> RecordToViewModelAsync(TRecord record);
+        protected abstract TRecord ViewModelToRecord(TViewModel model);
     }
 }

@@ -1,6 +1,9 @@
-﻿using DataLibrary.Models.OldTables;
+﻿using Dapper;
+using DataLibrary.Models.Joins;
+using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,23 +22,23 @@ namespace DataLibrary.Models
             this.pizzaDb = pizzaDb;
         }
 
-        public async Task CmdCheckoutCartAsync(SiteUser siteUser)
+        public async Task CheckoutCartAsync(SiteUser siteUser)
         {
-            List<CartItemJoin> cartItems = await GetJoinedCartItemListAsync(siteUser.CurrentCartId);
+            List<CartItemJoin> cartItems = new List<CartItemJoin>(await pizzaDb.GetJoinedCartItemListAsync(siteUser.CurrentCartId));
 
-            using (var transaction = connection.BeginTransaction())
+            using (var transaction = pizzaDb.Connection.BeginTransaction())
             {
                 siteUser.OrderConfirmationId++;
-                siteUser.Update(this, transaction);
-                CmdCloneCart(cartItems, siteUser.ConfirmOrderCartId, transaction);
+                await siteUser.UpdateAsync(pizzaDb, transaction);
+                await CloneCart(cartItems, siteUser.ConfirmOrderCartId, transaction);
 
                 transaction.Commit();
             }
         }
 
-        public async Task<bool> CmdUserOwnsDeliveryAddressAsync(int userId, int deliveryAddressId)
+        public async Task<bool> UserOwnsDeliveryAddressAsync(int userId, int deliveryAddressId)
         {
-            DeliveryAddress address = await GetAsync<DeliveryAddress>(deliveryAddressId);
+            DeliveryAddress address = await pizzaDb.GetAsync<DeliveryAddress>(deliveryAddressId);
 
             if (address != null)
             {
@@ -48,9 +51,9 @@ namespace DataLibrary.Models
             return false;
         }
 
-        public async Task<bool> CmdUserOwnsCartItemAsync(SiteUser user, int cartItemId)
+        public async Task<bool> UserOwnsCartItemAsync(SiteUser user, int cartItemId)
         {
-            List<CartItem> userCartItems = await GetListAsync<CartItem>(new { CartId = user.CurrentCartId });
+            List<CartItem> userCartItems = new List<CartItem>(await pizzaDb.GetListAsync<CartItem>(new { CartId = user.CurrentCartId }));
 
             foreach (CartItem cartItem in userCartItems)
             {
@@ -63,25 +66,25 @@ namespace DataLibrary.Models
             return false;
         }
 
-        public int CmdDeleteAllCartItems(int cartId, IDbTransaction transaction)
+        public async Task<int> DeleteAllCartItemsAsync(int cartId, IDbTransaction transaction)
         {
             string deleteQuerySql = @"delete from dbo.CartItem where CartId = @CartId;";
-            return connection.Execute(deleteQuerySql, new { CartId = cartId }, transaction);
+            return await pizzaDb.Connection.ExecuteAsync(deleteQuerySql, new { CartId = cartId }, transaction);
         }
 
-        private void CmdCloneCart(List<CartItemJoin> cartItems, int destinationCartId, IDbTransaction transaction = null)
+        private async Task CloneCart(List<CartItemJoin> cartItems, int destinationCartId, IDbTransaction transaction = null)
         {
-            CmdDeleteAllCartItems(destinationCartId, transaction);
+            await DeleteAllCartItemsAsync(destinationCartId, transaction);
 
             foreach (CartItemJoin cartItem in cartItems)
             {
                 cartItem.CartItem.Id = 0;
                 cartItem.CartItem.CartId = destinationCartId;
-                cartItem.Insert(this, transaction);
+                await cartItem.InsertAsync(pizzaDb, transaction);
             }
         }
 
-        public int CmdMoveCartItems(int sourceCartId, int destinationCartId, IDbTransaction transaction = null)
+        public async Task<int> MoveCartItems(int sourceCartId, int destinationCartId, IDbTransaction transaction = null)
         {
             string updateQuerySql = @"update dbo.CartItem set CartId = @DestinationCartId where CartId = @SourceCartId";
 
@@ -91,10 +94,10 @@ namespace DataLibrary.Models
                 DestinationCartId = destinationCartId
             };
 
-            return connection.Execute(updateQuerySql, queryParameters, transaction);
+            return await pizzaDb.Connection.ExecuteAsync(updateQuerySql, queryParameters, transaction);
         }
 
-        public async Task<int> CmdUpdateCartItemQuantityAsync(int cartItemId, int quantity, IDbTransaction transaction = null)
+        public async Task<int> UpdateCartItemQuantityAsync(int cartItemId, int quantity, IDbTransaction transaction = null)
         {
             string updateQuerySql = @"update dbo.CartItem set Quantity = @Quantity where Id = @Id;";
 
@@ -104,7 +107,7 @@ namespace DataLibrary.Models
                 Quantity = quantity
             };
 
-            return await connection.ExecuteAsync(updateQuerySql, queryParameters, transaction);
+            return await pizzaDb.Connection.ExecuteAsync(updateQuerySql, queryParameters, transaction);
         }
     }
 }

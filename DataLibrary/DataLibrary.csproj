@@ -74,43 +74,35 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\BaseClasses\Record.cs" />
-    <Compile Include="Models\Interfaces\IRecord.cs" />
-    <Compile Include="Models\Interfaces\IRecordCartItemType.cs" />
-    <Compile Include="Models\OldJoins\CartItemJoin.cs" />
-    <Compile Include="Models\OldJoins\CustomerOrderJoin.cs" />
+    <Compile Include="Models\CartItemTypeRecord.cs" />
+    <Compile Include="Models\Joins\CartItemJoin.cs" />
+    <Compile Include="Models\Joins\CustomerOrderJoin.cs" />
+    <Compile Include="Models\QueryFilters\EmployeeFilter.cs" />
+    <Compile Include="Models\QueryFilters\MenuPizzaFilter.cs" />
+    <Compile Include="Models\QueryFilters\MenuPizzaCheeseFilter.cs" />
+    <Compile Include="Models\QueryFilters\MenuPizzaCrustFilter.cs" />
+    <Compile Include="Models\QueryFilters\MenuPizzaCrustFlavorFilter.cs" />
+    <Compile Include="Models\QueryFilters\MenuPizzaSauceFilter.cs" />
+    <Compile Include="Models\QueryFilters\MenuPizzaToppingTypeFilter.cs" />
+    <Compile Include="Models\QueryFilters\QueryFilterBase.cs" />
+    <Compile Include="Models\QueryFilters\SiteUserFilter.cs" />
+    <Compile Include="Models\QueryFilters\StoreLocationFilter.cs" />
+    <Compile Include="Models\Record.cs" />
     <Compile Include="Models\OrderPhase.cs" />
     <Compile Include="Models\PizzaDatabase.cs" />
     <Compile Include="Models\PizzaDatabaseCommands.cs" />
     <Compile Include="Models\PizzaTopping.cs" />
     <Compile Include="Models\ProductCategory.cs" />
-    <Compile Include="Models\OldTables\Cart.cs" />
-    <Compile Include="Models\OldTables\CartItem.cs" />
-    <Compile Include="Models\OldTables\CartPizza.cs" />
-    <Compile Include="Models\OldTables\CartPizzaTopping.cs" />
-    <Compile Include="Models\OldTables\CustomerOrder.cs" />
-    <Compile Include="Models\OldTables\DeliveryAddress.cs" />
-    <Compile Include="Models\OldTables\DeliveryInfo.cs" />
-    <Compile Include="Models\OldTables\Employee.cs" />
-    <Compile Include="Models\OldTables\EmployeeLocation.cs" />
-    <Compile Include="Models\OldTables\MenuPizza.cs" />
-    <Compile Include="Models\OldTables\MenuPizzaCheese.cs" />
-    <Compile Include="Models\OldTables\MenuPizzaCrust.cs" />
-    <Compile Include="Models\OldTables\MenuPizzaCrustFlavor.cs" />
-    <Compile Include="Models\OldTables\MenuPizzaSauce.cs" />
-    <Compile Include="Models\OldTables\MenuPizzaTopping.cs" />
-    <Compile Include="Models\OldTables\MenuPizzaToppingType.cs" />
-    <Compile Include="Models\OldTables\SiteRole.cs" />
-    <Compile Include="Models\OldTables\SiteUser.cs" />
-    <Compile Include="Models\OldTables\StoreLocation.cs" />
-    <Compile Include="Models\OldTables\UserClaim.cs" />
-    <Compile Include="Models\OldTables\UserLogin.cs" />
-    <Compile Include="Models\OldTables\UserRole.cs" />
     <Compile Include="Models\ColumnValuePair.cs" />
-    <Compile Include="Models\SearchConditionsList.cs" />
-    <Compile Include="Models\SearchFilterList.cs" />
     <Compile Include="Models\Tables\Cart.cs" />
     <Compile Include="Models\Tables\CartItem.cs" />
+    <Compile Include="Models\Tables\CartPizza.cs" />
+    <Compile Include="Models\Tables\CartPizzaTopping.cs" />
+    <Compile Include="Models\Tables\CustomerOrder.cs" />
+    <Compile Include="Models\Tables\DeliveryAddress.cs" />
+    <Compile Include="Models\Tables\DeliveryInfo.cs" />
+    <Compile Include="Models\Tables\Employee.cs" />
+    <Compile Include="Models\Tables\EmployeeLocation.cs" />
     <Compile Include="Models\Tables\MenuPizza.cs" />
     <Compile Include="Models\Tables\MenuPizzaCheese.cs" />
     <Compile Include="Models\Tables\MenuPizzaCrust.cs" />
@@ -120,6 +112,7 @@
     <Compile Include="Models\Tables\MenuPizzaToppingType.cs" />
     <Compile Include="Models\Tables\SiteRole.cs" />
     <Compile Include="Models\Tables\SiteUser.cs" />
+    <Compile Include="Models\Tables\StoreLocation.cs" />
     <Compile Include="Models\Tables\UserClaim.cs" />
     <Compile Include="Models\Tables\UserLogin.cs" />
     <Compile Include="Models\Tables\UserRole.cs" />
@@ -129,8 +122,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\Joins\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
