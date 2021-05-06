@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using DataLibrary.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("SiteUser")]
-    public class SiteUser : IRecord
+    public class SiteUser : Record
     {
         [Key]
         public int Id { get; set; }
@@ -31,41 +30,41 @@ namespace DataLibrary.Models.Tables
         public int AccessFailedCount { get; set; }
         public string UserName { get; set; }
 
-        public SiteUser()
-        {
-        }
-
-        public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
-        {
-            Cart currentCart = new Cart();
-            Cart confirmOrderCart = new Cart();
-            currentCart.Insert(pizzaDb, transaction);
-            confirmOrderCart.Insert(pizzaDb, transaction);
-            CurrentCartId = currentCart.Id;
-            ConfirmOrderCartId = confirmOrderCart.Id;
-            Id = pizzaDb.Connection.Insert(this, transaction).Value;
-        }
-
-        public dynamic GetId()
+        public override dynamic GetId()
         {
             return Id;
         }
 
-        public void MapEntity(PizzaDatabase pizzaDb)
+        internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
+            // Create user's carts
+            Cart currentCart = new Cart();
+            Cart confirmOrderCart = new Cart();
+            CurrentCartId = await currentCart.InsertAsync(pizzaDb, transaction);
+            ConfirmOrderCartId = await confirmOrderCart.InsertAsync(pizzaDb, transaction);
+
+            // Insert user record
+            int? id = await pizzaDb.Connection.InsertAsync(this, transaction);
+            Id = id.Value;
+            return Id;
         }
 
-        public bool InsertRequiresTransaction()
+        internal override bool InsertRequiresTransaction()
         {
             return true;
         }
 
-        public int Update(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        internal override async Task MapEntityAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            return pizzaDb.Connection.Update(this, transaction);
+            await Task.FromResult(0);
         }
 
-        public bool UpdateRequiresTransaction()
+        internal override async Task<int> UpdateAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        {
+            return await pizzaDb.Connection.UpdateAsync(this, transaction);
+        }
+
+        internal override bool UpdateRequiresTransaction()
         {
             return false;
         }

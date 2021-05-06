@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using DataLibrary.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,37 +9,41 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("Cart")]
-    public class Cart : IRecord
+    public class Cart : Record
     {
         [Key]
         public int Id { get; set; }
 
-        public dynamic GetId()
+        public override dynamic GetId()
         {
             return Id;
         }
 
-        public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            // We had to use Query<int> instead of Insert because the Insert method will not work with SQL DEFAULT VALUES.
-            Id = pizzaDb.Connection.Query<int>("INSERT INTO Cart OUTPUT Inserted.Id DEFAULT VALUES;", null, transaction).Single();
+            // We had to use QueryAsync<int> instead of InsertAsync because the InsertAsync method will not work with SQL DEFAULT VALUES.
+            IEnumerable<int> result = await pizzaDb.Connection.QueryAsync<int>("INSERT INTO Cart OUTPUT Inserted.Id DEFAULT VALUES;", null, transaction);
+            Id = result.First();
+
+            return Id;
         }
 
-        public bool InsertRequiresTransaction()
+        internal override bool InsertRequiresTransaction()
         {
             return false;
         }
 
-        public void MapEntity(PizzaDatabase pizzaDb)
+        internal override async Task MapEntityAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
+            await Task.FromResult(0);
         }
 
-        public int Update(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        internal override async Task<int> UpdateAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            return pizzaDb.Connection.Update(this);
+            return await pizzaDb.Connection.UpdateAsync(this, transaction);
         }
 
-        public bool UpdateRequiresTransaction()
+        internal override bool UpdateRequiresTransaction()
         {
             return false;
         }

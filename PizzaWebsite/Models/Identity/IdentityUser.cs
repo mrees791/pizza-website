@@ -1,4 +1,4 @@
-﻿using DataLibrary.Models.Tables;
+﻿using DataLibrary.Models.OldTables;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;

@@ -1,6 +1,4 @@
 ﻿using Dapper;
-using DataLibrary.Models.Interfaces;
-using DataLibrary.Models.Joins;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,7 +9,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("MenuPizza")]
-    public class MenuPizza : IRecord
+    public class MenuPizza : Record
     {
         [Key]
         public int Id { get; set; }
@@ -32,85 +30,52 @@ namespace DataLibrary.Models.Tables
             Toppings = new List<MenuPizzaTopping>();
         }
 
-        public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
-        {
-            Id = pizzaDb.Connection.Insert(this, transaction).Value;
-
-            foreach (MenuPizzaTopping topping in Toppings)
-            {
-                topping.MenuPizzaId = Id;
-                topping.Insert(pizzaDb, transaction);
-            }
-        }
-
-        public dynamic GetId()
+        public override dynamic GetId()
         {
             return Id;
         }
 
-        public void MapEntity(PizzaDatabase pizzaDb)
+        internal override async Task MapEntityAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            Toppings = pizzaDb.GetList<MenuPizzaTopping>(new { MenuPizzaId = Id }, "Id");
+            Toppings.AddRange(await pizzaDb.GetListAsync<MenuPizzaTopping>(new { MenuPizzaId = Id }));
         }
 
-        public int Update(PizzaDatabase pizzaDb, IDbTransaction transaction)
+        internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        {
+            int? id = await pizzaDb.Connection.InsertAsync(this, transaction);
+            Id = id.Value;
+
+            // Insert toppings
+            foreach (MenuPizzaTopping topping in Toppings)
+            {
+                topping.MenuPizzaId = Id;
+                await topping.InsertAsync(pizzaDb, transaction);
+            }
+
+            return Id;
+        }
+
+        internal override async Task<int> UpdateAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
             // Delete previous toppings
-            pizzaDb.Connection.DeleteList<MenuPizzaTopping>(new { MenuPizzaId = Id }, transaction);
+            await pizzaDb.Connection.DeleteListAsync<MenuPizzaTopping>(new { MenuPizzaId = Id }, transaction);
 
             // Insert new toppings
             foreach (MenuPizzaTopping topping in Toppings)
             {
-                pizzaDb.Connection.Insert(topping, transaction);
+                await pizzaDb.Connection.InsertAsync(topping, transaction);
             }
 
             // Update pizza record
-            int rowsAffected = pizzaDb.Connection.Update(this, transaction);
-
-            return rowsAffected;
+            return await pizzaDb.Connection.UpdateAsync(this, transaction);
         }
 
-        public CartItemJoin CreateCartRecords(PizzaDatabase pizzaDb, int cartId, int quantity, string size, int menuCrustId)
-        {
-            CartPizza cartPizza = new CartPizza()
-            {
-                CheeseAmount = CheeseAmount,
-                MenuPizzaCheeseId = MenuPizzaCheeseId,
-                MenuPizzaCrustFlavorId = MenuPizzaCrustFlavorId,
-                MenuPizzaCrustId = menuCrustId,
-                MenuPizzaSauceId = MenuPizzaSauceId,
-                SauceAmount = SauceAmount,
-                Size = size
-            };
-
-            foreach (MenuPizzaTopping menuTopping in Toppings)
-            {
-                cartPizza.Toppings.Add(menuTopping.CreateCartTopping());
-            }
-
-            CartItem cartItem = new CartItem()
-            {
-                CartId = cartId,
-                Quantity = quantity,
-                ProductCategory = ProductCategory.Pizza.ToString(),
-                PricePerItem = cartPizza.CalculatePrice(pizzaDb)
-            };
-
-            CartItemJoin cartItemJoin = new CartItemJoin()
-            {
-                CartItem = cartItem,
-                CartItemType = cartPizza
-            };
-
-            return cartItemJoin;
-        }
-
-        public bool InsertRequiresTransaction()
+        internal override bool InsertRequiresTransaction()
         {
             return true;
         }
 
-        public bool UpdateRequiresTransaction()
+        internal override bool UpdateRequiresTransaction()
         {
             return true;
         }

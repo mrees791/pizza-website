@@ -1,10 +1,11 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.Tables;
+using DataLibrary.Models.OldTables;
 using DataLibrary.Models.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace PizzaWebsite.Models.PizzaBuilders
@@ -39,14 +40,14 @@ namespace PizzaWebsite.Models.PizzaBuilders
         public int SelectedCrustFlavorId { get; set; }
         public List<PizzaToppingViewModel> ToppingList { get; set; }
 
-        protected virtual void LoadBuilderLists(PizzaDatabase pizzaDb, List<PizzaTopping> toppings)
+        protected virtual async Task LoadBuilderListsAsync(PizzaDatabase pizzaDb, List<PizzaTopping> toppings)
         {
             SauceAmountList = ListUtility.GetSauceAmountList();
             CheeseAmountList = ListUtility.GetCheeseAmountList();
-            List<MenuPizzaToppingType> toppingTypeList = pizzaDb.GetList<MenuPizzaToppingType>(new { AvailableForPurchase = true }, "SortOrder");
-            List<MenuPizzaCrustFlavor> crustFlavorList = pizzaDb.GetList<MenuPizzaCrustFlavor>(new { AvailableForPurchase = true }, "SortOrder").ToList();
-            List<MenuPizzaSauce> pizzaSauceList = pizzaDb.GetList<MenuPizzaSauce>(new { AvailableForPurchase = true }, "SortOrder").ToList();
-            List<MenuPizzaCheese> pizzaCheeseList = pizzaDb.GetList<MenuPizzaCheese>(new { AvailableForPurchase = true }, "SortOrder").ToList();
+            List<MenuPizzaToppingType> toppingTypeList = await pizzaDb.GetListAsync<MenuPizzaToppingType>(new { AvailableForPurchase = true }, "SortOrder");
+            List<MenuPizzaCrustFlavor> crustFlavorList = await pizzaDb.GetListAsync<MenuPizzaCrustFlavor>(new { AvailableForPurchase = true }, "SortOrder");
+            List<MenuPizzaSauce> pizzaSauceList = await pizzaDb.GetListAsync<MenuPizzaSauce>(new { AvailableForPurchase = true }, "SortOrder");
+            List<MenuPizzaCheese> pizzaCheeseList = await pizzaDb.GetListAsync<MenuPizzaCheese>(new { AvailableForPurchase = true }, "SortOrder");
 
             foreach (MenuPizzaCrustFlavor crustFlavor in crustFlavorList)
             {

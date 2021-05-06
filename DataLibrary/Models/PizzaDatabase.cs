@@ -1,7 +1,9 @@
 ﻿using Dapper;
+using DataLibrary.Models.BaseClasses;
 using DataLibrary.Models.Interfaces;
-using DataLibrary.Models.Joins;
-using DataLibrary.Models.Tables;
+using DataLibrary.Models.OldJoins;
+using DataLibrary.Models.OldTables;
+using DataLibrary.Models.QueryFilters;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -17,15 +19,24 @@ namespace DataLibrary.Models
     public class PizzaDatabase : IDisposable
     {
         private IDbConnection connection;
+        private PizzaDatabaseCommands commands;
 
-        public IDbConnection Connection
+        public PizzaDatabase(string connectionName = "PizzaDatabase")
         {
-            get
-            {
-                return connection;
-            }
+            string connectionString = ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
+            connection = new SqlConnection(connectionString);
+            connection.Open();
+
+            commands = new PizzaDatabaseCommands(this);
         }
 
+        public void Dispose()
+        {
+            connection.Close();
+            connection.Dispose();
+        }
+
+        // CRUD
         public async Task<List<CustomerOrderJoin>> GetJoinedCustomerOrderListAsync(int userId)
         {
             string whereClause = "where c.UserId = @UserId";
@@ -38,7 +49,6 @@ namespace DataLibrary.Models
             return await GetJoinedCustomerOrderListAsync(whereClause, parameters);
         }
 
-        // todo: Test
         private async Task<List<CustomerOrderJoin>> GetJoinedCustomerOrderListAsync(string whereClause, object parameters)
         {
             string joinQuery = @"select c.Id, c.UserId, c.StoreId, c.CartId, c.IsCancelled, 
@@ -74,18 +84,7 @@ namespace DataLibrary.Models
             List<CartItemJoin> items = new List<CartItemJoin>();
 
             // One join is required for each product category.
-            List<Task<IEnumerable<CartItemJoin>>> joinQueryTasks = new List<Task<IEnumerable<CartItemJoin>>>()
-            {
-                GetJoinedPizzaCartItemsAsync(cartId)
-            };
-
-            while (joinQueryTasks.Any())
-            {
-                Task<IEnumerable<CartItemJoin>> finishedTask = await Task.WhenAny(joinQueryTasks);
-                items.AddRange(finishedTask.Result);
-                joinQueryTasks.Remove(finishedTask);
-            }
-
+            items.AddRange(await GetJoinedPizzaCartItemsAsync(cartId));
             items.Sort();
 
             return items;
@@ -122,120 +121,57 @@ namespace DataLibrary.Models
             return cartPizzaList;
         }
 
-        public PizzaDatabase(string connectionName = "PizzaDatabase")
+        public async Task<TRecord> GetAsync<TRecord>(object id, IDbTransaction transaction = null) where TRecord : Record
         {
-            string connectionString = ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
-            connection = new SqlConnection(connectionString);
-            connection.Open();
+            TRecord record = await connection.GetAsync<TRecord>(id, transaction);
+            await record.MapEntityAsync(this);
+            return record;
         }
 
-        public void Dispose()
+        public async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(IDbTransaction transaction = null) where TRecord : Record
         {
-            connection.Close();
-            connection.Dispose();
+            return await GetListAsync<TRecord>(new { }, transaction);
         }
 
-        // CRUD Table Operations
-        public async Task<TEntity> GetAsync<TEntity>(object id, IDbTransaction transaction = null) where TEntity : class, IRecord, new()
+        public async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(object whereConditions, IDbTransaction transaction = null) where TRecord : Record
         {
-            TEntity entity = await connection.GetAsync<TEntity>(id, transaction);
-            entity.MapEntity(this);
-            return entity;
-        }
+            IEnumerable<TRecord> list = await connection.GetListAsync<TRecord>(whereConditions, transaction);
 
-        public TEntity Get<TEntity>(object id, IDbTransaction transaction = null) where TEntity : class, IRecord, new()
-        {
-            TEntity entity = connection.Get<TEntity>(id, transaction);
-            entity.MapEntity(this);
-            return entity;
-        }
-
-        public List<TEntity> GetList<TEntity>() where TEntity : IRecord
-        {
-            List<TEntity> list = connection.GetList<TEntity>().ToList();
-            foreach (TEntity entity in list)
+            foreach (TRecord record in list)
             {
-                entity.MapEntity(this);
+                await record.MapEntityAsync(this);
             }
+
             return list;
         }
 
-        public List<TEntity> GetList<TEntity>(object parameters, string orderByColumn) where TEntity : IRecord
+        public async Task<IEnumerable<TRecord>> GetPagedListAsync<TRecord>(int pageNumber, int rowsPerPage, string orderByColumn, QueryFilterBase filter,
+            IDbTransaction transaction = null) where TRecord : Record
         {
-            string conditions = GetSqlWhereConditions(parameters, orderByColumn);
-            List<TEntity> list = connection.GetList<TEntity>(conditions, parameters).ToList();
-            foreach (TEntity entity in list)
+            string conditions = filter.GetWhereConditions(orderByColumn);
+            IEnumerable<TRecord> list = await connection.GetListPagedAsync<TRecord>(pageNumber, rowsPerPage, conditions, orderByColumn, filter, transaction);
+
+            foreach (TRecord record in list)
             {
-                entity.MapEntity(this);
+                await record.MapEntityAsync(this, transaction);
             }
+
             return list;
         }
 
-        public async Task<List<TEntity>> GetListAsync<TEntity>(object parameters, string orderByColumn) where TEntity : IRecord
+        public async Task<int> GetNumberOfRecordsAsync<TRecord>(QueryFilterBase filter, IDbTransaction transaction = null)
         {
-            string conditions = GetSqlWhereConditions(parameters, orderByColumn);
-            IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>(conditions, parameters);
-            foreach (TEntity entity in list)
-            {
-                entity.MapEntity(this);
-            }
-            return list.ToList();
+            string conditions = filter.GetWhereConditions();
+            return await connection.RecordCountAsync<TRecord>(conditions, parameters: filter, transaction: transaction);
         }
 
-        public async Task<List<TEntity>> GetListAsync<TEntity>() where TEntity : IRecord
-        {
-            IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>();
-            foreach (TEntity entity in list)
-            {
-                entity.MapEntity(this);
-            }
-            return list.ToList();
-        }
-
-        public async Task<List<TEntity>> GetListAsync<TEntity>(object whereConditions) where TEntity : IRecord
-        {
-            IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>(whereConditions);
-            foreach (TEntity entity in list)
-            {
-                entity.MapEntity(this);
-            }
-            return list.ToList();
-        }
-
-        public async Task<List<TEntity>> GetListAsync<TEntity>(object searchFilter, object parameters) where TEntity : IRecord
-        {
-            IEnumerable<TEntity> list = await connection.GetListAsync<TEntity>(GetSqlWhereFilterConditions(searchFilter), parameters);
-            foreach (TEntity entity in list)
-            {
-                entity.MapEntity(this);
-            }
-            return list.ToList();
-        }
-
-        public async Task<List<TEntity>> GetListPagedAsync<TEntity>(object searchFilter, int pageNumber, int rowsPerPage, string orderby) where TEntity : IRecord
-        {
-            string conditions = GetSqlWhereFilterConditions(searchFilter);
-            IEnumerable<TEntity> list = await connection.GetListPagedAsync<TEntity>(pageNumber, rowsPerPage, conditions, orderby, searchFilter);
-            foreach (TEntity entity in list)
-            {
-                entity.MapEntity(this);
-            }
-            return list.ToList();
-        }
-
-        public async Task<int> GetNumberOfRecords<TEntity>(object searchFilter)
-        {
-            int recordCount = await connection.RecordCountAsync<TEntity>(GetSqlWhereFilterConditions(searchFilter), searchFilter);
-            return recordCount;
-        }
-
-        public async Task<int> GetNumberOfPagesAsync<TEntity>(object searchFilter, int rowsPerPage)
+        public async Task<int> GetNumberOfPagesAsync<TRecord>(QueryFilterBase filter, int rowsPerPage, IDbTransaction transaction = null)
         {
             if (rowsPerPage == 0)
             {
                 return 0;
             }
-            int recordCount = await GetNumberOfRecords<TEntity>(searchFilter);
+            int recordCount = await GetNumberOfRecordsAsync<TRecord>(filter);
             if (recordCount == 0)
             {
                 return 0;
@@ -249,235 +185,65 @@ namespace DataLibrary.Models
             return pages;
         }
 
-        /// <summary>
-        /// Create a where clause for a parameters object.
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <param name="orderByColumn"></param>
-        /// <returns></returns>
-        internal string GetSqlWhereConditions(object parameters, string orderByColumn)
+        public async Task<dynamic> InsertAsync(Record record)
         {
-            string sqlWhereConditions = string.Empty;
-            bool queriesAdded = false;
-            PropertyInfo[] properties = parameters.GetType().GetProperties();
-
-            foreach (PropertyInfo propertyInfo in properties)
+            if (record.InsertRequiresTransaction())
             {
-                Type propertyType = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
-                object propertyValue = propertyInfo.GetValue(parameters);
-
-                if (propertyValue != null)
+                using (IDbTransaction transaction = Connection.BeginTransaction())
                 {
-                    string columnName = propertyInfo.Name;
-
-                    if (!queriesAdded)
-                    {
-                        sqlWhereConditions += "where ";
-                    }
-                    else
-                    {
-                        sqlWhereConditions += "and ";
-                    }
-
-                    // Only uses the column name with a placeholder to avoid SQL injections.
-                    // The column name variable is never set by user input.
-                    sqlWhereConditions += $"{columnName} = @{columnName} ";
-                    queriesAdded = true;
-                }
-            }
-
-            // Order by column is never set by user input to avoid SQL injections.
-            sqlWhereConditions += $"order by {orderByColumn}";
-
-            return sqlWhereConditions;
-        }
-
-        /// <summary>
-        /// Creates a where clause which can be used to run queries with filters using the like operator.
-        /// </summary>
-        /// <param name="searchFilter"></param>
-        /// <returns>An SQL where clause.</returns>
-        internal string GetSqlWhereFilterConditions(object searchFilter)
-        {
-            string sqlWhereConditions = string.Empty;
-            bool queriesAdded = false;
-            PropertyInfo[] properties = searchFilter.GetType().GetProperties();
-
-            foreach (PropertyInfo propertyInfo in properties)
-            {
-                Type propertyType = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
-                object propertyValue = propertyInfo.GetValue(searchFilter);
-
-                if (propertyValue != null)
-                {
-                    string columnName = propertyInfo.Name;
-
-                    if (!queriesAdded)
-                    {
-                        sqlWhereConditions += "where ";
-                    }
-                    else
-                    {
-                        sqlWhereConditions += " and ";
-                    }
-
-                    // Only uses the column name with a placeholder to avoid SQL injections.
-                    // The column name variable is never set by user input.
-                    sqlWhereConditions += $"{columnName} like '%' + @{columnName} + '%'";
-                    queriesAdded = true;
-                }
-            }
-
-            return sqlWhereConditions;
-        }
-
-        // Special commands (confirm order, update cart item quantity, etc)
-        public void CmdCheckoutCart(SiteUser siteUser)
-        {
-            // todo: Finish
-            throw new NotImplementedException();
-            // WITHIN TRANSACTION
-            // Increment OrderConfirmationId
-            // Clone cart items to order confirmation cart
-        }
-
-        public async Task<bool> CmdUserOwnsDeliveryAddressAsync(int userId, int deliveryAddressId)
-        {
-            DeliveryAddress address = await GetAsync<DeliveryAddress>(deliveryAddressId);
-
-            if (address != null)
-            {
-                if (address.UserId == userId)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public async Task<bool> CmdUserOwnsCartItemAsync(SiteUser user, int cartItemId)
-        {
-            List<CartItem> userCartItems = await GetListAsync<CartItem>(new { CartId = user.CurrentCartId });
-
-            foreach (CartItem cartItem in userCartItems)
-            {
-                if (cartItem.Id == cartItemId)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public int CmdDeleteAllCartItems(int cartId, IDbTransaction transaction)
-        {
-            string deleteQuerySql = @"delete from dbo.CartItem where CartId = @CartId;";
-            return connection.Execute(deleteQuerySql, new { CartId = cartId }, transaction);
-        }
-
-        public async Task CmdCloneCartItemsAsync(int sourceCartId, int destinationCartId)
-        {
-            List<CartItemJoin> cartItems = await GetJoinedCartItemListAsync(sourceCartId);
-
-            using (var transaction = Connection.BeginTransaction())
-            {
-                CmdCloneCartItems(cartItems, destinationCartId, transaction);
-                transaction.Commit();
-            }
-        }
-
-        public void CmdCloneCartItems(List<CartItemJoin> cartItems, int destinationCartId, IDbTransaction transaction)
-        {
-            foreach (CartItemJoin cartItem in cartItems)
-            {
-                cartItem.CartItem.Id = 0;
-                cartItem.CartItem.CartId = destinationCartId;
-                cartItem.Insert(this, transaction);
-            }
-        }
-
-        public int CmdMoveCartItems(int sourceCartId, int destinationCartId, IDbTransaction transaction = null)
-        {
-            string updateQuerySql = @"update dbo.CartItem set CartId = @DestinationCartId where CartId = @SourceCartId";
-
-            object queryParameters = new
-            {
-                SourceCartId = sourceCartId,
-                DestinationCartId = destinationCartId
-            };
-
-            return connection.Execute(updateQuerySql, queryParameters, transaction);
-        }
-
-        // todo: Remove
-        /*public int CmdDeleteCartItem(int cartItemId, IDbTransaction transaction = null)
-        {
-            string deleteQuerySql = @"delete from dbo.CartItem where Id = @Id;";
-            return connection.Execute(deleteQuerySql, new { Id = cartItemId }, transaction);
-        }*/
-
-        public int CmdUpdateCartItemQuantity(int cartItemId, int quantity, IDbTransaction transaction = null)
-        {
-            string updateQuerySql = @"update dbo.CartItem set Quantity = @Quantity where Id = @Id;";
-
-            object queryParameters = new
-            {
-                Id = cartItemId,
-                Quantity = quantity
-            };
-
-            return connection.Execute(updateQuerySql, queryParameters, transaction);
-        }
-
-        // CRUD
-        public dynamic Insert(IRecord entity)
-        {
-            if (entity.InsertRequiresTransaction())
-            {
-                using (var transaction = connection.BeginTransaction())
-                {
-                    entity.Insert(this, transaction);
+                    await record.InsertAsync(this, transaction);
                     transaction.Commit();
                 }
             }
             else
             {
-                entity.Insert(this);
+                await record.InsertAsync(this);
             }
 
-            return entity.GetId();
+            return record.GetId();
         }
 
-        public int Update(IRecord entity)
+        public async Task<int> UpdateAsync(Record record)
         {
             int rowsUpdated = 0;
 
-            if (entity.UpdateRequiresTransaction())
+            if (record.UpdateRequiresTransaction())
             {
-                using (var transaction = connection.BeginTransaction())
+                using (IDbTransaction transaction = Connection.BeginTransaction())
                 {
-                    rowsUpdated = entity.Update(this, transaction);
+                    rowsUpdated = await record.UpdateAsync(this, transaction);
                     transaction.Commit();
                 }
             }
             else
             {
-                rowsUpdated = entity.Update(this);
+                rowsUpdated = await record.UpdateAsync(this);
             }
 
             return rowsUpdated;
         }
 
-        public int Delete<TEntity>(object id, IDbTransaction transaction = null) where TEntity : IRecord
+        internal async Task<int> DeleteAsync<TRecord>(object id, IDbTransaction transaction = null) where TRecord : Record
         {
-            return connection.Delete<TEntity>(id, transaction);
+            return await connection.DeleteAsync<TRecord>(id, transaction);
         }
 
-        public int Delete<TEntity>(TEntity entity, IDbTransaction transaction = null) where TEntity : IRecord
+        public async Task<int> DeleteAsync<TRecord>(object id) where TRecord : Record
         {
-            return connection.Delete(entity, transaction);
+            return await connection.DeleteAsync<TRecord>(id, null);
         }
+
+        internal async Task<int> DeleteListAsync<TRecord>(object whereConditions, IDbTransaction transaction = null) where TRecord : Record
+        {
+            return await connection.DeleteListAsync<TRecord>(whereConditions, transaction);
+        }
+
+        public async Task<int> DeleteListAsync<TRecord>(object whereConditions) where TRecord : Record
+        {
+            return await connection.DeleteListAsync<TRecord>(whereConditions, null);
+        }
+
+        public PizzaDatabaseCommands Commands { get => commands; }
+        internal IDbConnection Connection { get => connection; }
     }
 }

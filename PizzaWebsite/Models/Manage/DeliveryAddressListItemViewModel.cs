@@ -1,4 +1,4 @@
-﻿using DataLibrary.Models.Tables;
+﻿using DataLibrary.Models.OldTables;
 using System;
 using System.Collections.Generic;
 using System.Linq;

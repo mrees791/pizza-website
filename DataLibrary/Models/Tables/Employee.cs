@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using DataLibrary.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,39 +9,40 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("Employee")]
-    public class Employee : IRecord
+    public class Employee : Record
     {
         [Key]
         public string Id { get; set; }
         public int UserId { get; set; }
         public bool CurrentlyEmployed { get; set; }
 
-        public dynamic GetId()
+        public override dynamic GetId()
         {
             return Id;
         }
 
-        public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            // Query method was used since connection.Insert was having an issue with its string ID field.
-            pizzaDb.Connection.Query("INSERT INTO Employee (Id, UserId, CurrentlyEmployed) VALUES (@Id, @UserId, @CurrentlyEmployed)", this, transaction);
+            // QueryAsync method was used since connection.InsertAsync was having an issue with its string ID field.
+            return await pizzaDb.Connection.QueryAsync("INSERT INTO Employee (Id, UserId, CurrentlyEmployed) VALUES (@Id, @UserId, @CurrentlyEmployed)", this, transaction);
         }
 
-        public bool InsertRequiresTransaction()
+        internal override bool InsertRequiresTransaction()
         {
             return false;
         }
 
-        public void MapEntity(PizzaDatabase pizzaDb)
+        internal override async Task MapEntityAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
+            await Task.FromResult(0);
         }
 
-        public int Update(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        internal override async Task<int> UpdateAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            return pizzaDb.Connection.Update(this, transaction);
+            return await pizzaDb.Connection.UpdateAsync(this, transaction);
         }
 
-        public bool UpdateRequiresTransaction()
+        internal override bool UpdateRequiresTransaction()
         {
             return false;
         }

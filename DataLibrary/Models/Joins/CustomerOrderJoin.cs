@@ -1,5 +1,4 @@
-﻿using DataLibrary.Models.Interfaces;
-using DataLibrary.Models.Tables;
+﻿using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,54 +8,58 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Joins
 {
-    public class CustomerOrderJoin : IRecord
+    public class CustomerOrderJoin : Record
     {
         public CustomerOrder CustomerOrder { get; set; }
         public DeliveryInfo DeliveryInfo { get; set; }
 
-        public dynamic GetId()
+        public override dynamic GetId()
         {
             return CustomerOrder.Id;
         }
 
-        public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
             if (DeliveryInfo != null)
             {
-                DeliveryInfo.Insert(pizzaDb, transaction);
+                await DeliveryInfo.InsertAsync(pizzaDb, transaction);
                 CustomerOrder.DeliveryInfoId = DeliveryInfo.Id;
             }
-            CustomerOrder.Insert(pizzaDb, transaction);
+
+            await CustomerOrder.InsertAsync(pizzaDb, transaction);
+
+            return CustomerOrder.Id;
         }
 
-        public bool InsertRequiresTransaction()
+        internal override bool InsertRequiresTransaction()
         {
             return true;
         }
 
-        public void MapEntity(PizzaDatabase pizzaDb)
+        internal override async Task MapEntityAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
             if (DeliveryInfo != null)
             {
-                DeliveryInfo.MapEntity(pizzaDb);
+                await DeliveryInfo.MapEntityAsync(pizzaDb, transaction);
             }
-            CustomerOrder.MapEntity(pizzaDb);
+
+            await CustomerOrder.MapEntityAsync(pizzaDb, transaction);
         }
 
-        public int Update(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        internal override async Task<int> UpdateAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
             int rowsUpdated = 0;
 
             if (DeliveryInfo != null)
             {
-                rowsUpdated += DeliveryInfo.Update(pizzaDb, transaction);
+                rowsUpdated += await DeliveryInfo.UpdateAsync(pizzaDb, transaction);
             }
-            rowsUpdated += CustomerOrder.Update(pizzaDb, transaction);
+            rowsUpdated += await CustomerOrder.UpdateAsync(pizzaDb, transaction);
 
             return rowsUpdated;
         }
 
-        public bool UpdateRequiresTransaction()
+        internal override bool UpdateRequiresTransaction()
         {
             return true;
         }

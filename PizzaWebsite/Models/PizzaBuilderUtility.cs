@@ -1,5 +1,5 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.Tables;
+using DataLibrary.Models.OldTables;
 using DataLibrary.Models.Utility;
 using PizzaWebsite.Models.PizzaBuilders;
 using System;

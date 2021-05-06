@@ -1,5 +1,5 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.Tables;
+using DataLibrary.Models.OldTables;
 using DataLibrary.Models.Utility;
 using System;
 using System.Collections.Generic;
@@ -33,9 +33,9 @@ namespace PizzaWebsite.Models.PizzaBuilders
             return Id == 0;
         }
 
-        protected override void LoadBuilderLists(PizzaDatabase pizzaDb, List<PizzaTopping> toppings)
+        protected override async Task LoadBuilderListsAsync(PizzaDatabase pizzaDb, List<PizzaTopping> toppings)
         {
-            base.LoadBuilderLists(pizzaDb, toppings);
+            await base.LoadBuilderListsAsync(pizzaDb, toppings);
 
             CrustList = ListUtility.CreateCrustDictionary(pizzaDb);
             SizeList = ListUtility.GetPizzaSizeList();
@@ -72,16 +72,16 @@ namespace PizzaWebsite.Models.PizzaBuilders
             return cartPizza;
         }
 
-        public void CreateDefault(PizzaDatabase pizzaDb)
+        public async Task CreateDefaultAsync(PizzaDatabase pizzaDb)
         {
             SelectedCheeseAmount = "Regular";
             SelectedSauceAmount = "Regular";
             SelectedSize = "Medium";
 
-            LoadBuilderLists(pizzaDb, new List<PizzaTopping>());
+            await LoadBuilderListsAsync(pizzaDb, new List<PizzaTopping>());
         }
 
-        public void CreateFromEntities(PizzaDatabase pizzaDb, CartItem cartItem, CartPizza cartPizza)
+        public async Task CreateFromEntitiesAsync(PizzaDatabase pizzaDb, CartItem cartItem, CartPizza cartPizza)
         {
             Id = cartItem.Id;
             SelectedQuantity = cartItem.Quantity;
@@ -105,7 +105,7 @@ namespace PizzaWebsite.Models.PizzaBuilders
                 });
             }
 
-            LoadBuilderLists(pizzaDb, toppings);
+            await LoadBuilderListsAsync(pizzaDb, toppings);
         }
     }
 }

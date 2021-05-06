@@ -1,6 +1,6 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.Joins;
-using DataLibrary.Models.Tables;
+using DataLibrary.Models.OldJoins;
+using DataLibrary.Models.OldTables;
 using DataLibrary.Models.Utility;
 using PizzaWebsite.Models;
 using PizzaWebsite.Models.Identity.Stores;
@@ -35,16 +35,16 @@ namespace PizzaWebsite.Controllers
             CartPizza cartPizza = await PizzaDb.GetAsync<CartPizza>(cartItemId);
 
             CartPizzaBuilderViewModel viewModel = new CartPizzaBuilderViewModel();
-            viewModel.CreateFromEntities(PizzaDb, cartItem, cartPizza);
+            await viewModel.CreateFromEntitiesAsync(PizzaDb, cartItem, cartPizza);
 
             return viewModel;
         }
 
         [Authorize]
-        public ActionResult BuildPizza()
+        public async Task<ActionResult> BuildPizza()
         {
             CartPizzaBuilderViewModel cartPizzaVm = new CartPizzaBuilderViewModel();
-            cartPizzaVm.CreateDefault(PizzaDb);
+            await cartPizzaVm.CreateDefaultAsync(PizzaDb);
 
             return View("CartPizzaBuilder", cartPizzaVm);
         }
@@ -110,14 +110,14 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> AddMenuPizzaToCurrentCart(int id, int selectedQuantity, string selectedSize, int selectedCrustId)
         {
             SiteUser currentUser = await GetCurrentUserAsync();
-            AddMenuPizzaToCart(id, currentUser.CurrentCartId, selectedQuantity, selectedSize, selectedCrustId);
+            await AddMenuPizzaToCart(id, currentUser.CurrentCartId, selectedQuantity, selectedSize, selectedCrustId);
             return RedirectToAction("Cart");
         }
 
         [Authorize]
-        public void AddMenuPizzaToCart(int menuPizzaId, int cartId, int selectedQuantity, string selectedSize, int selectedCrustId)
+        public async Task AddMenuPizzaToCart(int menuPizzaId, int cartId, int selectedQuantity, string selectedSize, int selectedCrustId)
         {
-            MenuPizza menuPizza = PizzaDb.Get<MenuPizza>(menuPizzaId);
+            MenuPizza menuPizza = await PizzaDb.GetAsync<MenuPizza>(menuPizzaId);
             CartItemJoin cartItemJoin = menuPizza.CreateCartRecords(PizzaDb, cartId, selectedQuantity, selectedSize, selectedCrustId);
             PizzaDb.Insert(cartItemJoin);
         }
@@ -218,7 +218,7 @@ namespace PizzaWebsite.Controllers
                 throw new Exception($"Current user is not allowed to modify cart item ID {cartItemId}.");
             }
 
-            PizzaDb.CmdUpdateCartItemQuantity(cartItemId, quantity);
+            PizzaDb.CmdUpdateCartItemQuantityAsync(cartItemId, quantity);
         }
     }
 }

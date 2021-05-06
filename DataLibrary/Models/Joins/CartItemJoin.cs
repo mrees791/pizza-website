@@ -1,5 +1,4 @@
-﻿using DataLibrary.Models.Interfaces;
-using DataLibrary.Models.Tables;
+﻿using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,45 +8,47 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Joins
 {
-    public class CartItemJoin : IRecord
+    public class CartItemJoin : Record
     {
         public CartItem CartItem { get; set; }
-        public IRecordCartItemType CartItemType { get; set; }
+        public CartItemTypeRecord CartItemType { get; set; }
 
-        public dynamic GetId()
+        public override dynamic GetId()
         {
-            return CartItem.GetId();
+            return CartItem.Id;
         }
 
-        public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            CartItem.Insert(pizzaDb, transaction);
-            CartItemType.SetCartItemId(CartItem.GetId());
-            CartItemType.Insert(pizzaDb, transaction);
+            await CartItem.InsertAsync(pizzaDb, transaction);
+            CartItemType.SetCartItemId(CartItem.Id);
+            await CartItemType.InsertAsync(pizzaDb, transaction);
+
+            return CartItem.Id;
         }
 
-        public bool InsertRequiresTransaction()
+        internal override bool InsertRequiresTransaction()
         {
             return true;
         }
 
-        public void MapEntity(PizzaDatabase pizzaDb)
+        internal override async Task MapEntityAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            CartItem.MapEntity(pizzaDb);
-            CartItemType.MapEntity(pizzaDb);
+            await CartItem.MapEntityAsync(pizzaDb, transaction);
+            await CartItemType.MapEntityAsync(pizzaDb, transaction);
         }
 
-        public int Update(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        internal override async Task<int> UpdateAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
             int rowsUpdated = 0;
 
-            rowsUpdated += CartItem.Update(pizzaDb, transaction);
-            rowsUpdated += CartItemType.Update(pizzaDb, transaction);
+            rowsUpdated += await CartItem.UpdateAsync(pizzaDb, transaction);
+            rowsUpdated += await CartItemType.UpdateAsync(pizzaDb, transaction);
 
             return rowsUpdated;
         }
 
-        public bool UpdateRequiresTransaction()
+        internal override bool UpdateRequiresTransaction()
         {
             return true;
         }

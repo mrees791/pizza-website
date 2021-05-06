@@ -192,7 +192,7 @@
     <Compile Include="Models\Identity\Stores\UserStore.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ManageWebsiteViewModels.cs" />
-    <Compile Include="Models\Manage\DeliveryAddressViewModel.cs" />
+    <Compile Include="Models\Manage\DeliveryAddressListItemViewModel.cs" />
     <Compile Include="Models\Manage\ManageAddressesViewModel.cs" />
     <Compile Include="Models\Manage\ManageDeliveryAddressViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\CartPizzaBuilderViewModel.cs" />

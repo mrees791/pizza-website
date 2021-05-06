@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using DataLibrary.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("CartPizza")]
-    public class CartPizza : IRecordCartItemType
+    public class CartPizza : CartItemTypeRecord
     {
         [Key]
         public int CartItemId { get; set; }
@@ -28,9 +27,29 @@ namespace DataLibrary.Models.Tables
             Toppings = new List<CartPizzaTopping>();
         }
 
-        public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        public override dynamic GetId()
         {
-            pizzaDb.Connection.Query(@"INSERT INTO
+            return CartItemId;
+        }
+
+        internal override bool InsertRequiresTransaction()
+        {
+            return true;
+        }
+
+        internal override bool UpdateRequiresTransaction()
+        {
+            return true;
+        }
+
+        internal override async Task MapEntityAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        {
+            Toppings.AddRange(await pizzaDb.GetListAsync<CartPizzaTopping>(new { CartPizzaId = CartItemId }));
+        }
+
+        internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        {
+            await pizzaDb.Connection.QueryAsync(@"INSERT INTO
                                    CartPizza (CartItemId, Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId)
                                    VALUES (@CartItemId, @Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId)",
                                       this, transaction);
@@ -38,55 +57,35 @@ namespace DataLibrary.Models.Tables
             foreach (CartPizzaTopping topping in Toppings)
             {
                 topping.CartItemId = CartItemId;
-                topping.Insert(pizzaDb, transaction);
+                await topping.InsertAsync(pizzaDb, transaction);
             }
-        }
 
-        public dynamic GetId()
-        {
             return CartItemId;
         }
 
-        public void MapEntity(PizzaDatabase pizzaDb)
-        {
-            Toppings = pizzaDb.GetList<CartPizzaTopping>(new { CartItemId = CartItemId }, "Id");
-        }
-
-        public int Update(PizzaDatabase pizzaDb, IDbTransaction transaction)
+        internal override async Task<int> UpdateAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
             // Delete previous toppings
-            pizzaDb.Connection.DeleteList<CartPizzaTopping>(new { CartItemId = CartItemId }, transaction);
+            await pizzaDb.Connection.DeleteListAsync<CartPizzaTopping>(new { CartItemId = CartItemId }, transaction);
 
             // Insert new toppings
             foreach (CartPizzaTopping topping in Toppings)
             {
                 topping.CartItemId = CartItemId;
-                topping.Insert(pizzaDb, transaction);
+                await topping.InsertAsync(pizzaDb, transaction);
             }
 
             // Update pizza record
-            int rowsAffected = pizzaDb.Connection.Update(this, transaction);
-
-            return rowsAffected;
+            return await pizzaDb.Connection.UpdateAsync(this, transaction);
         }
 
-        public bool InsertRequiresTransaction()
-        {
-            return true;
-        }
-
-        public bool UpdateRequiresTransaction()
-        {
-            return true;
-        }
-
-        public decimal CalculatePrice(PizzaDatabase pizzaDb)
+        public override async Task<decimal> CalculatePriceAsync(PizzaDatabase pizzaDb)
         {
             decimal total = 0.0m;
 
-            MenuPizzaCheese cheese = pizzaDb.Get<MenuPizzaCheese>(MenuPizzaCheeseId);
-            MenuPizzaSauce sauce = pizzaDb.Get<MenuPizzaSauce>(MenuPizzaSauceId);
-            MenuPizzaCrust crust = pizzaDb.Get<MenuPizzaCrust>(MenuPizzaCrustId);
+            MenuPizzaCheese cheese = await pizzaDb.GetAsync<MenuPizzaCheese>(MenuPizzaCheeseId);
+            MenuPizzaSauce sauce = await pizzaDb.GetAsync<MenuPizzaSauce>(MenuPizzaSauceId);
+            MenuPizzaCrust crust = await pizzaDb.GetAsync<MenuPizzaCrust>(MenuPizzaCrustId);
 
             switch (CheeseAmount)
             {
@@ -129,7 +128,7 @@ namespace DataLibrary.Models.Tables
 
             foreach (CartPizzaTopping topping in Toppings)
             {
-                MenuPizzaToppingType toppingType = pizzaDb.Get<MenuPizzaToppingType>(topping.MenuPizzaToppingTypeId);
+                MenuPizzaToppingType toppingType = await pizzaDb.GetAsync<MenuPizzaToppingType>(topping.MenuPizzaToppingTypeId);
 
                 decimal toppingAmount = 0.0m;
 
@@ -157,43 +156,7 @@ namespace DataLibrary.Models.Tables
             return total;
         }
 
-        public string GetDescriptionHtml(PizzaDatabase pizzaDb)
-        {
-            MenuPizzaCheese cheese = pizzaDb.Get<MenuPizzaCheese>(MenuPizzaCheeseId);
-            MenuPizzaSauce sauce = pizzaDb.Get<MenuPizzaSauce>(MenuPizzaSauceId);
-            MenuPizzaCrust crust = pizzaDb.Get<MenuPizzaCrust>(MenuPizzaCrustId);
-            MenuPizzaCrustFlavor crustFlavor = pizzaDb.Get<MenuPizzaCrustFlavor>(MenuPizzaCrustFlavorId);
-
-            string details = string.Empty;
-
-            if (Toppings.Any())
-            {
-                details += $"Toppings<br />";
-
-                foreach (CartPizzaTopping topping in Toppings)
-                {
-                    MenuPizzaToppingType toppingType = pizzaDb.Get<MenuPizzaToppingType>(topping.MenuPizzaToppingTypeId);
-                    details += $"{toppingType.Name}: {topping.ToppingAmount}, {topping.ToppingHalf}<br />";
-                }
-
-                details += "<br />";
-            }
-
-            details += $"Size: {Size}<br />";
-            details += $"Cheese: {cheese.Name}<br />";
-            details += $"Sauce: {sauce.Name}<br />";
-            details += $"Crust: {crust.Name}<br />";
-            details += $"Crust Flavor: {crustFlavor.Name}<br />";
-
-            return details;
-        }
-
-        public string GetName(PizzaDatabase pizzaDb)
-        {
-            return $"{Size} Pizza";
-        }
-
-        public void SetCartItemId(int cartItemId)
+        public override void SetCartItemId(int cartItemId)
         {
             CartItemId = cartItemId;
         }

@@ -1,4 +1,4 @@
-﻿using DataLibrary.Models.Tables;
+﻿using DataLibrary.Models.OldTables;
 using DataLibrary.Models.Utility;
 using PizzaWebsite.Models;
 using System;

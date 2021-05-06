@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using DataLibrary.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("CartPizzaTopping")]
-    public class CartPizzaTopping : IRecord
+    public class CartPizzaTopping : Record
     {
         [Key]
         public int Id { get; set; }
@@ -19,31 +18,34 @@ namespace DataLibrary.Models.Tables
         public string ToppingAmount { get; set; }
         public int MenuPizzaToppingTypeId { get; set; }
 
-        public dynamic GetId()
+        public override dynamic GetId()
         {
             return Id;
         }
 
-        public void Insert(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            Id = pizzaDb.Connection.Insert(this, transaction).Value;
+            int? id = await pizzaDb.Connection.InsertAsync(this, transaction);
+            Id = id.Value;
+            return Id;
         }
 
-        public bool InsertRequiresTransaction()
+        internal override bool InsertRequiresTransaction()
         {
             return false;
         }
 
-        public void MapEntity(PizzaDatabase pizzaDb)
+        internal override async Task MapEntityAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
+            await Task.FromResult(0);
         }
 
-        public int Update(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
+        internal override async Task<int> UpdateAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            return pizzaDb.Connection.Update(this, transaction);
+            return await pizzaDb.Connection.UpdateAsync(this, transaction);
         }
 
-        public bool UpdateRequiresTransaction()
+        internal override bool UpdateRequiresTransaction()
         {
             return false;
         }

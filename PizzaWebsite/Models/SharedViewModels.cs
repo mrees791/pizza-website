@@ -1,5 +1,5 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.Tables;
+using DataLibrary.Models.OldTables;
 using DataLibrary.Models.Utility;
 using System;
 using System.Collections.Generic;

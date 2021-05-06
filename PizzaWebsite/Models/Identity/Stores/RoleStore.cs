@@ -1,5 +1,5 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.Tables;
+using DataLibrary.Models.OldTables;
 using Microsoft.AspNet.Identity;
 using PizzaWebsite.Models.Databases;
 using System;

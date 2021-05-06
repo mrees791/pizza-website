@@ -1,10 +1,11 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.Tables;
+using DataLibrary.Models.OldTables;
 using DataLibrary.Models.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -36,14 +37,13 @@ namespace PizzaWebsite.Models.PizzaBuilders
             return Id == 0;
         }
 
-        protected override void LoadBuilderLists(PizzaDatabase pizzaDb, List<PizzaTopping> toppings)
+        protected override async Task LoadBuilderListsAsync(PizzaDatabase pizzaDb, List<PizzaTopping> toppings)
         {
-            base.LoadBuilderLists(pizzaDb, toppings);
-
+            await base.LoadBuilderListsAsync(pizzaDb, toppings);
             CategoryList = ListUtility.GetPizzaCategoryList();
         }
 
-        public void CreateFromEntity(PizzaDatabase pizzaDb, MenuPizza menuPizza)
+        public async Task CreateFromEntity(PizzaDatabase pizzaDb, MenuPizza menuPizza)
         {
             Id = menuPizza.Id;
             Name = menuPizza.PizzaName;
@@ -68,7 +68,7 @@ namespace PizzaWebsite.Models.PizzaBuilders
                 });
             }
 
-            LoadBuilderLists(pizzaDb, toppings);
+            await LoadBuilderListsAsync(pizzaDb, toppings);
         }
     }
 }
