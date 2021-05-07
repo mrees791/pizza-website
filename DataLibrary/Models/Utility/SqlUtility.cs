@@ -8,6 +8,11 @@ namespace DataLibrary.Models.Utility
 {
     public static class SqlUtility
     {
+        public static string GetSiteRoleSelectSql()
+        {
+            return @"select Id, Name from dbo.SiteRole ";
+        }
+
         public static string GetSiteUserSelectSql()
         {
             return @"select Id, CurrentCartId, ConfirmOrderCartId, OrderConfirmationId, IsBanned, ZipCode, Email, EmailConfirmed, 

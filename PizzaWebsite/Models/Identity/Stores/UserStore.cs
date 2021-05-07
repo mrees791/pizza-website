@@ -42,12 +42,11 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task AddToRoleAsync(IdentityUser user, string roleName)
         {
-            List<SiteRole> siteRoles = new List<SiteRole>(await pizzaDb.GetListAsync<SiteRole>(new { Name = roleName }));
-            SiteRole siteRole = siteRoles.FirstOrDefault();
+            SiteRole siteRole = await pizzaDb.GetSiteRoleByNameAsync(roleName);
 
             if (siteRole == null)
             {
-                throw new ArgumentException("Invalid role name: roleName");
+                throw new ArgumentException($"Invalid role name: {roleName}");
             }
 
             UserRole userRole = new UserRole();
@@ -74,8 +73,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IdentityUser> FindByIdAsync(int userId)
         {
-            List<SiteUser> siteUsers = new List<SiteUser>(await pizzaDb.GetListAsync<SiteUser>(new { Id = userId }));
-            SiteUser siteUser = siteUsers.FirstOrDefault();
+            SiteUser siteUser = await pizzaDb.GetSiteUserByIdAsync(userId);
 
             if (siteUser == null)
             {
@@ -87,8 +85,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IdentityUser> FindByNameAsync(string userName)
         {
-            List<SiteUser> siteUsers = new List<SiteUser>(await pizzaDb.GetListAsync<SiteUser>(new { UserName = userName }));
-            SiteUser siteUser = siteUsers.FirstOrDefault();
+            SiteUser siteUser = await pizzaDb.GetSiteUserByNameAsync(userName);
 
             if (siteUser == null)
             {
@@ -100,43 +97,18 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IList<string>> GetRolesAsync(IdentityUser user)
         {
-            List<SiteRole> siteRoles = new List<SiteRole>(await pizzaDb.GetListAsync<SiteRole>());
-            List<UserRole> currentUserRoles = new List<UserRole>(await pizzaDb.GetListAsync<UserRole>(new { UserId = user.Id }));
-            IList<string> currentUserRoleNames = new List<string>();
-
-            foreach (UserRole userRole in currentUserRoles)
-            {
-                var currentRole = siteRoles.Where(r => r.Id == userRole.RoleId).First();
-                currentUserRoleNames.Add(currentRole.Name);
-            }
-
-            return currentUserRoleNames;
+            return new List<string>(await pizzaDb.GetRolesAsync(user.Id));
         }
 
         public async Task<bool> IsInRoleAsync(IdentityUser user, string roleName)
         {
             IList<string> currentUserRoles = await GetRolesAsync(user);
-            bool isInRole = currentUserRoles.Contains(roleName);
-
-            return isInRole;
+            return currentUserRoles.Contains(roleName);
         }
 
         public async Task RemoveFromRoleAsync(IdentityUser user, string roleName)
         {
-            List<SiteRole> siteRoles = new List<SiteRole>(await pizzaDb.GetListAsync<SiteRole>(new { Name = roleName }));
-            SiteRole currentRole = siteRoles.FirstOrDefault();
-
-            if (currentRole == null)
-            {
-                throw new ArgumentException($"Invalid roleName: {roleName}");
-            }
-
-            UserRole currentUserRole = (await pizzaDb.GetListAsync<UserRole>(new { UserId = user.Id, RoleId = currentRole.Id })).FirstOrDefault();
-
-            if (currentUserRole != null)
-            {
-                await pizzaDb.DeleteAsync(currentUserRole);
-            }
+            await pizzaDb.RemoveFromRoleAsync(user.Id, roleName);
         }
 
         public async Task UpdateAsync(IdentityUser user)
@@ -209,18 +181,13 @@ namespace PizzaWebsite.Models.Identity.Stores
                 ClaimType = claim.Type,
                 ClaimValue = claim.Value
             };
+
             await pizzaDb.InsertAsync(userClaim);
         }
 
         public async Task RemoveClaimAsync(IdentityUser user, Claim claim)
         {
-            List<UserClaim> userClaims = new List<UserClaim>(await pizzaDb.GetListAsync<UserClaim>(new { UserId = user.Id }));
-            UserClaim currentClaim = userClaims.Where(uc => uc.ClaimType == claim.Type && uc.ClaimValue == claim.Value).FirstOrDefault();
-
-            if (currentClaim != null)
-            {
-                await pizzaDb.DeleteAsync(currentClaim);
-            }
+            await pizzaDb.RemoveClaimAsync(user.Id, claim.Type, claim.Value);
         }
 
         public async Task AddLoginAsync(IdentityUser user, UserLoginInfo login)
@@ -231,19 +198,13 @@ namespace PizzaWebsite.Models.Identity.Stores
                 LoginProvider = login.LoginProvider,
                 ProviderKey = login.ProviderKey
             };
+
             await pizzaDb.InsertAsync(userLogin);
         }
 
         public async Task RemoveLoginAsync(IdentityUser user, UserLoginInfo login)
         {
-            List<UserLogin> userLogins = new List<UserLogin>(await pizzaDb.GetListAsync<UserLogin>(
-                new { UserId = user.Id, LoginProvider = login.LoginProvider, ProviderKey = login.ProviderKey }));
-            UserLogin currentUserLogin = userLogins.FirstOrDefault();
-
-            if (currentUserLogin != null)
-            {
-                await pizzaDb.DeleteAsync(currentUserLogin);
-            }
+            await pizzaDb.RemoveLoginAsync(user.Id, login.LoginProvider, login.ProviderKey);
         }
 
         public async Task<IList<UserLoginInfo>> GetLoginsAsync(IdentityUser user)
@@ -255,15 +216,14 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IdentityUser> FindAsync(UserLoginInfo login)
         {
-            UserLogin currentUserLogin = await pizzaDb.GetUserLoginAsync(login.LoginProvider, login.ProviderKey);
+            UserLogin currentUserLogin = await pizzaDb.GetLoginAsync(login.LoginProvider, login.ProviderKey);
 
             if (currentUserLogin == null)
             {
                 return null;
             }
 
-            IdentityUser user = await FindByIdAsync(currentUserLogin.UserId);
-            return user;
+            return await FindByIdAsync(currentUserLogin.UserId);
         }
 
         private bool ClaimsAreEqual(Claim claim1, Claim claim2)

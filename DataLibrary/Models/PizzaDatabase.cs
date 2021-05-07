@@ -97,7 +97,7 @@ namespace DataLibrary.Models
 	                                inner join CartPizza p on c.Id = p.CartItemId
                                     where c.CartId = @CartId";
 
-            object queryParameters = new
+            object parameters = new
             {
                 CartId = cartId
             };
@@ -110,7 +110,7 @@ namespace DataLibrary.Models
                     cartPizzaJoin.CartItem = cartItem;
                     cartPizzaJoin.CartItemType = cartPizza;
                     return cartPizzaJoin;
-                }, param: queryParameters, splitOn: "CartItemId");
+                }, param: parameters, splitOn: "CartItemId");
 
             foreach (CartItemJoin cartPizza in cartPizzaList)
             {
@@ -127,15 +127,147 @@ namespace DataLibrary.Models
             return record;
         }
 
+        public async Task<int> RemoveLoginAsync(int userId, string loginProvider, string providerKey, IDbTransaction transaction = null)
+        {
+            string sql = @"delete from dbo.UserLogin where UserId = @UserId and LoginProvider = @LoginProvider and ProviderKey = @ProviderKey";
+
+            object parameters = new
+            {
+                UserId = userId,
+                LoginProvider = loginProvider,
+                ProviderKey = providerKey
+            };
+
+            return await connection.ExecuteAsync(sql, parameters, transaction);
+        }
+
+        public async Task<int> RemoveClaimAsync(int userId, string claimType, string claimValue, IDbTransaction transaction = null)
+        {
+            string sql = @"delete from dbo.UserClaim where UserId = @UserId and ClaimType = @ClaimType and ClaimValue = @ClaimValue";
+
+            object parameters = new
+            {
+                UserId = userId,
+                ClaimType = claimType,
+                ClaimValue = claimValue
+            };
+
+            return await connection.ExecuteAsync(sql, parameters, transaction);
+        }
+
+        public async Task<int> RemoveFromRoleAsync(int userId, string roleName, IDbTransaction transaction = null)
+        {
+            SiteRole siteRole = await GetSiteRoleByNameAsync(roleName);
+
+            string sql = @"delete from dbo.UserRole where UserId = @UserId and RoleId = @RoleId";
+
+            object parameters = new
+            {
+                UserId = userId,
+                RoleId = siteRole.Id
+            };
+
+            return await connection.ExecuteAsync(sql, parameters, transaction);
+        }
+
+        public async Task<IEnumerable<string>> GetRolesAsync(int userId)
+        {
+            string joinQuery = @"select u.Id, u.UserId, u.RoleId, r.Id, r.Name
+                                from UserRole u
+                                inner join SiteRole r on u.RoleId = r.Id
+                                where u.UserId = @UserId";
+
+            object parameters = new
+            {
+                UserId = userId
+            };
+
+            IEnumerable<string> userRoleList = await connection.QueryAsync<UserRole, SiteRole, string>(
+                joinQuery,
+                (userRole, siteRole) =>
+                {
+                    return siteRole.Name;
+                }, param: parameters, splitOn: "RoleId");
+
+            return userRoleList;
+        }
+
+        public async Task<SiteRole> GetSiteRoleByNameAsync(string name, IDbTransaction transaction = null)
+        {
+            string sql = SqlUtility.GetSiteRoleSelectSql() + "where Name = @Name";
+
+            object parameters = new
+            {
+                Name = name
+            };
+
+            return await GetSiteRoleAsync(sql, parameters, transaction);
+        }
+
+        public async Task<SiteRole> GetSiteRoleByIdAsync(int id, IDbTransaction transaction = null)
+        {
+            string sql = SqlUtility.GetSiteRoleSelectSql() + "where Id = @Id";
+
+            object parameters = new
+            {
+                Id = id
+            };
+
+            return await GetSiteRoleAsync(sql, parameters, transaction);
+        }
+
+        private async Task<SiteRole> GetSiteRoleAsync(string sql, object parameters, IDbTransaction transaction = null)
+        {
+            SiteRole role = await connection.QuerySingleAsync<SiteRole>(sql, parameters, transaction);
+
+            if (role != null)
+            {
+                await role.MapEntityAsync(this, transaction);
+            }
+
+            return role;
+        }
+
+        public async Task<SiteUser> GetSiteUserByIdAsync(int id, IDbTransaction transaction = null)
+        {
+            string sql = SqlUtility.GetSiteUserSelectSql() + "where Id = @Id";
+
+            object parameters = new
+            {
+                Id = id
+            };
+
+            return await GetSiteUserAsync(sql, parameters, transaction);
+        }
+
         public async Task<SiteUser> GetSiteUserByEmailAsync(string email, IDbTransaction transaction = null)
         {
             string sql = SqlUtility.GetSiteUserSelectSql() + "where Email = @Email";
+
             object parameters = new
             {
                 Email = email
             };
 
+            return await GetSiteUserAsync(sql, parameters, transaction);
+        }
+
+        public async Task<SiteUser> GetSiteUserByNameAsync(string name, IDbTransaction transaction = null)
+        {
+            string sql = SqlUtility.GetSiteUserSelectSql() + "where UserName = @UserName";
+
+            object parameters = new
+            {
+                UserName = name
+            };
+
+            return await GetSiteUserAsync(sql, parameters, transaction);
+        }
+
+        private async Task<SiteUser> GetSiteUserAsync(string sql, object parameters, IDbTransaction transaction = null)
+        {
             SiteUser user = await connection.QuerySingleOrDefaultAsync<SiteUser>(sql, parameters, transaction);
+
             if (user != null)
             {
                 await user.MapEntityAsync(this, transaction);
@@ -144,9 +276,10 @@ namespace DataLibrary.Models
             return user;
         }
 
-        public async Task<UserLogin> GetUserLoginAsync(string loginProvider, string providerKey, IDbTransaction transaction = null)
+        public async Task<UserLogin> GetLoginAsync(string loginProvider, string providerKey, IDbTransaction transaction = null)
         {
             string sql = SqlUtility.GetUserLoginSelectSql() + "where LoginProvider = @LoginProvider and ProviderKey = @ProviderKey";
+
             object parameters = new
             {
                 LoginProvider = loginProvider,
