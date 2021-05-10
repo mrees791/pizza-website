@@ -84,7 +84,7 @@ namespace PizzaWebsite.Controllers
 
         protected async Task<SiteUser> GetCurrentUserAsync()
         {
-            return await PizzaDb.GetAsync<SiteUser>(new { UserName = User.Identity.Name });
+            return await PizzaDb.GetSiteUserByNameAsync(User.Identity.Name);
         }
 
         protected override void Dispose(bool disposing)

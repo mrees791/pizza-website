@@ -1,4 +1,6 @@
 ﻿using DataLibrary.Models;
+using DataLibrary.Models.Joins;
+using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
 using PizzaWebsite.Models;
@@ -34,7 +36,7 @@ namespace PizzaWebsite.Controllers
             CartPizza cartPizza = await PizzaDb.GetAsync<CartPizza>(cartItemId);
 
             CartPizzaBuilderViewModel viewModel = new CartPizzaBuilderViewModel();
-            await viewModel.CreateFromEntitiesAsync(PizzaDb, cartItem, cartPizza);
+            await viewModel.CreateFromRecordsAsync(PizzaDb, cartItem, cartPizza);
 
             return viewModel;
         }
@@ -76,7 +78,7 @@ namespace PizzaWebsite.Controllers
                 CartItem cartItem = new CartItem()
                 {
                     Id = model.Id,
-                    PricePerItem = cartPizza.CalculatePrice(PizzaDb),
+                    PricePerItem = await cartPizza.CalculatePriceAsync(PizzaDb),
                     CartId = currentUser.CurrentCartId,
                     ProductCategory = ProductCategory.Pizza.ToString(),
                     Quantity = model.SelectedQuantity
@@ -90,11 +92,11 @@ namespace PizzaWebsite.Controllers
 
                 if (model.IsNewRecord())
                 {
-                    PizzaDb.Insert(cartItemJoin);
+                    await PizzaDb.InsertAsync(cartItemJoin);
                 }
                 else
                 {
-                    PizzaDb.Update(cartItemJoin);
+                    await PizzaDb.UpdateAsync(cartItemJoin);
                 }
 
                 return RedirectToAction("Cart");
@@ -117,8 +119,8 @@ namespace PizzaWebsite.Controllers
         public async Task AddMenuPizzaToCart(int menuPizzaId, int cartId, int selectedQuantity, string selectedSize, int selectedCrustId)
         {
             MenuPizza menuPizza = await PizzaDb.GetAsync<MenuPizza>(menuPizzaId);
-            CartItemJoin cartItemJoin = menuPizza.CreateCartRecords(PizzaDb, cartId, selectedQuantity, selectedSize, selectedCrustId);
-            PizzaDb.Insert(cartItemJoin);
+            CartItemJoin cartItemJoin = await menuPizza.CreateCartRecordsAsync(PizzaDb, cartId, selectedQuantity, selectedSize, selectedCrustId);
+            await PizzaDb.InsertAsync(cartItemJoin);
         }
 
         public async Task<ActionResult> PizzaMenu()
@@ -127,12 +129,30 @@ namespace PizzaWebsite.Controllers
 
             List<int> quantityList = ListUtility.CreateQuantityList();
             List<string> sizeList = ListUtility.GetPizzaSizeList();
-            Dictionary<int, string> crustListDictionary = ListUtility.CreateCrustDictionary(PizzaDb);
+            Dictionary<int, string> crustListDictionary = await ListUtility.CreateCrustDictionaryAsync(PizzaDb);
+
+            MenuPizzaSearch popularPizzaSearch = new MenuPizzaSearch()
+            {
+                AvailableForPurchase = true,
+                CategoryName = "Popular"
+            };
+
+            MenuPizzaSearch meatPizzaSearch = new MenuPizzaSearch()
+            {
+                AvailableForPurchase = true,
+                CategoryName = "Meats"
+            };
+
+            MenuPizzaSearch veggiePizzaSearch = new MenuPizzaSearch()
+            {
+                AvailableForPurchase = true,
+                CategoryName = "Veggie"
+            };
 
             // Load all menu pizzas in to each category.
-            List<MenuPizza> popularMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>(new { AvailableForPurchase = true, CategoryName = "Popular" }, "SortOrder");
-            List<MenuPizza> meatsMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>(new { AvailableForPurchase = true, CategoryName = "Meats" }, "SortOrder");
-            List<MenuPizza> veggieMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>(new { AvailableForPurchase = true, CategoryName = "Veggie" }, "SortOrder");
+            IEnumerable<MenuPizza> popularMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>("SortOrder", popularPizzaSearch);
+            IEnumerable<MenuPizza> meatsMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>("SortOrder", meatPizzaSearch);
+            IEnumerable<MenuPizza> veggieMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>("SortOrder", veggiePizzaSearch);
             // Separate into categories
             pizzaMenuVm.PopularPizzaList = CreateMenuPizzaViewModels(popularMenuPizzas, quantityList, sizeList, crustListDictionary);
             pizzaMenuVm.MeatsPizzaList = CreateMenuPizzaViewModels(meatsMenuPizzas, quantityList, sizeList, crustListDictionary);
@@ -141,7 +161,7 @@ namespace PizzaWebsite.Controllers
             return View(pizzaMenuVm);
         }
 
-        private List<MenuPizzaViewModel> CreateMenuPizzaViewModels(List<MenuPizza> menuPizzaList, List<int> quantityList, List<string> sizeList, Dictionary<int, string> crustListDictionary)
+        private List<MenuPizzaViewModel> CreateMenuPizzaViewModels(IEnumerable<MenuPizza> menuPizzaList, List<int> quantityList, List<string> sizeList, Dictionary<int, string> crustListDictionary)
         {
             List<MenuPizzaViewModel> viewModelList = new List<MenuPizzaViewModel>();
 
@@ -168,21 +188,20 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> Cart()
         {
             CartViewModel cartVm = new CartViewModel();
-            List<int> quantityList = ListUtility.CreateQuantityList();
             SiteUser user = await GetCurrentUserAsync();
             List<CartItemJoin> cartItemList = await PizzaDb.GetJoinedCartItemListAsync(user.CurrentCartId);
+            List<int> quantityList = ListUtility.CreateQuantityList();
 
             foreach (CartItemJoin cartItemJoin in cartItemList)
             {
                 CartItemViewModel cartItemVm = new CartItemViewModel()
                 {
+                    CartItemJoin = cartItemJoin,
                     CartItemId = cartItemJoin.CartItem.Id,
                     ProductCategory = cartItemJoin.CartItem.ProductCategory,
                     Price = cartItemJoin.CartItem.PricePerItem.ToString("C", CultureInfo.CurrentCulture),
                     Quantity = cartItemJoin.CartItem.Quantity,
                     QuantityList = quantityList,
-                    Name = cartItemJoin.CartItemType.GetName(PizzaDb),
-                    Description = cartItemJoin.CartItemType.GetDescriptionHtml(PizzaDb),
                     CartItemQuantitySelectId = $"cartItemQuantitySelect-{cartItemJoin.CartItem.Id}",
                     CartItemDeleteButtonId = $"cartItemDeleteButton-{cartItemJoin.CartItem.Id}",
                     CartItemRowId = $"cartItemRow-{cartItemJoin.CartItem.Id}"
@@ -204,7 +223,7 @@ namespace PizzaWebsite.Controllers
                 throw new Exception($"Current user is not allowed to delete cart item ID {cartItemId}.");
             }
 
-            PizzaDb.Delete<CartItem>(cartItemId);
+            await PizzaDb.DeleteByIdAsync<CartItem>(cartItemId);
         }
 
         [HttpPost]
@@ -217,7 +236,7 @@ namespace PizzaWebsite.Controllers
                 throw new Exception($"Current user is not allowed to modify cart item ID {cartItemId}.");
             }
 
-            PizzaDb.CmdUpdateCartItemQuantityAsync(cartItemId, quantity);
+            await PizzaDb.Commands.UpdateCartItemQuantityAsync(cartItemId, quantity);
         }
     }
 }

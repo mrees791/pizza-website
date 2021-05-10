@@ -1,4 +1,5 @@
 ﻿using DataLibrary.Models;
+using DataLibrary.Models.Joins;
 using DataLibrary.Models.Utility;
 using System;
 using System.Collections.Generic;
@@ -32,8 +33,6 @@ namespace PizzaWebsite.Models
     public class CartItemViewModel
     {
         public int CartItemId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
         public string Price { get; set; }
         public int Quantity { get; set; }
         public string ProductCategory { get; set; }
@@ -41,6 +40,7 @@ namespace PizzaWebsite.Models
         public string CartItemDeleteButtonId { get; set; }
         public string CartItemRowId { get; set; }
         public List<int> QuantityList { get; set; }
+        public CartItemJoin CartItemJoin { get; set; }
     }
 
     public class CartViewModel

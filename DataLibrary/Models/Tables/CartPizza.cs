@@ -44,7 +44,7 @@ namespace DataLibrary.Models.Tables
 
         internal override async Task MapEntityAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            Toppings.AddRange(await pizzaDb.GetListAsync<CartPizzaTopping>(new { CartPizzaId = CartItemId }));
+            Toppings.AddRange(await pizzaDb.GetListAsync<CartPizzaTopping>(new { CartItemId = CartItemId }));
         }
 
         internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)

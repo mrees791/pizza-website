@@ -116,7 +116,7 @@ namespace PizzaWebsite.Controllers
                 throw new Exception($"Current user is not allowed to delete delivery address ID {addressId}.");
             }
 
-            await PizzaDb.DeleteAsync<DeliveryAddress>(addressId);
+            await PizzaDb.DeleteByIdAsync<DeliveryAddress>(addressId);
         }
 
         private async Task<bool> AuthorizedToModifyDeliveryAddressAsync(int addressId)

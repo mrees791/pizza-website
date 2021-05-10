@@ -49,5 +49,15 @@ namespace DataLibrary.Models.Tables
         {
             return false;
         }
+
+        internal CartPizzaTopping CreateCartTopping()
+        {
+            return new CartPizzaTopping()
+            {
+                MenuPizzaToppingTypeId = MenuPizzaToppingTypeId,
+                ToppingAmount = ToppingAmount,
+                ToppingHalf = ToppingHalf
+            };
+        }
     }
 }

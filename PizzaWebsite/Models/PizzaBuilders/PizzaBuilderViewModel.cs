@@ -1,4 +1,5 @@
 ﻿using DataLibrary.Models;
+using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
 using System;
@@ -42,12 +43,17 @@ namespace PizzaWebsite.Models.PizzaBuilders
 
         protected virtual async Task LoadBuilderListsAsync(PizzaDatabase pizzaDb, List<PizzaTopping> toppings)
         {
+            MenuItemSearch menuItemSearch = new MenuItemSearch()
+            {
+                AvailableForPurchase = true
+            };
+
+            IEnumerable<MenuPizzaToppingType> toppingTypeList = await pizzaDb.GetListAsync<MenuPizzaToppingType>("SortOrder", menuItemSearch);
+            IEnumerable<MenuPizzaCrustFlavor> crustFlavorList = await pizzaDb.GetListAsync<MenuPizzaCrustFlavor>("SortOrder", menuItemSearch);
+            IEnumerable<MenuPizzaSauce> pizzaSauceList = await pizzaDb.GetListAsync<MenuPizzaSauce>("SortOrder", menuItemSearch);
+            IEnumerable<MenuPizzaCheese> pizzaCheeseList = await pizzaDb.GetListAsync<MenuPizzaCheese>("SortOrder", menuItemSearch);
             SauceAmountList = ListUtility.GetSauceAmountList();
             CheeseAmountList = ListUtility.GetCheeseAmountList();
-            List<MenuPizzaToppingType> toppingTypeList = new List<MenuPizzaToppingType>(await pizzaDb.GetSortedListAsync<MenuPizzaToppingType>(new { AvailableForPurchase = true }, "SortOrder"));
-            List<MenuPizzaCrustFlavor> crustFlavorList = new List<MenuPizzaCrustFlavor>(await pizzaDb.GetListAsync<MenuPizzaCrustFlavor>(new { AvailableForPurchase = true }, "SortOrder"));
-            List<MenuPizzaSauce> pizzaSauceList = new List<MenuPizzaSauce>(await pizzaDb.GetListAsync<MenuPizzaSauce>(new { AvailableForPurchase = true }, "SortOrder"));
-            List<MenuPizzaCheese> pizzaCheeseList = new List<MenuPizzaCheese>(await pizzaDb.GetListAsync<MenuPizzaCheese>(new { AvailableForPurchase = true }, "SortOrder"));
 
             foreach (MenuPizzaCrustFlavor crustFlavor in crustFlavorList)
             {
@@ -65,9 +71,9 @@ namespace PizzaWebsite.Models.PizzaBuilders
             }
 
             // Create view models for toppings
-            for (int iTopping = 0; iTopping < toppingTypeList.Count; iTopping++)
+            for (int iTopping = 0; iTopping < toppingTypeList.Count(); iTopping++)
             {
-                MenuPizzaToppingType toppingType = toppingTypeList[iTopping];
+                MenuPizzaToppingType toppingType = toppingTypeList.ElementAt(iTopping);
 
                 PizzaTopping currentTopping = toppings.Where(t => t.ToppingTypeId == toppingType.Id).FirstOrDefault();
 

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataLibrary.Models.Joins;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -78,6 +79,41 @@ namespace DataLibrary.Models.Tables
         internal override bool UpdateRequiresTransaction()
         {
             return true;
+        }
+
+        public async Task<CartItemJoin> CreateCartRecordsAsync(PizzaDatabase pizzaDb, int cartId, int quantity, string size, int menuCrustId)
+        {
+            CartPizza cartPizza = new CartPizza()
+            {
+                CheeseAmount = CheeseAmount,
+                MenuPizzaCheeseId = MenuPizzaCheeseId,
+                MenuPizzaCrustFlavorId = MenuPizzaCrustFlavorId,
+                MenuPizzaCrustId = menuCrustId,
+                MenuPizzaSauceId = MenuPizzaSauceId,
+                SauceAmount = SauceAmount,
+                Size = size
+            };
+
+            foreach (MenuPizzaTopping menuTopping in Toppings)
+            {
+                cartPizza.Toppings.Add(menuTopping.CreateCartTopping());
+            }
+
+            CartItem cartItem = new CartItem()
+            {
+                CartId = cartId,
+                Quantity = quantity,
+                ProductCategory = ProductCategory.Pizza.ToString(),
+                PricePerItem = await cartPizza.CalculatePriceAsync(pizzaDb)
+            };
+
+            CartItemJoin cartItemJoin = new CartItemJoin()
+            {
+                CartItem = cartItem,
+                CartItemType = cartPizza
+            };
+
+            return cartItemJoin;
         }
     }
 }

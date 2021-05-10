@@ -125,7 +125,12 @@ namespace DataLibrary.Models
         public async Task<TRecord> GetAsync<TRecord>(object id, IDbTransaction transaction = null) where TRecord : Record
         {
             TRecord record = await connection.GetAsync<TRecord>(id, transaction);
-            await record.MapEntityAsync(this);
+
+            if (record != null)
+            {
+                await record.MapEntityAsync(this);
+            }
+
             return record;
         }
 
@@ -220,7 +225,7 @@ namespace DataLibrary.Models
 
         private async Task<SiteRole> GetSiteRoleAsync(string sql, object parameters, IDbTransaction transaction = null)
         {
-            SiteRole role = await connection.QuerySingleAsync<SiteRole>(sql, parameters, transaction);
+            SiteRole role = await connection.QuerySingleOrDefaultAsync<SiteRole>(sql, parameters, transaction);
 
             if (role != null)
             {

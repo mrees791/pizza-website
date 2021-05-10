@@ -31,10 +31,15 @@
                         {
                             @Html.AntiForgeryToken()
                             <input name="cartItemId" type="hidden" value="@cartItemVm.CartItemId" />
-                            <input type="submit" value="@cartItemVm.Name" class="form-control" />
+                            @*
+                            <input type="submit" value="@cartItemVm.Name" class="form-control" />*@
                         }
                     </td>
-                    <td>@Html.Raw(cartItemVm.Description)</td>
+                    <td>
+                        @*
+        @Html.Raw(cartItemVm.Description)
+                        *@
+                    </td>
                     <td>@cartItemVm.Price</td>
                     <td>
                         @Html.DropDownList("Quantity", new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity),

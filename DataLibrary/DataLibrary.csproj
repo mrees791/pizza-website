@@ -88,6 +88,7 @@
     <Compile Include="Models\QueryFilters\SiteUserFilter.cs" />
     <Compile Include="Models\QueryFilters\StoreLocationFilter.cs" />
     <Compile Include="Models\QuerySearches\MenuItemSearch.cs" />
+    <Compile Include="Models\QuerySearches\MenuPizzaSearch.cs" />
     <Compile Include="Models\QuerySearches\QuerySearchBase.cs" />
     <Compile Include="Models\Record.cs" />
     <Compile Include="Models\OrderPhase.cs" />
