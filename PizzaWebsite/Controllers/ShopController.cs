@@ -4,6 +4,7 @@ using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
 using PizzaWebsite.Models;
+using PizzaWebsite.Models.Carts;
 using PizzaWebsite.Models.Identity.Stores;
 using PizzaWebsite.Models.PizzaBuilders;
 using System;
@@ -206,6 +207,8 @@ namespace PizzaWebsite.Controllers
                     CartItemDeleteButtonId = $"cartItemDeleteButton-{cartItemJoin.CartItem.Id}",
                     CartItemRowId = $"cartItemRow-{cartItemJoin.CartItem.Id}"
                 };
+
+                await cartItemVm.UpdateAsync(PizzaDb);
 
                 cartVm.CartItemList.Add(cartItemVm);
             }

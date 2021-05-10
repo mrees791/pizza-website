@@ -29,32 +29,4 @@ namespace PizzaWebsite.Models
             PaginationVm = new PaginationViewModel();
         }
     }
-
-    public class CartItemViewModel
-    {
-        public int CartItemId { get; set; }
-        public string Price { get; set; }
-        public int Quantity { get; set; }
-        public string ProductCategory { get; set; }
-        public string CartItemQuantitySelectId { get; set; }
-        public string CartItemDeleteButtonId { get; set; }
-        public string CartItemRowId { get; set; }
-        public List<int> QuantityList { get; set; }
-        public CartItemJoin CartItemJoin { get; set; }
-    }
-
-    public class CartViewModel
-    {
-        public List<CartItemViewModel> CartItemList { get; set; }
-
-        public CartViewModel()
-        {
-            CartItemList = new List<CartItemViewModel>();
-        }
-
-        public bool IsEmpty()
-        {
-            return !CartItemList.Any();
-        }
-    }
 }

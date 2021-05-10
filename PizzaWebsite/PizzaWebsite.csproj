@@ -182,6 +182,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Carts\CartItemViewModel.cs" />
+    <Compile Include="Models\Carts\CartViewModel.cs" />
     <Compile Include="Models\Databases\DatabaseContext.cs" />
     <Compile Include="Models\Geography\State.cs" />
     <Compile Include="Models\Geography\StateListCreator.cs" />
@@ -296,11 +298,9 @@
     <Content Include="Views\Shop\_MenuPizzaView.cshtml" />
     <Content Include="Views\Manage\ManageAddresses.cshtml" />
     <Content Include="Views\Manage\ManageDeliveryAddress.cshtml" />
-    <Content Include="Views\Shared\Carts\_CartItemDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
