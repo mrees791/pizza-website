@@ -1,6 +1,8 @@
 ﻿using Dapper;
 using DataLibrary.Models.Joins;
 using DataLibrary.Models.QueryFilters;
+using DataLibrary.Models.QuerySearches;
+using DataLibrary.Models.Sql;
 using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
 using System;
@@ -194,7 +196,7 @@ namespace DataLibrary.Models
 
         public async Task<SiteRole> GetSiteRoleByNameAsync(string name, IDbTransaction transaction = null)
         {
-            string sql = SqlUtility.GetSiteRoleSelectSql() + "where Name = @Name";
+            string sql = SelectQueries.siteRoleSelectQuery + "where Name = @Name";
 
             object parameters = new
             {
@@ -206,7 +208,7 @@ namespace DataLibrary.Models
 
         public async Task<SiteRole> GetSiteRoleByIdAsync(int id, IDbTransaction transaction = null)
         {
-            string sql = SqlUtility.GetSiteRoleSelectSql() + "where Id = @Id";
+            string sql = SelectQueries.siteRoleSelectQuery + "where Id = @Id";
 
             object parameters = new
             {
@@ -230,7 +232,7 @@ namespace DataLibrary.Models
 
         public async Task<SiteUser> GetSiteUserByIdAsync(int id, IDbTransaction transaction = null)
         {
-            string sql = SqlUtility.GetSiteUserSelectSql() + "where Id = @Id";
+            string sql = SelectQueries.siteUserSelectQuery + "where Id = @Id";
 
             object parameters = new
             {
@@ -242,7 +244,7 @@ namespace DataLibrary.Models
 
         public async Task<SiteUser> GetSiteUserByEmailAsync(string email, IDbTransaction transaction = null)
         {
-            string sql = SqlUtility.GetSiteUserSelectSql() + "where Email = @Email";
+            string sql = SelectQueries.siteUserSelectQuery + "where Email = @Email";
 
             object parameters = new
             {
@@ -254,7 +256,7 @@ namespace DataLibrary.Models
 
         public async Task<SiteUser> GetSiteUserByNameAsync(string name, IDbTransaction transaction = null)
         {
-            string sql = SqlUtility.GetSiteUserSelectSql() + "where UserName = @UserName";
+            string sql = SelectQueries.siteUserSelectQuery + "where UserName = @UserName";
 
             object parameters = new
             {
@@ -278,7 +280,7 @@ namespace DataLibrary.Models
 
         public async Task<UserLogin> GetLoginAsync(string loginProvider, string providerKey, IDbTransaction transaction = null)
         {
-            string sql = SqlUtility.GetUserLoginSelectSql() + "where LoginProvider = @LoginProvider and ProviderKey = @ProviderKey";
+            string sql = SelectQueries.userLoginSelectQuery + "where LoginProvider = @LoginProvider and ProviderKey = @ProviderKey";
 
             object parameters = new
             {
@@ -287,6 +289,7 @@ namespace DataLibrary.Models
             };
 
             UserLogin userLogin = await connection.QuerySingleOrDefaultAsync<UserLogin>(sql, parameters, transaction);
+
             if (userLogin != null)
             {
                 await userLogin.MapEntityAsync(this, transaction);
@@ -297,12 +300,52 @@ namespace DataLibrary.Models
 
         public async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(IDbTransaction transaction = null) where TRecord : Record
         {
-            return await GetListAsync<TRecord>(new { }, transaction);
+            IEnumerable<TRecord> list = await connection.GetListAsync<TRecord>(new { }, transaction);
+
+            foreach (TRecord record in list)
+            {
+                await record.MapEntityAsync(this);
+            }
+
+            return list;
+        }
+
+        public async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(string orderByColumn, QuerySearchBase querySearch, IDbTransaction transaction = null) where TRecord : Record
+        {
+            string conditions = querySearch.GetWhereConditions(orderByColumn);
+            IEnumerable<TRecord> list = await connection.GetListAsync<TRecord>(conditions, querySearch, transaction);
+
+            foreach (TRecord record in list)
+            {
+                await record.MapEntityAsync(this);
+            }
+
+            return list;
+        }
+
+        public async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(string orderByColumn, IDbTransaction transaction = null) where TRecord : Record
+        {
+            string conditions = $"order by {orderByColumn}";
+            IEnumerable<TRecord> list = await GetListAsync<TRecord>(conditions, null, transaction);
+
+            foreach (TRecord record in list)
+            {
+                await record.MapEntityAsync(this);
+            }
+
+            return list;
         }
 
         internal async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(string conditions, object parameters, IDbTransaction transaction = null) where TRecord : Record
         {
-            return await connection.GetListAsync<TRecord>(conditions, parameters, transaction);
+            IEnumerable<TRecord> list = await connection.GetListAsync<TRecord>(conditions, parameters, transaction);
+
+            foreach (TRecord record in list)
+            {
+                await record.MapEntityAsync(this);
+            }
+
+            return list;
         }
 
         public async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(object whereConditions, IDbTransaction transaction = null) where TRecord : Record

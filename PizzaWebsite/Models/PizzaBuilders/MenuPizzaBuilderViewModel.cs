@@ -1,5 +1,4 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.OldTables;
 using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
 using System;
@@ -44,7 +43,7 @@ namespace PizzaWebsite.Models.PizzaBuilders
             CategoryList = ListUtility.GetPizzaCategoryList();
         }
 
-        public async Task CreateFromEntityAsync(PizzaDatabase pizzaDb, MenuPizza menuPizza)
+        public async Task CreateFromRecordAsync(PizzaDatabase pizzaDb, MenuPizza menuPizza)
         {
             Id = menuPizza.Id;
             Name = menuPizza.PizzaName;

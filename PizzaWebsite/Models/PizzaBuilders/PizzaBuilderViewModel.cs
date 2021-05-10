@@ -1,5 +1,5 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.OldTables;
+using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
 using System;
 using System.Collections.Generic;
@@ -44,10 +44,10 @@ namespace PizzaWebsite.Models.PizzaBuilders
         {
             SauceAmountList = ListUtility.GetSauceAmountList();
             CheeseAmountList = ListUtility.GetCheeseAmountList();
-            List<MenuPizzaToppingType> toppingTypeList = await pizzaDb.GetListAsync<MenuPizzaToppingType>(new { AvailableForPurchase = true }, "SortOrder");
-            List<MenuPizzaCrustFlavor> crustFlavorList = await pizzaDb.GetListAsync<MenuPizzaCrustFlavor>(new { AvailableForPurchase = true }, "SortOrder");
-            List<MenuPizzaSauce> pizzaSauceList = await pizzaDb.GetListAsync<MenuPizzaSauce>(new { AvailableForPurchase = true }, "SortOrder");
-            List<MenuPizzaCheese> pizzaCheeseList = await pizzaDb.GetListAsync<MenuPizzaCheese>(new { AvailableForPurchase = true }, "SortOrder");
+            List<MenuPizzaToppingType> toppingTypeList = new List<MenuPizzaToppingType>(await pizzaDb.GetSortedListAsync<MenuPizzaToppingType>(new { AvailableForPurchase = true }, "SortOrder"));
+            List<MenuPizzaCrustFlavor> crustFlavorList = new List<MenuPizzaCrustFlavor>(await pizzaDb.GetListAsync<MenuPizzaCrustFlavor>(new { AvailableForPurchase = true }, "SortOrder"));
+            List<MenuPizzaSauce> pizzaSauceList = new List<MenuPizzaSauce>(await pizzaDb.GetListAsync<MenuPizzaSauce>(new { AvailableForPurchase = true }, "SortOrder"));
+            List<MenuPizzaCheese> pizzaCheeseList = new List<MenuPizzaCheese>(await pizzaDb.GetListAsync<MenuPizzaCheese>(new { AvailableForPurchase = true }, "SortOrder"));
 
             foreach (MenuPizzaCrustFlavor crustFlavor in crustFlavorList)
             {

@@ -43,7 +43,7 @@ namespace PizzaWebsite.Controllers
         protected override async Task<MenuPizzaBuilderViewModel> RecordToViewModelAsync(MenuPizza record)
         {
             MenuPizzaBuilderViewModel model = new MenuPizzaBuilderViewModel();
-            await model.CreateFromEntityAsync(PizzaDb, record);
+            await model.CreateFromRecordAsync(PizzaDb, record);
 
             return model;
         }

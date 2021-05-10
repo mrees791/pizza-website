@@ -1,5 +1,4 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.OldTables;
 using Microsoft.AspNet.Identity.Owin;
 using PizzaWebsite.Models.Geography;
 using System;

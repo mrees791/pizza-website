@@ -87,6 +87,8 @@
     <Compile Include="Models\QueryFilters\QueryFilterBase.cs" />
     <Compile Include="Models\QueryFilters\SiteUserFilter.cs" />
     <Compile Include="Models\QueryFilters\StoreLocationFilter.cs" />
+    <Compile Include="Models\QuerySearches\MenuItemSearch.cs" />
+    <Compile Include="Models\QuerySearches\QuerySearchBase.cs" />
     <Compile Include="Models\Record.cs" />
     <Compile Include="Models\OrderPhase.cs" />
     <Compile Include="Models\PizzaDatabase.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="Models\PizzaTopping.cs" />
     <Compile Include="Models\ProductCategory.cs" />
     <Compile Include="Models\ColumnValuePair.cs" />
+    <Compile Include="Models\Sql\SelectQueries.cs" />
     <Compile Include="Models\Tables\Cart.cs" />
     <Compile Include="Models\Tables\CartItem.cs" />
     <Compile Include="Models\Tables\CartPizza.cs" />
@@ -117,7 +120,6 @@
     <Compile Include="Models\Tables\UserLogin.cs" />
     <Compile Include="Models\Tables\UserRole.cs" />
     <Compile Include="Models\Utility\ListUtility.cs" />
-    <Compile Include="Models\Utility\SqlUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

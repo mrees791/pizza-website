@@ -4,25 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLibrary.Models.QueryFilters
+namespace DataLibrary.Models.QuerySearches
 {
     /// <summary>
-    /// Used to create a where clause using the SQL like operator to filter query results.
+    /// Used to create a where clause from a list of search values.
     /// </summary>
-    public abstract class QueryFilterBase
+    public abstract class QuerySearchBase
     {
         internal abstract string GetWhereConditions(string orderByColumn = null);
 
-        protected string GetWhereConditions(List<ColumnValuePair> filters, string orderByColumn = null)
+        protected string GetWhereConditions(List<ColumnValuePair> searchValues, string orderByColumn = null)
         {
             string sqlWhereConditions = string.Empty;
             bool queriesAdded = false;
 
-            foreach (ColumnValuePair searchFilter in filters)
+            foreach (ColumnValuePair searchValue in searchValues)
             {
-                if (!string.IsNullOrEmpty(searchFilter.Value))
+                if (!string.IsNullOrEmpty(searchValue.Value))
                 {
-                    string columnName = searchFilter.Column;
+                    string columnName = searchValue.Column;
 
                     if (!queriesAdded)
                     {
@@ -35,7 +35,7 @@ namespace DataLibrary.Models.QueryFilters
 
                     // Only uses the column name with a placeholder to avoid SQL injections.
                     // The column name variable is never set by user input.
-                    sqlWhereConditions += $"{columnName} like '%' + @{columnName} + '%' ";
+                    sqlWhereConditions += $"{columnName} = @{columnName} ";
                     queriesAdded = true;
                 }
             }
