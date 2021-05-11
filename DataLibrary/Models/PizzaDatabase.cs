@@ -38,7 +38,7 @@ namespace DataLibrary.Models
         }
 
         // CRUD
-        public async Task<List<CustomerOrderJoin>> GetJoinedCustomerOrderListAsync(int userId)
+        public async Task<IEnumerable<CustomerOrderJoin>> GetJoinedCustomerOrderListAsync(int userId)
         {
             string whereClause = "where c.UserId = @UserId";
 
@@ -50,7 +50,7 @@ namespace DataLibrary.Models
             return await GetJoinedCustomerOrderListAsync(whereClause, parameters);
         }
 
-        private async Task<List<CustomerOrderJoin>> GetJoinedCustomerOrderListAsync(string whereClause, object parameters)
+        private async Task<IEnumerable<CustomerOrderJoin>> GetJoinedCustomerOrderListAsync(string whereClause, object parameters)
         {
             string joinQuery = @"select c.Id, c.UserId, c.StoreId, c.CartId, c.IsCancelled, 
                                  c.OrderSubtotal, c.OrderTax, c.OrderTotal, c.OrderPhase,
@@ -77,10 +77,10 @@ namespace DataLibrary.Models
                 await customerOrder.MapEntityAsync(this);
             }
 
-            return customerOrderList.ToList();
+            return customerOrderList;
         }
 
-        public async Task<List<CartItemJoin>> GetJoinedCartItemListAsync(int cartId)
+        public async Task<IEnumerable<CartItemJoin>> GetJoinedCartItemListAsync(int cartId)
         {
             List<CartItemJoin> items = new List<CartItemJoin>();
 

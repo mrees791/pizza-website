@@ -191,7 +191,7 @@ namespace PizzaWebsite.Controllers
         {
             CartViewModel cartVm = new CartViewModel();
             SiteUser user = await GetCurrentUserAsync();
-            List<CartItemJoin> cartItemList = await PizzaDb.GetJoinedCartItemListAsync(user.CurrentCartId);
+            IEnumerable<CartItemJoin> cartItemList = await PizzaDb.GetJoinedCartItemListAsync(user.CurrentCartId);
             List<int> quantityList = ListUtility.CreateQuantityList();
 
             foreach (CartItemJoin cartItemJoin in cartItemList)
