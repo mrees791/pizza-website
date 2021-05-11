@@ -22,9 +22,12 @@ namespace PizzaWebsite.Controllers
     {
         public ActionResult Checkout()
         {
+            CheckoutViewModel model = new CheckoutViewModel();
+
             // Run checkout cart command from DataLibrary.
             // todo: Finish
-            throw new NotImplementedException();
+
+            return View("Checkout", model);
         }
 
         private async Task<bool> AuthorizedToModifyCartItemAsync(int cartItemId)
