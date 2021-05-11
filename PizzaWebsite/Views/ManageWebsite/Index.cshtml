@@ -5,25 +5,23 @@
 
 <h2>Manage Website</h2>
 
-<ul>
-    <li>
-        <a href="@Url.Action("Index", "ManageMenu")">
-            <input type="button" value="Manage Menu" class="btn btn-default" />
-        </a>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Home</li>
+    </ol>
+</nav>
+
+<ul class="list-group">
+    <li class="list-group-item">
+        <a href="@Url.Action("Index", "ManageMenu")">Manage Menu</a>
     </li>
-    <li>
-        <a href="@Url.Action("Index", "ManageStores")?Page=1&RowsPerPage=10">
-            <input type="button" value="Manage Stores" class="btn btn-default" />
-        </a>
+    <li class="list-group-item">
+        <a href="@Url.Action("Index", "ManageStores")?Page=1&RowsPerPage=10">Manage Stores</a>
     </li>
-    <li>
-        <a href="@Url.Action("Index", "ManageUsers")?Page=1&RowsPerPage=10">
-            <input type="button" value="Manage Users" class="btn btn-default" />
-        </a>
+    <li class="list-group-item">
+        <a href="@Url.Action("Index", "ManageUsers")?Page=1&RowsPerPage=10">Manage Users</a>
     </li>
-    <li>
-        <a href="@Url.Action("Index", "ManageEmployees")?Page=1&RowsPerPage=10">
-            <input type="button" value="Manage Employees" class="btn btn-default" />
-        </a>
+    <li class="list-group-item">
+        <a href="@Url.Action("Index", "ManageEmployees")?Page=1&RowsPerPage=10">Manage Employees</a>
     </li>
 </ul>
