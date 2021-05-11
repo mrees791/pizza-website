@@ -11,8 +11,6 @@ namespace DataLibrary.Models.Tables
     [Table("CartPizza")]
     public class CartPizza : CartItemTypeRecord
     {
-        [Key]
-        public int CartItemId { get; set; }
         public string Size { get; set; }
         public int MenuPizzaCrustId { get; set; }
         public int MenuPizzaSauceId { get; set; }

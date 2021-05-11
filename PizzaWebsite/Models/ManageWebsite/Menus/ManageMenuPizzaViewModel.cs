@@ -1,6 +1,7 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
+using PizzaWebsite.Models.PizzaBuilders;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,9 +10,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-namespace PizzaWebsite.Models.PizzaBuilders
+namespace PizzaWebsite.Models.ManageWebsite.Menus
 {
-    public class MenuPizzaBuilderViewModel : PizzaBuilderViewModel
+    public class ManageMenuPizzaViewModel : PizzaBuilderViewModel
     {
         [HiddenInput(DisplayValue = false)]
         public int Id { get; set; }

@@ -368,7 +368,7 @@ namespace DataLibrary.Models
         public async Task<IEnumerable<TRecord>> GetPagedListAsync<TRecord>(int pageNumber, int rowsPerPage, string orderByColumn, QueryFilterBase filter,
             IDbTransaction transaction = null) where TRecord : Record
         {
-            string conditions = filter.GetWhereConditions(orderByColumn);
+            string conditions = filter.GetWhereConditions();
             IEnumerable<TRecord> list = await connection.GetListPagedAsync<TRecord>(pageNumber, rowsPerPage, conditions, orderByColumn, filter, transaction);
 
             foreach (TRecord record in list)
@@ -391,17 +391,22 @@ namespace DataLibrary.Models
             {
                 return 0;
             }
+
             int recordCount = await GetNumberOfRecordsAsync<TRecord>(filter);
+
             if (recordCount == 0)
             {
                 return 0;
             }
+
             int pages = recordCount / rowsPerPage;
             int remainder = recordCount % rowsPerPage;
+
             if (remainder != 0)
             {
                 pages += 1;
             }
+
             return pages;
         }
 

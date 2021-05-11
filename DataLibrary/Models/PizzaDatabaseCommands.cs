@@ -36,6 +36,22 @@ namespace DataLibrary.Models
             }
         }
 
+        public async Task ConfirmCustomerOrderAsync(SiteUser siteUser, CustomerOrder customerOrder)
+        {
+            throw new NotImplementedException();
+
+            // Needs completed
+
+            // In transaction:
+            // Create new cart
+            // Move all cart items from ConfirmOrderCartId to new cart
+            // Insert DeliveryInfo if needed
+            // Insert CustomerOrder record
+
+            // Delete all cart items in CurrentCartId
+            // Delete all cart items in ConfirmOrderCartId
+        }
+
         public async Task<bool> UserOwnsDeliveryAddressAsync(int userId, int deliveryAddressId)
         {
             DeliveryAddress address = await pizzaDb.GetAsync<DeliveryAddress>(deliveryAddressId);

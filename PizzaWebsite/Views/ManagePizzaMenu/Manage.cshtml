@@ -1,4 +1,5 @@
-﻿@model PizzaWebsite.Models.PizzaBuilders.MenuPizzaBuilderViewModel
+﻿@using PizzaWebsite.Models.ManageWebsite.Menus
+@model ManageMenuPizzaViewModel
 
 @{
     if (Model.IsNewRecord())
@@ -40,7 +41,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="form-group">
             @Html.LabelFor(model => model.SelectedCategory, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -52,7 +53,7 @@
                 @Html.ValidationMessageFor(model => model.SelectedCategory, "", new { @class = "text-danger" })
             </div>
         </div>
-        
+
         <div class="form-group">
             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -62,7 +63,7 @@
         </div>
 
         @Html.Partial("_PizzaBuilder", Model)
-        
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 @if (Model.IsNewRecord())

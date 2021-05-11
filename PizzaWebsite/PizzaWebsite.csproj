@@ -182,8 +182,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Attributes\PhoneNumberAttribute.cs" />
+    <Compile Include="Models\Attributes\ZipCodeAttribute.cs" />
     <Compile Include="Models\Carts\CartItemViewModel.cs" />
     <Compile Include="Models\Carts\CartViewModel.cs" />
+    <Compile Include="Models\ConfirmationViewModel.cs" />
     <Compile Include="Models\Databases\DatabaseContext.cs" />
     <Compile Include="Models\Geography\State.cs" />
     <Compile Include="Models\Geography\StateListCreator.cs" />
@@ -193,17 +196,26 @@
     <Compile Include="Models\Identity\Stores\RoleStore.cs" />
     <Compile Include="Models\Identity\Stores\UserStore.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\ManageWebsiteViewModels.cs" />
+    <Compile Include="Models\ManageWebsite\ErrorViewModel.cs" />
+    <Compile Include="Models\ManageWebsite\ManageEmployeeViewModel.cs" />
+    <Compile Include="Models\ManageWebsite\ManagePagedListViewModel.cs" />
+    <Compile Include="Models\ManageWebsite\ManageStoreViewModel.cs" />
+    <Compile Include="Models\ManageWebsite\ManageUserViewModel.cs" />
+    <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaCheeseViewModel.cs" />
+    <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaCrustFlavorViewModel.cs" />
+    <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaCrustViewModel.cs" />
+    <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaSauceViewModel.cs" />
+    <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaToppingTypeViewModel.cs" />
+    <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaViewModel.cs" />
     <Compile Include="Models\Manage\DeliveryAddressListItemViewModel.cs" />
     <Compile Include="Models\Manage\ManageAddressesViewModel.cs" />
     <Compile Include="Models\Manage\ManageDeliveryAddressViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\CartPizzaBuilderViewModel.cs" />
-    <Compile Include="Models\PizzaBuilders\MenuPizzaBuilderViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\PizzaBuilderViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\PizzaToppingViewModel.cs" />
-    <Compile Include="Models\PizzaViewModels.cs" />
     <Compile Include="Models\SharedViewModels.cs" />
-    <Compile Include="Models\ShopViewModels.cs" />
+    <Compile Include="Models\Shop\MenuPizzaViewModel.cs" />
+    <Compile Include="Models\Shop\PizzaMenuPageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

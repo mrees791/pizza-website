@@ -1,6 +1,7 @@
 ﻿using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Models;
+using PizzaWebsite.Models.ManageWebsite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,8 +62,7 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> EditStore(int? id)
         {
-            List<StoreLocation> storeList = new List<StoreLocation>(await PizzaDb.GetListAsync<StoreLocation>(new { Id = id.Value }));
-            StoreLocation store = storeList.FirstOrDefault();
+            StoreLocation store = await PizzaDb.GetAsync<StoreLocation>(id.Value);
             ManageStoreViewModel model = RecordToViewModel(store);
 
             return View("ManageStore", model);

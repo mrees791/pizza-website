@@ -7,6 +7,7 @@ using PizzaWebsite.Models;
 using PizzaWebsite.Models.Carts;
 using PizzaWebsite.Models.Identity.Stores;
 using PizzaWebsite.Models.PizzaBuilders;
+using PizzaWebsite.Models.Shop;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

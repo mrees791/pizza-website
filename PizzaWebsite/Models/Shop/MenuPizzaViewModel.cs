@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace PizzaWebsite.Models
+namespace PizzaWebsite.Models.Shop
 {
     public class MenuPizzaViewModel
     {
@@ -19,19 +19,5 @@ namespace PizzaWebsite.Models
         [Display(Name = "Quantity")]
         public int SelectedQuantity { get; set; }
         public List<int> QuantityList { get; set; }
-    }
-
-    public class PizzaMenuPageViewModel
-    {
-        public List<MenuPizzaViewModel> PopularPizzaList { get; set; }
-        public List<MenuPizzaViewModel> MeatsPizzaList { get; set; }
-        public List<MenuPizzaViewModel> VeggiePizzaList { get; set; }
-
-        public PizzaMenuPageViewModel()
-        {
-            PopularPizzaList = new List<MenuPizzaViewModel>();
-            MeatsPizzaList = new List<MenuPizzaViewModel>();
-            VeggiePizzaList = new List<MenuPizzaViewModel>();
-        }
     }
 }

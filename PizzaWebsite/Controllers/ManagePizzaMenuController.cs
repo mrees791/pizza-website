@@ -3,6 +3,7 @@ using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
 using PizzaWebsite.Models;
+using PizzaWebsite.Models.ManageWebsite.Menus;
 using PizzaWebsite.Models.PizzaBuilders;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using System.Web.Mvc;
 namespace PizzaWebsite.Controllers
 {
     [Authorize(Roles = "Admin,Manager")]
-    public class ManagePizzaMenuController : BaseManageMenuController<MenuPizza, MenuPizzaBuilderViewModel>
+    public class ManagePizzaMenuController : BaseManageMenuController<MenuPizza, ManageMenuPizzaViewModel>
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
@@ -28,21 +29,21 @@ namespace PizzaWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Add(MenuPizzaBuilderViewModel model)
+        public async Task<ActionResult> Add(ManageMenuPizzaViewModel model)
         {
             return await Add(model, model.Name);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(MenuPizzaBuilderViewModel model)
+        public async Task<ActionResult> Edit(ManageMenuPizzaViewModel model)
         {
             return await Edit(model, model.Name);
         }
 
-        protected override async Task<MenuPizzaBuilderViewModel> RecordToViewModelAsync(MenuPizza record)
+        protected override async Task<ManageMenuPizzaViewModel> RecordToViewModelAsync(MenuPizza record)
         {
-            MenuPizzaBuilderViewModel model = new MenuPizzaBuilderViewModel();
+            ManageMenuPizzaViewModel model = new ManageMenuPizzaViewModel();
             await model.CreateFromRecordAsync(PizzaDb, record);
 
             return model;
@@ -65,7 +66,7 @@ namespace PizzaWebsite.Controllers
             }
         }
 
-        protected override MenuPizza ViewModelToRecord(MenuPizzaBuilderViewModel model)
+        protected override MenuPizza ViewModelToRecord(ManageMenuPizzaViewModel model)
         {
             MenuPizza entity = new MenuPizza()
             {

@@ -1,5 +1,4 @@
-﻿using DataLibrary.Models.Utility;
-using PizzaWebsite.Models.Attributes;
+﻿using PizzaWebsite.Models.Attributes;
 using PizzaWebsite.Models.Geography;
 using System;
 using System.Collections.Generic;
@@ -7,29 +6,22 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace PizzaWebsite.Models.Manage
+namespace PizzaWebsite.Models.ManageWebsite
 {
-    public class ManageDeliveryAddressViewModel
+    public class ManageStoreViewModel
     {
-        public ManageDeliveryAddressViewModel()
+        public ManageStoreViewModel()
         {
             StateList = StateListCreator.CreateStateList();
-            AddressTypeList = ListUtility.CreateDeliveryAddressTypeList();
         }
 
         public List<State> StateList { get; set; }
-        public List<string> AddressTypeList { get; set; }
-
         public int Id { get; set; }
 
         [Required]
-        [Display(Name = "Name")]
+        [Display(Name = "Store Name")]
         [MaxLength(50)]
         public string Name { get; set; }
-
-        [Required]
-        [Display(Name = "Address Type")]
-        public string SelectedAddressType { get; set; }
 
         [Required]
         [Display(Name = "Street Address")]
@@ -54,6 +46,9 @@ namespace PizzaWebsite.Models.Manage
         [Display(Name = "Phone Number")]
         [PhoneNumber]
         public string PhoneNumber { get; set; }
+
+        [Display(Name = "Is Active")]
+        public bool IsActiveLocation { get; set; }
 
         public bool IsNewRecord()
         {

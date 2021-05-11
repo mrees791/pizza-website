@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Joins
 {
-    public class CartItemJoin : Record
+    public class CartItemJoin : Record, IComparable<CartItemJoin>
     {
         public CartItem CartItem { get; set; }
         public CartItemTypeRecord CartItemType { get; set; }
@@ -51,6 +51,11 @@ namespace DataLibrary.Models.Joins
         internal override bool UpdateRequiresTransaction()
         {
             return true;
+        }
+
+        public int CompareTo(CartItemJoin other)
+        {
+            return CartItem.Id.CompareTo(other.CartItem.Id);
         }
     }
 }
