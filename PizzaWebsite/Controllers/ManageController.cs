@@ -66,7 +66,7 @@ namespace PizzaWebsite.Controllers
             }
             else
             {
-                bool authorized = await AuthorizedToModifyDeliveryAddressAsync(addressVm.Id);
+                bool authorized = await DeliveryAddressAuthorizationAsync(addressVm.Id);
 
                 if (!authorized)
                 {
@@ -83,7 +83,7 @@ namespace PizzaWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ModifyDeliveryAddress(int addressId)
         {
-            bool authorized = await AuthorizedToModifyDeliveryAddressAsync(addressId);
+            bool authorized = await DeliveryAddressAuthorizationAsync(addressId);
 
             if (!authorized)
             {
@@ -109,7 +109,7 @@ namespace PizzaWebsite.Controllers
 
         public async Task DeleteDeliveryAddress(int addressId)
         {
-            bool authorized = await AuthorizedToModifyDeliveryAddressAsync(addressId);
+            bool authorized = await DeliveryAddressAuthorizationAsync(addressId);
 
             if (!authorized)
             {
@@ -119,7 +119,7 @@ namespace PizzaWebsite.Controllers
             await PizzaDb.DeleteByIdAsync<DeliveryAddress>(addressId);
         }
 
-        private async Task<bool> AuthorizedToModifyDeliveryAddressAsync(int addressId)
+        private async Task<bool> DeliveryAddressAuthorizationAsync(int addressId)
         {
             return await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId<int>(), addressId);
         }
