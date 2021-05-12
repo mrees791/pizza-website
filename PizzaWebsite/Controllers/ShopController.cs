@@ -34,6 +34,38 @@ namespace PizzaWebsite.Controllers
             return View("Checkout", model);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> SubmitOrder(CheckoutViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Checkout", model);
+            }
+
+            // Validate order confirmation ID
+            SiteUser user = await GetCurrentUserAsync();
+            bool validConfirmationId = model.OrderConfirmationId == user.OrderConfirmationId;
+
+            if (!validConfirmationId)
+            {
+                return RedirectToAction("OrderExpired");
+            }
+
+            // todo: RUN SUBMIT ORDER COMMAND
+
+            return RedirectToAction("OrderConfirmed");
+        }
+
+        public ActionResult OrderConfirmed()
+        {
+            return View();
+        }
+
+        public ActionResult OrderExpired()
+        {
+            return View();
+        }
+
         private async Task<bool> AuthorizedToModifyCartItemAsync(int cartItemId)
         {
             return await PizzaDb.Commands.UserOwnsCartItemAsync(await GetCurrentUserAsync(), cartItemId);

@@ -9,6 +9,14 @@ namespace DataLibrary.Models.Utility
 {
     public static class ListUtility
     {
+        public static List<string> CreateCustomerOrderTypeList()
+        {
+            return new List<string>()
+            {
+                "Pickup", "Delivery"
+            };
+        }
+
         public static List<string> CreateDeliveryAddressTypeList()
         {
             return new List<string>()

@@ -12,7 +12,7 @@
 }
 else
 {
-    using (Html.BeginForm())
+    using (Html.BeginForm("SubmitOrder", "Shop"))
     {
         @Html.AntiForgeryToken()
         <input name="orderConfirmationId" type="hidden" value="@Model.OrderConfirmationId" />
@@ -33,7 +33,7 @@ else
 
             <div class="form-group">
                 <div class="col-md-2">
-                    <input type="submit" value="Confirm Order" class="btn btn-default" />
+                    <input type="submit" value="Submit Order" class="btn btn-default" />
                 </div>
             </div>
         </div>
