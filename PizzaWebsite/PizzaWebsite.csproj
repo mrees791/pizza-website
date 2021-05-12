@@ -312,6 +312,9 @@
     <Content Include="Views\Manage\ManageAddresses.cshtml" />
     <Content Include="Views\Manage\ManageDeliveryAddress.cshtml" />
     <Content Include="Views\Shop\Checkout.cshtml" />
+    <Content Include="Views\Shared\Carts\_Cart.cshtml" />
+    <Content Include="Views\Shared\Carts\_CartWithControls.cshtml" />
+    <Content Include="Views\Shop\OrderExpired.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

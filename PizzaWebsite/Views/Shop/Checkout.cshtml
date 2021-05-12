@@ -6,7 +6,7 @@
 
 <h2>Checkout</h2>
 
-@if (Model.CartIsEmpty)
+@if (Model.Cart.IsEmpty())
 {
     <p>Your cart is empty.</p>
 }
@@ -15,6 +15,7 @@ else
     using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
+        <input name="orderConfirmationId" type="hidden" value="@Model.OrderConfirmationId" />
 
         <div class="form-horizontal">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -28,6 +29,7 @@ else
                     </div>
                 </div>
             *@
+            @Html.Partial("~/Views/Shared/Carts/_Cart.cshtml", Model.Cart)
 
             <div class="form-group">
                 <div class="col-md-2">

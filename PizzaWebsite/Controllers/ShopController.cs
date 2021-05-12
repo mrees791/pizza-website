@@ -20,12 +20,16 @@ namespace PizzaWebsite.Controllers
 {
     public class ShopController : BaseController
     {
-        public ActionResult Checkout()
+        public async Task<ActionResult> Checkout()
         {
-            CheckoutViewModel model = new CheckoutViewModel();
+            await PizzaDb.Commands.CheckoutCartAsync(await GetCurrentUserAsync());
 
-            // Run checkout cart command from DataLibrary.
-            // todo: Finish
+            SiteUser updatedUser = await GetCurrentUserAsync();
+            IEnumerable<CartItemJoin> cartItemList = await PizzaDb.GetJoinedCartItemListAsync(updatedUser.ConfirmOrderCartId);
+
+            CheckoutViewModel model = new CheckoutViewModel();
+            model.OrderConfirmationId = updatedUser.OrderConfirmationId;
+            await model.Cart.LoadCartItems(updatedUser.ConfirmOrderCartId, PizzaDb);
 
             return View("Checkout", model);
         }
@@ -192,30 +196,10 @@ namespace PizzaWebsite.Controllers
         [Authorize]
         public async Task<ActionResult> Cart()
         {
-            CartViewModel cartVm = new CartViewModel();
             SiteUser user = await GetCurrentUserAsync();
-            IEnumerable<CartItemJoin> cartItemList = await PizzaDb.GetJoinedCartItemListAsync(user.CurrentCartId);
-            List<int> quantityList = ListUtility.CreateQuantityList();
+            CartViewModel cartVm = new CartViewModel();
 
-            foreach (CartItemJoin cartItemJoin in cartItemList)
-            {
-                CartItemViewModel cartItemVm = new CartItemViewModel()
-                {
-                    CartItemJoin = cartItemJoin,
-                    CartItemId = cartItemJoin.CartItem.Id,
-                    ProductCategory = cartItemJoin.CartItem.ProductCategory,
-                    Price = cartItemJoin.CartItem.PricePerItem.ToString("C", CultureInfo.CurrentCulture),
-                    Quantity = cartItemJoin.CartItem.Quantity,
-                    QuantityList = quantityList,
-                    CartItemQuantitySelectId = $"cartItemQuantitySelect-{cartItemJoin.CartItem.Id}",
-                    CartItemDeleteButtonId = $"cartItemDeleteButton-{cartItemJoin.CartItem.Id}",
-                    CartItemRowId = $"cartItemRow-{cartItemJoin.CartItem.Id}"
-                };
-
-                await cartItemVm.UpdateAsync(PizzaDb);
-
-                cartVm.CartItemList.Add(cartItemVm);
-            }
+            await cartVm.LoadCartItems(user.CurrentCartId, PizzaDb);
 
             return View(cartVm);
         }

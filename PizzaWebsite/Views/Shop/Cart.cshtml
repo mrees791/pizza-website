@@ -12,47 +12,7 @@
     <p>Your cart is empty.</p>
 </div>
 <div id="cartBlock" style="display: none;">
-    <table class="table" id="cartTable">
-        <thead>
-            <tr>
-                <th>Item</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                @* Empty table header for controls. *@
-                <th></th>
-            </tr>
-        </thead>
-        <tbody id="cartTableBody">
-            @foreach (CartItemViewModel cartItemVm in Model.CartItemList)
-            {
-                <tr id="@cartItemVm.CartItemRowId">
-                    <td>
-                        @using (Html.BeginForm("ModifyCartPizza", "Shop", FormMethod.Post))
-                        {
-                            @Html.AntiForgeryToken()
-                            <input name="cartItemId" type="hidden" value="@cartItemVm.CartItemId" />
-                            <input type="submit" value="@cartItemVm.Name" class="form-control" />
-                        }
-                    </td>
-                    <td>@Html.Raw(cartItemVm.DescriptionHtml)</td>
-                    <td>@cartItemVm.Price</td>
-                    <td>
-                        @Html.DropDownList("Quantity", new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity),
-                            new
-                            {
-                                @class = "form-control",
-                                id = cartItemVm.CartItemQuantitySelectId,
-                                name = "Quantity"
-                            })
-                    </td>
-                    <td>
-                        <input type="button" value="Remove" id="@cartItemVm.CartItemDeleteButtonId" class="form-control" />
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    @Html.Partial("~/Views/Shared/Carts/_CartWithControls.cshtml")
     @Html.ActionLink("Checkout", "Checkout")
 </div>
 
