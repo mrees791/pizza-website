@@ -15,11 +15,6 @@ namespace PizzaWebsite.Models.Carts
     {
         public List<CartItemViewModel> CartItemList { get; set; }
 
-        public CartViewModel()
-        {
-            CartItemList = new List<CartItemViewModel>();
-        }
-
         public async Task LoadCartItems(int cartId, PizzaDatabase pizzaDb)
         {
             List<int> quantityList = ListUtility.CreateQuantityList();

@@ -28,7 +28,8 @@ namespace DataLibrary.Models
 
             using (var transaction = pizzaDb.Connection.BeginTransaction())
             {
-                siteUser.OrderConfirmationId++;
+                // todo: Remove old order confirmation ID code
+                //siteUser.OrderConfirmationId++;
                 await siteUser.UpdateAsync(pizzaDb, transaction);
                 await CloneCart(cartItems, siteUser.ConfirmOrderCartId, transaction);
 
@@ -36,20 +37,26 @@ namespace DataLibrary.Models
             }
         }
 
-        public async Task ConfirmCustomerOrderAsync(SiteUser siteUser, CustomerOrder customerOrder)
+        public async Task SubmitCustomerOrderAsync(SiteUser siteUser, CustomerOrder customerOrder, DeliveryInfo deliveryInfo = null)
         {
-            throw new NotImplementedException();
+            using (var transaction = pizzaDb.Connection.BeginTransaction())
+            {
+                Cart cart = new Cart();
+                customerOrder.CartId = await cart.InsertAsync(pizzaDb, transaction);
+                await MoveCartItems(siteUser.ConfirmOrderCartId, cart.Id, transaction);
 
-            // Needs completed
+                if (deliveryInfo != null)
+                {
+                    customerOrder.IsDelivery = true;
+                    customerOrder.DeliveryInfoId = await deliveryInfo.InsertAsync(pizzaDb, transaction);
+                }
 
-            // In transaction:
-            // Create new cart
-            // Move all cart items from ConfirmOrderCartId to new cart
-            // Insert DeliveryInfo if needed
-            // Insert CustomerOrder record
+                await customerOrder.InsertAsync(pizzaDb, transaction);
+                await DeleteAllCartItemsAsync(siteUser.CurrentCartId, transaction);
+                await DeleteAllCartItemsAsync(siteUser.ConfirmOrderCartId, transaction);
 
-            // Delete all cart items in CurrentCartId
-            // Delete all cart items in ConfirmOrderCartId
+                transaction.Commit();
+            }
         }
 
         public async Task<bool> UserOwnsDeliveryAddressAsync(int userId, int deliveryAddressId)

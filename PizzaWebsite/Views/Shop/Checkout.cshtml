@@ -15,11 +15,11 @@ else
     using (Html.BeginForm("SubmitOrder", "Shop"))
     {
         @Html.AntiForgeryToken()
-        <input name="orderConfirmationId" type="hidden" value="@Model.OrderConfirmationId" />
 
         <div class="form-horizontal">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
+            @* todo: Remove commented code *@
             @*
                 <div class="form-group">
                     @Html.LabelFor(model => model.TestProperty, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -29,11 +29,61 @@ else
                     </div>
                 </div>
             *@
+
+            @*
+            <div class="form-group">
+                @Html.LabelFor(model => model.SelectedOrderType, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.SelectedOrderType, new SelectList(Model.OrderTypeList), "Address Type")
+                    @Html.ValidationMessageFor(model => model.SelectedOrderType, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+            
+            <div class="form-group">
+                @Html.LabelFor(model => model.SelectedOrderType, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.SelectedOrderType, new SelectList(Model.OrderTypeList), "Order Type")
+                    @Html.ValidationMessageFor(model => model.SelectedOrderType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SelectedStoreLocationId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.SelectedStoreLocationId, new SelectList(Model.StoreLocationSelectList, "Value", "Text"), "Location")
+                    @Html.ValidationMessageFor(model => model.SelectedStoreLocationId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @* todo: Use AJAX to render or hide _CheckoutDeliveryInfo if user selected order as a delivery. *@
+            <div id="deliveryInfoDiv">
+                <h3>Delivery Info</h3>
+                @Html.Partial("_CheckoutDeliveryInfo")
+            </div>
+
+            <h3>Order Summary</h3>
             @Html.Partial("~/Views/Shared/Carts/_Cart.cshtml", Model.Cart)
+
+            <h3>Cost Summary</h3>
+            <table class="table">
+                <tr>
+                    <td>Subtotal</td>
+                    <td>@Model.OrderSubtotal</td>
+                </tr>
+                <tr>
+                    <td>Tax</td>
+                    <td>@Model.OrderTax</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td>@Model.OrderTotal</td>
+                </tr>
+            </table>
 
             <div class="form-group">
                 <div class="col-md-2">
-                    <input type="submit" value="Submit Order" class="btn btn-default" />
+                    <input type="submit" value="Place Your Order" class="btn btn-primary" />
                 </div>
             </div>
         </div>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -23,7 +24,13 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> ManageAddresses()
         {
             ManageAddressesViewModel viewModel = new ManageAddressesViewModel();
-            List<DeliveryAddress> addressList = new List<DeliveryAddress>(await PizzaDb.GetListAsync<DeliveryAddress>(new { UserId = User.Identity.GetUserId<int>() }));
+
+            DeliveryAddressSearch addressSearch = new DeliveryAddressSearch()
+            {
+                UserId = User.Identity.GetUserId<int>()
+            };
+
+            IEnumerable<DeliveryAddress> addressList = await PizzaDb.GetListAsync<DeliveryAddress>("Name", addressSearch);
 
             foreach (DeliveryAddress address in addressList)
             {
