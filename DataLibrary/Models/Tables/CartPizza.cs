@@ -77,7 +77,7 @@ namespace DataLibrary.Models.Tables
             return await pizzaDb.Connection.UpdateAsync(this, transaction);
         }
 
-        public override async Task<decimal> CalculatePriceAsync(PizzaDatabase pizzaDb)
+        public override async Task<decimal> CalculateItemPriceAsync(PizzaDatabase pizzaDb)
         {
             decimal total = 0.0m;
 

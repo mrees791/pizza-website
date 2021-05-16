@@ -2,6 +2,7 @@
 (
   Id INT NOT NULL IDENTITY,
   CartId INT NOT NULL,
+  Price DECIMAL(20,2) NOT NULL,
   PricePerItem DECIMAL(20,2) NOT NULL,
   Quantity INT NOT NULL,
   ProductCategory NVARCHAR(50) NOT NULL,

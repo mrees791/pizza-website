@@ -14,6 +14,7 @@ namespace DataLibrary.Models.Tables
         [Key]
         public int Id { get; set; }
         public int CartId { get; set; }
+        public decimal Price { get; set; }
         public decimal PricePerItem { get; set; }
         public int Quantity { get; set; }
         public string ProductCategory { get; set; }
@@ -27,6 +28,7 @@ namespace DataLibrary.Models.Tables
         {
             int? id = await pizzaDb.Connection.InsertAsync(this, transaction);
             Id = id.Value;
+
             return Id;
         }
 

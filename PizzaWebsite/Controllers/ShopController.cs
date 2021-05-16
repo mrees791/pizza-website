@@ -63,9 +63,9 @@ namespace PizzaWebsite.Controllers
             // Costs
             decimal orderSubtotal = 0.0m;
 
-            foreach (CartItemJoin cartItem in cartItemList)
+            foreach (CartItemJoin cartItemJoin in cartItemList)
             {
-                orderSubtotal += await cartItem.CartItemType.CalculatePriceAsync(PizzaDb);
+                orderSubtotal += cartItemJoin.CartItem.Price;
             }
 
             decimal orderTax = orderSubtotal * 0.05m;
@@ -233,13 +233,16 @@ namespace PizzaWebsite.Controllers
                 SiteUser currentUser = await GetCurrentUserAsync();
                 CartPizza cartPizza = model.ToCartPizza();
 
+                decimal pricePerItem = await cartPizza.CalculateItemPriceAsync(PizzaDb);
+
                 CartItem cartItem = new CartItem()
                 {
                     Id = model.Id,
-                    PricePerItem = await cartPizza.CalculatePriceAsync(PizzaDb),
                     CartId = currentUser.CurrentCartId,
                     ProductCategory = ProductCategory.Pizza.ToString(),
-                    Quantity = model.SelectedQuantity
+                    Quantity = model.SelectedQuantity,
+                    PricePerItem = pricePerItem,
+                    Price = pricePerItem * model.SelectedQuantity
                 };
 
                 CartItemJoin cartItemJoin = new CartItemJoin()
@@ -370,7 +373,7 @@ namespace PizzaWebsite.Controllers
         }
 
         [HttpPost]
-        public async Task UpdateCartItemQuantity(int cartItemId, int quantity)
+        public async Task<string> UpdateCartItemQuantity(int cartItemId, int quantity)
         {
             bool authorized = await AuthorizedToModifyCartItemAsync(cartItemId);
 
@@ -379,7 +382,9 @@ namespace PizzaWebsite.Controllers
                 throw new Exception($"Current user is not allowed to modify cart item ID {cartItemId}.");
             }
 
-            await PizzaDb.Commands.UpdateCartItemQuantityAsync(cartItemId, quantity);
+            CartItem updatedCartItem = await PizzaDb.Commands.UpdateCartItemQuantityAsync(cartItemId, quantity);
+
+            return updatedCartItem.Price.ToString("C", CultureInfo.CurrentCulture);
         }
     }
 }

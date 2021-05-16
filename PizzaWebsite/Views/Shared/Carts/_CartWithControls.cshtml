@@ -26,7 +26,7 @@
                     }
                 </td>
                 <td>@Html.Raw(cartItemVm.DescriptionHtml)</td>
-                <td>@cartItemVm.Price</td>
+                <td id="@cartItemVm.CartItemPriceCellId">@cartItemVm.Price</td>
                     <td>
                         @Html.DropDownList("Quantity", new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity),
                             new

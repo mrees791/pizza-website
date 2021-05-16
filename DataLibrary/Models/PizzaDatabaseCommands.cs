@@ -22,14 +22,14 @@ namespace DataLibrary.Models
             this.pizzaDb = pizzaDb;
         }
 
+        // todo: Add server side validation
         public async Task CheckoutCartAsync(SiteUser siteUser)
         {
             List<CartItemJoin> cartItems = new List<CartItemJoin>(await pizzaDb.GetJoinedCartItemListAsync(siteUser.CurrentCartId));
 
             using (var transaction = pizzaDb.Connection.BeginTransaction())
             {
-                // todo: Remove old order confirmation ID code
-                //siteUser.OrderConfirmationId++;
+                siteUser.OrderConfirmationId++;
                 await siteUser.UpdateAsync(pizzaDb, transaction);
                 await CloneCart(cartItems, siteUser.ConfirmOrderCartId, transaction);
 
@@ -120,17 +120,20 @@ namespace DataLibrary.Models
             return await pizzaDb.Connection.ExecuteAsync(updateQuerySql, queryParameters, transaction);
         }
 
-        public async Task<int> UpdateCartItemQuantityAsync(int cartItemId, int quantity, IDbTransaction transaction = null)
+        public async Task<CartItem> UpdateCartItemQuantityAsync(int cartItemId, int quantity)
         {
-            string updateQuerySql = @"update dbo.CartItem set Quantity = @Quantity where Id = @Id;";
+            CartItem cartItem = await pizzaDb.GetAsync<CartItem>(cartItemId);
 
-            object queryParameters = new
+            using (IDbTransaction transaction = pizzaDb.Connection.BeginTransaction())
             {
-                Id = cartItemId,
-                Quantity = quantity
-            };
+                cartItem.Quantity = quantity;
+                cartItem.Price = cartItem.Quantity * cartItem.PricePerItem;
+                await cartItem.UpdateAsync(pizzaDb, transaction);
 
-            return await pizzaDb.Connection.ExecuteAsync(updateQuerySql, queryParameters, transaction);
+                transaction.Commit();
+            }
+
+            return cartItem;
         }
     }
 }

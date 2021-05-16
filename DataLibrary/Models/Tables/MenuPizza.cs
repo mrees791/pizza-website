@@ -99,12 +99,15 @@ namespace DataLibrary.Models.Tables
                 cartPizza.Toppings.Add(menuTopping.CreateCartTopping());
             }
 
+            decimal pricePerItem = await cartPizza.CalculateItemPriceAsync(pizzaDb);
+
             CartItem cartItem = new CartItem()
             {
                 CartId = cartId,
                 Quantity = quantity,
                 ProductCategory = ProductCategory.Pizza.ToString(),
-                PricePerItem = await cartPizza.CalculatePriceAsync(pizzaDb)
+                PricePerItem = pricePerItem,
+                Price = pricePerItem * quantity
             };
 
             CartItemJoin cartItemJoin = new CartItemJoin()

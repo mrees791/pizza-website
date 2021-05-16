@@ -27,11 +27,12 @@ namespace PizzaWebsite.Models.Carts
                     CartItemJoin = cartItemJoin,
                     CartItemId = cartItemJoin.CartItem.Id,
                     ProductCategory = cartItemJoin.CartItem.ProductCategory,
-                    Price = cartItemJoin.CartItem.PricePerItem.ToString("C", CultureInfo.CurrentCulture),
+                    Price = cartItemJoin.CartItem.Price.ToString("C", CultureInfo.CurrentCulture),
                     Quantity = cartItemJoin.CartItem.Quantity,
                     QuantityList = quantityList,
                     CartItemQuantitySelectId = $"cartItemQuantitySelect-{cartItemJoin.CartItem.Id}",
                     CartItemDeleteButtonId = $"cartItemDeleteButton-{cartItemJoin.CartItem.Id}",
+                    CartItemPriceCellId = $"cartItemPriceCell-{cartItemJoin.CartItem.Id}",
                     CartItemRowId = $"cartItemRow-{cartItemJoin.CartItem.Id}"
                 };
 

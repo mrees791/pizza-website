@@ -30,13 +30,17 @@
                 var rowId = '#@cartItemVm.CartItemRowId';
                 var quantitySelectId = '#@cartItemVm.CartItemQuantitySelectId';
                 var deleteButtonId = '#@cartItemVm.CartItemDeleteButtonId';
+                var priceCellId = '#@cartItemVm.CartItemPriceCellId';
                 // Update cart item quantity
                 $(quantitySelectId).on("change", function () {
                     var quantity = $(quantitySelectId).val();
                     var params = { cartItemId: @cartItemVm.CartItemId, quantity: quantity };
                     pizzaSiteNs.ajaxCall('/Shop/UpdateCartItemQuantity', JSON.stringify(params), 'POST').fail(function (error) {
-			            alert(error.statusText);
-		            });
+                        alert(error.statusText);
+                    })
+                    .done(function (updatedPrice) {
+                        $(priceCellId).text(updatedPrice);
+                    });
                 });
                 // Delete cart item
                 $(deleteButtonId).on("click", function () {

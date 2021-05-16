@@ -14,6 +14,6 @@ namespace DataLibrary.Models
         public int CartItemId { get; set; }
 
         public abstract void SetCartItemId(int cartItemId);
-        public abstract Task<decimal> CalculatePriceAsync(PizzaDatabase pizzaDb);
+        public abstract Task<decimal> CalculateItemPriceAsync(PizzaDatabase pizzaDb);
     }
 }
