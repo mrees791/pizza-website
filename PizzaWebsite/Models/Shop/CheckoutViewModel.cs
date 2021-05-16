@@ -75,6 +75,7 @@ namespace PizzaWebsite.Models.Shop
         //[Required]
         //[Display(Name = "Phone Number")]
         //[PhoneNumber]
+        [RequiredIfDelivery("A phone number is required.")]
         public string DeliveryPhoneNumber { get; set; }
 
         public bool IsDelivery()

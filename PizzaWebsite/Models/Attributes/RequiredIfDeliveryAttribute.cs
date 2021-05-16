@@ -9,18 +9,25 @@ namespace PizzaWebsite.Models.Attributes
 {
     public class RequiredIfDeliveryAttribute : ValidationAttribute
     {
-        CheckoutViewModel checkoutViewModel;
-
-        public RequiredIfDeliveryAttribute(CheckoutViewModel checkoutViewModel)
+        public RequiredIfDeliveryAttribute(string errorMessage)
         {
-            this.checkoutViewModel = checkoutViewModel;
+            ErrorMessage = errorMessage;
         }
-
-        public override bool IsValid(object value)
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            // todo: Finish
-            return false;
-            //return value == null ? false : Regex.IsMatch(value.ToString(), zipRegex);
+            CheckoutViewModel checkoutModel = (CheckoutViewModel)validationContext.ObjectInstance;
+
+            if (checkoutModel.IsDelivery())
+            {
+                if (value != null && value.ToString().Any())
+                {
+                    return ValidationResult.Success;
+                }
+
+                return new ValidationResult(ErrorMessage);
+            }
+
+            return ValidationResult.Success;
         }
     }
 }
