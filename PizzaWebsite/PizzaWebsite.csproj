@@ -183,10 +183,12 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Attributes\PhoneNumberAttribute.cs" />
+    <Compile Include="Models\Attributes\RequiredIfDeliveryAttribute.cs" />
     <Compile Include="Models\Attributes\ZipCodeAttribute.cs" />
     <Compile Include="Models\Carts\CartItemViewModel.cs" />
     <Compile Include="Models\Carts\CartViewModel.cs" />
     <Compile Include="Models\ConfirmationViewModel.cs" />
+    <Compile Include="Models\CostSummary.cs" />
     <Compile Include="Models\Databases\DatabaseContext.cs" />
     <Compile Include="Models\Geography\State.cs" />
     <Compile Include="Models\Geography\StateListCreator.cs" />

@@ -23,129 +23,53 @@ namespace PizzaWebsite.Controllers
     {
         public async Task<ActionResult> Checkout()
         {
-            await PizzaDb.Commands.CheckoutCartAsync(await GetCurrentUserAsync());
-
-            SiteUser updatedUser = await GetCurrentUserAsync();
-
-            StoreLocationSearch storeSearch = new StoreLocationSearch()
-            {
-                IsActiveLocation = true
-            };
-            DeliveryAddressSearch addressSearch = new DeliveryAddressSearch()
-            {
-                UserId = updatedUser.Id
-            };
-            IEnumerable<StoreLocation> storeLocationList = await PizzaDb.GetListAsync<StoreLocation>("Name", storeSearch);
-            IEnumerable<DeliveryAddress> deliveryAddressList = await PizzaDb.GetListAsync<DeliveryAddress>("Name", addressSearch);
-            IEnumerable<CartItemJoin> cartItemList = await PizzaDb.GetJoinedCartItemListAsync(updatedUser.ConfirmOrderCartId);
-
-            List<SelectListItem> deliveryAddressSelectList = new List<SelectListItem>();
-            List<SelectListItem> storeLocationSelectList = new List<SelectListItem>();
-
-            foreach (DeliveryAddress deliveryAddress in deliveryAddressList)
-            {
-                deliveryAddressSelectList.Add(new SelectListItem()
-                {
-                    Text = deliveryAddress.Name,
-                    Value = deliveryAddress.Id.ToString()
-                });
-            }
-
-            foreach (StoreLocation storeLocation in storeLocationList)
-            {
-                storeLocationSelectList.Add(new SelectListItem()
-                {
-                    Text = storeLocation.Name,
-                    Value = storeLocation.Id.ToString()
-                });
-            }
-
-            // Costs
-            decimal orderSubtotal = 0.0m;
-
-            foreach (CartItemJoin cartItemJoin in cartItemList)
-            {
-                orderSubtotal += cartItemJoin.CartItem.Price;
-            }
-
-            decimal orderTax = orderSubtotal * 0.05m;
-            decimal orderTotal = orderSubtotal + orderTax;
-
-            CheckoutViewModel checkoutModel = new CheckoutViewModel()
-            {
-                Cart = new CartViewModel()
-                {
-                    CartItemList = new List<CartItemViewModel>()
-                },
-                OrderTypeList = ListUtility.CreateCustomerOrderTypeList(),
-                DeliveryStateSelectList = StateListCreator.CreateStateList(),
-                DeliveryAddressTypeSelectList = ListUtility.CreateDeliveryAddressTypeList(),
-                DeliveryAddressSelectList = deliveryAddressSelectList,
-                StoreLocationSelectList = storeLocationSelectList,
-                OrderSubtotal = orderSubtotal.ToString("C", CultureInfo.CurrentCulture),
-                OrderTax = orderTax.ToString("C", CultureInfo.CurrentCulture),
-                OrderTotal = orderTotal.ToString("C", CultureInfo.CurrentCulture)
-            };
-
-            await checkoutModel.Cart.LoadCartItems(updatedUser.ConfirmOrderCartId, PizzaDb);
-
+            CheckoutViewModel checkoutModel = new CheckoutViewModel();
+            SiteUser currentUser = await GetCurrentUserAsync();
+            await checkoutModel.InitializeAsync(currentUser, PizzaDb);
 
             return View("Checkout", checkoutModel);
         }
 
-        /*[HttpPost]
+        [HttpPost]
+        public async Task<ActionResult> Checkout(CheckoutViewModel checkoutModel)
+        {
+            return await SubmitOrder(checkoutModel);
+        }
+
+        // todo: Finish SubmitOrder
+        [HttpPost]
         public async Task<ActionResult> SubmitOrder(CheckoutViewModel checkoutModel)
         {
             SiteUser user = await GetCurrentUserAsync();
 
             if (!ModelState.IsValid)
             {
-                checkoutModel.Cart = new CartViewModel()
-                {
-                    CartItemList = new List<CartItemViewModel>()
-                };
-
-                checkoutModel.OrderTypeList = ListUtility.CreateCustomerOrderTypeList();
-                checkoutModel.DeliveryStateSelectList = StateListCreator.CreateStateList();
-                checkoutModel.DeliveryAddressTypeSelectList = ListUtility.CreateDeliveryAddressTypeList();
-
-                await checkoutModel.Cart.LoadCartItems(user.ConfirmOrderCartId, PizzaDb);
+                await checkoutModel.InitializeAsync(user, PizzaDb);
 
                 return View("Checkout", checkoutModel);
             }
 
-            // todo: Validate checkout cart
-            // Make sure the user cannot submit an outdated checkout cart
-            /*SiteUser user = await GetCurrentUserAsync();
-            bool orderExpired = model.OrderConfirmationId != user.OrderConfirmationId;
+            // todo: Finish client side validation using OrderConfirmationId
+            /*bool orderExpired = checkoutModel.OrderConfirmationId != user.OrderConfirmationId;
 
             if (orderExpired)
             {
                 return RedirectToAction("OrderExpired");
             }*/
 
-            /*IEnumerable<CartItemJoin> cartItemList = await PizzaDb.GetJoinedCartItemListAsync(user.ConfirmOrderCartId);
-
-            decimal orderSubtotal = 0.0m;
-
-            foreach (CartItemJoin cartItem in cartItemList)
-            {
-                orderSubtotal += await cartItem.CartItemType.CalculatePriceAsync(PizzaDb);
-            }
-
-            decimal orderTax = orderSubtotal * 0.05m;
-            decimal orderTotal = orderSubtotal + orderTax;
+            IEnumerable<CartItemJoin> cartItemJoinList = await PizzaDb.GetJoinedCartItemListAsync(user.ConfirmOrderCartId);
+            CostSummary costSummary = new CostSummary(cartItemJoinList);
 
             CustomerOrder customerOrder = new CustomerOrder()
             {
                 UserId = user.Id,
                 DateOfOrder = DateTime.Now,
                 IsDelivery = checkoutModel.IsDelivery(),
-                StoreId = checkoutModel.StoreId,
+                StoreId = checkoutModel.SelectedStoreLocationId,
                 OrderPhase = OrderPhase.Order_Placed,
-                OrderSubtotal = orderSubtotal,
-                OrderTax = orderTax,
-                OrderTotal = orderTotal
+                OrderSubtotal = costSummary.Subtotal,
+                OrderTax = costSummary.Tax,
+                OrderTotal = costSummary.Total
             };
 
             if (checkoutModel.IsDelivery())
@@ -169,9 +93,8 @@ namespace PizzaWebsite.Controllers
                 await PizzaDb.Commands.SubmitCustomerOrderAsync(user, customerOrder);
             }
 
-
             return RedirectToAction("OrderConfirmed");
-        }*/
+        }
 
         public ActionResult OrderConfirmed()
         {
