@@ -31,14 +31,14 @@ else
             *@
 
             @*
-            <div class="form-group">
-                @Html.LabelFor(model => model.SelectedOrderType, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.DropDownListFor(m => m.SelectedOrderType, new SelectList(Model.OrderTypeList), "Address Type")
-                    @Html.ValidationMessageFor(model => model.SelectedOrderType, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-            
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SelectedOrderType, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(m => m.SelectedOrderType, new SelectList(Model.OrderTypeList), "Address Type")
+                        @Html.ValidationMessageFor(model => model.SelectedOrderType, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
             <div class="form-group">
                 @Html.LabelFor(model => model.SelectedStoreLocationId, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -46,7 +46,7 @@ else
                     @Html.ValidationMessageFor(model => model.SelectedStoreLocationId, "", new { @class = "text-danger" })
                 </div>
             </div>
-            
+
             <div class="form-group">
                 @Html.LabelFor(model => model.SelectedOrderType, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -56,7 +56,7 @@ else
             </div>
 
             @* todo: Use AJAX to render or hide _CheckoutDeliveryInfo if user selected order as a delivery. *@
-            <div id="deliveryInfoDiv">
+            <div id="deliveryInfoGroup" style="display: none;">
                 <h3>Delivery Info</h3>
                 @Html.Partial("_CheckoutDeliveryInfo")
             </div>
@@ -87,4 +87,12 @@ else
             </div>
         </div>
     }
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            pizzaSiteCheckoutNs.initializeOrderTypeSelect();
+        });
+    </script>
 }

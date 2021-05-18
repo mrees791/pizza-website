@@ -44,38 +44,37 @@ namespace PizzaWebsite.Models.Shop
         public List<State> DeliveryStateSelectList { get; set; }
         public List<string> DeliveryAddressTypeSelectList { get; set; }
 
-        //[Required]
+        [RequiredIfDelivery("A delivery address name is required.")]
         [Display(Name = "Address Name")]
         [MaxLength(50)]
         public string DeliveryAddressName { get; set; }
 
-        //[Required]
+        [RequiredIfDelivery("A delivery address type is required.")]
         [Display(Name = "Address Type")]
         public string SelectedDeliveryAddressType { get; set; }
 
-        //[Required]
+        [RequiredIfDelivery("A delivery street is required.")]
         [Display(Name = "Street Address")]
         [MaxLength(50)]
         public string DeliveryStreetAddress { get; set; }
 
-        //[Required]
+        [RequiredIfDelivery("A delivery city is required.")]
         [Display(Name = "City")]
         [MaxLength(50)]
         public string DeliveryCity { get; set; }
 
-        //[Required]
+        [RequiredIfDelivery("A delivery state is required.")]
         [Display(Name = "State")]
         public string SelectedDeliveryState { get; set; }
 
-        //[Required]
-        //[Display(Name = "Zip Code")]
-        //[ZipCode]
+        [RequiredIfDelivery("A delivery zip code is required.")]
+        [ZipCode]
+        [Display(Name = "Zip Code")]
         public string DeliveryZipCode { get; set; }
 
-        //[Required]
-        //[Display(Name = "Phone Number")]
-        //[PhoneNumber]
-        [RequiredIfDelivery("A phone number is required.")]
+        [RequiredIfDelivery("A delivery phone number is required.")]
+        [PhoneNumber]
+        [Display(Name = "Phone Number")]
         public string DeliveryPhoneNumber { get; set; }
 
         public bool IsDelivery()

@@ -246,6 +246,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\site-checkout.js" />
     <Content Include="Scripts\site-cart.js" />
     <Content Include="Scripts\site-manage-addresses.js" />
     <Content Include="Scripts\site.js" />
