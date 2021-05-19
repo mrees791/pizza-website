@@ -40,9 +40,11 @@ namespace PizzaWebsite.Models.Shop
         [Display(Name = "Delivery Address")]
         public int SelectedDeliveryAddressId { get; set; }
         public List<SelectListItem> DeliveryAddressSelectList { get; set; }
-        public bool AddNewDeliveryAddress { get; set; }
         public List<State> DeliveryStateSelectList { get; set; }
         public List<string> DeliveryAddressTypeSelectList { get; set; }
+
+        [Display(Name = "Save New Address")]
+        public bool SaveNewDeliveryAddress { get; set; }
 
         [RequiredIfDelivery("A delivery address name is required.")]
         [Display(Name = "Address Name")]
@@ -82,8 +84,13 @@ namespace PizzaWebsite.Models.Shop
             return SelectedOrderType == "Delivery";
         }
 
-        public async Task InitializeAsync(SiteUser user, PizzaDatabase pizzaDb)
+        public async Task InitializeAsync(bool isPostBack, SiteUser user, PizzaDatabase pizzaDb)
         {
+            if (!isPostBack)
+            {
+                SaveNewDeliveryAddress = true;
+            }
+
             await pizzaDb.Commands.CheckoutCartAsync(user);
 
             SiteUser updatedUser = await pizzaDb.GetAsync<SiteUser>(user.Id);

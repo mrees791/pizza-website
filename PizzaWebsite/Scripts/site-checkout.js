@@ -15,14 +15,61 @@ const pizzaSiteCheckoutNs = {
             }
         });
     },
-    initializeDeliveryAddressSelect: () => {
-        // Get address ID from select
-        // Use AJAX to return string array with delivery info
-        // Fill delivery fields with returned data
-
-        var $deliveryAddressSelect = $('#SelectedDeliveryAddressId')
+    fillDeliveryFeilds: (name, addressType, streetAddress, city, state, zipCode, phoneNumber) => {
+        var $deliveryAddressName = $('#DeliveryAddressName');
+        var $deliveryAddressType = $('#SelectedDeliveryAddressType');
         var $deliveryStreetAddress = $('#DeliveryStreetAddress');
+        var $deliveryCity = $('#DeliveryCity');
+        var $deliveryState = $('#SelectedDeliveryState');
+        var $deliveryZipCode = $('#DeliveryZipCode');
+        var $deliveryPhoneNumber = $('#DeliveryPhoneNumber');
 
+        $deliveryAddressName.val(name);
+        $deliveryAddressType.val(addressType);
+        $deliveryStreetAddress.val(streetAddress);
+        $deliveryCity.val(city);
+        $deliveryState.val(state);
+        $deliveryZipCode.val(zipCode);
+        $deliveryPhoneNumber.val(phoneNumber);
+    },
+    resetDeliveryFields: () => {
+        pizzaSiteCheckoutNs.fillDeliveryFeilds('', '', '', '', '', '', '');
+    },
+    initializeDeliveryAddressSelect: () => {
+        var $deliveryAddressSelect = $('#SelectedDeliveryAddressId')
+        var $saveNewDeliveryGroup = $('#saveNewDeliveryAddressGroup');
 
+        $deliveryAddressSelect.on("change", function () {
+            addressId = $deliveryAddressSelect.val();
+            addressIsSelected = addressId.length != 0;
+
+            if (addressIsSelected) {
+                
+                var params = { addressId: addressId };
+                pizzaSiteNs.ajaxCall('/Shop/GetDeliveryAddressAjax', JSON.stringify(params), 'POST').
+                    fail(function (response) {
+                        console.log(response);
+                    }).
+                    done(function (response) {
+                        var name = response[0];
+                        var addressType = response[1];
+                        var streetAddress = response[2];
+                        var city = response[3];
+                        var state = response[4];
+                        var zipCode = response[5];
+                        var phoneNumber = response[6];
+
+                        pizzaSiteCheckoutNs.fillDeliveryFeilds(name, addressType, streetAddress, city, state, zipCode, phoneNumber);
+                        $saveNewDeliveryGroup.hide();
+                    });
+            } else {
+                pizzaSiteCheckoutNs.resetDeliveryFields();
+                $saveNewDeliveryGroup.show();
+            }
+        });
+    },
+    initializeCheckoutView: () => {
+        pizzaSiteCheckoutNs.initializeOrderTypeSelect();
+        pizzaSiteCheckoutNs.initializeDeliveryAddressSelect();
     }
 };

@@ -76,7 +76,7 @@ namespace PizzaWebsite.Controllers
             }
             else
             {
-                bool authorized = await DeliveryAddressAuthorizationAsync(address);
+                bool authorized = await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId<int>(), address);
 
                 if (!authorized)
                 {
@@ -93,15 +93,15 @@ namespace PizzaWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ModifyDeliveryAddress(int addressId)
         {
-            DeliveryAddress deliveryAddress = await PizzaDb.GetAsync<DeliveryAddress>(addressId);
+            DeliveryAddress address = await PizzaDb.GetAsync<DeliveryAddress>(addressId);
 
-            if (deliveryAddress == null)
+            if (address == null)
             {
                 throw new RecordDoesNotExistException($"Delivery Address with ID {addressId} does not exist.");
             }
             else
             {
-                bool authorized = await DeliveryAddressAuthorizationAsync(deliveryAddress);
+                bool authorized = await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId<int>(), address);
 
                 if (!authorized)
                 {
@@ -111,31 +111,32 @@ namespace PizzaWebsite.Controllers
                 ManageDeliveryAddressViewModel viewModel = new ManageDeliveryAddressViewModel()
                 {
                     Id = addressId,
-                    Name = deliveryAddress.Name,
-                    City = deliveryAddress.City,
-                    PhoneNumber = deliveryAddress.PhoneNumber,
-                    SelectedAddressType = deliveryAddress.AddressType,
-                    SelectedState = deliveryAddress.State,
-                    StreetAddress = deliveryAddress.StreetAddress,
-                    ZipCode = deliveryAddress.ZipCode
+                    Name = address.Name,
+                    City = address.City,
+                    PhoneNumber = address.PhoneNumber,
+                    SelectedAddressType = address.AddressType,
+                    SelectedState = address.State,
+                    StreetAddress = address.StreetAddress,
+                    ZipCode = address.ZipCode
                 };
 
                 return View("ManageDeliveryAddress", viewModel);
             }
         }
 
+        [HttpPost]
         public async Task<ActionResult> DeleteDeliveryAddressAjax(int addressId)
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
-            DeliveryAddress deliveryAddress = await PizzaDb.GetAsync<DeliveryAddress>(addressId);
+            DeliveryAddress address = await PizzaDb.GetAsync<DeliveryAddress>(addressId);
 
-            if (deliveryAddress == null)
+            if (address == null)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json($"Delivery Address with ID {addressId} does not exist.", MediaTypeNames.Text.Plain);
             }
 
-            bool authorized = await DeliveryAddressAuthorizationAsync(deliveryAddress);
+            bool authorized = await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId<int>(), address);
 
             if (!authorized)
             {
@@ -147,11 +148,6 @@ namespace PizzaWebsite.Controllers
             string responseText = $"{rowsDeleted} rows deleted.";
 
             return Json(responseText, MediaTypeNames.Text.Plain);
-        }
-
-        private async Task<bool> DeliveryAddressAuthorizationAsync(DeliveryAddress deliveryAddress)
-        {
-            return await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(await GetCurrentUserAsync(), deliveryAddress);
         }
 
         //

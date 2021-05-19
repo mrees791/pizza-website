@@ -29,7 +29,7 @@ namespace PizzaWebsite.Controllers
         {
             CheckoutViewModel checkoutModel = new CheckoutViewModel();
             SiteUser currentUser = await GetCurrentUserAsync();
-            await checkoutModel.InitializeAsync(currentUser, PizzaDb);
+            await checkoutModel.InitializeAsync(false, currentUser, PizzaDb);
 
             return View("Checkout", checkoutModel);
         }
@@ -48,7 +48,7 @@ namespace PizzaWebsite.Controllers
 
             if (!ModelState.IsValid)
             {
-                await checkoutModel.InitializeAsync(user, PizzaDb);
+                await checkoutModel.InitializeAsync(true, user, PizzaDb);
 
                 return View("Checkout", checkoutModel);
             }
@@ -90,6 +90,8 @@ namespace PizzaWebsite.Controllers
                     DeliveryZipCode = checkoutModel.DeliveryZipCode
                 };
 
+                // todo: If is new delivery address and user selected save new address, save new delivery address record.
+
                 await PizzaDb.Commands.SubmitCustomerOrderAsync(user, customerOrder, deliveryInfo);
             }
             else
@@ -112,7 +114,7 @@ namespace PizzaWebsite.Controllers
 
         private async Task<bool> AuthorizedToModifyCartItemAsync(CartItem cartItem)
         {
-            return await PizzaDb.Commands.UserOwnsCartItemAsync(await GetCurrentUserAsync(), cartItem);
+            return await PizzaDb.Commands.UserOwnsCartItemAsync(User.Identity.GetUserId<int>(), cartItem);
         }
 
         private async Task<CartPizzaBuilderViewModel> CreatePizzaBuilderVm(int cartItemId)
@@ -294,6 +296,7 @@ namespace PizzaWebsite.Controllers
             return View(cartVm);
         }
 
+        [HttpPost]
         public async Task<ActionResult> DeleteCartItemAjax(int cartItemId)
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
@@ -319,6 +322,7 @@ namespace PizzaWebsite.Controllers
             return Json(responseText, MediaTypeNames.Text.Plain);
         }
 
+        [HttpPost]
         public async Task<ActionResult> UpdateCartItemQuantityAjax(int cartItemId, int quantity)
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
@@ -342,6 +346,41 @@ namespace PizzaWebsite.Controllers
             string updatedPrice = cartItem.Price.ToString("C", CultureInfo.CurrentCulture);
 
             return Json(updatedPrice);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> GetDeliveryAddressAjax(int addressId)
+        {
+            Response.StatusCode = (int)HttpStatusCode.OK;
+            DeliveryAddress address = await PizzaDb.GetAsync<DeliveryAddress>(addressId);
+
+            if (address == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Delivery Address with ID {addressId} does not exist.", MediaTypeNames.Text.Plain);
+            }
+
+            bool authorized = await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId<int>(), address);
+
+            if (!authorized)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Current user is not allowed to access delivery address ID {addressId}.", MediaTypeNames.Text.Plain);
+            }
+
+            // Name, Address Type, Street Address, City, State, Zip Code, Phone Number
+            string[] deliveryAddressResponse = new string[]
+            {
+                address.Name,
+                address.AddressType,
+                address.StreetAddress,
+                address.City,
+                address.State,
+                address.ZipCode,
+                address.PhoneNumber
+            };
+
+            return Json(deliveryAddressResponse);
         }
     }
 }

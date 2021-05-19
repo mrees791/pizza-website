@@ -60,14 +60,14 @@ namespace DataLibrary.Models
             }
         }
 
-        public async Task<bool> UserOwnsDeliveryAddressAsync(SiteUser siteUser, DeliveryAddress deliveryAddress)
+        public async Task<bool> UserOwnsDeliveryAddressAsync(int userId, DeliveryAddress deliveryAddress)
         {
-            return await Task.FromResult(deliveryAddress.UserId == siteUser.Id);
+            return await Task.FromResult(deliveryAddress.UserId == userId);
         }
 
-        public async Task<bool> UserOwnsCartItemAsync(SiteUser siteUser, CartItem cartItem)
+        public async Task<bool> UserOwnsCartItemAsync(int userId, CartItem cartItem)
         {
-            return await Task.FromResult(cartItem.UserId == siteUser.Id);
+            return await Task.FromResult(cartItem.UserId == userId);
         }
 
         public async Task<int> DeleteAllCartItemsAsync(int cartId, IDbTransaction transaction)
