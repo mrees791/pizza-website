@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using DataLibrary.Models.Exceptions;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity;
@@ -73,7 +74,7 @@ namespace PizzaWebsite.Controllers
             }
             else
             {
-                bool authorized = await DeliveryAddressAuthorizationAsync(addressVm.Id);
+                bool authorized = await DeliveryAddressAuthorizationAsync(address);
 
                 if (!authorized)
                 {
@@ -90,45 +91,61 @@ namespace PizzaWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ModifyDeliveryAddress(int addressId)
         {
-            bool authorized = await DeliveryAddressAuthorizationAsync(addressId);
-
-            if (!authorized)
-            {
-                throw new Exception($"Current user is not allowed to modify delivery address ID {addressId}.");
-            }
-
             DeliveryAddress deliveryAddress = await PizzaDb.GetAsync<DeliveryAddress>(addressId);
 
-            ManageDeliveryAddressViewModel viewModel = new ManageDeliveryAddressViewModel()
+            if (deliveryAddress == null)
             {
-                Id = addressId,
-                Name = deliveryAddress.Name,
-                City = deliveryAddress.City,
-                PhoneNumber = deliveryAddress.PhoneNumber,
-                SelectedAddressType = deliveryAddress.AddressType,
-                SelectedState = deliveryAddress.State,
-                StreetAddress = deliveryAddress.StreetAddress,
-                ZipCode = deliveryAddress.ZipCode
-            };
+                throw new RecordDoesNotExistException($"Delivery Address with ID {addressId} does not exist.");
+            }
+            else
+            {
+                bool authorized = await DeliveryAddressAuthorizationAsync(deliveryAddress);
 
-            return View("ManageDeliveryAddress", viewModel);
+                if (!authorized)
+                {
+                    throw new Exception($"Current user is not allowed to modify delivery address ID {addressId}.");
+                }
+
+                ManageDeliveryAddressViewModel viewModel = new ManageDeliveryAddressViewModel()
+                {
+                    Id = addressId,
+                    Name = deliveryAddress.Name,
+                    City = deliveryAddress.City,
+                    PhoneNumber = deliveryAddress.PhoneNumber,
+                    SelectedAddressType = deliveryAddress.AddressType,
+                    SelectedState = deliveryAddress.State,
+                    StreetAddress = deliveryAddress.StreetAddress,
+                    ZipCode = deliveryAddress.ZipCode
+                };
+
+                return View("ManageDeliveryAddress", viewModel);
+            }
         }
 
         public async Task DeleteDeliveryAddress(int addressId)
         {
-            bool authorized = await DeliveryAddressAuthorizationAsync(addressId);
+            DeliveryAddress deliveryAddress = await PizzaDb.GetAsync<DeliveryAddress>(addressId);
 
-            if (!authorized)
+            if (deliveryAddress == null)
             {
-                throw new Exception($"Current user is not allowed to delete delivery address ID {addressId}.");
+                throw new RecordDoesNotExistException($"Delivery Address with ID {addressId} does not exist.");
             }
+            else
+            {
+                bool authorized = await DeliveryAddressAuthorizationAsync(deliveryAddress);
 
-            await PizzaDb.DeleteByIdAsync<DeliveryAddress>(addressId);
+                if (!authorized)
+                {
+                    throw new Exception($"Current user is not allowed to delete delivery address ID {addressId}.");
+                }
+
+                await PizzaDb.DeleteByIdAsync<DeliveryAddress>(addressId);
+            }
         }
 
-        private async Task<bool> DeliveryAddressAuthorizationAsync(int addressId)
+        private async Task<bool> DeliveryAddressAuthorizationAsync(DeliveryAddress deliveryAddress)
         {
-            return await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId<int>(), addressId);
+            return await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(await GetCurrentUserAsync(), deliveryAddress);
         }
 
         //

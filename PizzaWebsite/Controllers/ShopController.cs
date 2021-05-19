@@ -1,8 +1,10 @@
 ﻿using DataLibrary.Models;
+using DataLibrary.Models.Exceptions;
 using DataLibrary.Models.Joins;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
+using Microsoft.AspNet.Identity;
 using PizzaWebsite.Models;
 using PizzaWebsite.Models.Carts;
 using PizzaWebsite.Models.Geography;
@@ -13,6 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -106,9 +110,9 @@ namespace PizzaWebsite.Controllers
             return View();
         }
 
-        private async Task<bool> AuthorizedToModifyCartItemAsync(int cartItemId)
+        private async Task<bool> AuthorizedToModifyCartItemAsync(CartItem cartItem)
         {
-            return await PizzaDb.Commands.UserOwnsCartItemAsync(await GetCurrentUserAsync(), cartItemId);
+            return await PizzaDb.Commands.UserOwnsCartItemAsync(await GetCurrentUserAsync(), cartItem);
         }
 
         private async Task<CartPizzaBuilderViewModel> CreatePizzaBuilderVm(int cartItemId)
@@ -135,7 +139,14 @@ namespace PizzaWebsite.Controllers
         [Authorize]
         public async Task<ActionResult> ModifyCartPizza(int cartItemId)
         {
-            bool authorized = await AuthorizedToModifyCartItemAsync(cartItemId);
+            CartItem cartItem = await PizzaDb.GetAsync<CartItem>(cartItemId);
+
+            if (cartItem == null)
+            {
+                throw new RecordDoesNotExistException($"Cart Item with ID {cartItemId} does not exist.");
+            }
+
+            bool authorized = await AuthorizedToModifyCartItemAsync(cartItem);
 
             if (!authorized)
             {
@@ -162,6 +173,7 @@ namespace PizzaWebsite.Controllers
                 {
                     Id = model.Id,
                     CartId = currentUser.CurrentCartId,
+                    UserId = User.Identity.GetUserId<int>(),
                     ProductCategory = ProductCategory.Pizza.ToString(),
                     Quantity = model.SelectedQuantity,
                     PricePerItem = pricePerItem,
@@ -195,15 +207,15 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> AddMenuPizzaToCurrentCart(int id, int selectedQuantity, string selectedSize, int selectedCrustId)
         {
             SiteUser currentUser = await GetCurrentUserAsync();
-            await AddMenuPizzaToCart(id, currentUser.CurrentCartId, selectedQuantity, selectedSize, selectedCrustId);
+            await AddMenuPizzaToCart(id, currentUser.CurrentCartId, currentUser.Id, selectedQuantity, selectedSize, selectedCrustId);
             return RedirectToAction("Cart");
         }
 
         [Authorize]
-        public async Task AddMenuPizzaToCart(int menuPizzaId, int cartId, int selectedQuantity, string selectedSize, int selectedCrustId)
+        public async Task AddMenuPizzaToCart(int menuPizzaId, int cartId, int userId, int selectedQuantity, string selectedSize, int selectedCrustId)
         {
             MenuPizza menuPizza = await PizzaDb.GetAsync<MenuPizza>(menuPizzaId);
-            CartItemJoin cartItemJoin = await menuPizza.CreateCartRecordsAsync(PizzaDb, cartId, selectedQuantity, selectedSize, selectedCrustId);
+            CartItemJoin cartItemJoin = await menuPizza.CreateCartRecordsAsync(PizzaDb, cartId, userId, selectedQuantity, selectedSize, selectedCrustId);
             await PizzaDb.InsertAsync(cartItemJoin);
         }
 
@@ -283,31 +295,55 @@ namespace PizzaWebsite.Controllers
         }
 
         [HttpPost]
-        public async Task DeleteCartItem(int cartItemId)
+        public async Task<ActionResult> DeleteCartItemAjax(int cartItemId)
         {
-            bool authorized = await AuthorizedToModifyCartItemAsync(cartItemId);
+            Response.StatusCode = (int)HttpStatusCode.OK;
+            CartItem cartItem = await PizzaDb.GetAsync<CartItem>(cartItemId);
+
+            if (cartItem == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Cart Item with ID {cartItemId} does not exist.", MediaTypeNames.Text.Plain);
+            }
+
+            bool authorized = await AuthorizedToModifyCartItemAsync(cartItem);
 
             if (!authorized)
             {
-                throw new Exception($"Current user is not allowed to delete cart item ID {cartItemId}.");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Current user is not allowed to modify cart item ID {cartItemId}.", MediaTypeNames.Text.Plain);
             }
 
-            await PizzaDb.DeleteByIdAsync<CartItem>(cartItemId);
+            int rowsDeleted = await PizzaDb.DeleteByIdAsync<CartItem>(cartItemId);
+            string responseText = $"{rowsDeleted} rows deleted.";
+
+            return Json(responseText, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public async Task<string> UpdateCartItemQuantity(int cartItemId, int quantity)
+        public async Task<ActionResult> UpdateCartItemQuantityAjax(int cartItemId, int quantity)
         {
-            bool authorized = await AuthorizedToModifyCartItemAsync(cartItemId);
+            Response.StatusCode = (int)HttpStatusCode.OK;
+            CartItem cartItem = await PizzaDb.GetAsync<CartItem>(cartItemId);
+
+            if (cartItem == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Cart Item with ID {cartItemId} does not exist.", MediaTypeNames.Text.Plain);
+            }
+
+            bool authorized = await AuthorizedToModifyCartItemAsync(cartItem);
 
             if (!authorized)
             {
-                throw new Exception($"Current user is not allowed to modify cart item ID {cartItemId}.");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Current user is not allowed to modify cart item ID {cartItemId}.", MediaTypeNames.Text.Plain);
             }
 
-            CartItem updatedCartItem = await PizzaDb.Commands.UpdateCartItemQuantityAsync(cartItemId, quantity);
+            cartItem = await PizzaDb.Commands.UpdateCartItemQuantityAsync(cartItem, quantity);
+            string updatedPrice = cartItem.Price.ToString("C", CultureInfo.CurrentCulture);
 
-            return updatedCartItem.Price.ToString("C", CultureInfo.CurrentCulture);
+            return Json(updatedPrice, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\CartItemTypeRecord.cs" />
+    <Compile Include="Models\Exceptions\RecordDoesNotExistException.cs" />
     <Compile Include="Models\Joins\CartItemJoin.cs" />
     <Compile Include="Models\Joins\CustomerOrderJoin.cs" />
     <Compile Include="Models\QueryFilters\EmployeeFilter.cs" />

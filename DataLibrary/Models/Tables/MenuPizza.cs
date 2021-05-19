@@ -81,7 +81,7 @@ namespace DataLibrary.Models.Tables
             return true;
         }
 
-        public async Task<CartItemJoin> CreateCartRecordsAsync(PizzaDatabase pizzaDb, int cartId, int quantity, string size, int menuCrustId)
+        public async Task<CartItemJoin> CreateCartRecordsAsync(PizzaDatabase pizzaDb, int cartId, int userId, int quantity, string size, int menuCrustId)
         {
             CartPizza cartPizza = new CartPizza()
             {
@@ -104,6 +104,7 @@ namespace DataLibrary.Models.Tables
             CartItem cartItem = new CartItem()
             {
                 CartId = cartId,
+                UserId = userId,
                 Quantity = quantity,
                 ProductCategory = ProductCategory.Pizza.ToString(),
                 PricePerItem = pricePerItem,

@@ -93,7 +93,7 @@ namespace DataLibrary.Models
 
         private async Task<IEnumerable<CartItemJoin>> GetJoinedPizzaCartItemsAsync(int cartId)
         {
-            string joinQuery = @"select c.Id, c.CartId, c.Price, c.PricePerItem, c.Quantity, c.ProductCategory, c.Quantity,
+            string joinQuery = @"select c.Id, c.CartId, c.UserId, c.Price, c.PricePerItem, c.Quantity, c.ProductCategory, c.Quantity,
                                     p.CartItemId, p.CheeseAmount, p.MenuPizzaCheeseId, p.MenuPizzaCrustFlavorId, p.MenuPizzaCrustId, p.MenuPizzaSauceId, p.SauceAmount, p.size
 	                                from CartItem c
 	                                inner join CartPizza p on c.Id = p.CartItemId

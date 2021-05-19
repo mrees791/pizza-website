@@ -14,5 +14,13 @@ const pizzaSiteCheckoutNs = {
                 $deliveryInfoGroup.hide();
             }
         });
+    },
+    initializeDeliveryAddressSelect: () => {
+        // Get address ID from select
+        // Use AJAX to return string array with delivery info
+        // Fill delivery fields with returned data
+
+        var $deliveryAddressSelect = $('#SelectedDeliveryAddressId')
+        var $deliveryStreetAddress = $('#DeliveryStreetAddress');
     }
 };

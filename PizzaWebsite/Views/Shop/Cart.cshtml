@@ -25,7 +25,7 @@
     @* Cart item controls. *@
     @foreach (CartItemViewModel cartItemVm in Model.CartItemList)
     {
-        <script type="text/javascript">
+<script type="text/javascript">
             $(function () {
                 var rowId = '#@cartItemVm.CartItemRowId';
                 var quantitySelectId = '#@cartItemVm.CartItemQuantitySelectId';
@@ -35,26 +35,26 @@
                 $(quantitySelectId).on("change", function () {
                     var quantity = $(quantitySelectId).val();
                     var params = { cartItemId: @cartItemVm.CartItemId, quantity: quantity };
-                    pizzaSiteNs.ajaxCall('/Shop/UpdateCartItemQuantity', JSON.stringify(params), 'POST').fail(function (error) {
-                        alert(error.statusText);
+                    pizzaSiteNs.ajaxCall('/Shop/UpdateCartItemQuantityAjax', JSON.stringify(params), 'POST').fail(function (response) {
+                        console.log(response);
                     })
-                    .done(function (updatedPrice) {
-                        $(priceCellId).text(updatedPrice);
+                    .done(function (response) {
+                        $(priceCellId).text(response);
                     });
                 });
                 // Delete cart item
                 $(deleteButtonId).on("click", function () {
                     var params = { cartItemId: @cartItemVm.CartItemId };
-                    pizzaSiteNs.ajaxCall('/Shop/DeleteCartItem', JSON.stringify(params), 'POST').
-                        fail(function (error) {
-                            alert(error.statusText);
+                    pizzaSiteNs.ajaxCall('/Shop/DeleteCartItemAjax', JSON.stringify(params), 'POST').
+                        fail(function (response) {
+                            console.log(response);
                         }).
-                        done(function () {
+                        done(function (response) {
                             $(rowId).remove();
                             pizzaSiteCartNs.updateCartElementVisibility();
                         });
                 });
             });
-        </script>
+</script>
     }
 }
