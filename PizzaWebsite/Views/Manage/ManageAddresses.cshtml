@@ -73,11 +73,11 @@
                 // Delete delivery address
                 $(deleteButtonId).on("click", function () {
                     var params = { addressId: @addressVm.Id };
-                    pizzaSiteNs.ajaxCall('/Manage/DeleteDeliveryAddress', JSON.stringify(params), 'POST').
-                        fail(function (error) {
-                            alert(error.statusText);
+                    pizzaSiteNs.ajaxCall('/Manage/DeleteDeliveryAddressAjax', JSON.stringify(params), 'POST').
+                        fail(function (response) {
+                            console.log(response);
                         }).
-                        done(function () {
+                        done(function (response) {
                             $(rowId).remove();
                             pizzaSiteManageAddressesNs.updateAddressListElementVisibility();
                         });

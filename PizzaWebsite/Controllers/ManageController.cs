@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -122,25 +124,30 @@ namespace PizzaWebsite.Controllers
             }
         }
 
-        public async Task DeleteDeliveryAddress(int addressId)
+        [HttpPost]
+        public async Task<ActionResult> DeleteDeliveryAddressAjax(int addressId)
         {
+            Response.StatusCode = (int)HttpStatusCode.OK;
             DeliveryAddress deliveryAddress = await PizzaDb.GetAsync<DeliveryAddress>(addressId);
 
             if (deliveryAddress == null)
             {
-                throw new RecordDoesNotExistException($"Delivery Address with ID {addressId} does not exist.");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Delivery Address with ID {addressId} does not exist.", MediaTypeNames.Text.Plain);
             }
-            else
+
+            bool authorized = await DeliveryAddressAuthorizationAsync(deliveryAddress);
+
+            if (!authorized)
             {
-                bool authorized = await DeliveryAddressAuthorizationAsync(deliveryAddress);
-
-                if (!authorized)
-                {
-                    throw new Exception($"Current user is not allowed to delete delivery address ID {addressId}.");
-                }
-
-                await PizzaDb.DeleteByIdAsync<DeliveryAddress>(addressId);
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Current user is not allowed to delete delivery address ID {addressId}.", MediaTypeNames.Text.Plain);
             }
+
+            int rowsDeleted = await PizzaDb.DeleteByIdAsync<DeliveryAddress>(addressId);
+            string responseText = $"{rowsDeleted} rows deleted.";
+
+            return Json(responseText, MediaTypeNames.Text.Plain);
         }
 
         private async Task<bool> DeliveryAddressAuthorizationAsync(DeliveryAddress deliveryAddress)

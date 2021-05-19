@@ -317,7 +317,7 @@ namespace PizzaWebsite.Controllers
             int rowsDeleted = await PizzaDb.DeleteByIdAsync<CartItem>(cartItemId);
             string responseText = $"{rowsDeleted} rows deleted.";
 
-            return Json(responseText, JsonRequestBehavior.AllowGet);
+            return Json(responseText, MediaTypeNames.Text.Plain);
         }
 
         [HttpPost]
@@ -343,7 +343,7 @@ namespace PizzaWebsite.Controllers
             cartItem = await PizzaDb.Commands.UpdateCartItemQuantityAsync(cartItem, quantity);
             string updatedPrice = cartItem.Price.ToString("C", CultureInfo.CurrentCulture);
 
-            return Json(updatedPrice, JsonRequestBehavior.AllowGet);
+            return Json(updatedPrice);
         }
     }
 }
