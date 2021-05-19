@@ -294,7 +294,6 @@ namespace PizzaWebsite.Controllers
             return View(cartVm);
         }
 
-        [HttpPost]
         public async Task<ActionResult> DeleteCartItemAjax(int cartItemId)
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
@@ -320,7 +319,6 @@ namespace PizzaWebsite.Controllers
             return Json(responseText, MediaTypeNames.Text.Plain);
         }
 
-        [HttpPost]
         public async Task<ActionResult> UpdateCartItemQuantityAjax(int cartItemId, int quantity)
         {
             Response.StatusCode = (int)HttpStatusCode.OK;

@@ -124,7 +124,6 @@ namespace PizzaWebsite.Controllers
             }
         }
 
-        [HttpPost]
         public async Task<ActionResult> DeleteDeliveryAddressAjax(int addressId)
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
