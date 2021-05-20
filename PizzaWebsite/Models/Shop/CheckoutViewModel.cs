@@ -37,14 +37,14 @@ namespace PizzaWebsite.Models.Shop
         public string OrderTotal { get; set; }
 
         // Delivery Info
+        [Display(Name = "Save New Address")]
+        public bool SaveNewDeliveryAddress { get; set; }
+
         [Display(Name = "Delivery Address")]
         public int SelectedDeliveryAddressId { get; set; }
         public List<SelectListItem> DeliveryAddressSelectList { get; set; }
         public List<State> DeliveryStateSelectList { get; set; }
         public List<string> DeliveryAddressTypeSelectList { get; set; }
-
-        [Display(Name = "Save New Address")]
-        public bool SaveNewDeliveryAddress { get; set; }
 
         [RequiredIfDelivery("A delivery address name is required.")]
         [Display(Name = "Address Name")]
@@ -84,6 +84,11 @@ namespace PizzaWebsite.Models.Shop
             return SelectedOrderType == "Delivery";
         }
 
+        public bool IsNewDeliveryAddress()
+        {
+            return SelectedDeliveryAddressId == 0;
+        }
+
         public async Task InitializeAsync(bool isPostBack, SiteUser user, PizzaDatabase pizzaDb)
         {
             if (!isPostBack)
@@ -109,6 +114,12 @@ namespace PizzaWebsite.Models.Shop
 
             List<SelectListItem> deliveryAddressSelectList = new List<SelectListItem>();
             List<SelectListItem> storeLocationSelectList = new List<SelectListItem>();
+
+            deliveryAddressSelectList.Add(new SelectListItem()
+            {
+                Text = "New Address",
+                Value = "0"
+            });
 
             foreach (DeliveryAddress deliveryAddress in deliveryAddressList)
             {

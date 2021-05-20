@@ -1,6 +1,7 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using PizzaWebsite.Models;
 using System;
@@ -84,7 +85,7 @@ namespace PizzaWebsite.Controllers
 
         protected async Task<SiteUser> GetCurrentUserAsync()
         {
-            return await PizzaDb.GetSiteUserByNameAsync(User.Identity.Name);
+            return await PizzaDb.GetSiteUserByIdAsync(User.Identity.GetUserId<int>());
         }
 
         protected override void Dispose(bool disposing)

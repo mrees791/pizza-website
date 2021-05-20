@@ -55,11 +55,20 @@ else
                 </div>
             </div>
 
-            @* todo: Use AJAX to render or hide _CheckoutDeliveryInfo if user selected order as a delivery. *@
-            <div id="deliveryInfoGroup" style="display: none;">
-                <h3>Delivery Info</h3>
-                @Html.Partial("_CheckoutDeliveryInfo")
-            </div>
+            @if (Model.IsDelivery())
+            {
+                <div id="deliveryInfoGroup">
+                    <h3>Delivery Info</h3>
+                    @Html.Partial("_CheckoutDeliveryInfo")
+                </div>
+            }
+            else
+            {
+                <div id="deliveryInfoGroup" style="display: none;">
+                    <h3>Delivery Info</h3>
+                    @Html.Partial("_CheckoutDeliveryInfo")
+                </div>
+            }
 
             <h3>Order Summary</h3>
             @Html.Partial("~/Views/Shared/Carts/_Cart.cshtml", Model.Cart)

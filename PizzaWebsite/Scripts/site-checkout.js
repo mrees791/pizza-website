@@ -40,8 +40,8 @@ const pizzaSiteCheckoutNs = {
         var $saveNewDeliveryGroup = $('#saveNewDeliveryAddressGroup');
 
         $deliveryAddressSelect.on("change", function () {
-            addressId = $deliveryAddressSelect.val();
-            addressIsSelected = addressId.length != 0;
+            var addressId = $deliveryAddressSelect.val();
+            addressIsSelected = addressId != 0;
 
             if (addressIsSelected) {
                 

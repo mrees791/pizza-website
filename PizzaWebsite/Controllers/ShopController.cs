@@ -78,6 +78,23 @@ namespace PizzaWebsite.Controllers
 
             if (checkoutModel.IsDelivery())
             {
+                if (checkoutModel.IsNewDeliveryAddress() && checkoutModel.SaveNewDeliveryAddress)
+                {
+                    DeliveryAddress deliveryAddress = new DeliveryAddress()
+                    {
+                        UserId = User.Identity.GetUserId<int>(),
+                        Name = checkoutModel.DeliveryAddressName,
+                        AddressType = checkoutModel.SelectedDeliveryAddressType,
+                        City = checkoutModel.DeliveryCity,
+                        PhoneNumber = checkoutModel.DeliveryPhoneNumber,
+                        State = checkoutModel.SelectedDeliveryState,
+                        StreetAddress = checkoutModel.DeliveryStreetAddress,
+                        ZipCode = checkoutModel.DeliveryZipCode
+                    };
+
+                    await PizzaDb.InsertAsync(deliveryAddress);
+                }
+
                 DeliveryInfo deliveryInfo = new DeliveryInfo()
                 {
                     DateOfDelivery = DateTime.Now,
@@ -89,8 +106,6 @@ namespace PizzaWebsite.Controllers
                     DeliveryStreetAddress = checkoutModel.DeliveryStreetAddress,
                     DeliveryZipCode = checkoutModel.DeliveryZipCode
                 };
-
-                // todo: If is new delivery address and user selected save new address, save new delivery address record.
 
                 await PizzaDb.Commands.SubmitCustomerOrderAsync(user, customerOrder, deliveryInfo);
             }
