@@ -10,14 +10,14 @@ namespace DataLibrary.Models.QuerySearches
     {
         public int UserId { get; set; }
 
-        internal override string GetWhereConditions(string orderByColumn = null)
+        internal override string GetWhereConditions()
         {
             List<ColumnValuePair> searchValues = new List<ColumnValuePair>()
             {
                 new ColumnValuePair("UserId", UserId.ToString())
             };
 
-            return GetWhereConditions(searchValues, orderByColumn);
+            return GetWhereConditions(searchValues);
         }
     }
 }

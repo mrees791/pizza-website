@@ -212,13 +212,16 @@
     <Compile Include="Models\Manage\DeliveryAddressListItemViewModel.cs" />
     <Compile Include="Models\Manage\ManageAddressesViewModel.cs" />
     <Compile Include="Models\Manage\ManageDeliveryAddressViewModel.cs" />
+    <Compile Include="Models\PagedListViewModel.cs" />
+    <Compile Include="Models\PaginationViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\CartPizzaBuilderViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\PizzaBuilderViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\PizzaToppingViewModel.cs" />
-    <Compile Include="Models\SharedViewModels.cs" />
     <Compile Include="Models\Shop\CheckoutViewModel.cs" />
     <Compile Include="Models\Shop\MenuPizzaViewModel.cs" />
     <Compile Include="Models\Shop\PizzaMenuPageViewModel.cs" />
+    <Compile Include="Models\Shop\PreviousOrderListViewModel.cs" />
+    <Compile Include="Models\Shop\PreviousOrderViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -320,6 +323,7 @@
     <Content Include="Views\Shop\OrderExpired.cshtml" />
     <Content Include="Views\Shop\OrderConfirmed.cshtml" />
     <Content Include="Views\Shop\_CheckoutDeliveryInfo.cshtml" />
+    <Content Include="Views\Shop\PreviousOrders.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

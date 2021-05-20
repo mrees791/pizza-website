@@ -11,7 +11,7 @@ namespace DataLibrary.Models.QueryFilters
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
 
-        internal override string GetWhereConditions(string orderByColumn = null)
+        internal override string GetWhereConditions()
         {
             List<ColumnValuePair> filters = new List<ColumnValuePair>()
             {
@@ -19,7 +19,7 @@ namespace DataLibrary.Models.QueryFilters
                 new ColumnValuePair("PhoneNumber", PhoneNumber)
             };
 
-            return GetWhereConditions(filters, orderByColumn);
+            return GetWhereConditions(filters);
         }
     }
 }

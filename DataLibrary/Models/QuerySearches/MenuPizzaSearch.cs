@@ -11,7 +11,7 @@ namespace DataLibrary.Models.QuerySearches
         public bool AvailableForPurchase { get; set; }
         public string CategoryName { get; set; }
 
-        internal override string GetWhereConditions(string orderByColumn = null)
+        internal override string GetWhereConditions()
         {
             List<ColumnValuePair> searchValues = new List<ColumnValuePair>()
             {
@@ -19,7 +19,7 @@ namespace DataLibrary.Models.QuerySearches
                 new ColumnValuePair("CategoryName", CategoryName)
             };
 
-            return GetWhereConditions(searchValues, orderByColumn);
+            return GetWhereConditions(searchValues);
         }
     }
 }

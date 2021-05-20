@@ -78,6 +78,7 @@
     <Compile Include="Models\Exceptions\RecordDoesNotExistException.cs" />
     <Compile Include="Models\Joins\CartItemJoin.cs" />
     <Compile Include="Models\Joins\CustomerOrderJoin.cs" />
+    <Compile Include="Models\OrderBy.cs" />
     <Compile Include="Models\QueryFilters\EmployeeFilter.cs" />
     <Compile Include="Models\QueryFilters\MenuPizzaFilter.cs" />
     <Compile Include="Models\QueryFilters\MenuPizzaCheeseFilter.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Models\QuerySearches\DeliveryAddressSearch.cs" />
     <Compile Include="Models\QuerySearches\MenuItemSearch.cs" />
     <Compile Include="Models\QuerySearches\MenuPizzaSearch.cs" />
+    <Compile Include="Models\QuerySearches\PreviousOrderSearch.cs" />
     <Compile Include="Models\QuerySearches\QuerySearchBase.cs" />
     <Compile Include="Models\QuerySearches\StoreLocationSearch.cs" />
     <Compile Include="Models\Record.cs" />
@@ -100,6 +102,7 @@
     <Compile Include="Models\PizzaTopping.cs" />
     <Compile Include="Models\ProductCategory.cs" />
     <Compile Include="Models\ColumnValuePair.cs" />
+    <Compile Include="Models\SortOrder.cs" />
     <Compile Include="Models\Sql\SelectQueries.cs" />
     <Compile Include="Models\Tables\Cart.cs" />
     <Compile Include="Models\Tables\CartItem.cs" />

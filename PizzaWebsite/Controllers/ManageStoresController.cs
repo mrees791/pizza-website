@@ -1,4 +1,5 @@
-﻿using DataLibrary.Models.QueryFilters;
+﻿using DataLibrary.Models;
+using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Models;
 using PizzaWebsite.Models.ManageWebsite;
@@ -24,7 +25,7 @@ namespace PizzaWebsite.Controllers
                 PhoneNumber = phoneNumber
             };
 
-            List<StoreLocation> storeList = await LoadPagedRecordsAsync<StoreLocation>(page, rowsPerPage, "Name", searchFilter, PizzaDb, Request, manageStoresVm.PaginationVm);
+            List<StoreLocation> storeList = await LoadPagedRecordsAsync<StoreLocation>(page, rowsPerPage, "Name", SortOrder.Ascending, searchFilter, PizzaDb, Request, manageStoresVm.PaginationVm);
 
             foreach (StoreLocation store in storeList)
             {

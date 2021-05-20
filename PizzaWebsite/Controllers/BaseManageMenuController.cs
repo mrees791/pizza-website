@@ -18,7 +18,7 @@ namespace PizzaWebsite.Controllers
         {
             var viewModelList = new ManagePagedListViewModel<TViewModel>();
 
-            List<TRecord> recordList = await LoadPagedRecordsAsync<TRecord>(page, rowsPerPage, orderByColumn, searchFilter, PizzaDb, Request, viewModelList.PaginationVm);
+            List<TRecord> recordList = await LoadPagedRecordsAsync<TRecord>(page, rowsPerPage, orderByColumn, SortOrder.Ascending, searchFilter, PizzaDb, Request, viewModelList.PaginationVm);
 
             foreach (TRecord record in recordList)
             {

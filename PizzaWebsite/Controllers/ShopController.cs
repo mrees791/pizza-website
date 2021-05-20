@@ -263,9 +263,9 @@ namespace PizzaWebsite.Controllers
             };
 
             // Load all menu pizzas in to each category.
-            IEnumerable<MenuPizza> popularMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>("SortOrder", popularPizzaSearch);
-            IEnumerable<MenuPizza> meatsMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>("SortOrder", meatPizzaSearch);
-            IEnumerable<MenuPizza> veggieMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>("SortOrder", veggiePizzaSearch);
+            IEnumerable<MenuPizza> popularMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>("SortOrder", SortOrder.Ascending, popularPizzaSearch);
+            IEnumerable<MenuPizza> meatsMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>("SortOrder", SortOrder.Ascending, meatPizzaSearch);
+            IEnumerable<MenuPizza> veggieMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>("SortOrder", SortOrder.Ascending, veggiePizzaSearch);
             // Separate into categories
             pizzaMenuVm.PopularPizzaList = CreateMenuPizzaViewModels(popularMenuPizzas, quantityList, sizeList, crustListDictionary);
             pizzaMenuVm.MeatsPizzaList = CreateMenuPizzaViewModels(meatsMenuPizzas, quantityList, sizeList, crustListDictionary);
@@ -396,6 +396,35 @@ namespace PizzaWebsite.Controllers
             };
 
             return Json(deliveryAddressResponse);
+        }
+
+
+        public async Task<ActionResult> PreviousOrders(int? page, int? rowsPerPage)
+        {
+            PreviousOrderListViewModel previousOrdersVm = new PreviousOrderListViewModel();
+            previousOrdersVm.PaginationVm = new PaginationViewModel();
+            previousOrdersVm.PreviousOrderViewModelList = new List<PreviousOrderViewModel>();
+
+            PreviousOrderSearch search = new PreviousOrderSearch()
+            {
+                UserId = User.Identity.GetUserId<int>()
+            };
+
+            IEnumerable<CustomerOrder> previousOrderList = await PizzaDb.GetPagedListAsync<CustomerOrder>(page.Value, rowsPerPage.Value, "Id", SortOrder.Descending, search);
+
+            foreach (CustomerOrder prevOrder in previousOrderList)
+            {
+                PreviousOrderViewModel orderVm = new PreviousOrderViewModel()
+                {
+                    Id = prevOrder.Id,
+                    DateOfOrder = prevOrder.DateOfOrder,
+                    OrderTotal = prevOrder.OrderTotal
+                };
+
+                previousOrdersVm.PreviousOrderViewModelList.Add(orderVm);
+            }
+
+            return View(previousOrdersVm);
         }
     }
 }

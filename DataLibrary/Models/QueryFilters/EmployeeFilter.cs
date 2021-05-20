@@ -10,14 +10,14 @@ namespace DataLibrary.Models.QueryFilters
     {
         public string Id { get; set; }
 
-        internal override string GetWhereConditions(string orderByColumn = null)
+        internal override string GetWhereConditions()
         {
             List<ColumnValuePair> filters = new List<ColumnValuePair>()
             {
                 new ColumnValuePair("Id", Id)
             };
 
-            return GetWhereConditions(filters, orderByColumn);
+            return GetWhereConditions(filters);
         }
     }
 }

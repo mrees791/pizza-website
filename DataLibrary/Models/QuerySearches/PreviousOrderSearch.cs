@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.QuerySearches
 {
-    public class StoreLocationSearch : QuerySearchBase
+    public class PreviousOrderSearch : QuerySearchBase
     {
-        public bool IsActiveLocation { get; set; }
+        public int UserId { get; set; }
 
         internal override string GetWhereConditions()
         {
             List<ColumnValuePair> searchValues = new List<ColumnValuePair>()
             {
-                new ColumnValuePair("IsActiveLocation", IsActiveLocation.ToString())
+                new ColumnValuePair("UserId", UserId.ToString())
             };
 
             return GetWhereConditions(searchValues);

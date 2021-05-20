@@ -295,11 +295,6 @@ namespace DataLibrary.Models
 
             UserLogin userLogin = await connection.QuerySingleOrDefaultAsync<UserLogin>(sql, parameters, transaction);
 
-            if (userLogin != null)
-            {
-                await userLogin.MapEntityAsync(this, transaction);
-            }
-
             return userLogin;
         }
 
@@ -315,9 +310,16 @@ namespace DataLibrary.Models
             return list;
         }
 
-        public async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(string orderByColumn, QuerySearchBase querySearch, IDbTransaction transaction = null) where TRecord : Record
+        public async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(string orderByColumn, SortOrder sortOrder, QuerySearchBase querySearch, IDbTransaction transaction = null) where TRecord : Record
         {
-            string conditions = querySearch.GetWhereConditions(orderByColumn);
+            OrderBy orderBy = new OrderBy()
+            {
+                OrderByColumn = orderByColumn,
+                SortOrder = sortOrder
+            };
+
+            string conditions = $"{querySearch.GetWhereConditions()} order by {orderBy.GetConditions()}";
+
             IEnumerable<TRecord> list = await connection.GetListAsync<TRecord>(conditions, querySearch, transaction);
 
             foreach (TRecord record in list)
@@ -328,9 +330,16 @@ namespace DataLibrary.Models
             return list;
         }
 
-        public async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(string orderByColumn, IDbTransaction transaction = null) where TRecord : Record
+        public async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(string orderByColumn, SortOrder sortOrder, IDbTransaction transaction = null) where TRecord : Record
         {
-            string conditions = $"order by {orderByColumn}";
+            OrderBy orderBy = new OrderBy()
+            {
+                OrderByColumn = orderByColumn,
+                SortOrder = sortOrder
+            };
+
+            string conditions = $"order by {orderBy.GetConditions()}";
+
             IEnumerable<TRecord> list = await GetListAsync<TRecord>(conditions, null, transaction);
 
             foreach (TRecord record in list)
@@ -365,11 +374,36 @@ namespace DataLibrary.Models
             return list;
         }
 
-        public async Task<IEnumerable<TRecord>> GetPagedListAsync<TRecord>(int pageNumber, int rowsPerPage, string orderByColumn, QueryFilterBase filter,
+        public async Task<IEnumerable<TRecord>> GetPagedListAsync<TRecord>(int pageNumber, int rowsPerPage, string orderByColumn, SortOrder sortOrder, QueryFilterBase filter,
             IDbTransaction transaction = null) where TRecord : Record
         {
-            string conditions = filter.GetWhereConditions();
-            IEnumerable<TRecord> list = await connection.GetListPagedAsync<TRecord>(pageNumber, rowsPerPage, conditions, orderByColumn, filter, transaction);
+            OrderBy orderBy = new OrderBy()
+            {
+                OrderByColumn = orderByColumn,
+                SortOrder = sortOrder
+            };
+
+            IEnumerable<TRecord> list = await connection.GetListPagedAsync<TRecord>(pageNumber, rowsPerPage, filter.GetWhereConditions(), orderBy.GetConditions(), filter, transaction);
+
+            foreach (TRecord record in list)
+            {
+                await record.MapEntityAsync(this, transaction);
+            }
+
+            return list;
+        }
+
+        public async Task<IEnumerable<TRecord>> GetPagedListAsync<TRecord>(int pageNumber, int rowsPerPage, string orderByColumn, SortOrder sortOrder,
+            QuerySearchBase querySearch, IDbTransaction transaction = null) where TRecord : Record
+        {
+            OrderBy orderBy = new OrderBy()
+            {
+                OrderByColumn = orderByColumn,
+                SortOrder = sortOrder
+            };
+
+            IEnumerable<TRecord> list = await connection.GetListPagedAsync<TRecord>(pageNumber, rowsPerPage, querySearch.GetWhereConditions(), orderBy.GetConditions(),
+                querySearch, transaction);
 
             foreach (TRecord record in list)
             {

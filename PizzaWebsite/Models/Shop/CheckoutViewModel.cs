@@ -108,8 +108,8 @@ namespace PizzaWebsite.Models.Shop
             {
                 UserId = updatedUser.Id
             };
-            IEnumerable<StoreLocation> storeLocationList = await pizzaDb.GetListAsync<StoreLocation>("Name", storeSearch);
-            IEnumerable<DeliveryAddress> deliveryAddressList = await pizzaDb.GetListAsync<DeliveryAddress>("Name", addressSearch);
+            IEnumerable<StoreLocation> storeLocationList = await pizzaDb.GetListAsync<StoreLocation>("Name", SortOrder.Ascending, storeSearch);
+            IEnumerable<DeliveryAddress> deliveryAddressList = await pizzaDb.GetListAsync<DeliveryAddress>("Name", SortOrder.Ascending, addressSearch);
             IEnumerable<CartItemJoin> cartItemJoinList = await pizzaDb.GetJoinedCartItemListAsync(updatedUser.ConfirmOrderCartId);
 
             List<SelectListItem> deliveryAddressSelectList = new List<SelectListItem>();

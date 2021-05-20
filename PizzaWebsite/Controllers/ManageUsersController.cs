@@ -1,4 +1,5 @@
-﻿using DataLibrary.Models.QueryFilters;
+﻿using DataLibrary.Models;
+using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Models;
 using PizzaWebsite.Models.ManageWebsite;
@@ -24,7 +25,7 @@ namespace PizzaWebsite.Controllers
                 Email = email
             };
 
-            List<SiteUser> userList = await LoadPagedRecordsAsync<SiteUser>(page, rowsPerPage, "UserName", searchFilter, PizzaDb, Request, manageUsersVm.PaginationVm);
+            List<SiteUser> userList = await LoadPagedRecordsAsync<SiteUser>(page, rowsPerPage, "UserName", SortOrder.Ascending, searchFilter, PizzaDb, Request, manageUsersVm.PaginationVm);
 
             foreach (SiteUser user in userList)
             {

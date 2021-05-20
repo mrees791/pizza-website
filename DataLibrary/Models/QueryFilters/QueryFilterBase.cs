@@ -11,9 +11,9 @@ namespace DataLibrary.Models.QueryFilters
     /// </summary>
     public abstract class QueryFilterBase
     {
-        internal abstract string GetWhereConditions(string orderByColumn = null);
+        internal abstract string GetWhereConditions();
 
-        protected string GetWhereConditions(List<ColumnValuePair> filters, string orderByColumn = null)
+        protected string GetWhereConditions(List<ColumnValuePair> filters)
         {
             string sqlWhereConditions = string.Empty;
             bool queriesAdded = false;
@@ -38,12 +38,6 @@ namespace DataLibrary.Models.QueryFilters
                     sqlWhereConditions += $"{columnName} like '%' + @{columnName} + '%' ";
                     queriesAdded = true;
                 }
-            }
-
-            if (!string.IsNullOrEmpty(orderByColumn))
-            {
-                // Order by column is never set by user input to avoid SQL injections.
-                sqlWhereConditions += $"order by {orderByColumn}";
             }
 
             return sqlWhereConditions;

@@ -48,10 +48,10 @@ namespace PizzaWebsite.Models.PizzaBuilders
                 AvailableForPurchase = true
             };
 
-            IEnumerable<MenuPizzaToppingType> toppingTypeList = await pizzaDb.GetListAsync<MenuPizzaToppingType>("SortOrder", menuItemSearch);
-            IEnumerable<MenuPizzaCrustFlavor> crustFlavorList = await pizzaDb.GetListAsync<MenuPizzaCrustFlavor>("SortOrder", menuItemSearch);
-            IEnumerable<MenuPizzaSauce> pizzaSauceList = await pizzaDb.GetListAsync<MenuPizzaSauce>("SortOrder", menuItemSearch);
-            IEnumerable<MenuPizzaCheese> pizzaCheeseList = await pizzaDb.GetListAsync<MenuPizzaCheese>("SortOrder", menuItemSearch);
+            IEnumerable<MenuPizzaToppingType> toppingTypeList = await pizzaDb.GetListAsync<MenuPizzaToppingType>("SortOrder", SortOrder.Ascending, menuItemSearch);
+            IEnumerable<MenuPizzaCrustFlavor> crustFlavorList = await pizzaDb.GetListAsync<MenuPizzaCrustFlavor>("SortOrder", SortOrder.Ascending, menuItemSearch);
+            IEnumerable<MenuPizzaSauce> pizzaSauceList = await pizzaDb.GetListAsync<MenuPizzaSauce>("SortOrder", SortOrder.Ascending, menuItemSearch);
+            IEnumerable<MenuPizzaCheese> pizzaCheeseList = await pizzaDb.GetListAsync<MenuPizzaCheese>("SortOrder", SortOrder.Ascending, menuItemSearch);
             SauceAmountList = ListUtility.GetSauceAmountList();
             CheeseAmountList = ListUtility.GetCheeseAmountList();
 

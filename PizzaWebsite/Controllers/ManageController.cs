@@ -6,6 +6,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using DataLibrary.Models;
 using DataLibrary.Models.Exceptions;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
@@ -33,7 +34,7 @@ namespace PizzaWebsite.Controllers
                 UserId = User.Identity.GetUserId<int>()
             };
 
-            IEnumerable<DeliveryAddress> addressList = await PizzaDb.GetListAsync<DeliveryAddress>("Name", addressSearch);
+            IEnumerable<DeliveryAddress> addressList = await PizzaDb.GetListAsync<DeliveryAddress>("Name", SortOrder.Ascending, addressSearch);
 
             foreach (DeliveryAddress address in addressList)
             {

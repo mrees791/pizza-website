@@ -55,7 +55,7 @@ namespace PizzaWebsite.Controllers
             }
         }
 
-        protected async Task<List<TRecord>> LoadPagedRecordsAsync<TRecord>(int? page, int? rowsPerPage, string orderByColumn,
+        protected async Task<List<TRecord>> LoadPagedRecordsAsync<TRecord>(int? page, int? rowsPerPage, string orderByColumn, SortOrder sortOrder,
             QueryFilterBase searchFilter, PizzaDatabase database, HttpRequestBase request, PaginationViewModel paginationVm) where TRecord : Record
         {
             // Set default values
@@ -71,7 +71,7 @@ namespace PizzaWebsite.Controllers
             List<TRecord> recordList = new List<TRecord>();
             int totalNumberOfItems = await database.GetNumberOfRecordsAsync<TRecord>(searchFilter);
             int totalPages = await database.GetNumberOfPagesAsync<TRecord>(searchFilter, rowsPerPage.Value);
-            recordList.AddRange(await database.GetPagedListAsync<TRecord>(page.Value, rowsPerPage.Value, orderByColumn, searchFilter));
+            recordList.AddRange(await database.GetPagedListAsync<TRecord>(page.Value, rowsPerPage.Value, orderByColumn, sortOrder, searchFilter));
 
             // Navigation pane
             paginationVm.QueryString = request.QueryString;
