@@ -7,13 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models
 {
-    public abstract class Record
+    public abstract class Record : EntityBase
     {
-        abstract public dynamic GetId();
-        abstract internal bool InsertRequiresTransaction();
-        abstract internal bool UpdateRequiresTransaction();
-        abstract internal Task MapEntityAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null);
-        abstract internal Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null);
-        abstract internal Task<int> UpdateAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null);
     }
 }

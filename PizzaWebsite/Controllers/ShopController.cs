@@ -398,12 +398,14 @@ namespace PizzaWebsite.Controllers
             return Json(deliveryAddressResponse);
         }
 
-        public async Task<ActionResult> PreviousOrder(int? orderId)
+        public async Task<ActionResult> PreviousOrder(int? id)
         {
-            CustomerOrderJoin customerOrderJoin = await PizzaDb.GetJoinedCustomerOrderByIdAsync(orderId.Value);
+            CustomerOrderJoin customerOrderJoin = await PizzaDb.GetJoinedCustomerOrderByIdAsync(id.Value);
 
             PreviousOrderViewModel orderVm = new PreviousOrderViewModel();
-            await orderVm.InitializeAsync(false, );
+            await orderVm.InitializeAsync(true, customerOrderJoin.CustomerOrder, customerOrderJoin.DeliveryInfo, PizzaDb);
+
+            return View(orderVm);
         }
 
         public async Task<ActionResult> PreviousOrders(int? page, int? rowsPerPage)

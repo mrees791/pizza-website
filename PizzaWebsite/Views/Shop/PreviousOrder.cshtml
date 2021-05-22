@@ -2,8 +2,9 @@
 @model PreviousOrderViewModel
 
 @{
-    ViewBag.Title = "PreviousOrder";
+    ViewBag.Title = "Order";
 }
 
-<h2>PreviousOrder</h2>
+<h2>Order</h2>
 
+@Html.Partial("~/Views/Shared/Carts/_Cart.cshtml", Model.CartViewModel)

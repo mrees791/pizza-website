@@ -40,7 +40,14 @@ namespace DataLibrary.Models
         // CRUD
         public async Task<CustomerOrderJoin> GetJoinedCustomerOrderByIdAsync(int id)
         {
-            IEnumerable<CustomerOrderJoin> resultList = await GetJoinedCustomerOrderListByIdAsync(id);
+            string whereClause = "where c.Id = @Id";
+
+            object parameters = new
+            {
+                Id = id
+            };
+
+            IEnumerable<CustomerOrderJoin> resultList = await GetJoinedCustomerOrderListAsync(whereClause, parameters, true);
 
             return resultList.FirstOrDefault();
         }
@@ -54,7 +61,7 @@ namespace DataLibrary.Models
                 Id = id
             };
 
-            return await GetJoinedCustomerOrderListAsync(whereClause, parameters);
+            return await GetJoinedCustomerOrderListAsync(whereClause, parameters, false);
         }
 
         public async Task<IEnumerable<CustomerOrderJoin>> GetJoinedCustomerOrderListByUserIdAsync(int userId)
@@ -66,12 +73,12 @@ namespace DataLibrary.Models
                 UserId = userId
             };
 
-            return await GetJoinedCustomerOrderListAsync(whereClause, parameters);
+            return await GetJoinedCustomerOrderListAsync(whereClause, parameters, false);
         }
 
-        private async Task<IEnumerable<CustomerOrderJoin>> GetJoinedCustomerOrderListAsync(string whereClause, object parameters)
+        private async Task<IEnumerable<CustomerOrderJoin>> GetJoinedCustomerOrderListAsync(string whereClause, object parameters, bool onlySelectFirst)
         {
-            string joinQuery = SelectQueries.customerOrderDeliveryInfoJoin + whereClause;
+            string joinQuery = SelectQueries.GetCustomerOrderDeliveryInfoJoin(onlySelectFirst) + whereClause;
 
             IEnumerable<CustomerOrderJoin> customerOrderList = await connection.QueryAsync<CustomerOrder, DeliveryInfo, CustomerOrderJoin>(
                 joinQuery,
@@ -424,13 +431,13 @@ namespace DataLibrary.Models
             return list;
         }
 
-        public async Task<int> GetNumberOfRecordsAsync<TRecord>(QueryBase query, IDbTransaction transaction = null)
+        public async Task<int> GetNumberOfRecordsAsync<TRecord>(QueryBase query, IDbTransaction transaction = null) where TRecord : Record
         {
             string conditions = query.GetWhereConditions();
             return await connection.RecordCountAsync<TRecord>(conditions, parameters: query, transaction: transaction);
         }
 
-        public async Task<int> GetNumberOfPagesAsync<TRecord>(int rowsPerPage, QueryBase query, IDbTransaction transaction = null)
+        public async Task<int> GetNumberOfPagesAsync<TRecord>(int rowsPerPage, QueryBase query, IDbTransaction transaction = null) where TRecord : Record
         {
             if (rowsPerPage == 0)
             {
@@ -455,25 +462,25 @@ namespace DataLibrary.Models
             return pages;
         }
 
-        public async Task<dynamic> InsertAsync(Record record)
+        public async Task<dynamic> InsertAsync(EntityBase entity)
         {
-            if (record.InsertRequiresTransaction())
+            if (entity.InsertRequiresTransaction())
             {
                 using (IDbTransaction transaction = Connection.BeginTransaction())
                 {
-                    await record.InsertAsync(this, transaction);
+                    await entity.InsertAsync(this, transaction);
                     transaction.Commit();
                 }
             }
             else
             {
-                await record.InsertAsync(this);
+                await entity.InsertAsync(this);
             }
 
-            return record.GetId();
+            return entity.GetId();
         }
 
-        public async Task<int> UpdateAsync(Record record)
+        public async Task<int> UpdateAsync(EntityBase record)
         {
             int rowsUpdated = 0;
 

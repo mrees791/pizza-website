@@ -17,6 +17,7 @@ namespace PizzaWebsite.Models.Carts
 
         public async Task InitializeAsync(int cartId, PizzaDatabase pizzaDb)
         {
+            CartItemList = new List<CartItemViewModel>();
             List<int> quantityList = ListUtility.CreateQuantityList();
             IEnumerable<CartItemJoin> cartItemList = await pizzaDb.GetJoinedCartItemListAsync(cartId);
 
