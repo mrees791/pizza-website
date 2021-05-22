@@ -446,7 +446,7 @@ namespace PizzaWebsite.Controllers
             previousOrdersVm.PaginationVm.TotalNumberOfItems = totalNumberOfItems;
             previousOrdersVm.PaginationVm.QueryString = Request.QueryString;
 
-            return View(previousOrdersVm);
+            return View("PreviousOrderList", previousOrdersVm);
         }
     }
 }

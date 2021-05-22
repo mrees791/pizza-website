@@ -323,7 +323,7 @@
     <Content Include="Views\Shop\OrderExpired.cshtml" />
     <Content Include="Views\Shop\OrderConfirmed.cshtml" />
     <Content Include="Views\Shop\_CheckoutDeliveryInfo.cshtml" />
-    <Content Include="Views\Shop\PreviousOrders.cshtml" />
+    <Content Include="Views\Shop\PreviousOrderList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
