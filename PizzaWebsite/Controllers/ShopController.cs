@@ -398,6 +398,7 @@ namespace PizzaWebsite.Controllers
             return Json(deliveryAddressResponse);
         }
 
+        [Authorize]
         public async Task<ActionResult> PreviousOrder(int? id)
         {
             CustomerOrderJoin customerOrderJoin = await PizzaDb.GetJoinedCustomerOrderByIdAsync(id.Value);
@@ -408,6 +409,7 @@ namespace PizzaWebsite.Controllers
             return View(orderVm);
         }
 
+        [Authorize]
         public async Task<ActionResult> PreviousOrders(int? page, int? rowsPerPage)
         {
             // Set default values

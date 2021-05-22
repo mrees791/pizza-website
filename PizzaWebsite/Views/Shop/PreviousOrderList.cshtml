@@ -7,57 +7,64 @@
 
 <h2>Previous Orders</h2>
 
-<table class="table">
-    <tr>
-        @* Table header for controls columns. *@
-        <th></th>
-        <th>
-            @Html.DisplayNameFor(model => model.PreviousOrderViewModel.DateOfOrder)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PreviousOrderViewModel.OrderType)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PreviousOrderViewModel.OrderTotal)
-        </th>
-    </tr>
-
-    @foreach (PreviousOrderViewModel prevOrderVm in Model.PreviousOrderViewModelList)
-    {
+@if (!Model.HasPreviousOrders())
+{
+    <p>You do not have any orders.</p>
+}
+else
+{
+    <table class="table">
         <tr>
-            <td>
-                <a href="@Url.Action("PreviousOrder")/@prevOrderVm.Id?@(Request.QueryString)">
-                    <input type="button" value="View" class="btn btn-default" />
-                </a>
-                <a href="@Url.Action("ViewOrderStatus")/@prevOrderVm.Id?@(Request.QueryString)">
-                    <input type="button" value="Order Status" class="btn btn-default" />
-                </a>
-                <a href="@Url.Action("OrderAgain")/@prevOrderVm.Id?@(Request.QueryString)">
-                    <input type="button" value="Order Again" class="btn btn-default" />
-                </a>
-            </td>
-            <td>
-                @Html.DisplayFor(model => prevOrderVm.DateOfOrder)
-            </td>
-            <td>
-                @Html.DisplayFor(model => prevOrderVm.OrderType)
-            </td>
-            <td>
-                @Html.DisplayFor(viewModel => prevOrderVm.OrderTotal)
-            </td>
+            @* Table header for controls columns. *@
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreviousOrderViewModel.DateOfOrder)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreviousOrderViewModel.OrderType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreviousOrderViewModel.OrderTotal)
+            </th>
         </tr>
-    }
-</table>
 
-<nav>
-    <ul id="managePagination" class="pagination">
-    </ul>
-</nav>
+        @foreach (PreviousOrderViewModel prevOrderVm in Model.PreviousOrderViewModelList)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("PreviousOrder")/@prevOrderVm.Id?@(Request.QueryString)">
+                        <input type="button" value="View" class="btn btn-default" />
+                    </a>
+                    <a href="@Url.Action("ViewOrderStatus")/@prevOrderVm.Id?@(Request.QueryString)">
+                        <input type="button" value="Order Status" class="btn btn-default" />
+                    </a>
+                    <a href="@Url.Action("OrderAgain")/@prevOrderVm.Id?@(Request.QueryString)">
+                        <input type="button" value="Order Again" class="btn btn-default" />
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => prevOrderVm.DateOfOrder)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => prevOrderVm.OrderType)
+                </td>
+                <td>
+                    @Html.DisplayFor(viewModel => prevOrderVm.OrderTotal)
+                </td>
+            </tr>
+        }
+    </table>
 
-@section Scripts {
-    <script type="text/javascript">
+    <nav>
+        <ul id="managePagination" class="pagination">
+        </ul>
+    </nav>
+
+    @section Scripts {
+        <script type="text/javascript">
         $(function () {
             pizzaSiteNs.createPagination('#managePagination', @Model.PaginationVm.CurrentPage, @Model.PaginationVm.RowsPerPage, @Model.PaginationVm.TotalPages, @Model.PaginationVm.TotalNumberOfItems);
         });
-    </script>
+        </script>
+    }
 }

@@ -9,5 +9,10 @@ namespace PizzaWebsite.Models.Shop
     {
         public PreviousOrderViewModel PreviousOrderViewModel { get; set; }
         public List<PreviousOrderViewModel> PreviousOrderViewModelList { get; set; }
+
+        public bool HasPreviousOrders()
+        {
+            return PreviousOrderViewModelList.Any();
+        }
     }
 }
