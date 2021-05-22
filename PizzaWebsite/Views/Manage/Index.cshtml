@@ -85,6 +85,15 @@
                 }*@
         </dd>
         <dt></dt>
-        <dd>@Html.ActionLink("Manage Addresses", "ManageAddresses")</dd>
+        <dd>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    @Html.ActionLink("Manage Addresses", "ManageAddresses")
+                </li>
+                <li class="list-group-item">
+                    <a href="@Url.Action("PreviousOrders", "Shop")?Page=1&RowsPerPage=10">Previous Orders</a>
+                </li>
+            </ul>
+        </dd>
     </dl>
 </div>

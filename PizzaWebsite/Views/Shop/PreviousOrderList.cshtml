@@ -10,9 +10,11 @@
 @if (!Model.HasPreviousOrders())
 {
     <p>You do not have any orders.</p>
+    <p>@Html.ActionLink("Back", "Index", "Manage")</p>
 }
 else
 {
+    <p>@Html.ActionLink("Back", "Index", "Manage")</p>
     <table class="table">
         <tr>
             @* Table header for controls columns. *@

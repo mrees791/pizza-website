@@ -7,12 +7,14 @@
 
 <h2>Manage Addresses</h2>
 
-<p>@Html.ActionLink("Add New Address", "AddNewAddress")</p>
-
 <div id="emptyAddressListBlock" style="display: none;">
     <p>You currently have no delivery addresses.</p>
+    <p>@Html.ActionLink("Back", "Index")</p>
+    <p>@Html.ActionLink("Add New Address", "AddNewAddress")</p>
 </div>
 <div id="addressListBlock" style="display: none;">
+    <p>@Html.ActionLink("Back", "Index")</p>
+    <p>@Html.ActionLink("Add New Address", "AddNewAddress")</p>
     <table class="table">
         <thead>
             <tr>
@@ -54,8 +56,6 @@
         </tbody>
     </table>
 </div>
-
-<p>@Html.ActionLink("Back", "Index")</p>
 
 @section Scripts {
     <script type="text/javascript">
