@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Joins
 {
-    public class CartItemJoin : Record, IComparable<CartItemJoin>
+    public class CartItemJoin : JoinRecord, IComparable<CartItemJoin>
     {
         public CartItem CartItem { get; set; }
         public CartItemTypeRecord CartItemType { get; set; }

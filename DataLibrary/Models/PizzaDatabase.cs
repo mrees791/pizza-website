@@ -38,7 +38,26 @@ namespace DataLibrary.Models
         }
 
         // CRUD
-        public async Task<IEnumerable<CustomerOrderJoin>> GetJoinedCustomerOrderListAsync(int userId)
+        public async Task<CustomerOrderJoin> GetJoinedCustomerOrderByIdAsync(int id)
+        {
+            IEnumerable<CustomerOrderJoin> resultList = await GetJoinedCustomerOrderListByIdAsync(id);
+
+            return resultList.FirstOrDefault();
+        }
+
+        public async Task<IEnumerable<CustomerOrderJoin>> GetJoinedCustomerOrderListByIdAsync(int id)
+        {
+            string whereClause = "where c.Id = @Id";
+
+            object parameters = new
+            {
+                Id = id
+            };
+
+            return await GetJoinedCustomerOrderListAsync(whereClause, parameters);
+        }
+
+        public async Task<IEnumerable<CustomerOrderJoin>> GetJoinedCustomerOrderListByUserIdAsync(int userId)
         {
             string whereClause = "where c.UserId = @UserId";
 
@@ -52,15 +71,7 @@ namespace DataLibrary.Models
 
         private async Task<IEnumerable<CustomerOrderJoin>> GetJoinedCustomerOrderListAsync(string whereClause, object parameters)
         {
-            string joinQuery = @"select c.Id, c.UserId, c.StoreId, c.CartId, c.IsCancelled, 
-                                 c.OrderSubtotal, c.OrderTax, c.OrderTotal, c.OrderPhase,
-                                 c.OrderCompleted, c.DateOfOrder, c.IsDelivery, c.DeliveryInfoId,
-                                 d.Id, d.DateOfDelivery, d.DeliveryAddressType, d.DeliveryAddressName,
-                                 d.DeliveryStreetAddress, d.DeliveryCity, d.DeliveryState, d.DeliveryZipCode,
-                                 d.DeliveryPhoneNumber
-                                 from CustomerOrder c
-                                 left join DeliveryInfo d on c.DeliveryInfoId = d.Id " +
-                                 whereClause;
+            string joinQuery = SelectQueries.customerOrderDeliveryInfoJoin + whereClause;
 
             IEnumerable<CustomerOrderJoin> customerOrderList = await connection.QueryAsync<CustomerOrder, DeliveryInfo, CustomerOrderJoin>(
                 joinQuery,

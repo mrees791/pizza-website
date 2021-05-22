@@ -155,7 +155,7 @@ namespace PizzaWebsite.Models.Shop
             OrderTax = costSummary.Tax.ToString("C", CultureInfo.CurrentCulture);
             OrderTotal = costSummary.Total.ToString("C", CultureInfo.CurrentCulture);
 
-            await Cart.LoadCartItems(updatedUser.ConfirmOrderCartId, pizzaDb);
+            await Cart.InitializeAsync(updatedUser.ConfirmOrderCartId, pizzaDb);
         }
     }
 }

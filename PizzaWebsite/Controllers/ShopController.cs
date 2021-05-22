@@ -306,7 +306,7 @@ namespace PizzaWebsite.Controllers
                 CartItemList = new List<CartItemViewModel>()
             };
 
-            await cartVm.LoadCartItems(user.CurrentCartId, PizzaDb);
+            await cartVm.InitializeAsync(user.CurrentCartId, PizzaDb);
 
             return View(cartVm);
         }
@@ -398,6 +398,13 @@ namespace PizzaWebsite.Controllers
             return Json(deliveryAddressResponse);
         }
 
+        public async Task<ActionResult> PreviousOrder(int? orderId)
+        {
+            CustomerOrderJoin customerOrderJoin = await PizzaDb.GetJoinedCustomerOrderByIdAsync(orderId.Value);
+
+            PreviousOrderViewModel orderVm = new PreviousOrderViewModel();
+            await orderVm.InitializeAsync(false, );
+        }
 
         public async Task<ActionResult> PreviousOrders(int? page, int? rowsPerPage)
         {
@@ -425,26 +432,13 @@ namespace PizzaWebsite.Controllers
 
             foreach (CustomerOrder prevOrder in previousOrderList)
             {
-                PreviousOrderViewModel orderVm = new PreviousOrderViewModel()
-                {
-                    Id = prevOrder.Id,
-                    DateOfOrder = $"{prevOrder.DateOfOrder.ToShortDateString()} {prevOrder.DateOfOrder.ToShortTimeString()}",
-                    OrderTotal = prevOrder.OrderTotal.ToString("C", CultureInfo.CurrentCulture),
-                    OrderType = prevOrder.GetOrderType()
-                };
+                PreviousOrderViewModel orderVm = new PreviousOrderViewModel();
+                await orderVm.InitializeAsync(false, prevOrder, null, PizzaDb);
 
                 previousOrdersVm.PreviousOrderViewModelList.Add(orderVm);
             }
 
-            // Initialize pagination
-            int totalNumberOfItems = await PizzaDb.GetNumberOfRecordsAsync<CustomerOrder>(search);
-            int numberOfPages = await PizzaDb.GetNumberOfPagesAsync<CustomerOrder>(rowsPerPage.Value, search);
-
-            previousOrdersVm.PaginationVm.CurrentPage = page.Value;
-            previousOrdersVm.PaginationVm.RowsPerPage = rowsPerPage.Value;
-            previousOrdersVm.PaginationVm.TotalPages = numberOfPages;
-            previousOrdersVm.PaginationVm.TotalNumberOfItems = totalNumberOfItems;
-            previousOrdersVm.PaginationVm.QueryString = Request.QueryString;
+            await previousOrdersVm.PaginationVm.InitializeAsync<CustomerOrder>(page.Value, rowsPerPage.Value, search, Request, PizzaDb);
 
             return View("PreviousOrderList", previousOrdersVm);
         }

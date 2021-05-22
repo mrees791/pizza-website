@@ -1,8 +1,12 @@
-﻿using PizzaWebsite.Models.Carts;
+﻿using DataLibrary.Models;
+using DataLibrary.Models.Tables;
+using PizzaWebsite.Models.Carts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace PizzaWebsite.Models.Shop
@@ -17,5 +21,19 @@ namespace PizzaWebsite.Models.Shop
         [Display(Name = "Total")]
         public string OrderTotal { get; set; }
         public CartViewModel CartViewModel { get; set; }
+
+        public async Task InitializeAsync(bool loadCartItems, CustomerOrder customerOrder, DeliveryInfo deliveryInfo, PizzaDatabase pizzaDb)
+        {
+            Id = customerOrder.Id;
+            DateOfOrder = $"{customerOrder.DateOfOrder.ToShortDateString()} {customerOrder.DateOfOrder.ToShortTimeString()}";
+            OrderTotal = customerOrder.OrderTotal.ToString("C", CultureInfo.CurrentCulture);
+            OrderType = customerOrder.GetOrderType();
+
+            if (loadCartItems)
+            {
+                CartViewModel = new CartViewModel();
+                await CartViewModel.InitializeAsync(customerOrder.CartId, pizzaDb);
+            }
+        }
     }
 }

@@ -324,6 +324,7 @@
     <Content Include="Views\Shop\OrderConfirmed.cshtml" />
     <Content Include="Views\Shop\_CheckoutDeliveryInfo.cshtml" />
     <Content Include="Views\Shop\PreviousOrderList.cshtml" />
+    <Content Include="Views\Shop\PreviousOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
