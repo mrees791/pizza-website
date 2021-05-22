@@ -70,7 +70,7 @@ namespace PizzaWebsite.Controllers
 
             List<TRecord> recordList = new List<TRecord>();
             int totalNumberOfItems = await database.GetNumberOfRecordsAsync<TRecord>(searchFilter);
-            int totalPages = await database.GetNumberOfPagesAsync<TRecord>(searchFilter, rowsPerPage.Value);
+            int totalPages = await database.GetNumberOfPagesAsync<TRecord>(rowsPerPage.Value, searchFilter);
             recordList.AddRange(await database.GetPagedListAsync<TRecord>(page.Value, rowsPerPage.Value, orderByColumn, sortOrder, searchFilter));
 
             // Navigation pane

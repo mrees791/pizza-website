@@ -9,10 +9,8 @@ namespace DataLibrary.Models.QuerySearches
     /// <summary>
     /// Used to create a where clause from a list of search values.
     /// </summary>
-    public abstract class QuerySearchBase
+    public abstract class QuerySearchBase : QueryBase
     {
-        internal abstract string GetWhereConditions();
-
         protected string GetWhereConditions(List<ColumnValuePair> searchValues)
         {
             string sqlWhereConditions = string.Empty;

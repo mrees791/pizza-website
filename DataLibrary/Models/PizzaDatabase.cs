@@ -413,20 +413,20 @@ namespace DataLibrary.Models
             return list;
         }
 
-        public async Task<int> GetNumberOfRecordsAsync<TRecord>(QueryFilterBase filter, IDbTransaction transaction = null)
+        public async Task<int> GetNumberOfRecordsAsync<TRecord>(QueryBase query, IDbTransaction transaction = null)
         {
-            string conditions = filter.GetWhereConditions();
-            return await connection.RecordCountAsync<TRecord>(conditions, parameters: filter, transaction: transaction);
+            string conditions = query.GetWhereConditions();
+            return await connection.RecordCountAsync<TRecord>(conditions, parameters: query, transaction: transaction);
         }
 
-        public async Task<int> GetNumberOfPagesAsync<TRecord>(QueryFilterBase filter, int rowsPerPage, IDbTransaction transaction = null)
+        public async Task<int> GetNumberOfPagesAsync<TRecord>(int rowsPerPage, QueryBase query, IDbTransaction transaction = null)
         {
             if (rowsPerPage == 0)
             {
                 return 0;
             }
 
-            int recordCount = await GetNumberOfRecordsAsync<TRecord>(filter);
+            int recordCount = await GetNumberOfRecordsAsync<TRecord>(query);
 
             if (recordCount == 0)
             {

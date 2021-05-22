@@ -36,7 +36,7 @@
                     </li>
                     <li>@Html.ActionLink("Cart", "Cart", "Shop")</li>
                     <li>
-                        <a href="@Url.Action("PreviousOrders", "Shop")?Page=1&RowsPerPage=10">Re-order</a>
+                        <a href="@Url.Action("PreviousOrders", "Shop")?Page=1&RowsPerPage=10">Previous Orders</a>
                     </li>
                     @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                     {

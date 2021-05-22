@@ -9,10 +9,8 @@ namespace DataLibrary.Models.QueryFilters
     /// <summary>
     /// Used to create a where clause using the SQL like operator to filter query results.
     /// </summary>
-    public abstract class QueryFilterBase
+    public abstract class QueryFilterBase : QueryBase
     {
-        internal abstract string GetWhereConditions();
-
         protected string GetWhereConditions(List<ColumnValuePair> filters)
         {
             string sqlWhereConditions = string.Empty;

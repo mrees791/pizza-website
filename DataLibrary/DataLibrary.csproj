@@ -79,6 +79,7 @@
     <Compile Include="Models\Joins\CartItemJoin.cs" />
     <Compile Include="Models\Joins\CustomerOrderJoin.cs" />
     <Compile Include="Models\OrderBy.cs" />
+    <Compile Include="Models\QueryBase.cs" />
     <Compile Include="Models\QueryFilters\EmployeeFilter.cs" />
     <Compile Include="Models\QueryFilters\MenuPizzaFilter.cs" />
     <Compile Include="Models\QueryFilters\MenuPizzaCheeseFilter.cs" />

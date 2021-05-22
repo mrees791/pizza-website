@@ -401,6 +401,17 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> PreviousOrders(int? page, int? rowsPerPage)
         {
+            // Set default values
+            if (!page.HasValue)
+            {
+                page = 1;
+            }
+            if (!rowsPerPage.HasValue)
+            {
+                rowsPerPage = 10;
+            }
+            
+            // Load previous order list
             PreviousOrderListViewModel previousOrdersVm = new PreviousOrderListViewModel();
             previousOrdersVm.PaginationVm = new PaginationViewModel();
             previousOrdersVm.PreviousOrderViewModelList = new List<PreviousOrderViewModel>();
@@ -417,12 +428,23 @@ namespace PizzaWebsite.Controllers
                 PreviousOrderViewModel orderVm = new PreviousOrderViewModel()
                 {
                     Id = prevOrder.Id,
-                    DateOfOrder = prevOrder.DateOfOrder,
-                    OrderTotal = prevOrder.OrderTotal
+                    DateOfOrder = $"{prevOrder.DateOfOrder.ToShortDateString()} {prevOrder.DateOfOrder.ToShortTimeString()}",
+                    OrderTotal = prevOrder.OrderTotal.ToString("C", CultureInfo.CurrentCulture),
+                    OrderType = prevOrder.GetOrderType()
                 };
 
                 previousOrdersVm.PreviousOrderViewModelList.Add(orderVm);
             }
+
+            // Initialize pagination
+            int totalNumberOfItems = await PizzaDb.GetNumberOfRecordsAsync<CustomerOrder>(search);
+            int numberOfPages = await PizzaDb.GetNumberOfPagesAsync<CustomerOrder>(rowsPerPage.Value, search);
+
+            previousOrdersVm.PaginationVm.CurrentPage = page.Value;
+            previousOrdersVm.PaginationVm.RowsPerPage = rowsPerPage.Value;
+            previousOrdersVm.PaginationVm.TotalPages = numberOfPages;
+            previousOrdersVm.PaginationVm.TotalNumberOfItems = totalNumberOfItems;
+            previousOrdersVm.PaginationVm.QueryString = Request.QueryString;
 
             return View(previousOrdersVm);
         }

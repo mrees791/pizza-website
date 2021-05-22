@@ -31,6 +31,11 @@ namespace DataLibrary.Models.Tables
             return Id;
         }
 
+        public string GetOrderType()
+        {
+            return IsDelivery ? "Delivery" : "Pickup";
+        }
+
         internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
             int? id = await pizzaDb.Connection.InsertAsync(this, transaction);
