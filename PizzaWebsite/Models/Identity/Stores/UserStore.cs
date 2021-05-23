@@ -287,7 +287,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task SetLockoutEndDateAsync(IdentityUser user, DateTimeOffset lockoutEnd)
         {
-            user.LockoutEndDateUtc = lockoutEnd;
+            user.LockoutEndDateUtc = lockoutEnd.DateTime;
             await Task.FromResult(0);
         }
 

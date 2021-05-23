@@ -25,7 +25,7 @@ namespace PizzaWebsite.Models.Identity
         public bool LockoutEnabled { get; set; }
         public string ZipCode { get; set; }
         public int CurrentCartId { get; set; }
-        public int ConfirmOrderCardId { get; set; }
+        public int ConfirmOrderCartId { get; set; }
         public bool IsBanned { get; set; }
         public int OrderConfirmationId { get; set; }
 
@@ -69,6 +69,7 @@ namespace PizzaWebsite.Models.Identity
             {
                 AccessFailedCount = AccessFailedCount,
                 CurrentCartId = CurrentCartId,
+                ConfirmOrderCartId = ConfirmOrderCartId,
                 Email = Email,
                 EmailConfirmed = EmailConfirmed,
                 Id = Id,
@@ -90,6 +91,7 @@ namespace PizzaWebsite.Models.Identity
         {
             AccessFailedCount = dbModel.AccessFailedCount;
             CurrentCartId = dbModel.CurrentCartId;
+            ConfirmOrderCartId = dbModel.ConfirmOrderCartId;
             Email = dbModel.Email;
             EmailConfirmed = dbModel.EmailConfirmed;
             Id = dbModel.Id;
