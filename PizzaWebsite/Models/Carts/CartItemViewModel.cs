@@ -48,6 +48,12 @@ namespace PizzaWebsite.Models.Carts
 
             Name = $"{cartPizza.Size} Pizza";
 
+            DescriptionHtml += $"Size: {cartPizza.Size}<br />";
+            DescriptionHtml += $"Cheese: {cheese.Name}<br />";
+            DescriptionHtml += $"Sauce: {sauce.Name}<br />";
+            DescriptionHtml += $"Crust: {crust.Name}<br />";
+            DescriptionHtml += $"Crust Flavor: {crustFlavor.Name}<br /><br />";
+
             if (cartPizza.Toppings.Any())
             {
                 DescriptionHtml += $"Toppings<br />";
@@ -60,12 +66,6 @@ namespace PizzaWebsite.Models.Carts
 
                 DescriptionHtml += "<br />";
             }
-
-            DescriptionHtml += $"Size: {cartPizza.Size}<br />";
-            DescriptionHtml += $"Cheese: {cheese.Name}<br />";
-            DescriptionHtml += $"Sauce: {sauce.Name}<br />";
-            DescriptionHtml += $"Crust: {crust.Name}<br />";
-            DescriptionHtml += $"Crust Flavor: {crustFlavor.Name}<br />";
         }
     }
 }

@@ -7,4 +7,8 @@
 
 <h2>Order</h2>
 
-@Html.Partial("~/Views/Shared/Carts/_Cart.cshtml", Model.CartViewModel)
+<h3>Order Summary</h3>
+@Html.Partial("~/Views/Shared/Carts/_Cart.cshtml", Model.CartVm)
+
+<h3>Cost Summary</h3>
+@Html.Partial("~/Views/Shared/Carts/_CostSummary.cshtml", Model.CartVm.CostSummaryVm)

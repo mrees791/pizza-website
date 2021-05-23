@@ -187,6 +187,7 @@
     <Compile Include="Models\Attributes\ZipCodeAttribute.cs" />
     <Compile Include="Models\Carts\CartItemViewModel.cs" />
     <Compile Include="Models\Carts\CartViewModel.cs" />
+    <Compile Include="Models\Carts\CostSummaryViewModel.cs" />
     <Compile Include="Models\ConfirmationViewModel.cs" />
     <Compile Include="Models\CostSummary.cs" />
     <Compile Include="Models\Databases\DatabaseContext.cs" />
@@ -325,6 +326,7 @@
     <Content Include="Views\Shop\_CheckoutDeliveryInfo.cshtml" />
     <Content Include="Views\Shop\PreviousOrderList.cshtml" />
     <Content Include="Views\Shop\PreviousOrder.cshtml" />
+    <Content Include="Views\Shared\Carts\_CostSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

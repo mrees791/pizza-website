@@ -14,12 +14,16 @@ namespace PizzaWebsite.Models.Carts
     public class CartViewModel
     {
         public List<CartItemViewModel> CartItemList { get; set; }
+        public CostSummaryViewModel CostSummaryVm { get; set; }
 
         public async Task InitializeAsync(int cartId, PizzaDatabase pizzaDb)
         {
+            CostSummaryVm = new CostSummaryViewModel();
             CartItemList = new List<CartItemViewModel>();
+
             List<int> quantityList = ListUtility.CreateQuantityList();
             IEnumerable<CartItemJoin> cartItemList = await pizzaDb.GetJoinedCartItemListAsync(cartId);
+            CostSummaryVm.Initialize(new CostSummary(cartItemList));
 
             foreach (CartItemJoin cartItemJoin in cartItemList)
             {

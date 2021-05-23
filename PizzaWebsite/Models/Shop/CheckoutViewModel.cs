@@ -20,7 +20,7 @@ namespace PizzaWebsite.Models.Shop
 {
     public class CheckoutViewModel
     {
-        public CartViewModel Cart { get; set; }
+        public CartViewModel CartVm { get; set; }
         public List<string> OrderTypeList { get; set; }
         [Required]
         [Display(Name = "Order Type")]
@@ -30,11 +30,6 @@ namespace PizzaWebsite.Models.Shop
         [Display(Name = "Store")]
         public int SelectedStoreLocationId { get; set; }
         public List<SelectListItem> StoreLocationSelectList { get; set; }
-
-        // Cost summary
-        public string OrderSubtotal { get; set; }
-        public string OrderTax { get; set; }
-        public string OrderTotal { get; set; }
 
         // Delivery Info
         [Display(Name = "Save New Address")]
@@ -139,9 +134,7 @@ namespace PizzaWebsite.Models.Shop
                 });
             }
 
-            CostSummary costSummary = new CostSummary(cartItemJoinList);
-
-            Cart = new CartViewModel()
+            CartVm = new CartViewModel()
             {
                 CartItemList = new List<CartItemViewModel>()
             };
@@ -151,11 +144,8 @@ namespace PizzaWebsite.Models.Shop
             DeliveryAddressTypeSelectList = ListUtility.CreateDeliveryAddressTypeList();
             DeliveryAddressSelectList = deliveryAddressSelectList;
             StoreLocationSelectList = storeLocationSelectList;
-            OrderSubtotal = costSummary.Subtotal.ToString("C", CultureInfo.CurrentCulture);
-            OrderTax = costSummary.Tax.ToString("C", CultureInfo.CurrentCulture);
-            OrderTotal = costSummary.Total.ToString("C", CultureInfo.CurrentCulture);
 
-            await Cart.InitializeAsync(updatedUser.ConfirmOrderCartId, pizzaDb);
+            await CartVm.InitializeAsync(updatedUser.ConfirmOrderCartId, pizzaDb);
         }
     }
 }

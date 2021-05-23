@@ -20,7 +20,7 @@ namespace PizzaWebsite.Models.Shop
         public string OrderType { get; set; }
         [Display(Name = "Total")]
         public string OrderTotal { get; set; }
-        public CartViewModel CartViewModel { get; set; }
+        public CartViewModel CartVm { get; set; }
 
         public async Task InitializeAsync(bool loadCartItems, CustomerOrder customerOrder, DeliveryInfo deliveryInfo, PizzaDatabase pizzaDb)
         {
@@ -31,8 +31,8 @@ namespace PizzaWebsite.Models.Shop
 
             if (loadCartItems)
             {
-                CartViewModel = new CartViewModel();
-                await CartViewModel.InitializeAsync(customerOrder.CartId, pizzaDb);
+                CartVm = new CartViewModel();
+                await CartVm.InitializeAsync(customerOrder.CartId, pizzaDb);
             }
         }
     }

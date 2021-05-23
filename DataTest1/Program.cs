@@ -21,7 +21,7 @@ namespace DataTest1
 
         public async Task StartAsync()
         {
-            await InitializeExampleDbAsync();
+            //await InitializeExampleDbAsync();
 
             //TestCustomerOrderJoin();
             //await CreateExampleDeliveryAddressesAsync();

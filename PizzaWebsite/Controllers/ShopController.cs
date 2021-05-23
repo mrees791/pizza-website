@@ -301,12 +301,10 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> Cart()
         {
             SiteUser user = await GetCurrentUserAsync();
-            CartViewModel cartVm = new CartViewModel()
-            {
-                CartItemList = new List<CartItemViewModel>()
-            };
+            CartViewModel cartVm = new CartViewModel();
 
             await cartVm.InitializeAsync(user.CurrentCartId, PizzaDb);
+            cartVm.CostSummaryVm.OnlyShowSubtotal = true;
 
             return View(cartVm);
         }

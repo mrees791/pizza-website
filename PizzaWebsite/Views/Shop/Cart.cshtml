@@ -13,6 +13,7 @@
 </div>
 <div id="cartBlock" style="display: none;">
     @Html.Partial("~/Views/Shared/Carts/_CartWithControls.cshtml")
+    @Html.Partial("~/Views/Shared/Carts/_CostSummary.cshtml", Model.CostSummaryVm)
     @Html.ActionLink("Checkout", "Checkout")
 </div>
 

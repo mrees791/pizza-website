@@ -6,7 +6,7 @@
 
 <h2>Checkout</h2>
 
-@if (Model.Cart.IsEmpty())
+@if (Model.CartVm.IsEmpty())
 {
     <p>Your cart is empty.</p>
 }
@@ -51,23 +51,10 @@ else
             }
 
             <h3>Order Summary</h3>
-            @Html.Partial("~/Views/Shared/Carts/_Cart.cshtml", Model.Cart)
+            @Html.Partial("~/Views/Shared/Carts/_Cart.cshtml", Model.CartVm)
 
             <h3>Cost Summary</h3>
-            <table class="table">
-                <tr>
-                    <td>Subtotal</td>
-                    <td>@Model.OrderSubtotal</td>
-                </tr>
-                <tr>
-                    <td>Tax</td>
-                    <td>@Model.OrderTax</td>
-                </tr>
-                <tr>
-                    <td>Total</td>
-                    <td>@Model.OrderTotal</td>
-                </tr>
-            </table>
+            @Html.Partial("~/Views/Shared/Carts/_CostSummary.cshtml", Model.CartVm.CostSummaryVm)
 
             <div class="form-group">
                 <div class="col-md-2">
