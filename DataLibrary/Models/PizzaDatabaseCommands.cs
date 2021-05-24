@@ -23,7 +23,6 @@ namespace DataLibrary.Models
             this.pizzaDb = pizzaDb;
         }
 
-        // todo: Add server side validation
         public async Task CheckoutCartAsync(SiteUser siteUser)
         {
             List<CartItemJoin> cartItems = new List<CartItemJoin>(await pizzaDb.GetJoinedCartItemListAsync(siteUser.CurrentCartId));
@@ -36,6 +35,12 @@ namespace DataLibrary.Models
 
                 transaction.Commit();
             }
+        }
+
+        public async Task<decimal> CalculateCartSubtotalAsync(int cartId)
+        {
+            IEnumerable<CartItem> cartItems = await pizzaDb.GetListAsync<CartItem>(new { CartId = cartId });
+            return cartItems.Sum(i => i.Price);
         }
 
         public async Task SubmitCustomerOrderAsync(SiteUser siteUser, CustomerOrder customerOrder, DeliveryInfo deliveryInfo = null)
@@ -63,6 +68,11 @@ namespace DataLibrary.Models
         public async Task<bool> UserOwnsDeliveryAddressAsync(int userId, DeliveryAddress deliveryAddress)
         {
             return await Task.FromResult(deliveryAddress.UserId == userId);
+        }
+
+        public async Task<bool> UserOwnsCartAsync(SiteUser siteUser, Cart cart)
+        {
+            return await Task.FromResult(siteUser.CurrentCartId == cart.Id);
         }
 
         public async Task<bool> UserOwnsCartItemAsync(int userId, CartItem cartItem)

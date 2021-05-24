@@ -13,11 +13,13 @@ namespace PizzaWebsite.Models.Carts
 
     public class CartViewModel
     {
+        public int CartId { get; set; }
         public List<CartItemViewModel> CartItemList { get; set; }
         public CostSummaryViewModel CostSummaryVm { get; set; }
 
         public async Task InitializeAsync(int cartId, PizzaDatabase pizzaDb)
         {
+            CartId = cartId;
             CostSummaryVm = new CostSummaryViewModel();
             CartItemList = new List<CartItemViewModel>();
 

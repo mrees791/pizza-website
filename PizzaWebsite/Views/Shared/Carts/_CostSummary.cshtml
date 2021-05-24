@@ -5,15 +5,12 @@
         <td>Subtotal</td>
         <td>@Model.Subtotal</td>
     </tr>
-    @if (!Model.OnlyShowSubtotal)
-    {
-        <tr>
-            <td>Tax</td>
-            <td>@Model.Tax</td>
-        </tr>
-        <tr>
-            <td>Total</td>
-            <td>@Model.Total</td>
-        </tr>
-    }
+    <tr>
+        <td>Tax</td>
+        <td>@Model.Tax</td>
+    </tr>
+    <tr>
+        <td>Total</td>
+        <td>@Model.Total</td>
+    </tr>
 </table>

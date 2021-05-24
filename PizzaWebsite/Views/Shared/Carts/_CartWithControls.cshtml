@@ -27,19 +27,26 @@
                 </td>
                 <td>@Html.Raw(cartItemVm.DescriptionHtml)</td>
                 <td id="@cartItemVm.CartItemPriceCellId">@cartItemVm.Price</td>
-                    <td>
-                        @Html.DropDownList("Quantity", new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity),
-                            new
-                            {
-                                @class = "form-control",
-                                id = cartItemVm.CartItemQuantitySelectId,
-                                name = "Quantity"
-                            })
-                    </td>
+                <td>
+                    @Html.DropDownList("Quantity", new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity),
+                        new
+                        {
+                            @class = "form-control",
+                            id = cartItemVm.CartItemQuantitySelectId,
+                            name = "Quantity"
+                        })
+                </td>
                 <td>
                     <input type="button" value="Remove" id="@cartItemVm.CartItemDeleteButtonId" class="form-control" />
                 </td>
             </tr>
         }
+        <tr>
+            <td>Subtotal</td>
+            <td></td>
+            <td id="subtotalCell"></td>
+            <td></td>
+            <td></td>
+        </tr>
     </tbody>
 </table>

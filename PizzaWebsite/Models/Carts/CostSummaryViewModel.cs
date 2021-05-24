@@ -11,7 +11,6 @@ namespace PizzaWebsite.Models.Carts
         public string Subtotal { get; set; }
         public string Tax { get; set; }
         public string Total { get; set; }
-        public bool OnlyShowSubtotal { get; set; }
 
         public void Initialize(CostSummary costSummary)
         {

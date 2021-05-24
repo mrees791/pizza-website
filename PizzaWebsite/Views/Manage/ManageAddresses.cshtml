@@ -7,14 +7,15 @@
 
 <h2>Manage Addresses</h2>
 
+<div>
+    @Html.ActionLink("Back", "Index", "", new { @class = "btn btn-default" })
+    @Html.ActionLink("Add New Address", "AddNewAddress", "", new { @class = "btn btn-default" })
+</div>
+
 <div id="emptyAddressListBlock" style="display: none;">
     <p>You currently have no delivery addresses.</p>
-    <p>@Html.ActionLink("Back", "Index")</p>
-    <p>@Html.ActionLink("Add New Address", "AddNewAddress")</p>
 </div>
 <div id="addressListBlock" style="display: none;">
-    <p>@Html.ActionLink("Back", "Index")</p>
-    <p>@Html.ActionLink("Add New Address", "AddNewAddress")</p>
     <table class="table">
         <thead>
             <tr>

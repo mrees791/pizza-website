@@ -7,60 +7,71 @@
 
 <h2>Previous Orders</h2>
 
+<div>
+    <a href="@Url.Action("Index", "Manage")?@(Request.QueryString)">
+        <input type="button" value="Back" class="btn btn-default" />
+    </a>
+</div>
+
 @if (!Model.HasPreviousOrders())
 {
-    <p>You do not have any orders.</p>
-    <p>@Html.ActionLink("Back", "Index", "Manage")</p>
+    <div>
+        <p>You do not have any orders.</p>
+    </div>
 }
 else
 {
-    <p>@Html.ActionLink("Back", "Index", "Manage")</p>
-    <table class="table">
-        <tr>
-            @* Table header for controls columns. *@
-            <th></th>
-            <th>
-                @Html.DisplayNameFor(model => model.PreviousOrderViewModel.DateOfOrder)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PreviousOrderViewModel.OrderType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PreviousOrderViewModel.OrderTotal)
-            </th>
-        </tr>
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    @* Table header for controls columns. *@
+                    <th></th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PreviousOrderViewModel.DateOfOrder)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PreviousOrderViewModel.OrderType)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PreviousOrderViewModel.OrderTotal)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (PreviousOrderViewModel prevOrderVm in Model.PreviousOrderViewModelList)
+                {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("PreviousOrder")/@prevOrderVm.Id?@(Request.QueryString)">
+                                <input type="button" value="View" class="btn btn-default" />
+                            </a>
+                            <a href="@Url.Action("ViewOrderStatus")/@prevOrderVm.Id?@(Request.QueryString)">
+                                <input type="button" value="Order Status" class="btn btn-default" />
+                            </a>
+                            <a href="@Url.Action("OrderAgain")/@prevOrderVm.Id?@(Request.QueryString)">
+                                <input type="button" value="Order Again" class="btn btn-default" />
+                            </a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => prevOrderVm.DateOfOrder)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => prevOrderVm.OrderType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(viewModel => prevOrderVm.OrderTotal)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <nav>
+            <ul id="managePagination" class="pagination">
+            </ul>
+        </nav>
+    </div>
 
-        @foreach (PreviousOrderViewModel prevOrderVm in Model.PreviousOrderViewModelList)
-        {
-            <tr>
-                <td>
-                    <a href="@Url.Action("PreviousOrder")/@prevOrderVm.Id?@(Request.QueryString)">
-                        <input type="button" value="View" class="btn btn-default" />
-                    </a>
-                    <a href="@Url.Action("ViewOrderStatus")/@prevOrderVm.Id?@(Request.QueryString)">
-                        <input type="button" value="Order Status" class="btn btn-default" />
-                    </a>
-                    <a href="@Url.Action("OrderAgain")/@prevOrderVm.Id?@(Request.QueryString)">
-                        <input type="button" value="Order Again" class="btn btn-default" />
-                    </a>
-                </td>
-                <td>
-                    @Html.DisplayFor(model => prevOrderVm.DateOfOrder)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => prevOrderVm.OrderType)
-                </td>
-                <td>
-                    @Html.DisplayFor(viewModel => prevOrderVm.OrderTotal)
-                </td>
-            </tr>
-        }
-    </table>
-
-    <nav>
-        <ul id="managePagination" class="pagination">
-        </ul>
-    </nav>
 
     @section Scripts {
         <script type="text/javascript">

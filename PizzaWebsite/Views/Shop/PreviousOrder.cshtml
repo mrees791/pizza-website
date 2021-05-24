@@ -7,6 +7,12 @@
 
 <h2>Order</h2>
 
+<div>
+    <a href="@Url.Action("PreviousOrders")?@(Request.QueryString)">
+        <input type="button" value="Back" class="btn btn-default" />
+    </a>
+</div>
+
 <h3>Order Summary</h3>
 @Html.Partial("~/Views/Shared/Carts/_Cart.cshtml", Model.CartVm)
 

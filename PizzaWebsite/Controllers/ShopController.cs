@@ -304,7 +304,6 @@ namespace PizzaWebsite.Controllers
             CartViewModel cartVm = new CartViewModel();
 
             await cartVm.InitializeAsync(user.CurrentCartId, PizzaDb);
-            cartVm.CostSummaryVm.OnlyShowSubtotal = true;
 
             return View(cartVm);
         }
@@ -333,6 +332,34 @@ namespace PizzaWebsite.Controllers
             string responseText = $"{rowsDeleted} rows deleted.";
 
             return Json(responseText, MediaTypeNames.Text.Plain);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> GetCartSubtotalAjax(int cartId)
+        {
+            Response.StatusCode = (int)HttpStatusCode.OK;
+            Cart cart = await PizzaDb.GetAsync<Cart>(cartId);
+
+            if (cart == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Cart with ID {cartId} does not exist.", MediaTypeNames.Text.Plain);
+            }
+
+            SiteUser user = await GetCurrentUserAsync();
+
+            bool authorized = await PizzaDb.Commands.UserOwnsCartAsync(user, cart);
+
+            if (!authorized)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Current user does not own cart with ID {cartId}.", MediaTypeNames.Text.Plain);
+            }
+
+            decimal cartSubtotal = await PizzaDb.Commands.CalculateCartSubtotalAsync(cartId);
+            string formattedPrice = cartSubtotal.ToString("C", CultureInfo.CurrentCulture);
+
+            return Json(formattedPrice);
         }
 
         [HttpPost]
