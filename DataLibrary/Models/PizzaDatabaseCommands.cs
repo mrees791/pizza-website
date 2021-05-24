@@ -23,15 +23,27 @@ namespace DataLibrary.Models
             this.pizzaDb = pizzaDb;
         }
 
+        public async Task ReorderPreviousOrder(SiteUser siteUser, CustomerOrder previousOrder)
+        {
+            IEnumerable<CartItemJoin> cartItems = await pizzaDb.GetJoinedCartItemListAsync(previousOrder.CartId);
+
+            using (var transaction = pizzaDb.Connection.BeginTransaction())
+            {
+                await CloneCart(siteUser.CurrentCartId, true, cartItems, transaction);
+
+                transaction.Commit();
+            }
+        }
+
         public async Task CheckoutCartAsync(SiteUser siteUser)
         {
-            List<CartItemJoin> cartItems = new List<CartItemJoin>(await pizzaDb.GetJoinedCartItemListAsync(siteUser.CurrentCartId));
+            IEnumerable<CartItemJoin> cartItems = await pizzaDb.GetJoinedCartItemListAsync(siteUser.CurrentCartId);
 
             using (var transaction = pizzaDb.Connection.BeginTransaction())
             {
                 siteUser.OrderConfirmationId++;
                 await siteUser.UpdateAsync(pizzaDb, transaction);
-                await CloneCart(siteUser.ConfirmOrderCartId, cartItems, transaction);
+                await CloneCart(siteUser.ConfirmOrderCartId, true, cartItems, transaction);
 
                 transaction.Commit();
             }
@@ -91,9 +103,12 @@ namespace DataLibrary.Models
             return await pizzaDb.Connection.ExecuteAsync(deleteQuerySql, new { CartId = cartId }, transaction);
         }
 
-        private async Task CloneCart(int destinationCartId, List<CartItemJoin> cartItems, IDbTransaction transaction = null)
+        private async Task CloneCart(int destinationCartId, bool clearDestinationCart, IEnumerable<CartItemJoin> cartItems, IDbTransaction transaction = null)
         {
-            await DeleteAllCartItemsAsync(destinationCartId, transaction);
+            if (clearDestinationCart)
+            {
+                await DeleteAllCartItemsAsync(destinationCartId, transaction);
+            }
 
             foreach (CartItemJoin cartItem in cartItems)
             {

@@ -25,6 +25,29 @@ namespace PizzaWebsite.Controllers
 {
     public class ShopController : BaseController
     {
+        public async Task<ActionResult> OrderAgain(int id)
+        {
+            CustomerOrder customerOrder = await PizzaDb.GetAsync<CustomerOrder>(id);
+
+            if (customerOrder == null)
+            {
+                throw new RecordDoesNotExistException($"Customer Order with ID {id} does not exist.");
+            }
+
+            SiteUser currentUser = await GetCurrentUserAsync();
+
+            bool authorized = await PizzaDb.Commands.UserOwnsCustomerOrderAsync(currentUser, customerOrder);
+
+            if (!authorized)
+            {
+                throw new Exception($"Current user does not own order with ID {id}.");
+            }
+
+            await PizzaDb.Commands.ReorderPreviousOrder(currentUser, customerOrder);
+
+            return RedirectToAction("Cart");
+        }
+
         public async Task<ActionResult> Checkout()
         {
             CheckoutViewModel checkoutModel = new CheckoutViewModel();
