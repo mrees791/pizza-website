@@ -8,6 +8,6 @@ namespace DataLibrary.Models
 {
     public enum OrderPhase
     {
-        Order_Placed, Prep, Bake, Box, Out_For_Delivery
+        Order_Placed, Prep, Bake, Box, Ready_For_Pickup, Out_For_Delivery
     }
 }

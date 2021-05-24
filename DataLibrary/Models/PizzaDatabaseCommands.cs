@@ -75,6 +75,11 @@ namespace DataLibrary.Models
             return await Task.FromResult(siteUser.CurrentCartId == cart.Id);
         }
 
+        public async Task<bool> UserOwnsCustomerOrderAsync(SiteUser siteUser, CustomerOrder customerOrder)
+        {
+            return await Task.FromResult(customerOrder.UserId == siteUser.Id);
+        }
+
         public async Task<bool> UserOwnsCartItemAsync(int userId, CartItem cartItem)
         {
             return await Task.FromResult(cartItem.UserId == userId);

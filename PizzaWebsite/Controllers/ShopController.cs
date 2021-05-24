@@ -114,7 +114,22 @@ namespace PizzaWebsite.Controllers
                 await PizzaDb.Commands.SubmitCustomerOrderAsync(user, customerOrder);
             }
 
-            return RedirectToAction("OrderConfirmed");
+            OrderStatusViewModel orderStatusVm = new OrderStatusViewModel()
+            {
+                CustomerOrderId = customerOrder.Id
+            };
+
+            return View("OrderStatus", orderStatusVm);
+        }
+
+        public ActionResult PreviousOrderStatus(int id)
+        {
+            OrderStatusViewModel orderStatusVm = new OrderStatusViewModel()
+            {
+                CustomerOrderId = id
+            };
+
+            return View(orderStatusVm);
         }
 
         public ActionResult OrderConfirmed()
@@ -360,6 +375,54 @@ namespace PizzaWebsite.Controllers
             string formattedPrice = cartSubtotal.ToString("C", CultureInfo.CurrentCulture);
 
             return Json(formattedPrice);
+        }
+
+        private string GetOrderStatusMessage(OrderPhase orderPhase)
+        {
+            switch (orderPhase)
+            {
+                case OrderPhase.Order_Placed:
+                    return "Your order has been placed.";
+                case OrderPhase.Prep:
+                    return "Your order is being prepared.";
+                case OrderPhase.Bake:
+                    return "Your order is being baked.";
+                case OrderPhase.Box:
+                    return "Your order is being boxed.";
+                case OrderPhase.Ready_For_Pickup:
+                    return "Your order is ready for pickup.";
+                case OrderPhase.Out_For_Delivery:
+                    return "Your order is out for delivery.";
+            }
+
+            return "Unable to get order status.";
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> GetOrderStatusAjax(int orderId)
+        {
+            Response.StatusCode = (int)HttpStatusCode.OK;
+            CustomerOrder order = await PizzaDb.GetAsync<CustomerOrder>(orderId);
+
+            if (order == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Order with ID {order} does not exist.", MediaTypeNames.Text.Plain);
+            }
+
+            SiteUser user = await GetCurrentUserAsync();
+
+            bool authorized = await PizzaDb.Commands.UserOwnsCustomerOrderAsync(user, order);
+
+            if (!authorized)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Current user does not own order with ID {orderId}.", MediaTypeNames.Text.Plain);
+            }
+
+            string orderStatus = GetOrderStatusMessage(order.OrderPhase);
+
+            return Json(orderStatus);
         }
 
         [HttpPost]

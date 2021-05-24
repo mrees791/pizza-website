@@ -29,7 +29,8 @@ namespace PizzaWebsite
                       "~/Scripts/site.js",
                       "~/Scripts/site-cart.js",
                       "~/Scripts/site-checkout.js",
-                      "~/Scripts/site-manage-addresses.js"));
+                      "~/Scripts/site-manage-addresses.js",
+                      "~/Scripts/site-order-status.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
