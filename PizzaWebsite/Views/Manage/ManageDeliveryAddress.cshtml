@@ -11,6 +11,10 @@ else
     <h2>Manage Delivery Address</h2>
 }
 
+<div>
+    @Html.ActionLink("Back", "ManageAddresses", new { }, new { @class = "btn btn-default" })
+</div>
+
 @using (Html.BeginForm("SubmitDeliveryAddress", "Manage", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
@@ -51,7 +55,7 @@ else
                 @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
             </div>
         </div>
-        
+
         <div class="form-group">
             @Html.LabelFor(model => model.SelectedState, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -75,7 +79,7 @@ else
                 @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
             </div>
         </div>
-        
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 @if (Model.IsNewRecord())
@@ -90,7 +94,3 @@ else
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back", "ManageAddresses")
-</div>

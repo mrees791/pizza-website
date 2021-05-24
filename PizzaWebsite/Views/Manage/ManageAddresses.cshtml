@@ -8,8 +8,8 @@
 <h2>Manage Addresses</h2>
 
 <div>
-    @Html.ActionLink("Back", "Index", "", new { @class = "btn btn-default" })
-    @Html.ActionLink("Add New Address", "AddNewAddress", "", new { @class = "btn btn-default" })
+    @Html.ActionLink("Back", "Index", new { }, new { @class = "btn btn-default" })
+    @Html.ActionLink("Add New Address", "AddNewAddress", new { }, new { @class = "btn btn-default" })
 </div>
 
 <div id="emptyAddressListBlock" style="display: none;">
