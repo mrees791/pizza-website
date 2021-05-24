@@ -28,32 +28,31 @@
     {
 <script type="text/javascript">
             $(function () {
-
-                var rowId = '#@cartItemVm.CartItemRowId';
-                var quantitySelectId = '#@cartItemVm.CartItemQuantitySelectId';
-                var deleteButtonId = '#@cartItemVm.CartItemDeleteButtonId';
-                var priceCellId = '#@cartItemVm.CartItemPriceCellId';
+                var $cartItemRow = $('#@cartItemVm.CartItemRowId');
+                var $quantitySelect = $('#@cartItemVm.CartItemQuantitySelectId');
+                var $deleteButton = $('#@cartItemVm.CartItemDeleteButtonId');
+                var $priceCell = $('#@cartItemVm.CartItemPriceCellId');
                 // Update cart item quantity
-                $(quantitySelectId).on("change", function () {
-                    var quantity = $(quantitySelectId).val();
+                $quantitySelect.on("change", function () {
+                    var quantity = $quantitySelect.val();
                     var params = { cartItemId: @cartItemVm.CartItemId, quantity: quantity };
                     pizzaSiteNs.ajaxCall('/Shop/UpdateCartItemQuantityAjax', JSON.stringify(params), 'POST').fail(function (response) {
                         console.log(response);
                     })
                     .done(function (response) {
-                        $(priceCellId).html(response);
+                        $priceCell.html(response);
                         pizzaSiteCartNs.updateCartSubtotal(@Model.CartId);
                     });
                 });
                 // Delete cart item
-                $(deleteButtonId).on("click", function () {
+                $deleteButton.on("click", function () {
                     var params = { cartItemId: @cartItemVm.CartItemId };
                     pizzaSiteNs.ajaxCall('/Shop/DeleteCartItemAjax', JSON.stringify(params), 'POST').
                         fail(function (response) {
                             console.log(response);
                         }).
                         done(function (response) {
-                            $(rowId).remove();
+                            $cartItemRow.remove();
                             pizzaSiteCartNs.updateCartElementVisibility();
                             pizzaSiteCartNs.updateCartSubtotal(@Model.CartId);
                         });
