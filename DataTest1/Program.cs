@@ -640,6 +640,7 @@ namespace DataTest1
             {
                 SiteRole adminRole = await pizzaDb.GetSiteRoleByNameAsync("Admin");
                 SiteRole employeeRole = await pizzaDb.GetSiteRoleByNameAsync("Employee");
+                SiteRole managerRole = await pizzaDb.GetSiteRoleByNameAsync("Manager");
 
                 if (adminRole == null)
                 {
@@ -657,6 +658,15 @@ namespace DataTest1
                         Name = "Employee"
                     };
                     await pizzaDb.InsertAsync(employeeRole);
+                }
+
+                if (managerRole == null)
+                {
+                    managerRole = new SiteRole()
+                    {
+                        Name = "Manager"
+                    };
+                    await pizzaDb.InsertAsync(managerRole);
                 }
 
                 SiteUser acctUser = await pizzaDb.GetSiteUserByNameAsync("mrees791@gmail.com");
