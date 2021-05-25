@@ -26,14 +26,14 @@ namespace PizzaWebsite.Models.PizzaBuilders
         [Range(1, int.MaxValue, ErrorMessage = "You must select a sauce.")]
         public int SelectedSauceId { get; set; }
         public List<string> SauceAmountList { get; set; }
-        [Display(Name = "Amount")]
+        [Display(Name = "Sauce Amount")]
         public string SelectedSauceAmount { get; set; }
         public Dictionary<int, string> CheeseList { get; set; }
         [Display(Name = "Cheese")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a cheese.")]
         public int SelectedCheeseId { get; set; }
         public List<string> CheeseAmountList { get; set; }
-        [Display(Name = "Amount")]
+        [Display(Name = "Cheese Amount")]
         public string SelectedCheeseAmount { get; set; }
         public Dictionary<int, string> CrustFlavorList { get; set; }
         [Display(Name = "Crust Flavor")]

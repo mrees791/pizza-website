@@ -12,7 +12,7 @@
             <input type="hidden" name="SauceList[@i].Key" value="@saucePair.Key" />
             <input type="hidden" name="SauceList[@i].Value" value="@saucePair.Value" />
         }
-        @Html.DropDownListFor(m => m.SelectedSauceId, new SelectList(Model.SauceList, "Key", "Value"))
+        @Html.DropDownListFor(m => m.SelectedSauceId, new SelectList(Model.SauceList, "Key", "Value"), new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.SelectedSauceId, "", new { @class = "text-danger" })
     </div>
 </div>
@@ -24,7 +24,7 @@
         {
             <input type="hidden" name="SauceAmountList[@i]" value="@Model.SauceAmountList[i]" />
         }
-        @Html.DropDownListFor(m => m.SelectedSauceAmount, new SelectList(Model.SauceAmountList))
+        @Html.DropDownListFor(m => m.SelectedSauceAmount, new SelectList(Model.SauceAmountList), new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.SelectedSauceAmount, "", new { @class = "text-danger" })
     </div>
 </div>
@@ -38,7 +38,7 @@
             <input type="hidden" name="CheeseList[@i].Key" value="@cheesePair.Key" />
             <input type="hidden" name="CheeseList[@i].Value" value="@cheesePair.Value" />
         }
-        @Html.DropDownListFor(m => m.SelectedCheeseId, new SelectList(Model.CheeseList, "Key", "Value"))
+        @Html.DropDownListFor(m => m.SelectedCheeseId, new SelectList(Model.CheeseList, "Key", "Value"), new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.SelectedCheeseId, "", new { @class = "text-danger" })
     </div>
 </div>
@@ -50,7 +50,7 @@
         {
             <input type="hidden" name="CheeseAmountList[@i]" value="@Model.CheeseAmountList[i]" />
         }
-        @Html.DropDownListFor(m => m.SelectedCheeseAmount, new SelectList(Model.CheeseAmountList))
+        @Html.DropDownListFor(m => m.SelectedCheeseAmount, new SelectList(Model.CheeseAmountList), new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.SelectedCheeseAmount, "", new { @class = "text-danger" })
     </div>
 </div>
@@ -64,7 +64,7 @@
             <input type="hidden" name="CrustFlavorList[@i].Key" value="@crustFlavorPair.Key" />
             <input type="hidden" name="CrustFlavorList[@i].Value" value="@crustFlavorPair.Value" />
         }
-        @Html.DropDownListFor(m => m.SelectedCrustFlavorId, new SelectList(Model.CrustFlavorList, "Key", "Value"))
+        @Html.DropDownListFor(m => m.SelectedCrustFlavorId, new SelectList(Model.CrustFlavorList, "Key", "Value"), new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.SelectedCrustFlavorId, "", new { @class = "text-danger" })
     </div>
 </div>
