@@ -23,13 +23,13 @@
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
         @Html.Label("Name", "Name")
         @Html.TextBox("Name", Request["Name"], new { @class = "form-control" })
-        <input type="submit" value="Apply Search Filters" class="btn btn-default" />
+        <input type="submit" value="Apply Search Filters" class="btn btn-primary" />
     }
 </div>
 
 <div>
     <a href="@Url.Action("Add")?@(Request.QueryString)">
-        <input type="button" value="Add New Topping" class="btn btn-default" />
+        <input type="button" value="Add New Topping" class="btn btn-primary" />
     </a>
 </div>
 
@@ -55,7 +55,7 @@
             </td>
             <td>
                 <a href="@Url.Action("Edit")/@item.Id?@(Request.QueryString)">
-                    <input type="button" value="Edit" class="btn btn-default" />
+                    <input type="button" value="Edit" class="btn btn-primary" />
                 </a>
             </td>
         </tr>

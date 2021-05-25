@@ -23,13 +23,13 @@
         @Html.TextBox("StoreName", Request["StoreName"], new { @class = "form-control" })
         @Html.Label("PhoneNumber", "Phone Number")
         @Html.TextBox("PhoneNumber", Request["PhoneNumber"], new { @class = "form-control" })
-        <input type="submit" value="Apply Search Filters" class="btn btn-default" />
+        <input type="submit" value="Apply Search Filters" class="btn btn-primary" />
     }
 </div>
 
 <div>
     <a href="@Url.Action("CreateStore")?@(Request.QueryString)">
-        <input type="button" value="Create New Store" class="btn btn-default" />
+        <input type="button" value="Create New Store" class="btn btn-primary" />
     </a>
 </div>
 
@@ -79,7 +79,7 @@
             </td>
             <td>
                 <a href="@Url.Action("EditStore")/@item.Id?@(Request.QueryString)">
-                    <input type="button" value="Edit" class="btn btn-default" />
+                    <input type="button" value="Edit" class="btn btn-primary" />
                 </a>
             </td>
         </tr>

@@ -14,6 +14,14 @@
     }
 }
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ManageWebsite")">Home</a></li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ManageStores")">Manage Stores</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+    </ol>
+</nav>
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -48,7 +56,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.SelectedState, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(m => m.SelectedState, new SelectList(Model.StateList.Select(l => l.Abbreviation)), "State")
+                @Html.DropDownListFor(m => m.SelectedState, new SelectList(Model.StateList.Select(l => l.Abbreviation)), "State", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.SelectedState, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -83,19 +91,13 @@
             <div class="col-md-offset-2 col-md-10">
                 @if (Model.IsNewRecord())
                 {
-                    <input type="submit" value="Create New Store" class="btn btn-default" />
+                    <input type="submit" value="Create New Store" class="btn btn-success" />
                 }
                 else
                 {
-                    <input type="submit" value="Apply Changes" class="btn btn-default" />
+                    <input type="submit" value="Apply Changes" class="btn btn-success" />
                 }
             </div>
         </div>
     </div>
 }
-
-<div>
-    <a href="@Url.Action("Index")?@(Request.QueryString)">
-        <input type="button" value="Back" class="btn btn-default" />
-    </a>
-</div>

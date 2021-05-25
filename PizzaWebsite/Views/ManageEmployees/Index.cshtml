@@ -21,7 +21,7 @@
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
         @Html.Label("EmployeeId", "Employee ID")
         @Html.TextBox("EmployeeId", Request["EmployeeId"], new { @class = "form-control" })
-        <input type="submit" value="Apply Search Filters" class="btn btn-default" />
+        <input type="submit" value="Apply Search Filters" class="btn btn-primary" />
     }
 </div>
 
@@ -47,7 +47,7 @@
             </td>
             <td>
                 <a href="@Url.Action("ManageEmployee")/@item.Id?@(Request.QueryString)">
-                    <input type="button" value="Edit" class="btn btn-default" />
+                    <input type="button" value="Edit" class="btn btn-primary" />
                 </a>
             </td>
         </tr>

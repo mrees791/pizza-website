@@ -7,6 +7,14 @@
 
 <h2>Manage Employee</h2>
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ManageWebsite")">Home</a></li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ManageEmployees")">Manage Employees</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+    </ol>
+</nav>
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -38,14 +46,8 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-success" />
             </div>
         </div>
     </div>
 }
-
-<div>
-    <a href="@Url.Action("Index")?@(Request.QueryString)">
-        <input type="button" value="Back" class="btn btn-default" />
-    </a>
-</div>
