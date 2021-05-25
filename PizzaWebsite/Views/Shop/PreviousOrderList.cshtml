@@ -9,7 +9,7 @@
 
 <div>
     <a href="@Url.Action("Index", "Manage")?@(Request.QueryString)">
-        <input type="button" value="Back" class="btn btn-default" />
+        <input type="button" value="Back" class="btn btn-primary" />
     </a>
 </div>
 
@@ -44,13 +44,13 @@ else
                     <tr>
                         <td>
                             <a href="@Url.Action("PreviousOrder")/@prevOrderVm.Id?@(Request.QueryString)">
-                                <input type="button" value="View" class="btn btn-default" />
+                                <input type="button" value="View" class="btn btn-primary" />
                             </a>
                             <a href="@Url.Action("PreviousOrderStatus")/@prevOrderVm.Id?@(Request.QueryString)">
-                                <input type="button" value="Order Status" class="btn btn-default" />
+                                <input type="button" value="Order Status" class="btn btn-primary" />
                             </a>
                             <a href="@Url.Action("OrderAgain")/@prevOrderVm.Id?@(Request.QueryString)">
-                                <input type="button" value="Order Again" class="btn btn-default" />
+                                <input type="button" value="Order Again" class="btn btn-primary" />
                             </a>
                         </td>
                         <td>
