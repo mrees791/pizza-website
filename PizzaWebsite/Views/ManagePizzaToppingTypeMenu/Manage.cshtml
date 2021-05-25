@@ -82,7 +82,7 @@
                 {
                     <input type="hidden" name="ToppingCategoryList[@i]" value="@Model.ToppingCategoryList[i]" />
                 }
-                @Html.DropDownListFor(m => m.CategoryName, new SelectList(Model.ToppingCategoryList), "Category")
+                @Html.DropDownListFor(m => m.CategoryName, new SelectList(Model.ToppingCategoryList), "Category", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
             </div>
         </div>
