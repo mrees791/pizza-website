@@ -28,9 +28,9 @@ namespace PizzaWebsite.Controllers
             return View(viewModelList);
         }
 
-        public virtual ActionResult Add()
+        public virtual async Task<ActionResult> Add()
         {
-            return View("Manage", RecordToViewModelAsync(new TRecord()));
+            return View("Manage", await RecordToViewModelAsync(new TRecord()));
         }
 
         [HttpPost]

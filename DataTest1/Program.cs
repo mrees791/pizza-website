@@ -57,7 +57,7 @@ namespace DataTest1
 
         private async Task InitializeExampleDbAsync()
         {
-            await CreateAdminsAsync();
+            await CreateRolesAsync();
             await CreateExamplePizzaIngredientsAsync();
             await CreateExampleMenuPizzasAsync();
             await CreateExampleDeliveryAddressesAsync();
@@ -634,11 +634,12 @@ namespace DataTest1
             }
         }
 
-        public async Task CreateAdminsAsync()
+        public async Task CreateRolesAsync()
         {
             using (var pizzaDb = new PizzaDatabase())
             {
                 SiteRole adminRole = await pizzaDb.GetSiteRoleByNameAsync("Admin");
+                SiteRole employeeRole = await pizzaDb.GetSiteRoleByNameAsync("Employee");
 
                 if (adminRole == null)
                 {
@@ -646,7 +647,16 @@ namespace DataTest1
                     {
                         Name = "Admin"
                     };
-                    adminRole.Id = await pizzaDb.InsertAsync(adminRole);
+                    await pizzaDb.InsertAsync(adminRole);
+                }
+
+                if (employeeRole == null)
+                {
+                    employeeRole = new SiteRole()
+                    {
+                        Name = "Employee"
+                    };
+                    await pizzaDb.InsertAsync(employeeRole);
                 }
 
                 SiteUser acctUser = await pizzaDb.GetSiteUserByNameAsync("mrees791@gmail.com");
