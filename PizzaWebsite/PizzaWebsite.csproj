@@ -332,6 +332,7 @@
     <Content Include="Views\Shop\_OrderStatus.cshtml" />
     <Content Include="Views\Shop\OrderStatus.cshtml" />
     <Content Include="Views\Shop\PreviousOrderStatus.cshtml" />
+    <Content Include="Views\Shop\CurrentOrderStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
