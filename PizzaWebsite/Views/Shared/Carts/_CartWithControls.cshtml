@@ -22,7 +22,7 @@
                     {
                         @Html.AntiForgeryToken()
                         <input name="cartItemId" type="hidden" value="@cartItemVm.CartItemId" />
-                        <input type="submit" value="@cartItemVm.Name" class="form-control btn btn-primary" />
+                        <input type="submit" value="@cartItemVm.Name" class="form-control btn-primary" />
                     }
                 </td>
                 <td>@Html.Raw(cartItemVm.DescriptionHtml)</td>
@@ -31,13 +31,13 @@
                     @Html.DropDownList("Quantity", new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity),
                         new
                         {
-                            @class = "form-control ",
+                            @class = "form-control",
                             id = cartItemVm.CartItemQuantitySelectId,
                             name = "Quantity"
                         })
                 </td>
                 <td>
-                    <input type="button" value="Remove" id="@cartItemVm.CartItemDeleteButtonId" class="form-control btn btn-danger" />
+                    <input type="button" value="Remove" id="@cartItemVm.CartItemDeleteButtonId" class="form-control btn-danger" />
                 </td>
             </tr>
         }

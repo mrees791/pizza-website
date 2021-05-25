@@ -8,8 +8,8 @@
 <h2>Manage Addresses</h2>
 
 <div>
-    @Html.ActionLink("Back", "Index", new { }, new { @class = "btn btn-default" })
-    @Html.ActionLink("Add New Address", "AddNewAddress", new { }, new { @class = "btn btn-default" })
+    @Html.ActionLink("Back", "Index", new { }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Add New Address", "AddNewAddress", new { }, new { @class = "btn btn-primary" })
 </div>
 
 <div id="emptyAddressListBlock" style="display: none;">
@@ -46,11 +46,11 @@
                         {
                             @Html.AntiForgeryToken()
                             <input name="addressId" type="hidden" value="@addressVm.Id" />
-                            <input type="submit" value="Edit" class="form-control" />
+                            <input type="submit" value="Edit" class="form-control btn-primary"/>
                         }
                     </td>
                     <td>
-                        <input id="@addressVm.DeleteButtonId" type="button" value="Delete" class="form-control" />
+                        <input id="@addressVm.DeleteButtonId" type="button" value="Delete" class="form-control btn-danger" />
                     </td>
                 </tr>
             }
