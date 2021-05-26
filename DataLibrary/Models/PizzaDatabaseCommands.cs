@@ -23,6 +23,46 @@ namespace DataLibrary.Models
             this.pizzaDb = pizzaDb;
         }
 
+        public async Task AddNewEmployee(string employeeId, string userName, bool isManager)
+        {
+            SiteUser user = await pizzaDb.GetSiteUserByNameAsync(userName);
+            IEnumerable<SiteRole> siteRoles = await pizzaDb.GetListAsync<SiteRole>();
+            SiteRole employeeSiteRole = siteRoles.Where(r => r.Name == "Employee").FirstOrDefault();
+            SiteRole managerSiteRole = siteRoles.Where(r => r.Name == "Manager").FirstOrDefault();
+
+            using (IDbTransaction transaction = pizzaDb.Connection.BeginTransaction())
+            {
+                Employee employee = new Employee()
+                {
+                    Id = employeeId,
+                    UserId = user.Id,
+                    CurrentlyEmployed = true
+                };
+
+                UserRole employeeRole = new UserRole()
+                {
+                    UserId = user.Id,
+                    RoleId = employeeSiteRole.Id
+                };
+
+                await employee.InsertAsync(pizzaDb, transaction);
+                await employeeRole.InsertAsync(pizzaDb, transaction);
+
+                if (isManager)
+                {
+                    UserRole managerRole = new UserRole()
+                    {
+                        UserId = user.Id,
+                        RoleId = managerSiteRole.Id
+                    };
+
+                    await managerRole.InsertAsync(pizzaDb, transaction);
+                }
+
+                transaction.Commit();
+            }
+        }
+
         public async Task ReorderPreviousOrder(SiteUser siteUser, CustomerOrder previousOrder)
         {
             IEnumerable<CartItemJoin> cartItems = await pizzaDb.GetJoinedCartItemListAsync(previousOrder.CartId);

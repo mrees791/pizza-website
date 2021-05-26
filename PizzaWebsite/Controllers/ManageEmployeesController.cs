@@ -58,6 +58,54 @@ namespace PizzaWebsite.Controllers
             return View(model);
         }
 
+        public ActionResult AddEmployee()
+        {
+            return View("AddEmployee", new AddEmployeeViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddEmployee(AddEmployeeViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Server side validation
+            IEnumerable<ValidationError> errorList = await model.ValidateAsync(PizzaDb);
+
+            if (errorList.Any())
+            {
+                foreach (ValidationError error in errorList)
+                {
+                    ModelState.AddModelError(error.Key, error.ErrorMessage);
+                }
+
+                return View(model);
+            }
+
+            // Attempt to add employee to database
+            try
+            {
+                await PizzaDb.Commands.AddNewEmployee(model.Id, model.UserName, model.IsManager);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+
+            // Show confirmation page
+            ConfirmationViewModel confirmationModel = new ConfirmationViewModel()
+            {
+                ConfirmationMessage = $"Employee {model.Id} has been added.",
+                ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}"
+            };
+
+            return View("CreateEditConfirmation", confirmationModel);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ManageEmployee(ManageEmployeeViewModel model)

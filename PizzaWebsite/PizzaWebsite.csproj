@@ -199,6 +199,7 @@
     <Compile Include="Models\Identity\Stores\RoleStore.cs" />
     <Compile Include="Models\Identity\Stores\UserStore.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ManageWebsite\AddEmployeeViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ErrorViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ManageEmployeeViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ManagePagedListViewModel.cs" />
@@ -224,6 +225,7 @@
     <Compile Include="Models\Shop\PizzaMenuPageViewModel.cs" />
     <Compile Include="Models\Shop\PreviousOrderListViewModel.cs" />
     <Compile Include="Models\Shop\PreviousOrderViewModel.cs" />
+    <Compile Include="Models\ValidationError.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -333,6 +335,7 @@
     <Content Include="Views\Shop\OrderStatus.cshtml" />
     <Content Include="Views\Shop\PreviousOrderStatus.cshtml" />
     <Content Include="Views\Shop\CurrentOrderStatus.cshtml" />
+    <Content Include="Views\ManageEmployees\AddEmployee.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
