@@ -38,16 +38,6 @@ namespace PizzaWebsite.Models.ManageWebsite
             if (user == null)
             {
                 errorList.Add(new ValidationError(nameof(UserName), "User does not exist."));
-                return errorList;
-            }
-
-            // Make sure user isn't already employed
-            bool alreadyEmployed = await pizzaDb.UserIsInRole(user.Id, "Employee");
-
-            if (alreadyEmployed)
-            {
-                errorList.Add(new ValidationError(nameof(UserName), "User is already employed."));
-                return errorList;
             }
 
             // Make sure employee ID isn't already taken
@@ -56,7 +46,18 @@ namespace PizzaWebsite.Models.ManageWebsite
             if (employee != null)
             {
                 errorList.Add(new ValidationError(nameof(Id), "Employee ID is already taken."));
-                return errorList;
+            }
+
+
+            // Make sure user isn't already employed
+            if (user != null)
+            {
+                bool alreadyEmployed = await pizzaDb.UserIsInRole(user.Id, "Employee");
+
+                if (alreadyEmployed)
+                {
+                    errorList.Add(new ValidationError(nameof(UserName), "User is already employed."));
+                }
             }
 
             return errorList;
