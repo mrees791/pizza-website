@@ -49,9 +49,11 @@ namespace PizzaWebsite.Models.Identity.Stores
                 throw new ArgumentException($"Invalid role name: {roleName}");
             }
 
-            UserRole userRole = new UserRole();
-            userRole.UserId = user.Id;
-            userRole.RoleId = siteRole.Id;
+            UserRole userRole = new UserRole()
+            {
+                UserId = user.Id,
+                RoleName = roleName
+            };
 
             await pizzaDb.InsertAsync(userRole);
         }
@@ -97,7 +99,8 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<IList<string>> GetRolesAsync(IdentityUser user)
         {
-            return new List<string>(await pizzaDb.GetRolesAsync(user.Id));
+            IEnumerable<UserRole> userRoleList = await pizzaDb.GetUserRoleListAsync(user.Id);
+            return new List<string>(userRoleList.Select(r => r.RoleName));
         }
 
         public async Task<bool> IsInRoleAsync(IdentityUser user, string roleName)

@@ -42,9 +42,9 @@ namespace PizzaWebsite.Models.ManageWebsite
             }
 
             // Make sure user isn't already employed
-            IEnumerable<string> userRoles = await pizzaDb.GetRolesAsync(user.Id);
+            bool alreadyEmployed = await pizzaDb.UserIsInRole(user.Id, "Employee");
 
-            if (userRoles.Contains("Employee"))
+            if (alreadyEmployed)
             {
                 errorList.Add(new ValidationError(nameof(UserName), "User is already employed."));
                 return errorList;

@@ -180,65 +180,36 @@ namespace DataLibrary.Models
             return await connection.ExecuteAsync(sql, parameters, transaction);
         }
 
+        public async Task<bool> UserIsInRole(int userId, string roleName, IDbTransaction transaction = null)
+        {
+            IEnumerable<UserRole> userRoles = await GetUserRoleListAsync(userId);
+
+            return userRoles.Select(r => r.RoleName).Contains(roleName);
+        }
+
         public async Task<int> RemoveFromRoleAsync(int userId, string roleName, IDbTransaction transaction = null)
         {
-            SiteRole siteRole = await GetSiteRoleByNameAsync(roleName);
-
-            string sql = @"delete from dbo.UserRole where UserId = @UserId and RoleId = @RoleId";
+            string sql = @"delete from dbo.UserRole where UserId = @UserId and RoleName = @RoleName";
 
             object parameters = new
             {
                 UserId = userId,
-                RoleId = siteRole.Id
+                RoleName = roleName
             };
 
             return await connection.ExecuteAsync(sql, parameters, transaction);
         }
 
-        public async Task<IEnumerable<string>> GetRolesAsync(int userId)
+        public async Task<IEnumerable<UserRole>> GetUserRoleListAsync(int userId)
         {
-            string joinQuery = @"select u.Id, u.UserId, u.RoleId, r.Id, r.Name
-                                from UserRole u
-                                inner join SiteRole r on u.RoleId = r.Id
-                                where u.UserId = @UserId";
+            IEnumerable<UserRole> userRoles = await GetListAsync<UserRole>(new { UserId = userId });
 
-            object parameters = new
-            {
-                UserId = userId
-            };
-
-            IEnumerable<string> userRoleList = await connection.QueryAsync<UserRole, SiteRole, string>(
-                joinQuery,
-                (userRole, siteRole) =>
-                {
-                    return siteRole.Name;
-                }, param: parameters, splitOn: "RoleId");
-
-            return userRoleList;
+            return userRoles;
         }
 
         public async Task<SiteRole> GetSiteRoleByNameAsync(string name, IDbTransaction transaction = null)
         {
-            string sql = SelectQueries.siteRoleSelectQuery + "where Name = @Name";
-
-            object parameters = new
-            {
-                Name = name
-            };
-
-            return await GetSiteRoleAsync(sql, parameters, transaction);
-        }
-
-        public async Task<SiteRole> GetSiteRoleByIdAsync(int id, IDbTransaction transaction = null)
-        {
-            string sql = SelectQueries.siteRoleSelectQuery + "where Id = @Id";
-
-            object parameters = new
-            {
-                Id = id
-            };
-
-            return await GetSiteRoleAsync(sql, parameters, transaction);
+            return await GetAsync<SiteRole>(name);
         }
 
         private async Task<SiteRole> GetSiteRoleAsync(string sql, object parameters, IDbTransaction transaction = null)

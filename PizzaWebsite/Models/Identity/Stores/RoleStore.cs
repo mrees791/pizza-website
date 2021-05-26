@@ -15,7 +15,7 @@ namespace PizzaWebsite.Models.Identity.Stores
     /// Reference:
     /// https://docs.microsoft.com/en-us/aspnet/identity/overview/extensibility/overview-of-custom-storage-providers-for-aspnet-identity
     /// </summary>
-    public class RoleStore : IRoleStore<IdentityRole, int>
+    public class RoleStore : IRoleStore<IdentityRole, string>
     {
         private PizzaDatabase pizzaDb;
 
@@ -44,9 +44,9 @@ namespace PizzaWebsite.Models.Identity.Stores
             pizzaDb.Dispose();
         }
 
-        public async Task<IdentityRole> FindByIdAsync(int roleId)
+        public async Task<IdentityRole> FindByIdAsync(string roleId)
         {
-            return new IdentityRole(await pizzaDb.GetSiteRoleByIdAsync(roleId));
+            return await FindByNameAsync(roleId);
         }
 
         public async Task<IdentityRole> FindByNameAsync(string roleName)

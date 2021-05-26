@@ -21,6 +21,7 @@ namespace DataTest1
 
         public async Task StartAsync()
         {
+            // This can only be ran after creating the databse and creating a user with username mrees791@gmail.com
             //await InitializeExampleDbAsync();
 
             //TestCustomerOrderJoin();
@@ -670,17 +671,17 @@ namespace DataTest1
                 }
 
                 SiteUser acctUser = await pizzaDb.GetSiteUserByNameAsync("mrees791@gmail.com");
-                IEnumerable<UserRole> acctRoles = await pizzaDb.GetListAsync<UserRole>(new { UserId = acctUser.Id });
-                UserRole acctAdminRole = acctRoles.Where(r => r.RoleId == adminRole.Id).FirstOrDefault();
+                bool isAdmin = await pizzaDb.UserIsInRole(acctUser.Id, "Admin");
 
-                if (acctAdminRole == null)
+                if (!isAdmin)
                 {
-                    acctAdminRole = new UserRole()
+                    UserRole adminUserRole = new UserRole()
                     {
-                        RoleId = adminRole.Id,
-                        UserId = acctUser.Id
+                        UserId = acctUser.Id,
+                        RoleName = "Admin"
                     };
-                    await pizzaDb.InsertAsync(acctAdminRole);
+
+                    await pizzaDb.InsertAsync(adminUserRole);
                 }
             }
         }

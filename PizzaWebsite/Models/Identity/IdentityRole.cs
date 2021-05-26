@@ -7,13 +7,13 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Identity
 {
-    public class IdentityRole : IRole<int>, IRecordConverter<SiteRole>
+    public class IdentityRole : IRole<string>, IRecordConverter<SiteRole>
     {
-        private int id;
+        private string name;
 
         public IdentityRole(string name)
         {
-            Name = name;
+            this.name = name;
         }
 
         public IdentityRole(SiteRole siteRole)
@@ -23,17 +23,17 @@ namespace PizzaWebsite.Models.Identity
 
         public string Name { get; set; }
 
-        int IRole<int>.Id => id;
+        string IRole<string>.Id => name;
 
-        public int Id
+        public string Id
         {
             get
             {
-                return id;
+                return name;
             }
             set
             {
-                id = value;
+                name = value;
             }
         }
 
@@ -41,14 +41,12 @@ namespace PizzaWebsite.Models.Identity
         {
             return new SiteRole()
             {
-                Id = Id,
                 Name = Name
             };
         }
 
         public void FromRecord(SiteRole siteRole)
         {
-            Id = siteRole.Id;
             Name = siteRole.Name;
         }
     }

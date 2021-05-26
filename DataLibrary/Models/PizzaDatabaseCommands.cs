@@ -26,9 +26,6 @@ namespace DataLibrary.Models
         public async Task AddNewEmployee(string employeeId, string userName, bool isManager)
         {
             SiteUser user = await pizzaDb.GetSiteUserByNameAsync(userName);
-            IEnumerable<SiteRole> siteRoles = await pizzaDb.GetListAsync<SiteRole>();
-            SiteRole employeeSiteRole = siteRoles.Where(r => r.Name == "Employee").FirstOrDefault();
-            SiteRole managerSiteRole = siteRoles.Where(r => r.Name == "Manager").FirstOrDefault();
 
             using (IDbTransaction transaction = pizzaDb.Connection.BeginTransaction())
             {
@@ -42,7 +39,7 @@ namespace DataLibrary.Models
                 UserRole employeeRole = new UserRole()
                 {
                     UserId = user.Id,
-                    RoleId = employeeSiteRole.Id
+                    RoleName = "Employee"
                 };
 
                 await employee.InsertAsync(pizzaDb, transaction);
@@ -53,7 +50,7 @@ namespace DataLibrary.Models
                     UserRole managerRole = new UserRole()
                     {
                         UserId = user.Id,
-                        RoleId = managerSiteRole.Id
+                        RoleName = "Manager"
                     };
 
                     await managerRole.InsertAsync(pizzaDb, transaction);

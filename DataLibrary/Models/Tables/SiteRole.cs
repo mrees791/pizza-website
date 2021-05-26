@@ -12,19 +12,17 @@ namespace DataLibrary.Models.Tables
     public class SiteRole : Record
     {
         [Key]
-        public int Id { get; set; }
         public string Name { get; set; }
 
         public override dynamic GetId()
         {
-            return Id;
+            return Name;
         }
 
         internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            int? id = await pizzaDb.Connection.InsertAsync(this, transaction);
-            Id = id.Value;
-            return Id;
+            // QueryAsync method was used since connection.InsertAsync was having an issue with its string ID field.
+            return await pizzaDb.Connection.QueryAsync("INSERT INTO SiteRole (Name) VALUES (@Name)", this, transaction);
         }
 
         internal override bool InsertRequiresTransaction()
