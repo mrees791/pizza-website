@@ -8,10 +8,8 @@ namespace PizzaWebsite.Models.ManageWebsite
 {
     public class ManageUserViewModel
     {
-        public int Id { get; set; }
-
-        [Display(Name = "User Name")]
-        public string UserName { get; set; }
+        [Display(Name = "Id")]
+        public string Id { get; set; }
 
         [Display(Name = "Email")]
         public string Email { get; set; }

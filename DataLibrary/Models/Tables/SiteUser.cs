@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataLibrary.Models.Sql;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,7 +13,7 @@ namespace DataLibrary.Models.Tables
     public class SiteUser : Record
     {
         [Key]
-        public int Id { get; set; }
+        public string Id { get; set; }
         public int CurrentCartId { get; set; }
         public int ConfirmOrderCartId { get; set; }
         public int OrderConfirmationId { get; set; }
@@ -28,7 +29,6 @@ namespace DataLibrary.Models.Tables
         public DateTime LockoutEndDateUtc { get; set; }
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
-        public string UserName { get; set; }
 
         public override dynamic GetId()
         {
@@ -43,10 +43,8 @@ namespace DataLibrary.Models.Tables
             CurrentCartId = await currentCart.InsertAsync(pizzaDb, transaction);
             ConfirmOrderCartId = await confirmOrderCart.InsertAsync(pizzaDb, transaction);
 
-            // Insert user record
-            int? id = await pizzaDb.Connection.InsertAsync(this, transaction);
-            Id = id.Value;
-            return Id;
+            // QueryAsync method was used since connection.InsertAsync was having an issue with its string Id field.
+            return await pizzaDb.Connection.QueryAsync(InsertQueries.siteUserInsertQuery, this, transaction);
         }
 
         internal override bool InsertRequiresTransaction()

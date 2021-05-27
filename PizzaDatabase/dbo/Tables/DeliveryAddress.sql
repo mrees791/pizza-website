@@ -1,7 +1,7 @@
 ﻿CREATE TABLE dbo.DeliveryAddress
 (
   Id INT NOT NULL IDENTITY,
-  UserId INT NOT NULL,
+  UserId NVARCHAR(256) NOT NULL,
   AddressType NVARCHAR(50) NOT NULL,
   Name NVARCHAR(50) NOT NULL,
   StreetAddress NVARCHAR(50) NOT NULL,

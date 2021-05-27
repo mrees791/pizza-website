@@ -13,7 +13,7 @@ namespace DataLibrary.Models.Tables
     {
         [Key]
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public int StoreId { get; set; }
         public int CartId { get; set; }
         public bool IsCancelled { get; set; }

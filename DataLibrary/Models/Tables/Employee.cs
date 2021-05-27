@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataLibrary.Models.Sql;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,7 +14,7 @@ namespace DataLibrary.Models.Tables
     {
         [Key]
         public string Id { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public bool CurrentlyEmployed { get; set; }
 
         public override dynamic GetId()
@@ -23,8 +24,8 @@ namespace DataLibrary.Models.Tables
 
         internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            // QueryAsync method was used since connection.InsertAsync was having an issue with its string ID field.
-            return await pizzaDb.Connection.QueryAsync("INSERT INTO Employee (Id, UserId, CurrentlyEmployed) VALUES (@Id, @UserId, @CurrentlyEmployed)", this, transaction);
+            // QueryAsync method was used since connection.InsertAsync was having an issue with its string Id field.
+            return await pizzaDb.Connection.QueryAsync(InsertQueries.employeeInsertQuery, this, transaction);
         }
 
         internal override bool InsertRequiresTransaction()

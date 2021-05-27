@@ -64,7 +64,7 @@ namespace DataLibrary.Models
             return await GetJoinedCustomerOrderListAsync(whereClause, parameters, false);
         }
 
-        public async Task<IEnumerable<CustomerOrderJoin>> GetJoinedCustomerOrderListByUserIdAsync(int userId)
+        public async Task<IEnumerable<CustomerOrderJoin>> GetJoinedCustomerOrderListByUserIdAsync(string userId)
         {
             string whereClause = "where c.UserId = @UserId";
 
@@ -152,7 +152,7 @@ namespace DataLibrary.Models
             return record;
         }
 
-        public async Task<int> RemoveLoginAsync(int userId, string loginProvider, string providerKey, IDbTransaction transaction = null)
+        public async Task<int> RemoveLoginAsync(string userId, string loginProvider, string providerKey, IDbTransaction transaction = null)
         {
             string sql = @"delete from dbo.UserLogin where UserId = @UserId and LoginProvider = @LoginProvider and ProviderKey = @ProviderKey";
 
@@ -166,7 +166,7 @@ namespace DataLibrary.Models
             return await connection.ExecuteAsync(sql, parameters, transaction);
         }
 
-        public async Task<int> RemoveClaimAsync(int userId, string claimType, string claimValue, IDbTransaction transaction = null)
+        public async Task<int> RemoveClaimAsync(string userId, string claimType, string claimValue, IDbTransaction transaction = null)
         {
             string sql = @"delete from dbo.UserClaim where UserId = @UserId and ClaimType = @ClaimType and ClaimValue = @ClaimValue";
 
@@ -180,14 +180,14 @@ namespace DataLibrary.Models
             return await connection.ExecuteAsync(sql, parameters, transaction);
         }
 
-        public async Task<bool> UserIsInRole(int userId, string roleName, IDbTransaction transaction = null)
+        public async Task<bool> UserIsInRole(string userId, string roleName, IDbTransaction transaction = null)
         {
             IEnumerable<UserRole> userRoles = await GetUserRoleListAsync(userId);
 
             return userRoles.Select(r => r.RoleName).Contains(roleName);
         }
 
-        public async Task<int> RemoveFromRoleAsync(int userId, string roleName, IDbTransaction transaction = null)
+        public async Task<int> RemoveFromRoleAsync(string userId, string roleName, IDbTransaction transaction = null)
         {
             string sql = @"delete from dbo.UserRole where UserId = @UserId and RoleName = @RoleName";
 
@@ -200,7 +200,7 @@ namespace DataLibrary.Models
             return await connection.ExecuteAsync(sql, parameters, transaction);
         }
 
-        public async Task<IEnumerable<UserRole>> GetUserRoleListAsync(int userId)
+        public async Task<IEnumerable<UserRole>> GetUserRoleListAsync(string userId)
         {
             IEnumerable<UserRole> userRoles = await GetListAsync<UserRole>(new { UserId = userId });
 
@@ -224,7 +224,7 @@ namespace DataLibrary.Models
             return role;
         }
 
-        public async Task<SiteUser> GetSiteUserByIdAsync(int id, IDbTransaction transaction = null)
+        public async Task<SiteUser> GetSiteUserByIdAsync(string id, IDbTransaction transaction = null)
         {
             string sql = SelectQueries.siteUserSelectQuery + "where Id = @Id";
 
@@ -250,7 +250,7 @@ namespace DataLibrary.Models
 
         public async Task<SiteUser> GetSiteUserByNameAsync(string name, IDbTransaction transaction = null)
         {
-            string sql = SelectQueries.siteUserSelectQuery + "where UserName = @UserName";
+            string sql = SelectQueries.siteUserSelectQuery + "where Id = @UserName";
 
             object parameters = new
             {

@@ -21,11 +21,11 @@ namespace PizzaWebsite.Controllers
 
             SiteUserFilter searchFilter = new SiteUserFilter()
             {
-                UserName = userName,
+                Id = userName,
                 Email = email
             };
 
-            List<SiteUser> userList = await LoadPagedRecordsAsync<SiteUser>(page, rowsPerPage, "UserName", SortOrder.Ascending, searchFilter, PizzaDb, Request, manageUsersVm.PaginationVm);
+            List<SiteUser> userList = await LoadPagedRecordsAsync<SiteUser>(page, rowsPerPage, "Id", SortOrder.Ascending, searchFilter, PizzaDb, Request, manageUsersVm.PaginationVm);
 
             foreach (SiteUser user in userList)
             {
@@ -33,8 +33,7 @@ namespace PizzaWebsite.Controllers
                 {
                     Id = user.Id,
                     Email = user.Email,
-                    IsBanned = user.IsBanned,
-                    UserName = user.UserName
+                    IsBanned = user.IsBanned
                 };
                 manageUsersVm.ItemViewModelList.Add(model);
             }
@@ -42,17 +41,15 @@ namespace PizzaWebsite.Controllers
             return View(manageUsersVm);
         }
 
-        public async Task<ActionResult> ManageUser(int? id)
+        public async Task<ActionResult> ManageUser(string id)
         {
-            List<SiteUser> userList = new List<SiteUser>(await PizzaDb.GetListAsync<SiteUser>(new { Id = id.Value }));
-            SiteUser user = userList.FirstOrDefault();
+            SiteUser user = await PizzaDb.GetSiteUserByIdAsync(id);
 
             ManageUserViewModel manageUserVm = new ManageUserViewModel()
             {
                 Id = user.Id,
                 Email = user.Email,
-                IsBanned = user.IsBanned,
-                UserName = user.UserName
+                IsBanned = user.IsBanned
             };
             
             return View("ManageUser", manageUserVm);
@@ -67,15 +64,20 @@ namespace PizzaWebsite.Controllers
                 return View("ManageUser", model);
             }
 
-            List<SiteUser> userList = new List<SiteUser>(await PizzaDb.GetListAsync<SiteUser>(new { Id = model.Id }));
-            SiteUser user = userList.FirstOrDefault();
+            SiteUser user = await PizzaDb.GetSiteUserByIdAsync(model.Id);
 
             // Update user record
             user.IsBanned = model.IsBanned;
-            await PizzaDb.UpdateAsync(user);
+            int rowsAffected = await PizzaDb.UpdateAsync(user);
+
+            if (rowsAffected == 0)
+            {
+                ModelState.AddModelError("", $"Unable to update user with ID: {user.Id}");
+                return View("ManageUser", model);
+            }
 
             ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
-            confirmationModel.ConfirmationMessage = $"Your changes to {model.UserName} have been confirmed.";
+            confirmationModel.ConfirmationMessage = $"Your changes to {model.Id} have been confirmed.";
             confirmationModel.ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}";
 
             return View("CreateEditConfirmation", confirmationModel);

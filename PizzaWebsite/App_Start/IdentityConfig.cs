@@ -68,9 +68,9 @@ namespace PizzaWebsite
     }
 
     // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
-    public class ApplicationUserManager : UserManager<IdentityUser, int>
+    public class ApplicationUserManager : UserManager<IdentityUser, string>
     {
-        public ApplicationUserManager(IUserStore<IdentityUser, int> store)
+        public ApplicationUserManager(IUserStore<IdentityUser, string> store)
             : base(store)
         {
         }
@@ -79,7 +79,7 @@ namespace PizzaWebsite
         {
             var manager = new ApplicationUserManager(new UserStore(context.Get<PizzaDatabase>()));
             // Configure validation logic for usernames
-            manager.UserValidator = new UserValidator<IdentityUser, int>(manager)
+            manager.UserValidator = new UserValidator<IdentityUser, string>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
@@ -102,11 +102,11 @@ namespace PizzaWebsite
 
             // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
             // You can write your own provider and plug it in here.
-            manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<IdentityUser, int>
+            manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<IdentityUser, string>
             {
                 MessageFormat = "Your security code is {0}"
             });
-            manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<IdentityUser, int>
+            manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<IdentityUser, string>
             {
                 Subject = "Security Code",
                 BodyFormat = "Your security code is {0}"
@@ -117,14 +117,14 @@ namespace PizzaWebsite
             if (dataProtectionProvider != null)
             {
                 manager.UserTokenProvider =
-                    new DataProtectorTokenProvider<IdentityUser, int>(dataProtectionProvider.Create("ASP.NET Identity"));
+                    new DataProtectorTokenProvider<IdentityUser, string>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;
         }
     }
 
     // Configure the application sign-in manager which is used in this application.
-    public class ApplicationSignInManager : SignInManager<IdentityUser, int>
+    public class ApplicationSignInManager : SignInManager<IdentityUser, string>
     {
         public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)
             : base(userManager, authenticationManager)

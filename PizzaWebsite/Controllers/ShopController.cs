@@ -105,7 +105,7 @@ namespace PizzaWebsite.Controllers
                 {
                     DeliveryAddress deliveryAddress = new DeliveryAddress()
                     {
-                        UserId = User.Identity.GetUserId<int>(),
+                        UserId = User.Identity.GetUserId(),
                         Name = checkoutModel.DeliveryAddressName,
                         AddressType = checkoutModel.SelectedDeliveryAddressType,
                         City = checkoutModel.DeliveryCity,
@@ -167,7 +167,7 @@ namespace PizzaWebsite.Controllers
 
         private async Task<bool> AuthorizedToModifyCartItemAsync(CartItem cartItem)
         {
-            return await PizzaDb.Commands.UserOwnsCartItemAsync(User.Identity.GetUserId<int>(), cartItem);
+            return await PizzaDb.Commands.UserOwnsCartItemAsync(User.Identity.GetUserId(), cartItem);
         }
 
         private async Task<CartPizzaBuilderViewModel> CreatePizzaBuilderVm(int cartItemId)
@@ -228,7 +228,7 @@ namespace PizzaWebsite.Controllers
                 {
                     Id = model.Id,
                     CartId = currentUser.CurrentCartId,
-                    UserId = User.Identity.GetUserId<int>(),
+                    UserId = User.Identity.GetUserId(),
                     ProductCategory = ProductCategory.Pizza.ToString(),
                     Quantity = model.SelectedQuantity,
                     PricePerItem = pricePerItem,
@@ -267,7 +267,7 @@ namespace PizzaWebsite.Controllers
         }
 
         [Authorize]
-        public async Task AddMenuPizzaToCart(int menuPizzaId, int cartId, int userId, int selectedQuantity, string selectedSize, int selectedCrustId)
+        public async Task AddMenuPizzaToCart(int menuPizzaId, int cartId, string userId, int selectedQuantity, string selectedSize, int selectedCrustId)
         {
             MenuPizza menuPizza = await PizzaDb.GetAsync<MenuPizza>(menuPizzaId);
             CartItemJoin cartItemJoin = await menuPizza.CreateCartRecordsAsync(PizzaDb, cartId, userId, selectedQuantity, selectedSize, selectedCrustId);
@@ -486,7 +486,7 @@ namespace PizzaWebsite.Controllers
                 return Json($"Delivery Address with ID {addressId} does not exist.", MediaTypeNames.Text.Plain);
             }
 
-            bool authorized = await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId<int>(), address);
+            bool authorized = await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId(), address);
 
             if (!authorized)
             {
@@ -540,7 +540,7 @@ namespace PizzaWebsite.Controllers
 
             PreviousOrderSearch search = new PreviousOrderSearch()
             {
-                UserId = User.Identity.GetUserId<int>()
+                UserId = User.Identity.GetUserId()
             };
 
             IEnumerable<CustomerOrder> previousOrderList = await PizzaDb.GetPagedListAsync<CustomerOrder>(page.Value, rowsPerPage.Value, "Id", SortOrder.Descending, search);

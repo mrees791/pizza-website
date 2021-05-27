@@ -13,7 +13,7 @@ namespace DataLibrary.Models.Tables
     {
         [Key]
         public int Id { get; set; }
-        public int EmployeeId { get; set; }
+        public string EmployeeId { get; set; }
         public int StoreId { get; set; }
 
         public override dynamic GetId()

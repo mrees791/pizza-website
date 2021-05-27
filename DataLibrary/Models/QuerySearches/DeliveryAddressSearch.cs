@@ -8,13 +8,13 @@ namespace DataLibrary.Models.QuerySearches
 {
     public class DeliveryAddressSearch : QuerySearchBase
     {
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         internal override string GetWhereConditions()
         {
             List<ColumnValuePair> searchValues = new List<ColumnValuePair>()
             {
-                new ColumnValuePair("UserId", UserId.ToString())
+                new ColumnValuePair("UserId", UserId)
             };
 
             return GetWhereConditions(searchValues);

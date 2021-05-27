@@ -1,7 +1,7 @@
 ﻿CREATE TABLE dbo.UserClaim
 (
   Id INT NOT NULL IDENTITY,
-  UserId INT NOT NULL,
+  UserId NVARCHAR(256) NOT NULL,
   ClaimType NVARCHAR(MAX),
   ClaimValue NVARCHAR(MAX),
   PRIMARY KEY (Id),

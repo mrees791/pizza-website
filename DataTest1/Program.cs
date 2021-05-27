@@ -78,7 +78,7 @@ namespace DataTest1
                 PhoneNumber = "7401234567",
                 State = "OH",
                 StreetAddress = "123 Happy Lane",
-                UserId = 1,
+                UserId = "mrees791@gmail.com",
                 ZipCode = "43701"
             };
 
@@ -90,7 +90,7 @@ namespace DataTest1
                 PhoneNumber = "7401111111",
                 State = "OH",
                 StreetAddress = "111 Main Street",
-                UserId = 1,
+                UserId = "mrees791@gmail.com",
                 ZipCode = "43701"
             };
 
@@ -137,7 +137,7 @@ namespace DataTest1
                     OrderTax = 1.00m,
                     OrderTotal = 6.00m,
                     StoreId = 1,
-                    UserId = 1,
+                    UserId = "mrees791@gmail.com",
                 };
 
                 // Create and test joins
@@ -159,7 +159,7 @@ namespace DataTest1
                     OrderTax = 1.00m,
                     OrderTotal = 6.00m,
                     StoreId = 1,
-                    UserId = 1,
+                    UserId = "mrees791@gmail.com",
                 };
 
                 CustomerOrderJoin orderJoin2 = new CustomerOrderJoin()
@@ -534,7 +534,7 @@ namespace DataTest1
         {
             using (var pizzaDb = new PizzaDatabase())
             {
-                IEnumerable<CustomerOrderJoin> customerOrderList = await pizzaDb.GetJoinedCustomerOrderListByUserIdAsync(1);
+                IEnumerable<CustomerOrderJoin> customerOrderList = await pizzaDb.GetJoinedCustomerOrderListByUserIdAsync("mrees791@gmail.com");
             }
         }
 
@@ -602,7 +602,7 @@ namespace DataTest1
 
                     SiteUser user = new SiteUser()
                     {
-                        UserName = email,
+                        Id = email,
                         Email = email,
                         PasswordHash = "HASHEDPASSWORD",
                         LockoutEndDateUtc = DateTime.UtcNow

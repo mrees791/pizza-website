@@ -17,16 +17,16 @@ namespace PizzaWebsite.Models.Identity.Stores
     /// https://docs.microsoft.com/en-us/aspnet/identity/overview/extensibility/overview-of-custom-storage-providers-for-aspnet-identity
     /// </summary>
     public class UserStore :
-        IUserStore<IdentityUser, int>,
-        IUserPasswordStore<IdentityUser, int>,
-        IUserEmailStore<IdentityUser, int>,
-        IUserRoleStore<IdentityUser, int>,
-        IUserClaimStore<IdentityUser, int>,
-        IUserLoginStore<IdentityUser, int>,
-        IUserSecurityStampStore<IdentityUser, int>,
-        IUserPhoneNumberStore<IdentityUser, int>,
-        IUserTwoFactorStore<IdentityUser, int>,
-        IUserLockoutStore<IdentityUser, int>
+        IUserStore<IdentityUser>,
+        IUserPasswordStore<IdentityUser>,
+        IUserEmailStore<IdentityUser>,
+        IUserRoleStore<IdentityUser>,
+        IUserClaimStore<IdentityUser>,
+        IUserLoginStore<IdentityUser>,
+        IUserSecurityStampStore<IdentityUser>,
+        IUserPhoneNumberStore<IdentityUser>,
+        IUserTwoFactorStore<IdentityUser, string>,
+        IUserLockoutStore<IdentityUser, string>
     {
         private PizzaDatabase pizzaDb;
 
@@ -73,7 +73,7 @@ namespace PizzaWebsite.Models.Identity.Stores
             pizzaDb.Dispose();
         }
 
-        public async Task<IdentityUser> FindByIdAsync(int userId)
+        public async Task<IdentityUser> FindByIdAsync(string userId)
         {
             SiteUser siteUser = await pizzaDb.GetSiteUserByIdAsync(userId);
 

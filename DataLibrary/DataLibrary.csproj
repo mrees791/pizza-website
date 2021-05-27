@@ -106,6 +106,7 @@
     <Compile Include="Models\ProductCategory.cs" />
     <Compile Include="Models\ColumnValuePair.cs" />
     <Compile Include="Models\SortOrder.cs" />
+    <Compile Include="Models\Sql\InsertQueries.cs" />
     <Compile Include="Models\Sql\SelectQueries.cs" />
     <Compile Include="Models\Tables\Cart.cs" />
     <Compile Include="Models\Tables\CartItem.cs" />

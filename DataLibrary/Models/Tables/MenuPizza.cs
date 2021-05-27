@@ -81,7 +81,7 @@ namespace DataLibrary.Models.Tables
             return true;
         }
 
-        public async Task<CartItemJoin> CreateCartRecordsAsync(PizzaDatabase pizzaDb, int cartId, int userId, int quantity, string size, int menuCrustId)
+        public async Task<CartItemJoin> CreateCartRecordsAsync(PizzaDatabase pizzaDb, int cartId, string userId, int quantity, string size, int menuCrustId)
         {
             CartPizza cartPizza = new CartPizza()
             {

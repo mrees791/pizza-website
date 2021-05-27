@@ -8,14 +8,14 @@ namespace DataLibrary.Models.QueryFilters
 {
     public class SiteUserFilter : QueryFilterBase
     {
-        public string UserName { get; set; }
+        public string Id { get; set; }
         public string Email { get; set; }
 
         internal override string GetWhereConditions()
         {
             List<ColumnValuePair> filters = new List<ColumnValuePair>()
             {
-                new ColumnValuePair("UserName", UserName),
+                new ColumnValuePair("Id", Id),
                 new ColumnValuePair("Email", Email)
             };
 

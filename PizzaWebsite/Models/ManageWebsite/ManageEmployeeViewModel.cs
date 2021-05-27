@@ -11,6 +11,9 @@ namespace PizzaWebsite.Models.ManageWebsite
         [Display(Name = "Employee ID")]
         public string Id { get; set; }
 
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
+
         [Display(Name = "Currently Employed")]
         public bool CurrentlyEmployed { get; set; }
 

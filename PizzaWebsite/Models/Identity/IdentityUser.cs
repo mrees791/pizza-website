@@ -9,10 +9,9 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Identity
 {
-    public class IdentityUser : IUser<int>, IRecordConverter<SiteUser>
+    public class IdentityUser : IUser<string>, IRecordConverter<SiteUser>
     {
-        public int Id { get; set; }
-        public string UserName { get; set; }
+        public string Id { get; set; }
         public string PasswordHash { get; set; }
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
@@ -28,6 +27,7 @@ namespace PizzaWebsite.Models.Identity
         public int ConfirmOrderCartId { get; set; }
         public bool IsBanned { get; set; }
         public int OrderConfirmationId { get; set; }
+        public string UserName { get => Id; set => Id = value; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
         {
@@ -82,7 +82,6 @@ namespace PizzaWebsite.Models.Identity
                 PhoneNumberConfirmed = PhoneNumberConfirmed,
                 SecurityStamp = SecurityStamp,
                 TwoFactorEnabled = TwoFactorEnabled,
-                UserName = UserName,
                 ZipCode = ZipCode
             };
         }
@@ -104,7 +103,6 @@ namespace PizzaWebsite.Models.Identity
             PhoneNumberConfirmed = dbModel.PhoneNumberConfirmed;
             SecurityStamp = dbModel.SecurityStamp;
             TwoFactorEnabled = dbModel.TwoFactorEnabled;
-            UserName = dbModel.UserName;
             ZipCode = dbModel.ZipCode;
         }
 

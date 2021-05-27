@@ -20,8 +20,8 @@
     {
         <input type="hidden" name="Page" value="1" />
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
-        @Html.Label("UserName", "User Name")
-        @Html.TextBox("UserName", Request["UserName"], new { @class = "form-control" })
+        @Html.Label("UserId", "User ID")
+        @Html.TextBox("UserId", Request["UserId"], new { @class = "form-control" })
         @Html.Label("Email", "Email")
         @Html.TextBox("Email", Request["Email"], new { @class = "form-control" })
         <input type="submit" value="Apply Search Filters" class="btn btn-primary" />
@@ -31,7 +31,7 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.ItemViewModel.UserName)
+            @Html.DisplayNameFor(model => model.ItemViewModel.Id)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.ItemViewModel.Email)
@@ -46,7 +46,7 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.UserName)
+                @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Email)

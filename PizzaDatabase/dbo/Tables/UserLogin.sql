@@ -1,7 +1,7 @@
 ﻿CREATE TABLE dbo.UserLogin
 (
   Id INT NOT NULL IDENTITY,
-  UserId INT NOT NULL,
+  UserId NVARCHAR(256) NOT NULL,
   LoginProvider NVARCHAR(128) NOT NULL,
   ProviderKey NVARCHAR(128) NOT NULL,
   PRIMARY KEY (Id),

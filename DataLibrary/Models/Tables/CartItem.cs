@@ -14,7 +14,7 @@ namespace DataLibrary.Models.Tables
         [Key]
         public int Id { get; set; }
         public int CartId { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public decimal Price { get; set; }
         public decimal PricePerItem { get; set; }
         public int Quantity { get; set; }

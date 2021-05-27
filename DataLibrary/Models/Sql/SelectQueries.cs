@@ -12,7 +12,7 @@ namespace DataLibrary.Models.Sql
         internal static readonly string userLoginSelectQuery = @"select Id, UserId, LoginProvider, ProviderKey from dbo.UserLogin ";
         internal static readonly string siteUserSelectQuery = @"select Id, CurrentCartId, ConfirmOrderCartId, OrderConfirmationId, IsBanned, ZipCode, Email, EmailConfirmed, 
                      PasswordHash, SecurityStamp, PhoneNumber, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEndDateUtc, LockoutEnabled, 
-                     AccessFailedCount, UserName from dbo.SiteUser ";
+                     AccessFailedCount from dbo.SiteUser ";
 
         internal static string GetCustomerOrderDeliveryInfoJoin(bool selectOnlyTopRecord)
         {

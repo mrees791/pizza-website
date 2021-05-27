@@ -1,7 +1,7 @@
 ﻿CREATE TABLE dbo.CustomerOrder
 (
   Id INT NOT NULL IDENTITY,
-  UserId INT NOT NULL,
+  UserId NVARCHAR(256) NOT NULL,
   StoreId INT NOT NULL,
   CartId INT NOT NULL,
   IsCancelled BIT NOT NULL,
