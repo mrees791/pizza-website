@@ -55,7 +55,7 @@
                 @Html.DisplayFor(modelItem => item.IsBanned)
             </td>
             <td>
-                <a href="@Url.Action("ManageUser")/@item.Id?@(Request.QueryString)">
+                <a href="@Url.Action("ManageUser")/@item.GetUrlSafeId()?@(Request.QueryString)">
                     <input type="button" value="Edit" class="btn btn-primary" />
                 </a>
             </td>

@@ -153,14 +153,6 @@ namespace PizzaWebsite.Controllers
             return View();
         }
 
-        private string CreateUserName(string email)
-        {
-            // User name matches everything in the email before the @ symbol.
-            // The user name can't have symbols since the {id} value in the RegisterRoutes method in RouteConfig won't work with symbols.
-
-            return Regex.Match(email, @"^\w*").Value;
-        }
-
         //
         // POST: /Account/Register
         [HttpPost]
@@ -170,9 +162,7 @@ namespace PizzaWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                string userName = CreateUserName(model.Email);
-
-                var user = new IdentityUser { UserName = userName, Email = model.Email };
+                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

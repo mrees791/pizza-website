@@ -41,9 +41,14 @@ namespace PizzaWebsite.Controllers
             return View(manageUsersVm);
         }
 
+        public string FromUrlSafeId(string urlSafeId)
+        {
+            return urlSafeId.Replace("(dot)", ".");
+        }
+
         public async Task<ActionResult> ManageUser(string id)
         {
-            SiteUser user = await PizzaDb.GetSiteUserByIdAsync(id);
+            SiteUser user = await PizzaDb.GetSiteUserByIdAsync(FromUrlSafeId(id));
 
             ManageUserViewModel manageUserVm = new ManageUserViewModel()
             {
@@ -64,7 +69,9 @@ namespace PizzaWebsite.Controllers
                 return View("ManageUser", model);
             }
 
-            SiteUser user = await PizzaDb.GetSiteUserByIdAsync(model.Id);
+            string id = FromUrlSafeId(model.Id);
+
+            SiteUser user = await PizzaDb.GetSiteUserByIdAsync(id);
 
             // Update user record
             user.IsBanned = model.IsBanned;
@@ -77,7 +84,7 @@ namespace PizzaWebsite.Controllers
             }
 
             ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
-            confirmationModel.ConfirmationMessage = $"Your changes to {model.Id} have been confirmed.";
+            confirmationModel.ConfirmationMessage = $"Your changes to {id} have been confirmed.";
             confirmationModel.ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}";
 
             return View("CreateEditConfirmation", confirmationModel);

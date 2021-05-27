@@ -16,5 +16,17 @@ namespace PizzaWebsite.Models.ManageWebsite
 
         [Display(Name = "Banned")]
         public bool IsBanned { get; set; }
+
+        /// <summary>
+        /// Replaces periods in the user's ID with (dot).
+        /// This is needed by {id} in the MapRoute method of the RouteConfig class.
+        /// The {id} section of the route won't work with periods so we use (dot) as a placeholder.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public string GetUrlSafeId()
+        {
+            return Id.Replace(".", "(dot)");
+        }
     }
 }
