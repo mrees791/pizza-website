@@ -15,13 +15,13 @@ namespace PizzaWebsite.Controllers
     [Authorize(Roles = "Admin,Manager")]
     public class ManageUsersController : BaseController
     {
-        public async Task<ActionResult> Index(int? page, int? rowsPerPage, string userName, string email)
+        public async Task<ActionResult> Index(int? page, int? rowsPerPage, string userId, string email)
         {
             var manageUsersVm = new ManagePagedListViewModel<ManageUserViewModel>();
 
             SiteUserFilter searchFilter = new SiteUserFilter()
             {
-                Id = userName,
+                Id = userId,
                 Email = email
             };
 

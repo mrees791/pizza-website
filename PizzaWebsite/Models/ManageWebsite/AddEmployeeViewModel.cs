@@ -17,9 +17,9 @@ namespace PizzaWebsite.Models.ManageWebsite
         [Required]
         public string Id { get; set; }
 
-        [Display(Name = "User Name")]
+        [Display(Name = "User Id")]
         [Required]
-        public string UserName { get; set; }
+        public string UserId { get; set; }
 
         [Display(Name = "Is Manager")]
         public bool IsManager { get; set; }
@@ -33,11 +33,11 @@ namespace PizzaWebsite.Models.ManageWebsite
             List<ValidationError> errorList = new List<ValidationError>();
 
             // Check if user exists
-            SiteUser user = await pizzaDb.GetSiteUserByNameAsync(UserName);
+            SiteUser user = await pizzaDb.GetSiteUserByNameAsync(UserId);
 
             if (user == null)
             {
-                errorList.Add(new ValidationError(nameof(UserName), "User does not exist."));
+                errorList.Add(new ValidationError(nameof(UserId), "User does not exist."));
             }
 
             // Make sure employee ID isn't already taken
@@ -56,7 +56,7 @@ namespace PizzaWebsite.Models.ManageWebsite
 
                 if (alreadyEmployed)
                 {
-                    errorList.Add(new ValidationError(nameof(UserName), "User is already employed."));
+                    errorList.Add(new ValidationError(nameof(UserId), "User is already employed."));
                 }
             }
 

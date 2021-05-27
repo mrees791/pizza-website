@@ -21,7 +21,7 @@ namespace DataTest1
 
         public async Task StartAsync()
         {
-            // This can only be ran after creating the databse and creating a user with username mrees791@gmail.com
+            // This can only be ran after creating the databse and creating a user with username mrees791
             //await InitializeExampleDbAsync();
 
             //TestCustomerOrderJoin();
@@ -78,7 +78,7 @@ namespace DataTest1
                 PhoneNumber = "7401234567",
                 State = "OH",
                 StreetAddress = "123 Happy Lane",
-                UserId = "mrees791@gmail.com",
+                UserId = "mrees791",
                 ZipCode = "43701"
             };
 
@@ -90,7 +90,7 @@ namespace DataTest1
                 PhoneNumber = "7401111111",
                 State = "OH",
                 StreetAddress = "111 Main Street",
-                UserId = "mrees791@gmail.com",
+                UserId = "mrees791",
                 ZipCode = "43701"
             };
 
@@ -137,7 +137,7 @@ namespace DataTest1
                     OrderTax = 1.00m,
                     OrderTotal = 6.00m,
                     StoreId = 1,
-                    UserId = "mrees791@gmail.com",
+                    UserId = "mrees791",
                 };
 
                 // Create and test joins
@@ -159,7 +159,7 @@ namespace DataTest1
                     OrderTax = 1.00m,
                     OrderTotal = 6.00m,
                     StoreId = 1,
-                    UserId = "mrees791@gmail.com",
+                    UserId = "mrees791",
                 };
 
                 CustomerOrderJoin orderJoin2 = new CustomerOrderJoin()
@@ -534,7 +534,7 @@ namespace DataTest1
         {
             using (var pizzaDb = new PizzaDatabase())
             {
-                IEnumerable<CustomerOrderJoin> customerOrderList = await pizzaDb.GetJoinedCustomerOrderListByUserIdAsync("mrees791@gmail.com");
+                IEnumerable<CustomerOrderJoin> customerOrderList = await pizzaDb.GetJoinedCustomerOrderListByUserIdAsync("mrees791");
             }
         }
 
@@ -670,7 +670,7 @@ namespace DataTest1
                     await pizzaDb.InsertAsync(managerRole);
                 }
 
-                SiteUser acctUser = await pizzaDb.GetSiteUserByNameAsync("mrees791@gmail.com");
+                SiteUser acctUser = await pizzaDb.GetSiteUserByNameAsync("mrees791");
                 bool isAdmin = await pizzaDb.UserIsInRole(acctUser.Id, "Admin");
 
                 if (!isAdmin)

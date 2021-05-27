@@ -88,7 +88,7 @@ namespace PizzaWebsite.Controllers
             // Attempt to add employee to database
             try
             {
-                await PizzaDb.Commands.AddNewEmployee(model.Id, model.UserName, model.IsManager);
+                await PizzaDb.Commands.AddNewEmployee(model.Id, model.UserId, model.IsManager);
             }
             catch (Exception ex)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -75,7 +76,7 @@ namespace PizzaWebsite.Controllers
                 return View(model);
             }
 
-            var user = await UserManager.FindByEmailAsync(model.Email);
+            IdentityUser user = await UserManager.FindByEmailAsync(model.Email);
 
             if (user == null)
             {
@@ -85,7 +86,7 @@ namespace PizzaWebsite.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -152,6 +153,14 @@ namespace PizzaWebsite.Controllers
             return View();
         }
 
+        private string CreateUserName(string email)
+        {
+            // User name matches everything in the email before the @ symbol.
+            // The user name can't have symbols since the {id} value in the RegisterRoutes method in RouteConfig won't work with symbols.
+
+            return Regex.Match(email, @"^\w*").Value;
+        }
+
         //
         // POST: /Account/Register
         [HttpPost]
@@ -161,7 +170,9 @@ namespace PizzaWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+                string userName = CreateUserName(model.Email);
+
+                var user = new IdentityUser { UserName = userName, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
