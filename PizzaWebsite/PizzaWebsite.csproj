@@ -201,6 +201,7 @@
     <Compile Include="Models\Identity\Stores\UserStore.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ManageWebsite\AddEmployeeViewModel.cs" />
+    <Compile Include="Models\ManageWebsite\EmployeeRosterViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ErrorViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ManageEmployeeViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ManagePagedListViewModel.cs" />
@@ -337,6 +338,7 @@
     <Content Include="Views\Shop\PreviousOrderStatus.cshtml" />
     <Content Include="Views\Shop\CurrentOrderStatus.cshtml" />
     <Content Include="Views\ManageEmployees\AddEmployee.cshtml" />
+    <Content Include="Views\ManageStores\EmployeeRoster.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

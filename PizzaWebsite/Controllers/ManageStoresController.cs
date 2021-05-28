@@ -87,6 +87,15 @@ namespace PizzaWebsite.Controllers
             return View("CreateEditConfirmation", confirmationModel);
         }
 
+        public async Task<ActionResult> EmployeeRoster(int id)
+        {
+            EmployeeRosterViewModel rosterVm = new EmployeeRosterViewModel();
+
+            await rosterVm.InitializeAsync(id, false, PizzaDb);
+
+            return View(rosterVm);
+        }
+
         public ManageStoreViewModel RecordToViewModel(StoreLocation record)
         {
             return new ManageStoreViewModel()

@@ -54,7 +54,9 @@
         <th>
             @Html.DisplayNameFor(model => model.ItemViewModel.IsActiveLocation)
         </th>
-        <th><!-- Empty header for edit column --></th>
+        @* Empty columns for Edit and Employee Roster buttons. *@
+        <th></th>
+        <th></th>
     </tr>
 
     @foreach (var item in Model.ItemViewModelList)
@@ -81,6 +83,11 @@
             <td>
                 <a href="@Url.Action("EditStore")/@item.Id?@(Request.QueryString)">
                     <input type="button" value="Edit" class="btn btn-primary" />
+                </a>
+            </td>
+            <td>
+                <a href="@Url.Action("EmployeeRoster")/@item.Id?@(Request.QueryString)">
+                    <input type="button" value="Employee Roster" class="btn btn-primary" />
                 </a>
             </td>
         </tr>
