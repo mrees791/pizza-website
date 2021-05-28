@@ -45,20 +45,6 @@ namespace PizzaWebsite.Controllers
             return View(manageEmployeesVm);
         }
 
-        public async Task<ActionResult> ManageEmployee(string id)
-        {
-            Employee employee = await PizzaDb.GetAsync<Employee>(id);
-            bool isManager = await UserManager.IsInRoleAsync(employee.UserId, "Manager");
-
-            ManageEmployeeViewModel model = new ManageEmployeeViewModel()
-            {
-                Id = employee.Id,
-                IsManager = isManager
-            };
-
-            return View(model);
-        }
-
         public ActionResult AddEmployee()
         {
             return View("AddEmployee", new AddEmployeeViewModel());
@@ -101,6 +87,21 @@ namespace PizzaWebsite.Controllers
             };
 
             return View("CreateEditConfirmation", confirmationModel);
+        }
+
+        public async Task<ActionResult> ManageEmployee(string id)
+        {
+            Employee employee = await PizzaDb.GetAsync<Employee>(id);
+            bool isManager = await UserManager.IsInRoleAsync(employee.UserId, "Manager");
+
+            ManageEmployeeViewModel model = new ManageEmployeeViewModel()
+            {
+                Id = employee.Id,
+                UserId = employee.UserId,
+                IsManager = isManager
+            };
+
+            return View(model);
         }
 
         [HttpPost]
