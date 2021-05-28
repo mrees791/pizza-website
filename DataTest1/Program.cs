@@ -584,8 +584,7 @@ namespace DataTest1
                     Employee employee = new Employee()
                     {
                         Id = employeeId,
-                        UserId = user.Id,
-                        CurrentlyEmployed = true
+                        UserId = user.Id
                     };
 
                     await pizzaDb.InsertAsync(employee);
@@ -673,17 +672,11 @@ namespace DataTest1
                 }
 
                 SiteUser acctUser = await pizzaDb.GetSiteUserByNameAsync(AdminUserName);
-                bool isAdmin = await pizzaDb.UserIsInRole(acctUser.Id, "Admin");
+                bool isAdmin = await pizzaDb.UserIsInRole(acctUser, adminRole);
 
                 if (!isAdmin)
                 {
-                    UserRole adminUserRole = new UserRole()
-                    {
-                        UserId = acctUser.Id,
-                        RoleName = "Admin"
-                    };
-
-                    await pizzaDb.InsertAsync(adminUserRole);
+                    await pizzaDb.Commands.AddUserToRoleAsync(acctUser, adminRole);
                 }
             }
         }

@@ -23,41 +23,46 @@ namespace DataLibrary.Models
             this.pizzaDb = pizzaDb;
         }
 
-        public async Task AddNewEmployee(string employeeId, string userName, bool isManager)
+        public async Task AddNewEmployeeAsync(string employeeId, bool isManager, SiteUser user)
         {
-            SiteUser user = await pizzaDb.GetSiteUserByNameAsync(userName);
+            SiteRole employeeRole = await pizzaDb.GetAsync<SiteRole>("Employee");
+            SiteRole managerRole = await pizzaDb.GetAsync<SiteRole>("Manager");
 
             using (IDbTransaction transaction = pizzaDb.Connection.BeginTransaction())
             {
                 Employee employee = new Employee()
                 {
                     Id = employeeId,
-                    UserId = user.Id,
-                    CurrentlyEmployed = true
-                };
-
-                UserRole employeeRole = new UserRole()
-                {
-                    UserId = user.Id,
-                    RoleName = "Employee"
+                    UserId = user.Id
                 };
 
                 await employee.InsertAsync(pizzaDb, transaction);
-                await employeeRole.InsertAsync(pizzaDb, transaction);
+                await AddUserToRoleAsync(user, employeeRole, transaction);
 
                 if (isManager)
                 {
-                    UserRole managerRole = new UserRole()
-                    {
-                        UserId = user.Id,
-                        RoleName = "Manager"
-                    };
-
-                    await managerRole.InsertAsync(pizzaDb, transaction);
+                    await AddUserToRoleAsync(user, managerRole, transaction);
                 }
 
                 transaction.Commit();
             }
+        }
+
+        public async Task AddUserToRoleAsync(SiteUser siteUser, SiteRole siteRole, IDbTransaction transaction = null)
+        {
+            UserRole userRole = new UserRole()
+            {
+                UserId = siteUser.Id,
+                RoleName = siteRole.Name
+            };
+
+            await userRole.InsertAsync(pizzaDb, transaction);
+        }
+
+        public async Task<int> RemoveUserFromRoleAsync(SiteUser user, SiteRole siteRole, IDbTransaction transaction = null)
+        {
+            UserRole userRole = await pizzaDb.GetUserRoleAsync(user, siteRole, transaction);
+            return await pizzaDb.DeleteAsync(userRole, transaction);
         }
 
         public async Task ReorderPreviousOrder(SiteUser siteUser, CustomerOrder previousOrder)

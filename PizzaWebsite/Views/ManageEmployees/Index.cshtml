@@ -38,7 +38,7 @@
             @Html.DisplayNameFor(model => model.ItemViewModel.Id)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ItemViewModel.CurrentlyEmployed)
+            @Html.DisplayNameFor(model => model.ItemViewModel.IsManager)
         </th>
         <th><!-- Empty header for edit column --></th>
     </tr>
@@ -50,7 +50,7 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CurrentlyEmployed)
+                @Html.DisplayFor(modelItem => item.IsManager)
             </td>
             <td>
                 <a href="@Url.Action("ManageEmployee")/@item.Id?@(Request.QueryString)">

@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Mvc;
 
 namespace PizzaWebsite.Models.ManageWebsite
 {
@@ -29,16 +30,14 @@ namespace PizzaWebsite.Models.ManageWebsite
         /// Validates the view model properties and returns a list of errors found (key, error message.)
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<ValidationError>> ValidateAsync(PizzaDatabase pizzaDb)
+        public async Task ValidateAsync(ModelStateDictionary modelState, PizzaDatabase pizzaDb)
         {
-            List<ValidationError> errorList = new List<ValidationError>();
-
             // Check if user exists
-            SiteUser user = await pizzaDb.GetSiteUserByNameAsync(UserId);
+            SiteUser siteUser = await pizzaDb.GetSiteUserByNameAsync(UserId);
 
-            if (user == null)
+            if (siteUser == null)
             {
-                errorList.Add(new ValidationError(nameof(UserId), "User does not exist."));
+                modelState.AddModelError(nameof(UserId), "User does not exist.");
             }
 
             // Make sure employee ID isn't already taken
@@ -46,22 +45,21 @@ namespace PizzaWebsite.Models.ManageWebsite
 
             if (employee != null)
             {
-                errorList.Add(new ValidationError(nameof(Id), "Employee ID is already taken."));
+                modelState.AddModelError(nameof(Id), "Employee ID is already taken.");
             }
 
 
             // Make sure user isn't already employed
-            if (user != null)
+            if (siteUser != null)
             {
-                bool alreadyEmployed = await pizzaDb.UserIsInRole(user.Id, "Employee");
+                SiteRole employeeRole = await pizzaDb.GetSiteRoleByNameAsync("Employee");
+                bool alreadyEmployed = await pizzaDb.UserIsInRole(siteUser, employeeRole);
 
                 if (alreadyEmployed)
                 {
-                    errorList.Add(new ValidationError(nameof(UserId), "User is already employed."));
+                    modelState.AddModelError(nameof(UserId), "User is already employed.");
                 }
             }
-
-            return errorList;
         }
     }
 }

@@ -14,9 +14,6 @@ namespace PizzaWebsite.Models.ManageWebsite
         [Display(Name = "User Name")]
         public string UserName { get; set; }
 
-        [Display(Name = "Currently Employed")]
-        public bool CurrentlyEmployed { get; set; }
-
         [Display(Name = "Is Manager")]
         public bool IsManager { get; set; }
     }

@@ -34,7 +34,6 @@ namespace PizzaWebsite.Controllers
                 ManageEmployeeViewModel model = new ManageEmployeeViewModel()
                 {
                     Id = employee.Id,
-                    CurrentlyEmployed = employee.CurrentlyEmployed,
                     IsManager = isManager
                 };
                 manageEmployeesVm.ItemViewModelList.Add(model);
@@ -51,7 +50,6 @@ namespace PizzaWebsite.Controllers
             ManageEmployeeViewModel model = new ManageEmployeeViewModel()
             {
                 Id = employee.Id,
-                CurrentlyEmployed = employee.CurrentlyEmployed,
                 IsManager = isManager
             };
 
@@ -73,22 +71,18 @@ namespace PizzaWebsite.Controllers
             }
 
             // Server side validation
-            IEnumerable<ValidationError> errorList = await model.ValidateAsync(PizzaDb);
+            await model.ValidateAsync(ModelState, PizzaDb);
 
-            if (errorList.Any())
+            if (!ModelState.IsValid)
             {
-                foreach (ValidationError error in errorList)
-                {
-                    ModelState.AddModelError(error.Key, error.ErrorMessage);
-                }
-
                 return View(model);
             }
 
             // Attempt to add employee to database
             try
             {
-                await PizzaDb.Commands.AddNewEmployee(model.Id, model.UserId, model.IsManager);
+                SiteUser siteUser = await PizzaDb.GetSiteUserByNameAsync(model.UserId);
+                await PizzaDb.Commands.AddNewEmployeeAsync(model.Id, model.IsManager, siteUser);
             }
             catch (Exception ex)
             {
@@ -116,7 +110,6 @@ namespace PizzaWebsite.Controllers
             }
 
             Employee employee = await PizzaDb.GetAsync<Employee>(model.Id);
-            employee.CurrentlyEmployed = model.CurrentlyEmployed;
             await PizzaDb.UpdateAsync(employee);
 
             if (model.IsManager)

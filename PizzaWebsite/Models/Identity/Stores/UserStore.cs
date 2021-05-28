@@ -40,24 +40,6 @@ namespace PizzaWebsite.Models.Identity.Stores
             user.Id = await pizzaDb.InsertAsync(user.ToRecord());
         }
 
-        public async Task AddToRoleAsync(IdentityUser user, string roleName)
-        {
-            SiteRole siteRole = await pizzaDb.GetSiteRoleByNameAsync(roleName);
-
-            if (siteRole == null)
-            {
-                throw new ArgumentException($"Invalid role name: {roleName}");
-            }
-
-            UserRole userRole = new UserRole()
-            {
-                UserId = user.Id,
-                RoleName = roleName
-            };
-
-            await pizzaDb.InsertAsync(userRole);
-        }
-
         /// <summary>
         /// User records should never be deleted.
         /// </summary>
@@ -105,13 +87,62 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task<bool> IsInRoleAsync(IdentityUser user, string roleName)
         {
-            IList<string> currentUserRoles = await GetRolesAsync(user);
-            return currentUserRoles.Contains(roleName);
+            SiteRole siteRole = await pizzaDb.GetSiteRoleByNameAsync(roleName);
+            SiteUser siteUser = await pizzaDb.GetSiteUserByIdAsync(user.Id);
+
+            if (siteRole == null)
+            {
+                throw new ArgumentException($"Invalid role name: {roleName}");
+            }
+
+            if (siteUser == null)
+            {
+                throw new ArgumentException($"User does not exist. ID: {user.Id}");
+            }
+
+            return await pizzaDb.UserIsInRole(siteUser, siteRole);
+        }
+
+        public async Task AddToRoleAsync(IdentityUser user, string roleName)
+        {
+            SiteRole siteRole = await pizzaDb.GetSiteRoleByNameAsync(roleName);
+            SiteUser siteUser = await pizzaDb.GetSiteUserByIdAsync(user.Id);
+
+            if (siteRole == null)
+            {
+                throw new ArgumentException($"Invalid role name: {roleName}");
+            }
+
+            if (siteUser == null)
+            {
+                throw new ArgumentException($"User does not exist. ID: {user.Id}");
+            }
+
+            if (!await IsInRoleAsync(user, roleName))
+            {
+                await pizzaDb.Commands.AddUserToRoleAsync(siteUser, siteRole);
+            }
         }
 
         public async Task RemoveFromRoleAsync(IdentityUser user, string roleName)
         {
-            await pizzaDb.RemoveFromRoleAsync(user.Id, roleName);
+            SiteRole siteRole = await pizzaDb.GetSiteRoleByNameAsync(roleName);
+            SiteUser siteUser = await pizzaDb.GetSiteUserByIdAsync(user.Id);
+
+            if (siteRole == null)
+            {
+                throw new ArgumentException($"Invalid role name: {roleName}");
+            }
+
+            if (siteUser == null)
+            {
+                throw new ArgumentException($"User does not exist. ID: {user.Id}");
+            }
+
+            if (await IsInRoleAsync(user, roleName))
+            {
+                await pizzaDb.Commands.RemoveUserFromRoleAsync(siteUser, siteRole);
+            }
         }
 
         public async Task UpdateAsync(IdentityUser user)

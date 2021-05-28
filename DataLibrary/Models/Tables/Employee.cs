@@ -15,7 +15,6 @@ namespace DataLibrary.Models.Tables
         [Key]
         public string Id { get; set; }
         public string UserId { get; set; }
-        public bool CurrentlyEmployed { get; set; }
 
         public override dynamic GetId()
         {

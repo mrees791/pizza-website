@@ -9,6 +9,7 @@ namespace DataLibrary.Models.Sql
     internal static class SelectQueries
     {
         internal static readonly string siteRoleSelectQuery = @"select Name from dbo.SiteRole ";
+        internal static readonly string userRoleSelectQuery = @"select Id, UserId, RoleName from dbo.UserRole ";
         internal static readonly string userLoginSelectQuery = @"select Id, UserId, LoginProvider, ProviderKey from dbo.UserLogin ";
         internal static readonly string siteUserSelectQuery = @"select Id, CurrentCartId, ConfirmOrderCartId, OrderConfirmationId, IsBanned, ZipCode, Email, EmailConfirmed, 
                      PasswordHash, SecurityStamp, PhoneNumber, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEndDateUtc, LockoutEnabled, 

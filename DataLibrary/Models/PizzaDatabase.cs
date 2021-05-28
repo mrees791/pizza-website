@@ -180,24 +180,11 @@ namespace DataLibrary.Models
             return await connection.ExecuteAsync(sql, parameters, transaction);
         }
 
-        public async Task<bool> UserIsInRole(string userId, string roleName, IDbTransaction transaction = null)
+        public async Task<bool> UserIsInRole(SiteUser siteUser, SiteRole siteRole, IDbTransaction transaction = null)
         {
-            IEnumerable<UserRole> userRoles = await GetUserRoleListAsync(userId);
+            UserRole userRole = await GetUserRoleAsync(siteUser, siteRole, transaction);
 
-            return userRoles.Select(r => r.RoleName).Contains(roleName);
-        }
-
-        public async Task<int> RemoveFromRoleAsync(string userId, string roleName, IDbTransaction transaction = null)
-        {
-            string sql = @"delete from dbo.UserRole where UserId = @UserId and RoleName = @RoleName";
-
-            object parameters = new
-            {
-                UserId = userId,
-                RoleName = roleName
-            };
-
-            return await connection.ExecuteAsync(sql, parameters, transaction);
+            return userRole != null;
         }
 
         public async Task<IEnumerable<UserRole>> GetUserRoleListAsync(string userId)
@@ -270,6 +257,31 @@ namespace DataLibrary.Models
             }
 
             return user;
+        }
+
+        public async Task<UserRole> GetUserRoleAsync(SiteUser siteUser, SiteRole siteRole, IDbTransaction transaction = null)
+        {
+            string sql = SelectQueries.userRoleSelectQuery + "where UserId = @UserId and RoleName = @RoleName";
+
+            object parameters = new
+            {
+                UserId = siteUser.Id,
+                RoleName = siteRole.Name
+            };
+
+            return await GetUserRoleAsync(sql, parameters, transaction);
+        }
+
+        private async Task<UserRole> GetUserRoleAsync(string sql, object parameters, IDbTransaction transaction = null)
+        {
+            UserRole userRole = await connection.QuerySingleOrDefaultAsync<UserRole>(sql, parameters, transaction);
+
+            if (userRole != null)
+            {
+                await userRole.MapEntityAsync(this, transaction);
+            }
+
+            return userRole;
         }
 
         public async Task<UserLogin> GetLoginAsync(string loginProvider, string providerKey, IDbTransaction transaction = null)
