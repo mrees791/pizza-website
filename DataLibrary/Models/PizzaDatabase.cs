@@ -98,6 +98,41 @@ namespace DataLibrary.Models
             return customerOrderList;
         }
 
+        public async Task<IEnumerable<EmployeeLocationJoin>> GetJoinedEmployeeLocationListByStoreId(int storeId)
+        {
+            string whereClause = "where l.StoreId = @StoreId";
+
+            object parameters = new
+            {
+                StoreId = storeId
+            };
+
+            return await GetJoinedEmployeeLocationListAsync(whereClause, parameters, false);
+        }
+
+        private async Task<IEnumerable<EmployeeLocationJoin>> GetJoinedEmployeeLocationListAsync(string whereClause, object parameters, bool onlySelectFirst)
+        {
+            string joinQuery = SelectQueries.GetEmployeeOnEmployeeLocationJoin(onlySelectFirst) + whereClause;
+
+            IEnumerable<EmployeeLocationJoin> employeeLocationJoinList = await connection.QueryAsync<Employee, EmployeeLocation, EmployeeLocationJoin>(
+                joinQuery,
+                (employee, employeeLocation) =>
+                {
+                    return new EmployeeLocationJoin()
+                    {
+                        Employee = employee,
+                        EmployeeLocation = employeeLocation
+                    };
+                }, param: parameters, splitOn: "Id");
+
+            foreach (EmployeeLocationJoin employeeLocationJoin in employeeLocationJoinList)
+            {
+                await employeeLocationJoin.MapAsync(this);
+            }
+
+            return employeeLocationJoinList;
+        }
+
         public async Task<IEnumerable<CartItemJoin>> GetJoinedCartItemListAsync(int cartId)
         {
             List<CartItemJoin> items = new List<CartItemJoin>();

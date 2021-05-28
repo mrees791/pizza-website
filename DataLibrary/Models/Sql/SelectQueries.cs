@@ -15,6 +15,22 @@ namespace DataLibrary.Models.Sql
                      PasswordHash, SecurityStamp, PhoneNumber, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEndDateUtc, LockoutEnabled, 
                      AccessFailedCount from dbo.SiteUser ";
 
+        internal static string GetEmployeeOnEmployeeLocationJoin(bool selectOnlyTopRecord)
+        {
+            string topClause = "";
+
+            if (selectOnlyTopRecord)
+            {
+                topClause = "top 1 ";
+            }
+
+            string joinQuery = $"select {topClause}";
+
+            joinQuery += @"e.Id, e.UserId, l.Id, l.EmployeeId, l.StoreId from Employee e inner join EmployeeLocation l on l.EmployeeId = e.Id ";
+
+            return joinQuery;
+        }
+
         internal static string GetCustomerOrderDeliveryInfoJoin(bool selectOnlyTopRecord)
         {
             string topClause = "";
