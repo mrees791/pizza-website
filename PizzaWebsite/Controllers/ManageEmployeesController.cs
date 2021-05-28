@@ -15,13 +15,14 @@ namespace PizzaWebsite.Controllers
     [Authorize(Roles = "Admin,Manager")]
     public class ManageEmployeesController : BaseController
     {
-        public async Task<ActionResult> Index(int? page, int? rowsPerPage, string employeeId)
+        public async Task<ActionResult> Index(int? page, int? rowsPerPage, string employeeId, string userId)
         {
             var manageEmployeesVm = new ManagePagedListViewModel<ManageEmployeeViewModel>();
 
             EmployeeFilter searchFilter = new EmployeeFilter()
             {
-                Id = employeeId
+                Id = employeeId,
+                UserId = userId
             };
 
             List<Employee> employeeList = await LoadPagedRecordsAsync<Employee>(page, rowsPerPage, "Id", SortOrder.Ascending, searchFilter, PizzaDb, Request,
@@ -29,11 +30,13 @@ namespace PizzaWebsite.Controllers
 
             foreach (Employee employee in employeeList)
             {
+                SiteUser siteUser = await PizzaDb.GetSiteUserByIdAsync(employee.UserId);
                 bool isManager = await UserManager.IsInRoleAsync(employee.UserId, "Manager");
 
                 ManageEmployeeViewModel model = new ManageEmployeeViewModel()
                 {
                     Id = employee.Id,
+                    UserId = employee.UserId,
                     IsManager = isManager
                 };
                 manageEmployeesVm.ItemViewModelList.Add(model);

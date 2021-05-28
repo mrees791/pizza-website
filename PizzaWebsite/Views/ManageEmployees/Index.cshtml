@@ -22,6 +22,8 @@
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
         @Html.Label("EmployeeId", "Employee ID")
         @Html.TextBox("EmployeeId", Request["EmployeeId"], new { @class = "form-control" })
+        @Html.Label("UserId", "User ID")
+        @Html.TextBox("UserId", Request["UserId"], new { @class = "form-control" })
         <input type="submit" value="Apply Search Filters" class="btn btn-primary" />
     }
 </div>
@@ -38,6 +40,9 @@
             @Html.DisplayNameFor(model => model.ItemViewModel.Id)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.ItemViewModel.UserId)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.ItemViewModel.IsManager)
         </th>
         <th><!-- Empty header for edit column --></th>
@@ -48,6 +53,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsManager)

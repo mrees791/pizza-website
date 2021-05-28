@@ -11,8 +11,8 @@ namespace PizzaWebsite.Models.ManageWebsite
         [Display(Name = "Employee ID")]
         public string Id { get; set; }
 
-        [Display(Name = "User Name")]
-        public string UserName { get; set; }
+        [Display(Name = "User ID")]
+        public string UserId { get; set; }
 
         [Display(Name = "Is Manager")]
         public bool IsManager { get; set; }
