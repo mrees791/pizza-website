@@ -223,6 +223,7 @@
     <Compile Include="Models\PizzaBuilders\CartPizzaBuilderViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\PizzaBuilderViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\PizzaToppingViewModel.cs" />
+    <Compile Include="Models\ManageWebsite\RemoveEmployeeFromRosterViewModel.cs" />
     <Compile Include="Models\Shop\CheckoutViewModel.cs" />
     <Compile Include="Models\Shop\MenuPizzaViewModel.cs" />
     <Compile Include="Models\Shop\OrderStatusViewModel.cs" />
@@ -342,6 +343,7 @@
     <Content Include="Views\ManageEmployees\AddEmployee.cshtml" />
     <Content Include="Views\ManageStores\EmployeeRoster.cshtml" />
     <Content Include="Views\ManageStores\AddEmployeeToRoster.cshtml" />
+    <Content Include="Views\ManageStores\RemoveEmployeeFromRoster.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

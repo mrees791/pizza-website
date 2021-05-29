@@ -36,6 +36,48 @@ namespace PizzaWebsite.Controllers
             return View(manageStoresVm);
         }
 
+        public async Task<ActionResult> RemoveEmployeeFromRoster(int id)
+        {
+            RemoveEmployeeFromRosterViewModel removeEmployeeVm = new RemoveEmployeeFromRosterViewModel();
+            await removeEmployeeVm.InitializeAsync(id, PizzaDb);
+
+            return View(removeEmployeeVm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RemoveEmployeeFromRoster(RemoveEmployeeFromRosterViewModel model)
+        {
+            await model.InitializeAsync(model.EmployeeLocationId, PizzaDb);
+            await model.ValidateAsync(ModelState, PizzaDb);
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Attempt to remove employee from store roster
+            try
+            {
+                EmployeeLocation employeeLocation = await PizzaDb.GetAsync<EmployeeLocation>(model.EmployeeLocationId);
+                await PizzaDb.DeleteAsync(employeeLocation);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+
+            // Show confirmation page
+            ConfirmationViewModel confirmationModel = new ConfirmationViewModel()
+            {
+                ConfirmationMessage = $"Employee {model.EmployeeId} has been removed from {model.StoreName}'s roster.",
+                ReturnUrlAction = $"{Url.Action("EmployeeRoster")}/{model.StoreId}?{Request.QueryString}"
+            };
+
+            return View("CreateEditConfirmation", confirmationModel);
+        }
+
         public async Task<ActionResult> AddEmployeeToRoster(int id)
         {
             AddEmployeeToRosterViewModel addEmployeeVm = new AddEmployeeToRosterViewModel();

@@ -33,6 +33,7 @@ namespace PizzaWebsite.Models.ManageWebsite
                 EmployeeRosterItemViewModel itemVm = new EmployeeRosterItemViewModel()
                 {
                     EmployeeId = locationJoin.Employee.Id,
+                    EmployeeLocationId = locationJoin.EmployeeLocation.Id,
                     UserId = locationJoin.Employee.UserId,
                     IsManager = isManager
                 };

@@ -15,10 +15,10 @@
 </nav>
 <hr />
 
+<h3>@($"{Model.StoreName} Employees")</h3>
 
 @if (Model.RosterIsEmpty())
 {
-    <h3>@($"{Model.StoreName} Employees")</h3>
     <p>This location does not have any employees.</p>
     <div>
         <a href="@Url.Action("AddEmployeeToRoster")/@Model.StoreId?@(Request.QueryString)">
@@ -28,19 +28,33 @@
 }
 else
 {
-    <h3>@($"{Model.StoreName} Employees")</h3>
-    @* todo: Display employee roster list here*@
     <div>
         <a href="@Url.Action("AddEmployeeToRoster")/@Model.StoreId?@(Request.QueryString)">
             <input type="button" value="Add Employee" class="btn btn-primary" />
         </a>
     </div>
-
-    <ul>
-        @* This list will need to store the ID of the EmployeeLocation record. *@
-        @foreach (EmployeeRosterItemViewModel employeeItem in Model.EmployeeRosterList)
+    <table class="table">
+        <tr>
+            <th>Employee ID</th>
+            <th>Is Manager</th>
+            @* Empty column for Remove button. *@
+            <th></th>
+        </tr>
+        @foreach (EmployeeRosterItemViewModel item in Model.EmployeeRosterList)
         {
-            <li>@employeeItem.EmployeeId</li>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmployeeId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsManager)
+                </td>
+                <td>
+                    <a href="@Url.Action("RemoveEmployeeFromRoster")/@item.EmployeeLocationId?@(Request.QueryString)">
+                        <input type="button" value="Remove" class="btn btn-danger" />
+                    </a>
+                </td>
+            </tr>
         }
-    </ul>
+    </table>
 }
