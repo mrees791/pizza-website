@@ -36,6 +36,60 @@ namespace PizzaWebsite.Controllers
             return View(manageStoresVm);
         }
 
+        public async Task<ActionResult> AddEmployeeToRoster(int id)
+        {
+            AddEmployeeToRosterViewModel addEmployeeVm = new AddEmployeeToRosterViewModel();
+            await addEmployeeVm.InitializeAsync(id, PizzaDb);
+
+            return View(addEmployeeVm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddEmployeeToRoster(AddEmployeeToRosterViewModel model)
+        {
+            await model.InitializeAsync(model.StoreId, PizzaDb);
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Server side validation
+            await model.ValidateAsync(ModelState, PizzaDb);
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Attempt to add employee to store roster
+            try
+            {
+                EmployeeLocation employeeLocation = new EmployeeLocation()
+                {
+                    EmployeeId = model.EmployeeId,
+                    StoreId = model.StoreId
+                };
+
+                await PizzaDb.InsertAsync(employeeLocation);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+
+            // Show confirmation page
+            ConfirmationViewModel confirmationModel = new ConfirmationViewModel()
+            {
+                ConfirmationMessage = $"Employee {model.EmployeeId} has been added to {model.StoreName}'s roster.",
+                ReturnUrlAction = $"{Url.Action("EmployeeRoster")}/{model.StoreId}?{Request.QueryString}"
+            };
+
+            return View("CreateEditConfirmation", confirmationModel);
+        }
+
         public ActionResult CreateStore()
         {
             ManageStoreViewModel model = new ManageStoreViewModel();
@@ -90,8 +144,7 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> EmployeeRoster(int id)
         {
             EmployeeRosterViewModel rosterVm = new EmployeeRosterViewModel();
-
-            await rosterVm.InitializeAsync(id, false, PizzaDb);
+            await rosterVm.InitializeAsync(id, PizzaDb);
 
             return View(rosterVm);
         }

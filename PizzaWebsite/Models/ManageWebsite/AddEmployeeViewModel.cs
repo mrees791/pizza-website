@@ -26,10 +26,6 @@ namespace PizzaWebsite.Models.ManageWebsite
         [Display(Name = "Is Manager")]
         public bool IsManager { get; set; }
 
-        /// <summary>
-        /// Validates the view model properties and returns a list of errors found (key, error message.)
-        /// </summary>
-        /// <returns></returns>
         public async Task ValidateAsync(ModelStateDictionary modelState, PizzaDatabase pizzaDb)
         {
             // Check if user exists

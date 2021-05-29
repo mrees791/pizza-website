@@ -23,6 +23,11 @@ namespace DataLibrary.Models
             this.pizzaDb = pizzaDb;
         }
 
+        public async Task<bool> IsEmployedAtLocation(Employee employee, StoreLocation storeLocation, IDbTransaction transaction = null)
+        {
+            return await pizzaDb.GetEmployeeLocationAsync(employee, storeLocation, transaction) != null;
+        }
+
         public async Task AddNewEmployeeAsync(string employeeId, bool isManager, SiteUser user)
         {
             SiteRole employeeRole = await pizzaDb.GetAsync<SiteRole>("Employee");

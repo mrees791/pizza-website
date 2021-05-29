@@ -203,7 +203,7 @@
     <Compile Include="Models\ManageWebsite\AddEmployeeToRosterViewModel.cs" />
     <Compile Include="Models\ManageWebsite\AddEmployeeViewModel.cs" />
     <Compile Include="Models\ManageWebsite\EmployeeRosterItemViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\EmployeeRosterListViewModel.cs" />
+    <Compile Include="Models\ManageWebsite\EmployeeRosterViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ErrorViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ManageEmployeeViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ManagePagedListViewModel.cs" />

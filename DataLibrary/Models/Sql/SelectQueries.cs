@@ -8,6 +8,7 @@ namespace DataLibrary.Models.Sql
 {
     internal static class SelectQueries
     {
+        // todo: Change these to methods with (bool selectOnlyTopRecord) parameter.
         internal static readonly string siteRoleSelectQuery = @"select Name from dbo.SiteRole ";
         internal static readonly string userRoleSelectQuery = @"select Id, UserId, RoleName from dbo.UserRole ";
         internal static readonly string userLoginSelectQuery = @"select Id, UserId, LoginProvider, ProviderKey from dbo.UserLogin ";
@@ -15,7 +16,7 @@ namespace DataLibrary.Models.Sql
                      PasswordHash, SecurityStamp, PhoneNumber, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEndDateUtc, LockoutEnabled, 
                      AccessFailedCount from dbo.SiteUser ";
 
-        internal static string GetEmployeeOnEmployeeLocationJoin(bool selectOnlyTopRecord)
+        private static string CreateSelectQuery(bool selectOnlyTopRecord)
         {
             string topClause = "";
 
@@ -24,7 +25,21 @@ namespace DataLibrary.Models.Sql
                 topClause = "top 1 ";
             }
 
-            string joinQuery = $"select {topClause}";
+            return $"select {topClause}";
+        }
+
+        internal static string GetEmployeeLocationSelectQuery(bool selectOnlyTopRecord)
+        {
+            string selectQuery = CreateSelectQuery(selectOnlyTopRecord);
+
+            selectQuery += @"Id, EmployeeId, StoreId from dbo.EmployeeLocation ";
+
+            return selectQuery;
+        }
+
+        internal static string GetEmployeeOnEmployeeLocationJoin(bool selectOnlyTopRecord)
+        {
+            string joinQuery = CreateSelectQuery(selectOnlyTopRecord);
 
             joinQuery += @"e.Id, e.UserId, l.Id, l.EmployeeId, l.StoreId from Employee e inner join EmployeeLocation l on l.EmployeeId = e.Id ";
 
@@ -33,14 +48,7 @@ namespace DataLibrary.Models.Sql
 
         internal static string GetCustomerOrderDeliveryInfoJoin(bool selectOnlyTopRecord)
         {
-            string topClause = "";
-
-            if (selectOnlyTopRecord)
-            {
-                topClause = "top 1 ";
-            }
-
-            string joinQuery = $"select {topClause}";
+            string joinQuery = CreateSelectQuery(selectOnlyTopRecord);
 
             joinQuery += @"c.Id, c.UserId, c.StoreId, c.CartId, c.IsCancelled, 
                                  c.OrderSubtotal, c.OrderTax, c.OrderTotal, c.OrderPhase,

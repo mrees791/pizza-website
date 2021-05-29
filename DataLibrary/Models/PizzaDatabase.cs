@@ -294,6 +294,31 @@ namespace DataLibrary.Models
             return user;
         }
 
+        public async Task<EmployeeLocation> GetEmployeeLocationAsync(Employee employee, StoreLocation storeLocation, IDbTransaction transaction = null)
+        {
+            string sql = SelectQueries.GetEmployeeLocationSelectQuery(true) + "where EmployeeId = @EmployeeId and StoreId = @StoreId";
+
+            object parameters = new
+            {
+                EmployeeId = employee.Id,
+                StoreId = storeLocation.Id
+            };
+
+            return await GetEmployeeLocationAsync(sql, parameters, transaction);
+        }
+
+        private async Task<EmployeeLocation> GetEmployeeLocationAsync(string sql, object parameters, IDbTransaction transaction = null)
+        {
+            EmployeeLocation employeeLocation = await connection.QuerySingleOrDefaultAsync<EmployeeLocation>(sql, parameters, transaction);
+
+            if (employeeLocation != null)
+            {
+                await employeeLocation.MapEntityAsync(this, transaction);
+            }
+
+            return employeeLocation;
+        }
+
         public async Task<UserRole> GetUserRoleAsync(SiteUser siteUser, SiteRole siteRole, IDbTransaction transaction = null)
         {
             string sql = SelectQueries.userRoleSelectQuery + "where UserId = @UserId and RoleName = @RoleName";
