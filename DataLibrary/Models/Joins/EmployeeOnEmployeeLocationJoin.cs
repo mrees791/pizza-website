@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Joins
 {
-    public class EmployeeLocationJoin
+    public class EmployeeOnEmployeeLocationJoin
     {
         public Employee Employee { get; set; }
         public EmployeeLocation EmployeeLocation { get; set; }

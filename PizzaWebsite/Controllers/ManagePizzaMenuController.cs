@@ -14,7 +14,7 @@ using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
-    [Authorize(Roles = "Admin,Manager")]
+    [Authorize(Roles = "Admin,Executive")]
     public class ManagePizzaMenuController : BaseManageMenuController<MenuPizza, ManageMenuPizzaViewModel>
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)

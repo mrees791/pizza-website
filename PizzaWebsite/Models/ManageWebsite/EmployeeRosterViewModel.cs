@@ -20,12 +20,12 @@ namespace PizzaWebsite.Models.ManageWebsite
             EmployeeRosterList = new List<EmployeeRosterItemViewModel>();
             StoreLocation storeLocation = await pizzaDb.GetAsync<StoreLocation>(storeId);
             SiteRole managerRole = await pizzaDb.GetSiteRoleByNameAsync("Manager");
-            IEnumerable<EmployeeLocationJoin> employeeLocationJoinList = await pizzaDb.GetJoinedEmployeeLocationListByStoreId(storeId);
+            IEnumerable<EmployeeOnEmployeeLocationJoin> employeeLocationJoinList = await pizzaDb.GetJoinedEmployeeLocationListByStoreId(storeId);
 
             StoreId = storeId;
             StoreName = storeLocation.Name;
 
-            foreach (EmployeeLocationJoin locationJoin in employeeLocationJoinList)
+            foreach (EmployeeOnEmployeeLocationJoin locationJoin in employeeLocationJoinList)
             {
                 SiteUser siteUser = await pizzaDb.GetSiteUserByIdAsync(locationJoin.Employee.UserId);
                 bool isManager = await pizzaDb.UserIsInRole(siteUser, managerRole);

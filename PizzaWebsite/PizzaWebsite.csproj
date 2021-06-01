@@ -164,6 +164,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BaseManageMenuController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ManageEmployeesController.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Models\ConfirmationViewModel.cs" />
     <Compile Include="Models\CostSummary.cs" />
     <Compile Include="Models\Databases\DatabaseContext.cs" />
+    <Compile Include="Models\Employees\EmployeeIndexViewModel.cs" />
     <Compile Include="Models\Geography\State.cs" />
     <Compile Include="Models\Geography\StateListCreator.cs" />
     <Compile Include="Models\IRecordConverter.cs" />
@@ -202,6 +204,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ManageWebsite\AddEmployeeToRosterViewModel.cs" />
     <Compile Include="Models\ManageWebsite\AddEmployeeViewModel.cs" />
+    <Compile Include="Models\ManageWebsite\EmployeeLocationViewModel.cs" />
     <Compile Include="Models\ManageWebsite\EmployeeRosterItemViewModel.cs" />
     <Compile Include="Models\ManageWebsite\EmployeeRosterViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ErrorViewModel.cs" />
@@ -215,6 +218,7 @@
     <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaSauceViewModel.cs" />
     <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaToppingTypeViewModel.cs" />
     <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaViewModel.cs" />
+    <Compile Include="Models\ManageWebsite\ViewEmployeeLocationsViewModel.cs" />
     <Compile Include="Models\Manage\DeliveryAddressListItemViewModel.cs" />
     <Compile Include="Models\Manage\ManageAddressesViewModel.cs" />
     <Compile Include="Models\Manage\ManageDeliveryAddressViewModel.cs" />
@@ -344,6 +348,8 @@
     <Content Include="Views\ManageStores\EmployeeRoster.cshtml" />
     <Content Include="Views\ManageStores\AddEmployeeToRoster.cshtml" />
     <Content Include="Views\ManageStores\RemoveEmployeeFromRoster.cshtml" />
+    <Content Include="Views\Employee\Index.cshtml" />
+    <Content Include="Views\ManageEmployees\ViewLocations.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

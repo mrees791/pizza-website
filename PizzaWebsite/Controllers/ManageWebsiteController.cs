@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
-    [Authorize(Roles = "Admin,Manager")]
+    [Authorize(Roles = "Admin,Executive")]
     public class ManageWebsiteController : BaseController
     {
         public ActionResult Index()

@@ -38,7 +38,7 @@ namespace DataLibrary.Models
         }
 
         // CRUD
-        public async Task<CustomerOrderJoin> GetJoinedCustomerOrderByIdAsync(int id)
+        public async Task<CustomerOrderOnDeliveryInfoJoin> GetJoinedCustomerOrderByIdAsync(int id)
         {
             string whereClause = "where c.Id = @Id";
 
@@ -47,12 +47,12 @@ namespace DataLibrary.Models
                 Id = id
             };
 
-            IEnumerable<CustomerOrderJoin> resultList = await GetJoinedCustomerOrderListAsync(whereClause, parameters, true);
+            IEnumerable<CustomerOrderOnDeliveryInfoJoin> resultList = await GetJoinedCustomerOrderListAsync(whereClause, parameters, true);
 
             return resultList.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<CustomerOrderJoin>> GetJoinedCustomerOrderListByIdAsync(int id)
+        public async Task<IEnumerable<CustomerOrderOnDeliveryInfoJoin>> GetJoinedCustomerOrderListByIdAsync(int id)
         {
             string whereClause = "where c.Id = @Id";
 
@@ -64,7 +64,7 @@ namespace DataLibrary.Models
             return await GetJoinedCustomerOrderListAsync(whereClause, parameters, false);
         }
 
-        public async Task<IEnumerable<CustomerOrderJoin>> GetJoinedCustomerOrderListByUserIdAsync(string userId)
+        public async Task<IEnumerable<CustomerOrderOnDeliveryInfoJoin>> GetJoinedCustomerOrderListByUserIdAsync(string userId)
         {
             string whereClause = "where c.UserId = @UserId";
 
@@ -76,21 +76,21 @@ namespace DataLibrary.Models
             return await GetJoinedCustomerOrderListAsync(whereClause, parameters, false);
         }
 
-        private async Task<IEnumerable<CustomerOrderJoin>> GetJoinedCustomerOrderListAsync(string whereClause, object parameters, bool onlySelectFirst)
+        private async Task<IEnumerable<CustomerOrderOnDeliveryInfoJoin>> GetJoinedCustomerOrderListAsync(string whereClause, object parameters, bool onlySelectFirst)
         {
             string joinQuery = SelectQueries.GetCustomerOrderDeliveryInfoJoin(onlySelectFirst) + whereClause;
 
-            IEnumerable<CustomerOrderJoin> customerOrderList = await connection.QueryAsync<CustomerOrder, DeliveryInfo, CustomerOrderJoin>(
+            IEnumerable<CustomerOrderOnDeliveryInfoJoin> customerOrderList = await connection.QueryAsync<CustomerOrder, DeliveryInfo, CustomerOrderOnDeliveryInfoJoin>(
                 joinQuery,
                 (customerOrder, deliveryInfo) =>
                 {
-                    CustomerOrderJoin customerOrderJoin = new CustomerOrderJoin();
+                    CustomerOrderOnDeliveryInfoJoin customerOrderJoin = new CustomerOrderOnDeliveryInfoJoin();
                     customerOrderJoin.CustomerOrder = customerOrder;
                     customerOrderJoin.DeliveryInfo = deliveryInfo;
                     return customerOrderJoin;
                 }, param: parameters, splitOn: "Id");
 
-            foreach (CustomerOrderJoin customerOrder in customerOrderList)
+            foreach (CustomerOrderOnDeliveryInfoJoin customerOrder in customerOrderList)
             {
                 await customerOrder.MapEntityAsync(this);
             }
@@ -98,7 +98,7 @@ namespace DataLibrary.Models
             return customerOrderList;
         }
 
-        public async Task<IEnumerable<EmployeeLocationJoin>> GetJoinedEmployeeLocationListByStoreId(int storeId)
+        public async Task<IEnumerable<EmployeeOnEmployeeLocationJoin>> GetJoinedEmployeeLocationListByStoreId(int storeId)
         {
             string whereClause = "where l.StoreId = @StoreId";
 
@@ -110,22 +110,34 @@ namespace DataLibrary.Models
             return await GetJoinedEmployeeLocationListAsync(whereClause, parameters, false);
         }
 
-        private async Task<IEnumerable<EmployeeLocationJoin>> GetJoinedEmployeeLocationListAsync(string whereClause, object parameters, bool onlySelectFirst)
+        public async Task<IEnumerable<EmployeeOnEmployeeLocationJoin>> GetJoinedEmployeeLocationListByEmployeeId(string employeeId)
+        {
+            string whereClause = "where l.EmployeeId = @EmployeeId";
+
+            object parameters = new
+            {
+                EmployeeId = employeeId
+            };
+
+            return await GetJoinedEmployeeLocationListAsync(whereClause, parameters, false);
+        }
+
+        private async Task<IEnumerable<EmployeeOnEmployeeLocationJoin>> GetJoinedEmployeeLocationListAsync(string whereClause, object parameters, bool onlySelectFirst)
         {
             string joinQuery = SelectQueries.GetEmployeeOnEmployeeLocationJoin(onlySelectFirst) + whereClause;
 
-            IEnumerable<EmployeeLocationJoin> employeeLocationJoinList = await connection.QueryAsync<Employee, EmployeeLocation, EmployeeLocationJoin>(
+            IEnumerable<EmployeeOnEmployeeLocationJoin> employeeLocationJoinList = await connection.QueryAsync<Employee, EmployeeLocation, EmployeeOnEmployeeLocationJoin>(
                 joinQuery,
                 (employee, employeeLocation) =>
                 {
-                    return new EmployeeLocationJoin()
+                    return new EmployeeOnEmployeeLocationJoin()
                     {
                         Employee = employee,
                         EmployeeLocation = employeeLocation
                     };
                 }, param: parameters, splitOn: "Id");
 
-            foreach (EmployeeLocationJoin employeeLocationJoin in employeeLocationJoinList)
+            foreach (EmployeeOnEmployeeLocationJoin employeeLocationJoin in employeeLocationJoinList)
             {
                 await employeeLocationJoin.MapAsync(this);
             }

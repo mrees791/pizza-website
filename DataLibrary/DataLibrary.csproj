@@ -79,8 +79,9 @@
     <Compile Include="Models\Exceptions\RecordDoesNotExistException.cs" />
     <Compile Include="Models\Join.cs" />
     <Compile Include="Models\Joins\CartItemJoin.cs" />
-    <Compile Include="Models\Joins\EmployeeLocationJoin.cs" />
-    <Compile Include="Models\Joins\CustomerOrderJoin.cs" />
+    <Compile Include="Models\Joins\EmployeeLocationOnStoreLocationJoin.cs" />
+    <Compile Include="Models\Joins\EmployeeOnEmployeeLocationJoin.cs" />
+    <Compile Include="Models\Joins\CustomerOrderOnDeliveryInfoJoin.cs" />
     <Compile Include="Models\OrderBy.cs" />
     <Compile Include="Models\QueryBase.cs" />
     <Compile Include="Models\QueryFilters\EmployeeFilter.cs" />

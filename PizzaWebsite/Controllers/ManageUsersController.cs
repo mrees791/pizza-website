@@ -12,7 +12,7 @@ using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
-    [Authorize(Roles = "Admin,Manager")]
+    [Authorize(Roles = "Admin,Executive")]
     public class ManageUsersController : BaseController
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string userId, string email)

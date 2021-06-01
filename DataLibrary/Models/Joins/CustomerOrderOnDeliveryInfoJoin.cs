@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.Joins
 {
-    public class CustomerOrderJoin : Join
+    public class CustomerOrderOnDeliveryInfoJoin : Join
     {
         public CustomerOrder CustomerOrder { get; set; }
         public DeliveryInfo DeliveryInfo { get; set; }

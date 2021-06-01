@@ -12,7 +12,7 @@ using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
-    [Authorize(Roles = "Admin,Manager")]
+    [Authorize(Roles = "Admin,Executive")]
     public class ManageEmployeesController : BaseController
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string employeeId, string userId)
@@ -43,6 +43,14 @@ namespace PizzaWebsite.Controllers
             }
 
             return View(manageEmployeesVm);
+        }
+
+        public async Task<ActionResult> ViewLocations(string id)
+        {
+            ViewEmployeeLocationsViewModel model = new ViewEmployeeLocationsViewModel();
+            await model.InitializeAsync(id, PizzaDb);
+
+            return View(model);
         }
 
         public ActionResult AddEmployee()

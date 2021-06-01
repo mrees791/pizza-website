@@ -143,7 +143,7 @@ namespace DataTest1
                 };
 
                 // Create and test joins
-                CustomerOrderJoin orderJoin1 = new CustomerOrderJoin()
+                CustomerOrderOnDeliveryInfoJoin orderJoin1 = new CustomerOrderOnDeliveryInfoJoin()
                 {
                     CustomerOrder = order1
                 };
@@ -164,7 +164,7 @@ namespace DataTest1
                     UserId = AdminUserName,
                 };
 
-                CustomerOrderJoin orderJoin2 = new CustomerOrderJoin()
+                CustomerOrderOnDeliveryInfoJoin orderJoin2 = new CustomerOrderOnDeliveryInfoJoin()
                 {
                     CustomerOrder = order2,
                     DeliveryInfo = deliveryInfo
@@ -536,7 +536,7 @@ namespace DataTest1
         {
             using (var pizzaDb = new PizzaDatabase())
             {
-                IEnumerable<CustomerOrderJoin> customerOrderList = await pizzaDb.GetJoinedCustomerOrderListByUserIdAsync(AdminUserName);
+                IEnumerable<CustomerOrderOnDeliveryInfoJoin> customerOrderList = await pizzaDb.GetJoinedCustomerOrderListByUserIdAsync(AdminUserName);
             }
         }
 
@@ -640,18 +640,11 @@ namespace DataTest1
         {
             using (var pizzaDb = new PizzaDatabase())
             {
-                SiteRole adminRole = await pizzaDb.GetSiteRoleByNameAsync("Admin");
                 SiteRole employeeRole = await pizzaDb.GetSiteRoleByNameAsync("Employee");
                 SiteRole managerRole = await pizzaDb.GetSiteRoleByNameAsync("Manager");
+                SiteRole adminRole = await pizzaDb.GetSiteRoleByNameAsync("Admin");
+                SiteRole executiveRole = await pizzaDb.GetSiteRoleByNameAsync("Executive");
 
-                if (adminRole == null)
-                {
-                    adminRole = new SiteRole()
-                    {
-                        Name = "Admin"
-                    };
-                    await pizzaDb.InsertAsync(adminRole);
-                }
 
                 if (employeeRole == null)
                 {
@@ -669,6 +662,24 @@ namespace DataTest1
                         Name = "Manager"
                     };
                     await pizzaDb.InsertAsync(managerRole);
+                }
+
+                if (executiveRole == null)
+                {
+                    executiveRole = new SiteRole()
+                    {
+                        Name = "Executive"
+                    };
+                    await pizzaDb.InsertAsync(executiveRole);
+                }
+
+                if (adminRole == null)
+                {
+                    adminRole = new SiteRole()
+                    {
+                        Name = "Admin"
+                    };
+                    await pizzaDb.InsertAsync(adminRole);
                 }
 
                 SiteUser acctUser = await pizzaDb.GetSiteUserByNameAsync(AdminUserName);
