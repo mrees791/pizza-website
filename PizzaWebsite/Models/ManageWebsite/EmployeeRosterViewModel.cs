@@ -1,4 +1,5 @@
 ﻿using DataLibrary.Models;
+using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.Joins;
 using DataLibrary.Models.Tables;
 using System;
@@ -20,21 +21,22 @@ namespace PizzaWebsite.Models.ManageWebsite
             EmployeeRosterList = new List<EmployeeRosterItemViewModel>();
             StoreLocation storeLocation = await pizzaDb.GetAsync<StoreLocation>(storeId);
             SiteRole managerRole = await pizzaDb.GetSiteRoleByNameAsync("Manager");
-            IEnumerable<EmployeeOnEmployeeLocationJoin> employeeLocationJoinList = await pizzaDb.GetJoinedEmployeeLocationListByStoreId(storeId);
+            var joinList = new EmployeeOnEmployeeLocationJoin();
+            await joinList.LoadListByStoreIdAsync(storeId, pizzaDb);
 
             StoreId = storeId;
             StoreName = storeLocation.Name;
 
-            foreach (EmployeeOnEmployeeLocationJoin locationJoin in employeeLocationJoinList)
+            foreach (Join2<Employee, EmployeeLocation> join in joinList.Items)
             {
-                SiteUser siteUser = await pizzaDb.GetSiteUserByIdAsync(locationJoin.Employee.UserId);
+                SiteUser siteUser = await pizzaDb.GetSiteUserByIdAsync(join.Table1.UserId);
                 bool isManager = await pizzaDb.UserIsInRole(siteUser, managerRole);
 
                 EmployeeRosterItemViewModel itemVm = new EmployeeRosterItemViewModel()
                 {
-                    EmployeeId = locationJoin.Employee.Id,
-                    EmployeeLocationId = locationJoin.EmployeeLocation.Id,
-                    UserId = locationJoin.Employee.UserId,
+                    EmployeeId = join.Table1.Id,
+                    EmployeeLocationId = join.Table2.Id,
+                    UserId = join.Table1.UserId,
                     IsManager = isManager
                 };
 

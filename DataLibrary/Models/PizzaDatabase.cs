@@ -98,52 +98,6 @@ namespace DataLibrary.Models
             return customerOrderList;
         }
 
-        public async Task<IEnumerable<EmployeeOnEmployeeLocationJoin>> GetJoinedEmployeeLocationListByStoreId(int storeId)
-        {
-            string whereClause = "where l.StoreId = @StoreId";
-
-            object parameters = new
-            {
-                StoreId = storeId
-            };
-
-            return await GetJoinedEmployeeLocationListAsync(whereClause, parameters, false);
-        }
-
-        public async Task<IEnumerable<EmployeeOnEmployeeLocationJoin>> GetJoinedEmployeeLocationListByEmployeeId(string employeeId)
-        {
-            string whereClause = "where l.EmployeeId = @EmployeeId";
-
-            object parameters = new
-            {
-                EmployeeId = employeeId
-            };
-
-            return await GetJoinedEmployeeLocationListAsync(whereClause, parameters, false);
-        }
-
-        private async Task<IEnumerable<EmployeeOnEmployeeLocationJoin>> GetJoinedEmployeeLocationListAsync(string whereClause, object parameters, bool onlySelectFirst)
-        {
-            string joinQuery = SelectQueries.GetEmployeeOnEmployeeLocationJoin(onlySelectFirst) + whereClause;
-
-            IEnumerable<EmployeeOnEmployeeLocationJoin> employeeLocationJoinList = await connection.QueryAsync<Employee, EmployeeLocation, EmployeeOnEmployeeLocationJoin>(
-                joinQuery,
-                (employee, employeeLocation) =>
-                {
-                    return new EmployeeOnEmployeeLocationJoin()
-                    {
-                        Employee = employee,
-                        EmployeeLocation = employeeLocation
-                    };
-                }, param: parameters, splitOn: "Id");
-
-            foreach (EmployeeOnEmployeeLocationJoin employeeLocationJoin in employeeLocationJoinList)
-            {
-                await employeeLocationJoin.MapAsync(this);
-            }
-
-            return employeeLocationJoinList;
-        }
 
         public async Task<IEnumerable<CartItemJoin>> GetJoinedCartItemListAsync(int cartId)
         {

@@ -26,15 +26,6 @@ namespace DataLibrary.Models.Sql
             return selectQuery;
         }
 
-        internal static string GetEmployeeOnEmployeeLocationJoin(bool selectOnlyTopRecord)
-        {
-            string joinQuery = SqlUtility.CreateSelectQueryStart(selectOnlyTopRecord);
-
-            joinQuery += @"e.Id, e.UserId, l.Id, l.EmployeeId, l.StoreId from Employee e inner join EmployeeLocation l on l.EmployeeId = e.Id ";
-
-            return joinQuery;
-        }
-
         internal static string GetCustomerOrderDeliveryInfoJoin(bool selectOnlyTopRecord)
         {
             string joinQuery = SqlUtility.CreateSelectQueryStart(selectOnlyTopRecord);

@@ -11,10 +11,6 @@ namespace DataLibrary.Models.JoinLists
 {
     public class EmployeeLocationOnStoreLocationJoin : JoinListBase<EmployeeLocation, StoreLocation>
     {
-        public EmployeeLocationOnStoreLocationJoin() : base()
-        {
-        }
-
         public async Task LoadListByEmployeeIdAsync(string employeeId, PizzaDatabase pizzaDb)
         {
             string whereClause = "where l.EmployeeId = @EmployeeId";
