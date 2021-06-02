@@ -79,6 +79,7 @@
     <Compile Include="Models\Exceptions\RecordDoesNotExistException.cs" />
     <Compile Include="Models\Join.cs" />
     <Compile Include="Models\Join2.cs" />
+    <Compile Include="Models\JoinLists\CustomerOrderOnDeliveryInfoJoin.cs" />
     <Compile Include="Models\JoinLists\EmployeeLocationOnStoreLocationJoin.cs" />
     <Compile Include="Models\JoinLists\EmployeeOnEmployeeLocationJoin.cs" />
     <Compile Include="Models\JoinLists\JoinListBase.cs" />

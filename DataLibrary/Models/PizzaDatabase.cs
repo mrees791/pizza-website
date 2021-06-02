@@ -38,67 +38,6 @@ namespace DataLibrary.Models
         }
 
         // CRUD
-        public async Task<CustomerOrderOnDeliveryInfoJoin> GetJoinedCustomerOrderByIdAsync(int id)
-        {
-            string whereClause = "where c.Id = @Id";
-
-            object parameters = new
-            {
-                Id = id
-            };
-
-            IEnumerable<CustomerOrderOnDeliveryInfoJoin> resultList = await GetJoinedCustomerOrderListAsync(whereClause, parameters, true);
-
-            return resultList.FirstOrDefault();
-        }
-
-        public async Task<IEnumerable<CustomerOrderOnDeliveryInfoJoin>> GetJoinedCustomerOrderListByIdAsync(int id)
-        {
-            string whereClause = "where c.Id = @Id";
-
-            object parameters = new
-            {
-                Id = id
-            };
-
-            return await GetJoinedCustomerOrderListAsync(whereClause, parameters, false);
-        }
-
-        public async Task<IEnumerable<CustomerOrderOnDeliveryInfoJoin>> GetJoinedCustomerOrderListByUserIdAsync(string userId)
-        {
-            string whereClause = "where c.UserId = @UserId";
-
-            object parameters = new
-            {
-                UserId = userId
-            };
-
-            return await GetJoinedCustomerOrderListAsync(whereClause, parameters, false);
-        }
-
-        private async Task<IEnumerable<CustomerOrderOnDeliveryInfoJoin>> GetJoinedCustomerOrderListAsync(string whereClause, object parameters, bool onlySelectFirst)
-        {
-            string joinQuery = SelectQueries.GetCustomerOrderDeliveryInfoJoin(onlySelectFirst) + whereClause;
-
-            IEnumerable<CustomerOrderOnDeliveryInfoJoin> customerOrderList = await connection.QueryAsync<CustomerOrder, DeliveryInfo, CustomerOrderOnDeliveryInfoJoin>(
-                joinQuery,
-                (customerOrder, deliveryInfo) =>
-                {
-                    CustomerOrderOnDeliveryInfoJoin customerOrderJoin = new CustomerOrderOnDeliveryInfoJoin();
-                    customerOrderJoin.CustomerOrder = customerOrder;
-                    customerOrderJoin.DeliveryInfo = deliveryInfo;
-                    return customerOrderJoin;
-                }, param: parameters, splitOn: "Id");
-
-            foreach (CustomerOrderOnDeliveryInfoJoin customerOrder in customerOrderList)
-            {
-                await customerOrder.MapEntityAsync(this);
-            }
-
-            return customerOrderList;
-        }
-
-
         public async Task<IEnumerable<CartItemJoin>> GetJoinedCartItemListAsync(int cartId)
         {
             List<CartItemJoin> items = new List<CartItemJoin>();

@@ -1,5 +1,6 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.Exceptions;
+using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.Joins;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
@@ -512,10 +513,12 @@ namespace PizzaWebsite.Controllers
         [Authorize]
         public async Task<ActionResult> PreviousOrder(int? id)
         {
-            CustomerOrderOnDeliveryInfoJoin customerOrderJoin = await PizzaDb.GetJoinedCustomerOrderByIdAsync(id.Value);
+            var join = new CustomerOrderOnDeliveryInfoJoin();
+            await join.LoadFirstOrDefaultByCustomerOrderIdAsync(id.Value, PizzaDb);
+            Join2<CustomerOrder, DeliveryInfo> result = join.Items.FirstOrDefault();
 
             PreviousOrderViewModel orderVm = new PreviousOrderViewModel();
-            await orderVm.InitializeAsync(true, customerOrderJoin.CustomerOrder, customerOrderJoin.DeliveryInfo, PizzaDb);
+            await orderVm.InitializeAsync(true, result.Table1, result.Table2, PizzaDb);
 
             return View(orderVm);
         }
