@@ -1,4 +1,5 @@
 ﻿using DataLibrary.Models;
+using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.Joins;
 using DataLibrary.Models.Tables;
 using System;
@@ -19,18 +20,19 @@ namespace PizzaWebsite.Models.ManageWebsite
         {
             EmployeeId = employeeId;
             EmployeeLocationVmList = new List<EmployeeLocationViewModel>();
-            IEnumerable<EmployeeLocationOnStoreLocationJoin> joinList = await EmployeeLocationOnStoreLocationJoin.GetListByEmployeeId(employeeId, pizzaDb);
+            var joinList = new EmployeeLocationOnStoreLocationJoinList();
+            await joinList.LoadListByEmployeeIdAsync(employeeId, pizzaDb);
 
-            foreach (EmployeeLocationOnStoreLocationJoin join in joinList)
+            foreach (Join2<EmployeeLocation, StoreLocation> join in joinList.Items)
             {
                 EmployeeLocationViewModel viewModel = new EmployeeLocationViewModel()
                 {
-                    Name = join.StoreLocation.Name,
-                    PhoneNumber = join.StoreLocation.PhoneNumber,
-                    City = join.StoreLocation.City,
-                    State = join.StoreLocation.State,
-                    ZipCode = join.StoreLocation.ZipCode,
-                    IsActiveLocation = join.StoreLocation.IsActiveLocation
+                    Name = join.Table2.Name,
+                    PhoneNumber = join.Table2.PhoneNumber,
+                    City = join.Table2.City,
+                    State = join.Table2.State,
+                    ZipCode = join.Table2.ZipCode,
+                    IsActiveLocation = join.Table2.IsActiveLocation
                 };
 
                 EmployeeLocationVmList.Add(viewModel);
