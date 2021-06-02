@@ -16,39 +16,19 @@ namespace DataLibrary.Models.Sql
                      PasswordHash, SecurityStamp, PhoneNumber, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEndDateUtc, LockoutEnabled, 
                      AccessFailedCount from dbo.SiteUser ";
 
-        private static string CreateSelectQuery(bool selectOnlyTopRecord)
-        {
-            string topClause = "";
-
-            if (selectOnlyTopRecord)
-            {
-                topClause = "top 1 ";
-            }
-
-            return $"select {topClause}";
-        }
 
         internal static string GetEmployeeLocationSelectQuery(bool selectOnlyTopRecord)
         {
-            string selectQuery = CreateSelectQuery(selectOnlyTopRecord);
+            string selectQuery = SqlUtility.CreateSelectQueryStart(selectOnlyTopRecord);
 
             selectQuery += @"Id, EmployeeId, StoreId from dbo.EmployeeLocation ";
 
             return selectQuery;
         }
 
-        internal static string GetEmployeeLocationOnStoreLocationJoin(bool selectOnlyTopRecord)
-        {
-            string joinQuery = CreateSelectQuery(selectOnlyTopRecord);
-            joinQuery += @"l.Id, l.EmployeeId, l.StoreId, s.Id, s.Name, s.StreetAddress, s.City, s.State, s.ZipCode, s.PhoneNumber, s.isActiveLocation
-                           from EmployeeLocation l inner join StoreLocation s on l.StoreId = s.Id ";
-
-            return joinQuery;
-        }
-
         internal static string GetEmployeeOnEmployeeLocationJoin(bool selectOnlyTopRecord)
         {
-            string joinQuery = CreateSelectQuery(selectOnlyTopRecord);
+            string joinQuery = SqlUtility.CreateSelectQueryStart(selectOnlyTopRecord);
 
             joinQuery += @"e.Id, e.UserId, l.Id, l.EmployeeId, l.StoreId from Employee e inner join EmployeeLocation l on l.EmployeeId = e.Id ";
 
@@ -57,7 +37,7 @@ namespace DataLibrary.Models.Sql
 
         internal static string GetCustomerOrderDeliveryInfoJoin(bool selectOnlyTopRecord)
         {
-            string joinQuery = CreateSelectQuery(selectOnlyTopRecord);
+            string joinQuery = SqlUtility.CreateSelectQueryStart(selectOnlyTopRecord);
 
             joinQuery += @"c.Id, c.UserId, c.StoreId, c.CartId, c.IsCancelled, 
                                  c.OrderSubtotal, c.OrderTax, c.OrderTotal, c.OrderPhase,

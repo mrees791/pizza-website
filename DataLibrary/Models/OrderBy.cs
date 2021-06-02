@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models
 {
+    // todo: Remove. SqlUtility will create order by keywords.
     internal class OrderBy
     {
         public string OrderByColumn { get; set; }

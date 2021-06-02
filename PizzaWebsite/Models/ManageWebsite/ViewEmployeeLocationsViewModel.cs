@@ -20,7 +20,7 @@ namespace PizzaWebsite.Models.ManageWebsite
         {
             EmployeeId = employeeId;
             EmployeeLocationVmList = new List<EmployeeLocationViewModel>();
-            var joinList = new EmployeeLocationOnStoreLocationJoinList();
+            var joinList = new EmployeeLocationOnStoreLocationJoin();
             await joinList.LoadListByEmployeeIdAsync(employeeId, pizzaDb);
 
             foreach (Join2<EmployeeLocation, StoreLocation> join in joinList.Items)

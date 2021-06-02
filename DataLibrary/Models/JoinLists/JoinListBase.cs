@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataLibrary.Models.Sql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +19,14 @@ namespace DataLibrary.Models.JoinLists
             Items = new List<Join2<TTable1, TTable2>>();
         }
 
-        protected async Task LoadListAsync(string joinQuery, string whereClause, object parameters, bool onlySelectFirst, PizzaDatabase pizzaDb)
+        protected abstract string GetSqlJoinQuery(bool onlySelectFirst);
+
+        protected async Task LoadListAsync(string whereClause, object parameters, bool onlySelectFirst, string orderByColumn, SortOrder sortOrder, PizzaDatabase pizzaDb, string splitOn = "Id")
         {
-            string finalSqlQuery = joinQuery + whereClause;
+            string sqlJoinQuery = $"{GetSqlJoinQuery(onlySelectFirst)} {whereClause} {SqlUtility.CreateOrderBy(orderByColumn, sortOrder)}";
 
             Items = await pizzaDb.Connection.QueryAsync<TTable1, TTable2, Join2<TTable1, TTable2>>(
-                finalSqlQuery,
+                sqlJoinQuery,
                 (table1, table2) =>
                 {
                     return new Join2<TTable1, TTable2>()
@@ -31,7 +34,7 @@ namespace DataLibrary.Models.JoinLists
                         Table1 = table1,
                         Table2 = table2
                     };
-                }, param: parameters, splitOn: "Id");
+                }, param: parameters, splitOn: splitOn);
 
             foreach (var join in Items)
             {

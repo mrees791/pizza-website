@@ -79,7 +79,7 @@
     <Compile Include="Models\Exceptions\RecordDoesNotExistException.cs" />
     <Compile Include="Models\Join.cs" />
     <Compile Include="Models\Join2.cs" />
-    <Compile Include="Models\JoinLists\EmployeeLocationOnStoreLocationJoinList.cs" />
+    <Compile Include="Models\JoinLists\EmployeeLocationOnStoreLocationJoin.cs" />
     <Compile Include="Models\JoinLists\JoinListBase.cs" />
     <Compile Include="Models\Joins\CartItemJoin.cs" />
     <Compile Include="Models\Joins\EmployeeOnEmployeeLocationJoin.cs" />
@@ -112,6 +112,7 @@
     <Compile Include="Models\SortOrder.cs" />
     <Compile Include="Models\Sql\InsertQueries.cs" />
     <Compile Include="Models\Sql\SelectQueries.cs" />
+    <Compile Include="Models\Sql\SqlUtility.cs" />
     <Compile Include="Models\Tables\Cart.cs" />
     <Compile Include="Models\Tables\CartItem.cs" />
     <Compile Include="Models\Tables\CartPizza.cs" />
