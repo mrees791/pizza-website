@@ -17,29 +17,19 @@ namespace DataLibrary.Models.Sql
                      AccessFailedCount from dbo.SiteUser ";
 
 
-        internal static string GetEmployeeLocationSelectQuery(bool selectOnlyTopRecord)
+        internal static string GetEmployeeLocationSelectQuery(bool onlySelectFirst)
         {
-            string selectQuery = SqlUtility.CreateSelectQueryStart(selectOnlyTopRecord);
-
-            selectQuery += @"Id, EmployeeId, StoreId from dbo.EmployeeLocation ";
-
-            return selectQuery;
+            return $"select {SqlUtility.CreateTopClause(onlySelectFirst)}" + @"Id, EmployeeId, StoreId from dbo.EmployeeLocation ";
         }
 
-        internal static string GetCustomerOrderDeliveryInfoJoin(bool selectOnlyTopRecord)
+        internal static string GetCustomerOrderDeliveryInfoJoin(bool onlySelectFirst)
         {
-            string joinQuery = SqlUtility.CreateSelectQueryStart(selectOnlyTopRecord);
-
-            joinQuery += @"c.Id, c.UserId, c.StoreId, c.CartId, c.IsCancelled, 
-                                 c.OrderSubtotal, c.OrderTax, c.OrderTotal, c.OrderPhase,
-                                 c.OrderCompleted, c.DateOfOrder, c.IsDelivery, c.DeliveryInfoId,
-                                 d.Id, d.DateOfDelivery, d.DeliveryAddressType, d.DeliveryAddressName,
-                                 d.DeliveryStreetAddress, d.DeliveryCity, d.DeliveryState, d.DeliveryZipCode,
-                                 d.DeliveryPhoneNumber
-                                 from CustomerOrder c
-                                 left join DeliveryInfo d on c.DeliveryInfoId = d.Id ";
-
-            return joinQuery;
+            return $"select {SqlUtility.CreateTopClause(onlySelectFirst)}" +
+                @"c.Id, c.UserId, c.StoreId, c.CartId, c.IsCancelled, c.OrderSubtotal, c.OrderTax, c.OrderTotal, c.OrderPhase,
+                  c.OrderCompleted, c.DateOfOrder, c.IsDelivery, c.DeliveryInfoId, d.Id, d.DateOfDelivery, d.DeliveryAddressType, d.DeliveryAddressName,
+                  d.DeliveryStreetAddress, d.DeliveryCity, d.DeliveryState, d.DeliveryZipCode, d.DeliveryPhoneNumber
+                  from CustomerOrder c
+                  left join DeliveryInfo d on c.DeliveryInfoId = d.Id ";
         }
     }
 }

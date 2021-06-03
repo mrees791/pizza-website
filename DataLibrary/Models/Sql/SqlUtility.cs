@@ -11,21 +11,9 @@ namespace DataLibrary.Models.Sql
     /// </summary>
     internal static class SqlUtility
     {
-        /// <summary>
-        /// Creates the start of a select SQL query and includes only the top record if needed.
-        /// </summary>
-        /// <param name="selectOnlyTopRecord"></param>
-        /// <returns></returns>
-        internal static string CreateSelectQueryStart(bool selectOnlyTopRecord)
+        internal static string CreateTopClause(bool onlySelectFirst)
         {
-            string topClause = "";
-
-            if (selectOnlyTopRecord)
-            {
-                topClause = "top 1 ";
-            }
-
-            return $"select {topClause} ";
+            return onlySelectFirst ? "top 1" : "";
         }
 
         internal static string CreateOrderBy(string orderByColumn, SortOrder sortOrder)

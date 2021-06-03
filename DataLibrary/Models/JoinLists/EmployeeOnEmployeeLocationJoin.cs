@@ -36,10 +36,8 @@ namespace DataLibrary.Models.JoinLists
 
         protected override string GetSqlJoinQuery(bool onlySelectFirst)
         {
-            string query = SqlUtility.CreateSelectQueryStart(onlySelectFirst);
-            query += @"e.Id, e.UserId, l.Id, l.EmployeeId, l.StoreId from Employee e inner join EmployeeLocation l on l.EmployeeId = e.Id";
-
-            return query;
+            return $"select {SqlUtility.CreateTopClause(onlySelectFirst)}" +
+                @"e.Id, e.UserId, l.Id, l.EmployeeId, l.StoreId from Employee e inner join EmployeeLocation l on l.EmployeeId = e.Id";
         }
     }
 }

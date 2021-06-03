@@ -48,18 +48,14 @@ namespace DataLibrary.Models.JoinLists
 
         protected override string GetSqlJoinQuery(bool onlySelectFirst)
         {
-            string joinQuery = SqlUtility.CreateSelectQueryStart(onlySelectFirst);
-
-            joinQuery += @"c.Id, c.UserId, c.StoreId, c.CartId, c.IsCancelled, 
-                                 c.OrderSubtotal, c.OrderTax, c.OrderTotal, c.OrderPhase,
-                                 c.OrderCompleted, c.DateOfOrder, c.IsDelivery, c.DeliveryInfoId,
-                                 d.Id, d.DateOfDelivery, d.DeliveryAddressType, d.DeliveryAddressName,
-                                 d.DeliveryStreetAddress, d.DeliveryCity, d.DeliveryState, d.DeliveryZipCode,
-                                 d.DeliveryPhoneNumber
-                                 from CustomerOrder c
-                                 left join DeliveryInfo d on c.DeliveryInfoId = d.Id";
-
-            return joinQuery;
+            return $"select {SqlUtility.CreateTopClause(onlySelectFirst)}" +
+                @"c.Id, c.UserId, c.StoreId, c.CartId, c.IsCancelled, c.OrderSubtotal, c.OrderTax, c.OrderTotal, c.OrderPhase,
+                  c.OrderCompleted, c.DateOfOrder, c.IsDelivery, c.DeliveryInfoId,
+                  d.Id, d.DateOfDelivery, d.DeliveryAddressType, d.DeliveryAddressName,
+                  d.DeliveryStreetAddress, d.DeliveryCity, d.DeliveryState, d.DeliveryZipCode,
+                  d.DeliveryPhoneNumber
+                  from CustomerOrder c
+                  left join DeliveryInfo d on c.DeliveryInfoId = d.Id";
         }
     }
 }
