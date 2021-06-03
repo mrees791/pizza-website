@@ -13,7 +13,7 @@ namespace DataLibrary.Models.Sql
     {
         internal static string CreateTopClause(bool onlySelectFirst)
         {
-            return onlySelectFirst ? "top 1" : "";
+            return onlySelectFirst ? "top 1 " : "";
         }
 
         internal static string CreateOrderByClause(string orderByColumn, SortOrder sortOrder)
