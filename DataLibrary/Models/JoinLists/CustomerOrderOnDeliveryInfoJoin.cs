@@ -57,7 +57,7 @@ namespace DataLibrary.Models.JoinLists
                                  d.DeliveryStreetAddress, d.DeliveryCity, d.DeliveryState, d.DeliveryZipCode,
                                  d.DeliveryPhoneNumber
                                  from CustomerOrder c
-                                 left join DeliveryInfo d on c.DeliveryInfoId = d.Id ";
+                                 left join DeliveryInfo d on c.DeliveryInfoId = d.Id";
 
             return joinQuery;
         }

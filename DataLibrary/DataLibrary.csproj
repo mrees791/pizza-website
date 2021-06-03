@@ -84,7 +84,6 @@
     <Compile Include="Models\JoinLists\EmployeeOnEmployeeLocationJoin.cs" />
     <Compile Include="Models\JoinLists\JoinListBase.cs" />
     <Compile Include="Models\Joins\CartItemJoin.cs" />
-    <Compile Include="Models\Joins\CustomerOrderOnDeliveryInfoJoin.cs" />
     <Compile Include="Models\OrderBy.cs" />
     <Compile Include="Models\QueryBase.cs" />
     <Compile Include="Models\QueryFilters\EmployeeFilter.cs" />
