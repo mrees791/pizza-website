@@ -153,7 +153,7 @@ namespace DataLibrary.Models
 
         public async Task<SiteUser> GetSiteUserByIdAsync(string id, IDbTransaction transaction = null)
         {
-            string sql = SelectQueries.siteUserSelectQuery + "where Id = @Id";
+            string sql = $"{SelectQueries.GetSiteUserSelectQuery(true)} where Id = @Id";
 
             object parameters = new
             {
@@ -165,7 +165,7 @@ namespace DataLibrary.Models
 
         public async Task<SiteUser> GetSiteUserByEmailAsync(string email, IDbTransaction transaction = null)
         {
-            string sql = SelectQueries.siteUserSelectQuery + "where Email = @Email";
+            string sql = $"{SelectQueries.GetSiteUserSelectQuery(true)} where Email = @Email";
 
             object parameters = new
             {
@@ -177,7 +177,7 @@ namespace DataLibrary.Models
 
         public async Task<SiteUser> GetSiteUserByNameAsync(string name, IDbTransaction transaction = null)
         {
-            string sql = SelectQueries.siteUserSelectQuery + "where Id = @UserName";
+            string sql = $"{SelectQueries.GetSiteUserSelectQuery(true)} where Id = @UserName";
 
             object parameters = new
             {
@@ -201,7 +201,7 @@ namespace DataLibrary.Models
 
         public async Task<EmployeeLocation> GetEmployeeLocationAsync(Employee employee, StoreLocation storeLocation, IDbTransaction transaction = null)
         {
-            string sql = SelectQueries.GetEmployeeLocationSelectQuery(true) + "where EmployeeId = @EmployeeId and StoreId = @StoreId";
+            string sql = $"{SelectQueries.GetEmployeeLocationSelectQuery(true)} where EmployeeId = @EmployeeId and StoreId = @StoreId";
 
             object parameters = new
             {
@@ -226,7 +226,7 @@ namespace DataLibrary.Models
 
         public async Task<UserRole> GetUserRoleAsync(SiteUser siteUser, SiteRole siteRole, IDbTransaction transaction = null)
         {
-            string sql = SelectQueries.userRoleSelectQuery + "where UserId = @UserId and RoleName = @RoleName";
+            string sql = $"{SelectQueries.GetUserRoleSelectQuery(true)} where UserId = @UserId and RoleName = @RoleName";
 
             object parameters = new
             {
@@ -251,7 +251,7 @@ namespace DataLibrary.Models
 
         public async Task<UserLogin> GetLoginAsync(string loginProvider, string providerKey, IDbTransaction transaction = null)
         {
-            string sql = SelectQueries.userLoginSelectQuery + "where LoginProvider = @LoginProvider and ProviderKey = @ProviderKey";
+            string sql = $"{SelectQueries.GetUserLoginSelectQuery(true)} where LoginProvider = @LoginProvider and ProviderKey = @ProviderKey";
 
             object parameters = new
             {

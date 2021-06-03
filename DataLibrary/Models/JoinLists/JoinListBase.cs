@@ -23,7 +23,7 @@ namespace DataLibrary.Models.JoinLists
 
         protected async Task LoadListAsync(string whereClause, object parameters, bool onlySelectFirst, string orderByColumn, SortOrder sortOrder, PizzaDatabase pizzaDb, string splitOn = "Id")
         {
-            string sqlJoinQuery = $"{GetSqlJoinQuery(onlySelectFirst)} {whereClause} {SqlUtility.CreateOrderBy(orderByColumn, sortOrder)}";
+            string sqlJoinQuery = $"{GetSqlJoinQuery(onlySelectFirst)} {whereClause} {SqlUtility.CreateOrderByClause(orderByColumn, sortOrder)}";
 
             Items = await pizzaDb.Connection.QueryAsync<TTable1, TTable2, Join2<TTable1, TTable2>>(
                 sqlJoinQuery,

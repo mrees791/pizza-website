@@ -16,7 +16,7 @@ namespace DataLibrary.Models.Sql
             return onlySelectFirst ? "top 1" : "";
         }
 
-        internal static string CreateOrderBy(string orderByColumn, SortOrder sortOrder)
+        internal static string CreateOrderByClause(string orderByColumn, SortOrder sortOrder)
         {
             string conditions = $"order by {orderByColumn} ";
 
