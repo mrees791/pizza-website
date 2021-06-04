@@ -1,6 +1,5 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.JoinLists;
-using DataLibrary.Models.Joins;
 using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
@@ -23,7 +22,7 @@ namespace PizzaWebsite.Models.ManageWebsite
             var joinList = new EmployeeLocationOnStoreLocationJoin();
             await joinList.LoadListByEmployeeIdAsync(employeeId, pizzaDb);
 
-            foreach (Join2<EmployeeLocation, StoreLocation> join in joinList.Items)
+            foreach (Join<EmployeeLocation, StoreLocation> join in joinList.Items)
             {
                 EmployeeLocationViewModel viewModel = new EmployeeLocationViewModel()
                 {

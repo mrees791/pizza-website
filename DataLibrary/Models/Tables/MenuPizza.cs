@@ -80,7 +80,7 @@ namespace DataLibrary.Models.Tables
             return true;
         }
 
-        public async Task<CartItemJoin> CreateCartRecordsAsync(PizzaDatabase pizzaDb, int cartId, string userId, int quantity, string size, int menuCrustId)
+        public async Task<Tuple<CartItem, CartPizza>> CreateCartRecordsAsync(PizzaDatabase pizzaDb, int cartId, string userId, int quantity, string size, int menuCrustId)
         {
             CartPizza cartPizza = new CartPizza()
             {
@@ -110,13 +110,7 @@ namespace DataLibrary.Models.Tables
                 Price = pricePerItem * quantity
             };
 
-            CartItemJoin cartItemJoin = new CartItemJoin()
-            {
-                CartItem = cartItem,
-                CartItemType = cartPizza
-            };
-
-            return cartItemJoin;
+            return new Tuple<CartItem, CartPizza>(cartItem, cartPizza);
         }
     }
 }

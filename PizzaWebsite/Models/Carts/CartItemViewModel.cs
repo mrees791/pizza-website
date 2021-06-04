@@ -1,5 +1,4 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.Joins;
 using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;

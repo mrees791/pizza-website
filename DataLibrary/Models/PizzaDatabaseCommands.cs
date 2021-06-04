@@ -2,7 +2,6 @@
 using DataLibrary.Models.Exceptions;
 using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.JoinLists.CartItems;
-using DataLibrary.Models.Joins;
 using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
@@ -154,20 +153,19 @@ namespace DataLibrary.Models
             return await pizzaDb.Connection.ExecuteAsync(deleteQuerySql, new { CartId = cartId }, transaction);
         }
 
-        private async Task CloneCart(int destinationCartId, bool clearDestinationCart, IEnumerable<CartItemJoin> cartItems, IDbTransaction transaction = null)
+        private async Task CloneCart(int destinationCartId, bool clearDestinationCart, IEnumerable<CartItemJoin> cartItems, IDbTransaction transaction)
         {
             if (clearDestinationCart)
             {
                 await DeleteAllCartItemsAsync(destinationCartId, transaction);
             }
 
-            foreach (CartItemJoin cartItem in cartItems)
+            foreach (CartItemJoin cartItemJoin in cartItems)
             {
-                cartItem.CartItem.Id = 0;
-                cartItem.CartItem.CartId = destinationCartId;
+                cartItemJoin.CartItem.Id = 0;
+                cartItemJoin.CartItem.CartId = destinationCartId;
 
-                await cartItem.CartItem.InsertAsync(pizzaDb, transaction);
-                await cartItem.CartItemType.InsertAsync(pizzaDb, transaction);
+                await pizzaDb.InsertAsync(cartItemJoin.CartItem, cartItemJoin.CartItemType, transaction);
             }
         }
 

@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using DataLibrary.Models.Joins;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Sql;
@@ -368,25 +367,45 @@ namespace DataLibrary.Models
             return pages;
         }
 
-        public async Task<dynamic> InsertAsync(EntityBase entity)
+        public async Task<dynamic> InsertAsync(Record record)
         {
-            if (entity.InsertRequiresTransaction())
+            if (record.InsertRequiresTransaction())
             {
                 using (IDbTransaction transaction = Connection.BeginTransaction())
                 {
-                    await entity.InsertAsync(this, transaction);
+                    await record.InsertAsync(this, transaction);
                     transaction.Commit();
                 }
             }
             else
             {
-                await entity.InsertAsync(this);
+                await record.InsertAsync(this);
             }
 
-            return entity.GetId();
+            return record.GetId();
         }
 
-        public async Task<int> UpdateAsync(EntityBase record)
+        public async Task<dynamic> InsertAsync(CartItem cartItem, CartItemType cartItemType)
+        {
+            using (IDbTransaction transaction = Connection.BeginTransaction())
+            {
+                await InsertAsync(cartItem, cartItemType, transaction);
+                transaction.Commit();
+            }
+
+            return cartItem.GetId();
+        }
+
+        internal async Task<dynamic> InsertAsync(CartItem cartItem, CartItemType cartItemType, IDbTransaction transaction)
+        {
+            await cartItem.InsertAsync(this, transaction);
+            cartItemType.CartItemId = cartItem.Id;
+            await cartItemType.InsertAsync(this, transaction);
+
+            return cartItem.GetId();
+        }
+
+        public async Task<int> UpdateAsync(Record record)
         {
             int rowsUpdated = 0;
 
@@ -401,6 +420,20 @@ namespace DataLibrary.Models
             else
             {
                 rowsUpdated = await record.UpdateAsync(this);
+            }
+
+            return rowsUpdated;
+        }
+
+        public async Task<int> UpdateAsync(CartItem cartItem, CartItemType cartItemType)
+        {
+            int rowsUpdated = 0;
+
+            using (IDbTransaction transaction = Connection.BeginTransaction())
+            {
+                rowsUpdated += await cartItem.UpdateAsync(this, transaction);
+                rowsUpdated += await cartItemType.UpdateAsync(this, transaction);
+                transaction.Commit();
             }
 
             return rowsUpdated;

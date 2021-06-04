@@ -1,6 +1,5 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.JoinLists;
-using DataLibrary.Models.Joins;
 using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
@@ -27,7 +26,7 @@ namespace PizzaWebsite.Models.ManageWebsite
             StoreId = storeId;
             StoreName = storeLocation.Name;
 
-            foreach (Join2<Employee, EmployeeLocation> join in joinList.Items)
+            foreach (Join<Employee, EmployeeLocation> join in joinList.Items)
             {
                 SiteUser siteUser = await pizzaDb.GetSiteUserByIdAsync(join.Table1.UserId);
                 bool isManager = await pizzaDb.UserIsInRole(siteUser, managerRole);

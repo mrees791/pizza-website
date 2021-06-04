@@ -12,11 +12,11 @@ namespace DataLibrary.Models.JoinLists
         where TTable1 : Record
         where TTable2 : Record
     {
-        public IEnumerable<Join2<TTable1, TTable2>> Items { get; protected set; }
+        public IEnumerable<Join<TTable1, TTable2>> Items { get; protected set; }
 
         public JoinListBase()
         {
-            Items = new List<Join2<TTable1, TTable2>>();
+            Items = new List<Join<TTable1, TTable2>>();
         }
 
         protected abstract string GetSqlJoinQuery(bool onlySelectFirst);
@@ -25,11 +25,11 @@ namespace DataLibrary.Models.JoinLists
         {
             string sqlJoinQuery = $"{GetSqlJoinQuery(onlySelectFirst)} {whereClause} {SqlUtility.CreateOrderByClause(orderByColumn, sortOrder)}";
 
-            Items = await pizzaDb.Connection.QueryAsync<TTable1, TTable2, Join2<TTable1, TTable2>>(
+            Items = await pizzaDb.Connection.QueryAsync<TTable1, TTable2, Join<TTable1, TTable2>>(
                 sqlJoinQuery,
                 (table1, table2) =>
                 {
-                    return new Join2<TTable1, TTable2>()
+                    return new Join<TTable1, TTable2>()
                     {
                         Table1 = table1,
                         Table2 = table2

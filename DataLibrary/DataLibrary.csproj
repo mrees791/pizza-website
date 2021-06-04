@@ -77,10 +77,8 @@
     <Compile Include="Models\CartItemJoin.cs" />
     <Compile Include="Models\CartItemType.cs" />
     <Compile Include="Models\CostSummary.cs" />
-    <Compile Include="Models\EntityBase.cs" />
     <Compile Include="Models\Exceptions\RecordDoesNotExistException.cs" />
     <Compile Include="Models\Join.cs" />
-    <Compile Include="Models\Join2.cs" />
     <Compile Include="Models\JoinLists\CartItems\CartItemJoinListBase.cs" />
     <Compile Include="Models\JoinLists\CartItems\CartItemOnCartItemTypeJoin.cs" />
     <Compile Include="Models\JoinLists\CartItems\CartItemOnCartPizzaJoin.cs" />

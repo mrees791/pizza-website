@@ -1,7 +1,6 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.JoinLists.CartItems;
-using DataLibrary.Models.Joins;
 using DataLibrary.Models.Utility;
 using System;
 using System.Collections.Generic;

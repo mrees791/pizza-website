@@ -2,7 +2,6 @@
 using DataLibrary.Models.Exceptions;
 using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.JoinLists.CartItems;
-using DataLibrary.Models.Joins;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
@@ -238,19 +237,13 @@ namespace PizzaWebsite.Controllers
                     Price = pricePerItem * model.SelectedQuantity
                 };
 
-                CartItemJoin cartItemJoin = new CartItemJoin()
-                {
-                    CartItem = cartItem,
-                    CartItemType = cartPizza
-                };
-
                 if (model.IsNewRecord())
                 {
-                    await PizzaDb.InsertAsync(cartItemJoin);
+                    await PizzaDb.InsertAsync(cartItem, cartPizza);
                 }
                 else
                 {
-                    await PizzaDb.UpdateAsync(cartItemJoin);
+                    await PizzaDb.UpdateAsync(cartItem, cartPizza);
                 }
 
                 return RedirectToAction("Cart");
@@ -273,8 +266,8 @@ namespace PizzaWebsite.Controllers
         public async Task AddMenuPizzaToCart(int menuPizzaId, int cartId, string userId, int selectedQuantity, string selectedSize, int selectedCrustId)
         {
             MenuPizza menuPizza = await PizzaDb.GetAsync<MenuPizza>(menuPizzaId);
-            CartItemJoin cartItemJoin = await menuPizza.CreateCartRecordsAsync(PizzaDb, cartId, userId, selectedQuantity, selectedSize, selectedCrustId);
-            await PizzaDb.InsertAsync(cartItemJoin);
+            Tuple<CartItem, CartPizza> cartItemRecords = await menuPizza.CreateCartRecordsAsync(PizzaDb, cartId, userId, selectedQuantity, selectedSize, selectedCrustId);
+            await PizzaDb.InsertAsync(cartItemRecords.Item1, cartItemRecords.Item2);
         }
 
         public async Task<ActionResult> PizzaMenu()
@@ -517,7 +510,7 @@ namespace PizzaWebsite.Controllers
         {
             var join = new CustomerOrderOnDeliveryInfoJoin();
             await join.LoadFirstOrDefaultByCustomerOrderIdAsync(id.Value, PizzaDb);
-            Join2<CustomerOrder, DeliveryInfo> result = join.Items.FirstOrDefault();
+            Join<CustomerOrder, DeliveryInfo> result = join.Items.FirstOrDefault();
 
             PreviousOrderViewModel orderVm = new PreviousOrderViewModel();
             await orderVm.InitializeAsync(true, result.Table1, result.Table2, PizzaDb);
