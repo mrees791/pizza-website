@@ -17,14 +17,13 @@ namespace DataLibrary.Models.JoinLists.CartItems
         where TCartItemType : CartItemType
     {
         public IEnumerable<CartItemJoin> Items { get; protected set; }
+        public abstract Task LoadListByCartIdAsync(int cartId, PizzaDatabase pizzaDb);
+        protected abstract string GetSqlJoinQuery(bool onlySelectFirst);
 
         public CartItemJoinListBase()
         {
             Items = new List<CartItemJoin>();
         }
-
-        protected abstract string GetSqlJoinQuery(bool onlySelectFirst);
-        public abstract Task LoadListByCartIdAsync(int cartId, PizzaDatabase pizzaDb);
 
         protected async Task LoadListAsync(string whereClause, object parameters, bool onlySelectFirst, string orderByColumn, SortOrder sortOrder, PizzaDatabase pizzaDb)
         {

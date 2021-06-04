@@ -26,11 +26,11 @@ namespace DataLibrary.Models.JoinLists.CartItems
             Items.Sort();
         }
 
-        private async Task LoadCartItemTypeListByCartIdAsync<T, U>(int cartId, PizzaDatabase pizzaDb)
-            where T : CartItemJoinListBase<U>, new()
-            where U : CartItemType
+        private async Task LoadCartItemTypeListByCartIdAsync<TJoinList, TCartItemType>(int cartId, PizzaDatabase pizzaDb)
+            where TJoinList : CartItemJoinListBase<TCartItemType>, new()
+            where TCartItemType : CartItemType
         {
-            var joinList = new T();
+            TJoinList joinList = new TJoinList();
             await joinList.LoadListByCartIdAsync(cartId, pizzaDb);
             Items.AddRange(joinList.Items);
         }
