@@ -1,6 +1,7 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.Exceptions;
 using DataLibrary.Models.JoinLists;
+using DataLibrary.Models.JoinLists.CartItems;
 using DataLibrary.Models.Joins;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
@@ -85,8 +86,9 @@ namespace PizzaWebsite.Controllers
                 return RedirectToAction("OrderExpired");
             }*/
 
-            IEnumerable<CartItemJoin> cartItemJoinList = await PizzaDb.GetJoinedCartItemListAsync(user.ConfirmOrderCartId);
-            CostSummary costSummary = new CostSummary(cartItemJoinList);
+            CartItemOnCartItemTypeJoin cartItemJoinList = new CartItemOnCartItemTypeJoin();
+            await cartItemJoinList.LoadListByCartIdAsync(user.ConfirmOrderCartId, PizzaDb);
+            CostSummary costSummary = new CostSummary(cartItemJoinList.Items);
 
             CustomerOrder customerOrder = new CustomerOrder()
             {

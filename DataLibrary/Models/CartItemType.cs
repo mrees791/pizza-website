@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models
 {
-    public abstract class CartItemTypeRecord : Record
+    public abstract class CartItemType : Record
     {
         [Key]
         public int CartItemId { get; set; }

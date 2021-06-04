@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using DataLibrary.Models.Joins;
 using System;
 using System.Collections.Generic;
 using System.Data;

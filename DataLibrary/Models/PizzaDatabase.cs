@@ -38,48 +38,6 @@ namespace DataLibrary.Models
         }
 
         // CRUD
-        public async Task<IEnumerable<CartItemJoin>> GetJoinedCartItemListAsync(int cartId)
-        {
-            List<CartItemJoin> items = new List<CartItemJoin>();
-
-            // One join is required for each product category.
-            items.AddRange(await GetJoinedPizzaCartItemsAsync(cartId));
-            items.Sort();
-
-            return items;
-        }
-
-        private async Task<IEnumerable<CartItemJoin>> GetJoinedPizzaCartItemsAsync(int cartId)
-        {
-            string joinQuery = @"select c.Id, c.CartId, c.UserId, c.Price, c.PricePerItem, c.Quantity, c.ProductCategory, c.Quantity,
-                                    p.CartItemId, p.CheeseAmount, p.MenuPizzaCheeseId, p.MenuPizzaCrustFlavorId, p.MenuPizzaCrustId, p.MenuPizzaSauceId, p.SauceAmount, p.size
-	                                from CartItem c
-	                                inner join CartPizza p on c.Id = p.CartItemId
-                                    where c.CartId = @CartId";
-
-            object parameters = new
-            {
-                CartId = cartId
-            };
-
-            IEnumerable<CartItemJoin> cartPizzaList = await connection.QueryAsync<CartItem, CartPizza, CartItemJoin>(
-                joinQuery,
-                (cartItem, cartPizza) =>
-                {
-                    CartItemJoin cartPizzaJoin = new CartItemJoin();
-                    cartPizzaJoin.CartItem = cartItem;
-                    cartPizzaJoin.CartItemType = cartPizza;
-                    return cartPizzaJoin;
-                }, param: parameters, splitOn: "CartItemId");
-
-            foreach (CartItemJoin cartPizza in cartPizzaList)
-            {
-                await cartPizza.MapEntityAsync(this);
-            }
-
-            return cartPizzaList;
-        }
-
         public async Task<TRecord> GetAsync<TRecord>(object id, IDbTransaction transaction = null) where TRecord : Record
         {
             TRecord record = await connection.GetAsync<TRecord>(id, transaction);

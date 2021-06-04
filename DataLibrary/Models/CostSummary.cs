@@ -1,11 +1,10 @@
-﻿using DataLibrary.Models.Joins;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 
-namespace PizzaWebsite.Models
+namespace DataLibrary.Models
 {
     public class CostSummary
     {

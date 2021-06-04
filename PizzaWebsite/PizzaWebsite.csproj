@@ -191,7 +191,6 @@
     <Compile Include="Models\Carts\CartViewModel.cs" />
     <Compile Include="Models\Carts\CostSummaryViewModel.cs" />
     <Compile Include="Models\ConfirmationViewModel.cs" />
-    <Compile Include="Models\CostSummary.cs" />
     <Compile Include="Models\Databases\DatabaseContext.cs" />
     <Compile Include="Models\Employees\EmployeeIndexViewModel.cs" />
     <Compile Include="Models\Geography\State.cs" />

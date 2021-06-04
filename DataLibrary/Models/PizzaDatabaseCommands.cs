@@ -1,5 +1,7 @@
 ﻿using Dapper;
 using DataLibrary.Models.Exceptions;
+using DataLibrary.Models.JoinLists;
+using DataLibrary.Models.JoinLists.CartItems;
 using DataLibrary.Models.Joins;
 using DataLibrary.Models.Tables;
 using System;
@@ -72,11 +74,12 @@ namespace DataLibrary.Models
 
         public async Task ReorderPreviousOrder(SiteUser siteUser, CustomerOrder previousOrder)
         {
-            IEnumerable<CartItemJoin> cartItems = await pizzaDb.GetJoinedCartItemListAsync(previousOrder.CartId);
+            CartItemOnCartItemTypeJoin cartItemJoinList = new CartItemOnCartItemTypeJoin();
+            await cartItemJoinList.LoadListByCartIdAsync(previousOrder.CartId, pizzaDb);
 
             using (var transaction = pizzaDb.Connection.BeginTransaction())
             {
-                await CloneCart(siteUser.CurrentCartId, true, cartItems, transaction);
+                await CloneCart(siteUser.CurrentCartId, true, cartItemJoinList.Items, transaction);
 
                 transaction.Commit();
             }
@@ -84,13 +87,14 @@ namespace DataLibrary.Models
 
         public async Task CheckoutCartAsync(SiteUser siteUser)
         {
-            IEnumerable<CartItemJoin> cartItems = await pizzaDb.GetJoinedCartItemListAsync(siteUser.CurrentCartId);
+            CartItemOnCartItemTypeJoin cartItemJoinList = new CartItemOnCartItemTypeJoin();
+            await cartItemJoinList.LoadListByCartIdAsync(siteUser.CurrentCartId, pizzaDb);
 
             using (var transaction = pizzaDb.Connection.BeginTransaction())
             {
                 siteUser.OrderConfirmationId++;
                 await siteUser.UpdateAsync(pizzaDb, transaction);
-                await CloneCart(siteUser.ConfirmOrderCartId, true, cartItems, transaction);
+                await CloneCart(siteUser.ConfirmOrderCartId, true, cartItemJoinList.Items, transaction);
 
                 transaction.Commit();
             }
@@ -161,7 +165,9 @@ namespace DataLibrary.Models
             {
                 cartItem.CartItem.Id = 0;
                 cartItem.CartItem.CartId = destinationCartId;
-                await cartItem.InsertAsync(pizzaDb, transaction);
+
+                await cartItem.CartItem.InsertAsync(pizzaDb, transaction);
+                await cartItem.CartItemType.InsertAsync(pizzaDb, transaction);
             }
         }
 

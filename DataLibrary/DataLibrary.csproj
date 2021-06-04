@@ -74,16 +74,20 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\CartItemTypeRecord.cs" />
+    <Compile Include="Models\CartItemJoin.cs" />
+    <Compile Include="Models\CartItemType.cs" />
+    <Compile Include="Models\CostSummary.cs" />
     <Compile Include="Models\EntityBase.cs" />
     <Compile Include="Models\Exceptions\RecordDoesNotExistException.cs" />
     <Compile Include="Models\Join.cs" />
     <Compile Include="Models\Join2.cs" />
+    <Compile Include="Models\JoinLists\CartItems\CartItemJoinListBase.cs" />
+    <Compile Include="Models\JoinLists\CartItems\CartItemOnCartItemTypeJoin.cs" />
+    <Compile Include="Models\JoinLists\CartItems\CartItemOnCartPizzaJoin.cs" />
     <Compile Include="Models\JoinLists\CustomerOrderOnDeliveryInfoJoin.cs" />
     <Compile Include="Models\JoinLists\EmployeeLocationOnStoreLocationJoin.cs" />
     <Compile Include="Models\JoinLists\EmployeeOnEmployeeLocationJoin.cs" />
     <Compile Include="Models\JoinLists\JoinListBase.cs" />
-    <Compile Include="Models\Joins\CartItemJoin.cs" />
     <Compile Include="Models\OrderBy.cs" />
     <Compile Include="Models\QueryBase.cs" />
     <Compile Include="Models\QueryFilters\EmployeeFilter.cs" />

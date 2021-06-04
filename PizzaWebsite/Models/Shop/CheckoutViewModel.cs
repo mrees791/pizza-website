@@ -1,4 +1,5 @@
 ﻿using DataLibrary.Models;
+using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.Joins;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
@@ -103,9 +104,9 @@ namespace PizzaWebsite.Models.Shop
             {
                 UserId = updatedUser.Id
             };
+
             IEnumerable<StoreLocation> storeLocationList = await pizzaDb.GetListAsync<StoreLocation>("Name", SortOrder.Ascending, storeSearch);
             IEnumerable<DeliveryAddress> deliveryAddressList = await pizzaDb.GetListAsync<DeliveryAddress>("Name", SortOrder.Ascending, addressSearch);
-            IEnumerable<CartItemJoin> cartItemJoinList = await pizzaDb.GetJoinedCartItemListAsync(updatedUser.ConfirmOrderCartId);
 
             List<SelectListItem> deliveryAddressSelectList = new List<SelectListItem>();
             List<SelectListItem> storeLocationSelectList = new List<SelectListItem>();
