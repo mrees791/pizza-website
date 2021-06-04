@@ -13,20 +13,20 @@ namespace DataLibrary.Models.Sql
     {
         internal static string CreateTopClause(bool onlySelectFirst)
         {
-            return onlySelectFirst ? "top 1 " : "";
+            return onlySelectFirst ? "TOP 1 " : "";
         }
 
         internal static string CreateOrderByClause(string orderByColumn, SortOrder sortOrder)
         {
-            string conditions = $"order by {orderByColumn} ";
+            string conditions = $"ORDER BY {orderByColumn} ";
 
             switch (sortOrder)
             {
                 case SortOrder.Ascending:
-                    conditions += "asc";
+                    conditions += "ASC";
                     break;
                 case SortOrder.Descending:
-                    conditions += "desc";
+                    conditions += "DESC";
                     break;
             }
 

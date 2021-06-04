@@ -12,7 +12,7 @@ namespace DataLibrary.Models.JoinLists
     {
         public async Task LoadListByStoreIdAsync(int storeId, PizzaDatabase pizzaDb)
         {
-            string whereClause = "where l.StoreId = @StoreId";
+            string whereClause = "WHERE l.StoreId = @StoreId";
 
             object parameters = new
             {
@@ -24,7 +24,7 @@ namespace DataLibrary.Models.JoinLists
 
         public async Task LoadListByEmployeeIdAsync(string employeeId, PizzaDatabase pizzaDb)
         {
-            string whereClause = "where l.EmployeeId = @EmployeeId";
+            string whereClause = "WHERE l.EmployeeId = @EmployeeId";
 
             object parameters = new
             {
@@ -36,8 +36,11 @@ namespace DataLibrary.Models.JoinLists
 
         protected override string GetSqlJoinQuery(bool onlySelectFirst)
         {
-            return $"select {SqlUtility.CreateTopClause(onlySelectFirst)}" +
-                @"e.Id, e.UserId, l.Id, l.EmployeeId, l.StoreId from Employee e inner join EmployeeLocation l on l.EmployeeId = e.Id";
+            return $@"SELECT {SqlUtility.CreateTopClause(onlySelectFirst)}
+                      e.Id, e.UserId, l.Id, l.EmployeeId, l.StoreId
+                      FROM Employee e
+                      INNER JOIN EmployeeLocation l
+                      ON l.EmployeeId = e.Id";
         }
     }
 }

@@ -12,7 +12,7 @@ namespace DataLibrary.Models.JoinLists
     {
         public async Task LoadFirstOrDefaultByCustomerOrderIdAsync(int customerOrderId, PizzaDatabase pizzaDb)
         {
-            string whereClause = "where c.Id = @Id";
+            string whereClause = "WHERE c.Id = @Id";
 
             object parameters = new
             {
@@ -24,7 +24,7 @@ namespace DataLibrary.Models.JoinLists
 
         public async Task LoadListByCustomerOderIdAsync(int customerOrderId, PizzaDatabase pizzaDb)
         {
-            string whereClause = "where c.Id = @Id";
+            string whereClause = "WHERE c.Id = @Id";
 
             object parameters = new
             {
@@ -36,7 +36,7 @@ namespace DataLibrary.Models.JoinLists
 
         public async Task LoadListByUserIdAsync(string userId, PizzaDatabase pizzaDb)
         {
-            string whereClause = "where c.UserId = @UserId";
+            string whereClause = "WHERE c.UserId = @UserId";
 
             object parameters = new
             {
@@ -48,14 +48,14 @@ namespace DataLibrary.Models.JoinLists
 
         protected override string GetSqlJoinQuery(bool onlySelectFirst)
         {
-            return $"select {SqlUtility.CreateTopClause(onlySelectFirst)}" +
-                @"c.Id, c.UserId, c.StoreId, c.CartId, c.IsCancelled, c.OrderSubtotal, c.OrderTax, c.OrderTotal, c.OrderPhase,
-                  c.OrderCompleted, c.DateOfOrder, c.IsDelivery, c.DeliveryInfoId,
-                  d.Id, d.DateOfDelivery, d.DeliveryAddressType, d.DeliveryAddressName,
-                  d.DeliveryStreetAddress, d.DeliveryCity, d.DeliveryState, d.DeliveryZipCode,
-                  d.DeliveryPhoneNumber
-                  from CustomerOrder c
-                  left join DeliveryInfo d on c.DeliveryInfoId = d.Id";
+            return $@"SELECT {SqlUtility.CreateTopClause(onlySelectFirst)}
+                      c.Id, c.UserId, c.StoreId, c.CartId, c.IsCancelled, c.OrderSubtotal, c.OrderTax, c.OrderTotal, c.OrderPhase,
+                      c.OrderCompleted, c.DateOfOrder, c.IsDelivery, c.DeliveryInfoId,
+                      d.Id, d.DateOfDelivery, d.DeliveryAddressType, d.DeliveryAddressName,
+                      d.DeliveryStreetAddress, d.DeliveryCity, d.DeliveryState, d.DeliveryZipCode, d.DeliveryPhoneNumber
+                      FROM CustomerOrder c
+                      LEFT JOIN DeliveryInfo d
+                      ON c.DeliveryInfoId = d.Id";
         }
     }
 }
