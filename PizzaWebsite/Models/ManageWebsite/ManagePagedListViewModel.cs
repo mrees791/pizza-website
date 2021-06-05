@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace PizzaWebsite.Models
+namespace PizzaWebsite.Models.ManageWebsite
 {
     public class ManagePagedListViewModel<TItemViewModel> : PagedListViewModel where TItemViewModel : class, new()
     {

@@ -11,7 +11,6 @@ using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
-    [Authorize(Roles = "Admin,Manager")]
     public abstract class BaseManageMenuController<TRecord, TViewModel> : BaseController where TRecord : Record, new() where TViewModel : class, new()
     {
         protected async Task<ActionResult> Index(int? page, int? rowsPerPage, string orderByColumn, QueryFilterBase searchFilter)
