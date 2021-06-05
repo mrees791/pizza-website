@@ -23,7 +23,7 @@ namespace DataLibrary.Models.JoinLists
             await LoadListAsync(whereClause, parameters, true, "c.Id", SortOrder.Ascending, pizzaDb);
         }
 
-        public async Task LoadListByCustomerOderIdAsync(int customerOrderId, PizzaDatabase pizzaDb)
+        public async Task LoadListByCustomerOrderIdAsync(int customerOrderId, PizzaDatabase pizzaDb)
         {
             string whereClause = "WHERE c.Id = @Id";
 
