@@ -6,3 +6,15 @@
 
 <h2>@ViewBag.Title</h2>
 <p>Employee ID: @Model.EmployeeId</p>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Home</li>
+    </ol>
+</nav>
+
+<ul class="list-group">
+    <li class="list-group-item">
+        <a href="@Url.Action("SearchUsers", "Employee")?Page=1&RowsPerPage=10">Search Users</a>
+    </li>
+</ul>

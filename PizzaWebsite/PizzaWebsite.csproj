@@ -193,6 +193,7 @@
     <Compile Include="Models\ConfirmationViewModel.cs" />
     <Compile Include="Models\Databases\DatabaseContext.cs" />
     <Compile Include="Models\Employees\EmployeeIndexViewModel.cs" />
+    <Compile Include="Models\Employees\SearchUserViewModel.cs" />
     <Compile Include="Models\Geography\State.cs" />
     <Compile Include="Models\Geography\StateListCreator.cs" />
     <Compile Include="Models\IRecordConverter.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="Models\Identity\IdentityUser.cs" />
     <Compile Include="Models\Identity\Stores\RoleStore.cs" />
     <Compile Include="Models\Identity\Stores\UserStore.cs" />
+    <Compile Include="Models\ManagePagedListViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ManageWebsite\AddEmployeeToRosterViewModel.cs" />
     <Compile Include="Models\ManageWebsite\AddEmployeeViewModel.cs" />
@@ -208,7 +210,6 @@
     <Compile Include="Models\ManageWebsite\EmployeeRosterViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ErrorViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ManageEmployeeViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\ManagePagedListViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ManageStoreViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ManageUserViewModel.cs" />
     <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaCheeseViewModel.cs" />
@@ -349,6 +350,7 @@
     <Content Include="Views\ManageStores\RemoveEmployeeFromRoster.cshtml" />
     <Content Include="Views\Employee\Index.cshtml" />
     <Content Include="Views\ManageEmployees\ViewLocations.cshtml" />
+    <Content Include="Views\Employee\SearchUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
