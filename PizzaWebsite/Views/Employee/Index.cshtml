@@ -11,9 +11,12 @@
     </ol>
 </nav>
 <ul class="list-group">
-    <li class="list-group-item">
-        <a href="@Url.Action("Index", "ManageMenu")">Manage Menu</a>
-    </li>
+    @if (User.IsInRole("Admin") || User.IsInRole("Executive"))
+    {
+        <li class="list-group-item">
+            <a href="@Url.Action("Index", "ManageMenu")">Manage Menu</a>
+        </li>
+    }
     <li class="list-group-item">
         <a href="@Url.Action("Index", "ManageStores")?Page=1&RowsPerPage=10">Manage Stores</a>
     </li>
