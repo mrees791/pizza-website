@@ -44,7 +44,7 @@ namespace DataLibrary.Models.Tables
             ConfirmOrderCartId = await confirmOrderCart.InsertAsync(pizzaDb, transaction);
 
             // QueryAsync method was used since connection.InsertAsync was having an issue with its string Id field.
-            return await pizzaDb.Connection.QueryAsync(InsertQueries.siteUserInsertQuery, this, transaction);
+            return await pizzaDb.Connection.QueryAsync(GetInsertQuery(), this, transaction);
         }
 
         internal override bool InsertRequiresTransaction()
@@ -65,6 +65,12 @@ namespace DataLibrary.Models.Tables
         internal override bool UpdateRequiresTransaction()
         {
             return false;
+        }
+
+        private string GetInsertQuery()
+        {
+            return @"INSERT INTO SiteUser (Id, CurrentCartId, ConfirmOrderCartId, OrderConfirmationId, IsBanned, ZipCode, Email, EmailConfirmed, PasswordHash, SecurityStamp, PhoneNumber, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEndDateUtc, LockoutEnabled, AccessFailedCount)
+                     VALUES (@Id, @CurrentCartId, @ConfirmOrderCartId, @OrderConfirmationId, @IsBanned, @ZipCode, @Email, @EmailConfirmed, @PasswordHash, @SecurityStamp, @PhoneNumber, @PhoneNumberConfirmed, @TwoFactorEnabled, @LockoutEndDateUtc, @LockoutEnabled, @AccessFailedCount)";
         }
     }
 }

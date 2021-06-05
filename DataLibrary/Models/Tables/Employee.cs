@@ -24,7 +24,7 @@ namespace DataLibrary.Models.Tables
         internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
             // QueryAsync method was used since connection.InsertAsync was having an issue with its string Id field.
-            return await pizzaDb.Connection.QueryAsync(InsertQueries.employeeInsertQuery, this, transaction);
+            return await pizzaDb.Connection.QueryAsync(GetInsertQuery(), this, transaction);
         }
 
         internal override bool InsertRequiresTransaction()
@@ -45,6 +45,12 @@ namespace DataLibrary.Models.Tables
         internal override bool UpdateRequiresTransaction()
         {
             return false;
+        }
+
+        private string GetInsertQuery()
+        {
+            return @"INSERT INTO Employee (Id, UserId)
+                     VALUES (@Id, @UserId)";
         }
     }
 }

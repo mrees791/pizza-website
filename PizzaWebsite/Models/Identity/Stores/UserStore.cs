@@ -238,7 +238,7 @@ namespace PizzaWebsite.Models.Identity.Stores
 
         public async Task RemoveLoginAsync(IdentityUser user, UserLoginInfo login)
         {
-            await pizzaDb.RemoveLoginAsync(user.Id, login.LoginProvider, login.ProviderKey);
+            await pizzaDb.DeleteLoginAsync(user.Id, login.LoginProvider, login.ProviderKey);
         }
 
         public async Task<IList<UserLoginInfo>> GetLoginsAsync(IdentityUser user)

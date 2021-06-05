@@ -49,9 +49,12 @@ namespace DataLibrary.Models
             return record;
         }
 
-        public async Task<int> RemoveLoginAsync(string userId, string loginProvider, string providerKey, IDbTransaction transaction = null)
+        public async Task<int> DeleteLoginAsync(string userId, string loginProvider, string providerKey, IDbTransaction transaction = null)
         {
-            string sql = @"delete from dbo.UserLogin where UserId = @UserId and LoginProvider = @LoginProvider and ProviderKey = @ProviderKey";
+            string sql = @"DELETE FROM UserLogin
+                           WHERE UserId = @UserId
+                           AND LoginProvider = @LoginProvider
+                           AND ProviderKey = @ProviderKey";
 
             object parameters = new
             {
@@ -65,7 +68,10 @@ namespace DataLibrary.Models
 
         public async Task<int> RemoveClaimAsync(string userId, string claimType, string claimValue, IDbTransaction transaction = null)
         {
-            string sql = @"delete from dbo.UserClaim where UserId = @UserId and ClaimType = @ClaimType and ClaimValue = @ClaimValue";
+            string sql = @"DELETE FROM UserClaim
+                           WHERE UserId = @UserId
+                           AND ClaimType = @ClaimType
+                           AND ClaimValue = @ClaimValue";
 
             object parameters = new
             {
@@ -79,16 +85,12 @@ namespace DataLibrary.Models
 
         public async Task<bool> UserIsInRole(SiteUser siteUser, SiteRole siteRole, IDbTransaction transaction = null)
         {
-            UserRole userRole = await GetUserRoleAsync(siteUser, siteRole, transaction);
-
-            return userRole != null;
+            return await GetUserRoleAsync(siteUser, siteRole, transaction) != null;
         }
 
         public async Task<IEnumerable<UserRole>> GetUserRoleListAsync(string userId)
         {
-            IEnumerable<UserRole> userRoles = await GetListAsync<UserRole>(new { UserId = userId });
-
-            return userRoles;
+            return await GetListAsync<UserRole>(new { UserId = userId });
         }
 
         public async Task<SiteRole> GetSiteRoleByNameAsync(string name, IDbTransaction transaction = null)
@@ -96,56 +98,45 @@ namespace DataLibrary.Models
             return await GetAsync<SiteRole>(name);
         }
 
-        private async Task<SiteRole> GetSiteRoleAsync(string sql, object parameters, IDbTransaction transaction = null)
-        {
-            SiteRole role = await connection.QuerySingleOrDefaultAsync<SiteRole>(sql, parameters, transaction);
-
-            if (role != null)
-            {
-                await role.MapEntityAsync(this, transaction);
-            }
-
-            return role;
-        }
-
         public async Task<SiteUser> GetSiteUserByIdAsync(string id, IDbTransaction transaction = null)
         {
-            string sql = $"{SelectQueries.GetSiteUserSelectQuery(true)} where Id = @Id";
+            string whereClause = "WHERE Id = @Id";
 
             object parameters = new
             {
                 Id = id
             };
 
-            return await GetSiteUserAsync(sql, parameters, transaction);
+            return await GetSiteUserAsync(whereClause, parameters, transaction);
         }
 
         public async Task<SiteUser> GetSiteUserByEmailAsync(string email, IDbTransaction transaction = null)
         {
-            string sql = $"{SelectQueries.GetSiteUserSelectQuery(true)} where Email = @Email";
+            string whereClause = "WHERE Email = @Email";
 
             object parameters = new
             {
                 Email = email
             };
 
-            return await GetSiteUserAsync(sql, parameters, transaction);
+            return await GetSiteUserAsync(whereClause, parameters, transaction);
         }
 
         public async Task<SiteUser> GetSiteUserByNameAsync(string name, IDbTransaction transaction = null)
         {
-            string sql = $"{SelectQueries.GetSiteUserSelectQuery(true)} where Id = @UserName";
+            string whereClause = "WHERE Id = @UserName";
 
             object parameters = new
             {
                 UserName = name
             };
 
-            return await GetSiteUserAsync(sql, parameters, transaction);
+            return await GetSiteUserAsync(whereClause, parameters, transaction);
         }
 
-        private async Task<SiteUser> GetSiteUserAsync(string sql, object parameters, IDbTransaction transaction = null)
+        private async Task<SiteUser> GetSiteUserAsync(string whereClause, object parameters, IDbTransaction transaction = null)
         {
+            string sql = $"{SelectQueries.GetSiteUserSelectQuery(true)} {whereClause}";
             SiteUser user = await connection.QuerySingleOrDefaultAsync<SiteUser>(sql, parameters, transaction);
 
             if (user != null)
@@ -158,7 +149,8 @@ namespace DataLibrary.Models
 
         public async Task<EmployeeLocation> GetEmployeeLocationAsync(Employee employee, StoreLocation storeLocation, IDbTransaction transaction = null)
         {
-            string sql = $"{SelectQueries.GetEmployeeLocationSelectQuery(true)} where EmployeeId = @EmployeeId and StoreId = @StoreId";
+            string whereClause = @"WHERE EmployeeId = @EmployeeId
+                                   AND StoreId = @StoreId";
 
             object parameters = new
             {
@@ -166,11 +158,12 @@ namespace DataLibrary.Models
                 StoreId = storeLocation.Id
             };
 
-            return await GetEmployeeLocationAsync(sql, parameters, transaction);
+            return await GetEmployeeLocationAsync(whereClause, parameters, transaction);
         }
 
-        private async Task<EmployeeLocation> GetEmployeeLocationAsync(string sql, object parameters, IDbTransaction transaction = null)
+        private async Task<EmployeeLocation> GetEmployeeLocationAsync(string whereClause, object parameters, IDbTransaction transaction = null)
         {
+            string sql = $"{SelectQueries.GetEmployeeLocationSelectQuery(true)} {whereClause}";
             EmployeeLocation employeeLocation = await connection.QuerySingleOrDefaultAsync<EmployeeLocation>(sql, parameters, transaction);
 
             if (employeeLocation != null)
@@ -183,7 +176,8 @@ namespace DataLibrary.Models
 
         public async Task<UserRole> GetUserRoleAsync(SiteUser siteUser, SiteRole siteRole, IDbTransaction transaction = null)
         {
-            string sql = $"{SelectQueries.GetUserRoleSelectQuery(true)} where UserId = @UserId and RoleName = @RoleName";
+            string whereClause = @"WHERE UserId = @UserId
+                           AND RoleName = @RoleName";
 
             object parameters = new
             {
@@ -191,11 +185,13 @@ namespace DataLibrary.Models
                 RoleName = siteRole.Name
             };
 
-            return await GetUserRoleAsync(sql, parameters, transaction);
+            return await GetUserRoleAsync(whereClause, parameters, transaction);
         }
 
-        private async Task<UserRole> GetUserRoleAsync(string sql, object parameters, IDbTransaction transaction = null)
+        private async Task<UserRole> GetUserRoleAsync(string whereClause, object parameters, IDbTransaction transaction = null)
         {
+            string sql = $"{SelectQueries.GetUserRoleSelectQuery(true)} {whereClause}";
+
             UserRole userRole = await connection.QuerySingleOrDefaultAsync<UserRole>(sql, parameters, transaction);
 
             if (userRole != null)
@@ -208,7 +204,8 @@ namespace DataLibrary.Models
 
         public async Task<UserLogin> GetLoginAsync(string loginProvider, string providerKey, IDbTransaction transaction = null)
         {
-            string sql = $"{SelectQueries.GetUserLoginSelectQuery(true)} where LoginProvider = @LoginProvider and ProviderKey = @ProviderKey";
+            string whereClause = @"WHERE LoginProvider = @LoginProvider
+                                   AND ProviderKey = @ProviderKey";
 
             object parameters = new
             {
@@ -216,7 +213,19 @@ namespace DataLibrary.Models
                 ProviderKey = providerKey
             };
 
+            return await GetLoginAsync(whereClause, parameters, transaction);
+        }
+
+        private async Task<UserLogin> GetLoginAsync(string whereClause, object parameters, IDbTransaction transaction = null)
+        {
+            string sql = $"{SelectQueries.GetUserLoginSelectQuery(true)} {whereClause}";
+
             UserLogin userLogin = await connection.QuerySingleOrDefaultAsync<UserLogin>(sql, parameters, transaction);
+
+            if (userLogin != null)
+            {
+                await userLogin.MapEntityAsync(this, transaction);
+            }
 
             return userLogin;
         }
@@ -241,7 +250,7 @@ namespace DataLibrary.Models
                 SortOrder = sortOrder
             };
 
-            string conditions = $"{querySearch.GetWhereConditions()} order by {orderBy.GetConditions()}";
+            string conditions = $"{querySearch.GetWhereConditions()} ORDER BY {orderBy.GetConditions()}";
 
             IEnumerable<TRecord> list = await connection.GetListAsync<TRecord>(conditions, querySearch, transaction);
 
@@ -261,7 +270,7 @@ namespace DataLibrary.Models
                 SortOrder = sortOrder
             };
 
-            string conditions = $"order by {orderBy.GetConditions()}";
+            string conditions = $"ORDER BY {orderBy.GetConditions()}";
 
             IEnumerable<TRecord> list = await GetListAsync<TRecord>(conditions, null, transaction);
 
