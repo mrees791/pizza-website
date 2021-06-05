@@ -10,9 +10,9 @@ namespace DataLibrary.Models
     public class CartItemJoin : IComparable<CartItemJoin>
     {
         public CartItem CartItem { get; set; }
-        public CartItemType CartItemType { get; set; }
+        public CartItemCategory CartItemType { get; set; }
 
-        public CartItemJoin(CartItem cartItem, CartItemType cartItemType)
+        public CartItemJoin(CartItem cartItem, CartItemCategory cartItemType)
         {
             CartItem = cartItem;
             CartItemType = cartItemType;

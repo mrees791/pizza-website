@@ -1,4 +1,5 @@
-﻿using DataLibrary.Models.Sql;
+﻿using DataLibrary.Models.JoinLists.BaseClasses;
+using DataLibrary.Models.Sql;
 using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
@@ -6,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLibrary.Models.JoinLists.CartItems
+namespace DataLibrary.Models.JoinLists.CartItemCategories
 {
-    public class CartItemOnCartPizzaJoin : CartItemJoinListBase<CartPizza>
+    public class CartItemOnCartPizzaJoinList : CartItemJoinListBase<CartPizza>
     {
         public override async Task LoadListByCartIdAsync(int cartId, PizzaDatabase pizzaDb)
         {

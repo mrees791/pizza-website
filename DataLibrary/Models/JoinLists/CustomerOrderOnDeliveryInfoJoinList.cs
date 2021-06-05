@@ -1,4 +1,5 @@
-﻿using DataLibrary.Models.Sql;
+﻿using DataLibrary.Models.JoinLists.BaseClasses;
+using DataLibrary.Models.Sql;
 using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.JoinLists
 {
-    public class CustomerOrderOnDeliveryInfoJoin : JoinListBase<CustomerOrder, DeliveryInfo>
+    public class CustomerOrderOnDeliveryInfoJoinList : JoinListBase<CustomerOrder, DeliveryInfo>
     {
         public async Task LoadFirstOrDefaultByCustomerOrderIdAsync(int customerOrderId, PizzaDatabase pizzaDb)
         {

@@ -80,7 +80,7 @@ namespace DataLibrary.Models.Tables
             return true;
         }
 
-        public async Task<Tuple<CartItem, CartPizza>> CreateCartRecordsAsync(PizzaDatabase pizzaDb, int cartId, string userId, int quantity, string size, int menuCrustId)
+        public async Task<Tuple<CartItem, CartPizza>> CreateCartRecordsAsync(int quantity, string size, int menuCrustId, SiteUser siteUser, PizzaDatabase pizzaDb)
         {
             CartPizza cartPizza = new CartPizza()
             {
@@ -102,8 +102,8 @@ namespace DataLibrary.Models.Tables
 
             CartItem cartItem = new CartItem()
             {
-                CartId = cartId,
-                UserId = userId,
+                CartId = siteUser.CurrentCartId,
+                UserId = siteUser.Id,
                 Quantity = quantity,
                 ProductCategory = ProductCategory.Pizza.ToString(),
                 PricePerItem = pricePerItem,

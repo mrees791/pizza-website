@@ -7,14 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLibrary.Models.JoinLists.CartItems
+namespace DataLibrary.Models.JoinLists.BaseClasses
 {
     /// <summary>
-    /// Provides a base join class for each cart item type table.
+    /// Provides a base join class for each cart item category table..
     /// </summary>
-    /// <typeparam name="TCartItemType"></typeparam>
-    public abstract class CartItemJoinListBase<TCartItemType>
-        where TCartItemType : CartItemType
+    /// <typeparam name="TCategoryTable"></typeparam>
+    public abstract class CartItemJoinListBase<TCategoryTable>
+        where TCategoryTable : CartItemCategory
     {
         public IEnumerable<CartItemJoin> Items { get; protected set; }
         public abstract Task LoadListByCartIdAsync(int cartId, PizzaDatabase pizzaDb);
@@ -29,7 +29,7 @@ namespace DataLibrary.Models.JoinLists.CartItems
         {
             string sqlJoinQuery = $"{GetSqlJoinQuery(onlySelectFirst)} {whereClause} {SqlUtility.CreateOrderByClause(orderByColumn, sortOrder)}";
 
-            Items = await pizzaDb.Connection.QueryAsync<CartItem, TCartItemType, CartItemJoin>(
+            Items = await pizzaDb.Connection.QueryAsync<CartItem, TCategoryTable, CartItemJoin>(
                 sqlJoinQuery,
                 (table1, table2) =>
                 {

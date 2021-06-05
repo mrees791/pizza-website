@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLibrary.Models.JoinLists
+namespace DataLibrary.Models.JoinLists.BaseClasses
 {
     public abstract class JoinListBase<TTable1, TTable2>
         where TTable1 : Record

@@ -20,7 +20,7 @@ namespace PizzaWebsite.Models.ManageWebsite
             EmployeeRosterList = new List<EmployeeRosterItemViewModel>();
             StoreLocation storeLocation = await pizzaDb.GetAsync<StoreLocation>(storeId);
             SiteRole managerRole = await pizzaDb.GetSiteRoleByNameAsync("Manager");
-            var joinList = new EmployeeOnEmployeeLocationJoin();
+            var joinList = new EmployeeOnEmployeeLocationJoinList();
             await joinList.LoadListByStoreIdAsync(storeId, pizzaDb);
 
             StoreId = storeId;

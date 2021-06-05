@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using DataLibrary.Models.Exceptions;
 using DataLibrary.Models.JoinLists;
-using DataLibrary.Models.JoinLists.CartItems;
 using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
@@ -22,6 +21,40 @@ namespace DataLibrary.Models
         public PizzaDatabaseCommands(PizzaDatabase pizzaDb)
         {
             this.pizzaDb = pizzaDb;
+        }
+
+        public async Task<int> AddItemToCart(SiteUser siteUser, CartItem cartItem, CartItemCategory cartItemCategory)
+        {
+            using (IDbTransaction transaction = pizzaDb.Connection.BeginTransaction())
+            {
+                await InsertAsync(cartItem, cartItemCategory, transaction);
+                transaction.Commit();
+            }
+
+            return cartItem.GetId();
+        }
+
+        private async Task<int> InsertAsync(CartItem cartItem, CartItemCategory cartItemCategory, IDbTransaction transaction)
+        {
+            await cartItem.InsertAsync(pizzaDb, transaction);
+            cartItemCategory.CartItemId = cartItem.Id;
+            await cartItemCategory.InsertAsync(pizzaDb, transaction);
+
+            return cartItem.GetId();
+        }
+
+        public async Task<int> UpdateCartItemAsync(CartItem cartItem, CartItemCategory cartItemCategory)
+        {
+            int rowsUpdated = 0;
+
+            using (IDbTransaction transaction = pizzaDb.Connection.BeginTransaction())
+            {
+                rowsUpdated += await cartItem.UpdateAsync(pizzaDb, transaction);
+                rowsUpdated += await cartItemCategory.UpdateAsync(pizzaDb, transaction);
+                transaction.Commit();
+            }
+
+            return rowsUpdated;
         }
 
         public async Task<bool> IsEmployedAtLocation(Employee employee, StoreLocation storeLocation, IDbTransaction transaction = null)
@@ -73,7 +106,7 @@ namespace DataLibrary.Models
 
         public async Task ReorderPreviousOrder(SiteUser siteUser, CustomerOrder previousOrder)
         {
-            CartItemOnCartItemTypeJoin cartItemJoinList = new CartItemOnCartItemTypeJoin();
+            JoinLists.CartItemJoinList cartItemJoinList = new JoinLists.CartItemJoinList();
             await cartItemJoinList.LoadListByCartIdAsync(previousOrder.CartId, pizzaDb);
 
             using (var transaction = pizzaDb.Connection.BeginTransaction())
@@ -86,7 +119,7 @@ namespace DataLibrary.Models
 
         public async Task CheckoutCartAsync(SiteUser siteUser)
         {
-            CartItemOnCartItemTypeJoin cartItemJoinList = new CartItemOnCartItemTypeJoin();
+            JoinLists.CartItemJoinList cartItemJoinList = new JoinLists.CartItemJoinList();
             await cartItemJoinList.LoadListByCartIdAsync(siteUser.CurrentCartId, pizzaDb);
 
             using (var transaction = pizzaDb.Connection.BeginTransaction())
@@ -105,7 +138,7 @@ namespace DataLibrary.Models
             return cartItems.Sum(i => i.Price);
         }
 
-        public async Task SubmitCustomerOrderAsync(SiteUser siteUser, CustomerOrder customerOrder, DeliveryInfo deliveryInfo = null)
+        public async Task AddCustomerOrderAsync(SiteUser siteUser, CustomerOrder customerOrder, DeliveryInfo deliveryInfo = null)
         {
             using (var transaction = pizzaDb.Connection.BeginTransaction())
             {
@@ -165,7 +198,7 @@ namespace DataLibrary.Models
                 cartItemJoin.CartItem.Id = 0;
                 cartItemJoin.CartItem.CartId = destinationCartId;
 
-                await pizzaDb.InsertAsync(cartItemJoin.CartItem, cartItemJoin.CartItemType, transaction);
+                await InsertAsync(cartItemJoin.CartItem, cartItemJoin.CartItemType, transaction);
             }
         }
 

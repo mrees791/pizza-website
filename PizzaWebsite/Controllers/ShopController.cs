@@ -1,7 +1,6 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.Exceptions;
 using DataLibrary.Models.JoinLists;
-using DataLibrary.Models.JoinLists.CartItems;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
@@ -85,7 +84,7 @@ namespace PizzaWebsite.Controllers
                 return RedirectToAction("OrderExpired");
             }*/
 
-            CartItemOnCartItemTypeJoin cartItemJoinList = new CartItemOnCartItemTypeJoin();
+            DataLibrary.Models.JoinLists.CartItemJoinList cartItemJoinList = new DataLibrary.Models.JoinLists.CartItemJoinList();
             await cartItemJoinList.LoadListByCartIdAsync(user.ConfirmOrderCartId, PizzaDb);
             CostSummary costSummary = new CostSummary(cartItemJoinList.Items);
 
@@ -132,11 +131,11 @@ namespace PizzaWebsite.Controllers
                     DeliveryZipCode = checkoutModel.DeliveryZipCode
                 };
 
-                await PizzaDb.Commands.SubmitCustomerOrderAsync(user, customerOrder, deliveryInfo);
+                await PizzaDb.Commands.AddCustomerOrderAsync(user, customerOrder, deliveryInfo);
             }
             else
             {
-                await PizzaDb.Commands.SubmitCustomerOrderAsync(user, customerOrder);
+                await PizzaDb.Commands.AddCustomerOrderAsync(user, customerOrder);
             }
 
             OrderStatusViewModel orderStatusVm = new OrderStatusViewModel()
@@ -239,11 +238,11 @@ namespace PizzaWebsite.Controllers
 
                 if (model.IsNewRecord())
                 {
-                    await PizzaDb.InsertAsync(cartItem, cartPizza);
+                    await PizzaDb.Commands.AddItemToCart(currentUser, cartItem, cartPizza);
                 }
                 else
                 {
-                    await PizzaDb.UpdateAsync(cartItem, cartPizza);
+                    await PizzaDb.Commands.UpdateCartItemAsync(cartItem, cartPizza);
                 }
 
                 return RedirectToAction("Cart");
@@ -258,16 +257,11 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> AddMenuPizzaToCurrentCart(int id, int selectedQuantity, string selectedSize, int selectedCrustId)
         {
             SiteUser currentUser = await GetCurrentUserAsync();
-            await AddMenuPizzaToCart(id, currentUser.CurrentCartId, currentUser.Id, selectedQuantity, selectedSize, selectedCrustId);
-            return RedirectToAction("Cart");
-        }
+            MenuPizza menuPizza = await PizzaDb.GetAsync<MenuPizza>(id);
+            Tuple<CartItem, CartPizza> cartItemRecords = await menuPizza.CreateCartRecordsAsync(selectedQuantity, selectedSize, selectedCrustId, currentUser, PizzaDb);
+            await PizzaDb.Commands.AddItemToCart(currentUser, cartItemRecords.Item1, cartItemRecords.Item2);
 
-        [Authorize]
-        public async Task AddMenuPizzaToCart(int menuPizzaId, int cartId, string userId, int selectedQuantity, string selectedSize, int selectedCrustId)
-        {
-            MenuPizza menuPizza = await PizzaDb.GetAsync<MenuPizza>(menuPizzaId);
-            Tuple<CartItem, CartPizza> cartItemRecords = await menuPizza.CreateCartRecordsAsync(PizzaDb, cartId, userId, selectedQuantity, selectedSize, selectedCrustId);
-            await PizzaDb.InsertAsync(cartItemRecords.Item1, cartItemRecords.Item2);
+            return RedirectToAction("Cart");
         }
 
         public async Task<ActionResult> PizzaMenu()
@@ -508,7 +502,7 @@ namespace PizzaWebsite.Controllers
         [Authorize]
         public async Task<ActionResult> PreviousOrder(int? id)
         {
-            var join = new CustomerOrderOnDeliveryInfoJoin();
+            var join = new CustomerOrderOnDeliveryInfoJoinList();
             await join.LoadFirstOrDefaultByCustomerOrderIdAsync(id.Value, PizzaDb);
             Join<CustomerOrder, DeliveryInfo> result = join.Items.FirstOrDefault();
 

@@ -1,6 +1,5 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.JoinLists;
-using DataLibrary.Models.JoinLists.CartItems;
 using DataLibrary.Models.Utility;
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,6 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Carts
 {
-
     public class CartViewModel
     {
         public int CartId { get; set; }
@@ -25,7 +23,7 @@ namespace PizzaWebsite.Models.Carts
             CartItemList = new List<CartItemViewModel>();
 
             List<int> quantityList = ListUtility.CreateQuantityList();
-            CartItemOnCartItemTypeJoin cartItemJoinList = new CartItemOnCartItemTypeJoin();
+            CartItemJoinList cartItemJoinList = new CartItemJoinList();
             await cartItemJoinList.LoadListByCartIdAsync(cartId, pizzaDb);
             CostSummaryVm.Initialize(new CostSummary(cartItemJoinList.Items));
 

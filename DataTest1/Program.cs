@@ -1,5 +1,4 @@
 ﻿using DataLibrary.Models;
-using DataLibrary.Models.Joins;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
@@ -113,6 +112,7 @@ namespace DataTest1
             using (var pizzaDb = new PizzaDatabase())
             {
                 int deliveryAddressId = 1002;
+                SiteUser user = await pizzaDb.GetSiteUserByIdAsync(AdminUserName);
                 DeliveryAddress address1 = await pizzaDb.GetAsync<DeliveryAddress>(deliveryAddressId);
                 DeliveryInfo deliveryInfo = new DeliveryInfo()
                 {
@@ -142,12 +142,6 @@ namespace DataTest1
                     UserId = AdminUserName,
                 };
 
-                // Create and test joins
-                CustomerOrderOnDeliveryInfoJoin orderJoin1 = new CustomerOrderOnDeliveryInfoJoin()
-                {
-                    CustomerOrder = order1
-                };
-
                 CustomerOrder order2 = new CustomerOrder()
                 {
                     CartId = 2,
@@ -164,18 +158,12 @@ namespace DataTest1
                     UserId = AdminUserName,
                 };
 
-                CustomerOrderOnDeliveryInfoJoin orderJoin2 = new CustomerOrderOnDeliveryInfoJoin()
-                {
-                    CustomerOrder = order2,
-                    DeliveryInfo = deliveryInfo
-                };
-
                 int orderPairs = orderAmount / 2;
 
                 for (int i = 0; i < orderPairs; i++)
                 {
-                    await pizzaDb.InsertAsync(orderJoin1);
-                    await pizzaDb.InsertAsync(orderJoin2);
+                    await pizzaDb.Commands.AddCustomerOrderAsync(user, order1);
+                    await pizzaDb.Commands.AddCustomerOrderAsync(user, order2, deliveryInfo);
                 }
             }
         }
@@ -529,14 +517,6 @@ namespace DataTest1
                 await pizzaDb.InsertAsync(greenBellPeppersTopping);
                 await pizzaDb.InsertAsync(bananaPeppersTopping);
                 await pizzaDb.InsertAsync(tomatoTopping);
-            }
-        }
-        
-        private async Task TestCustomerOrderJoin()
-        {
-            using (var pizzaDb = new PizzaDatabase())
-            {
-                IEnumerable<CustomerOrderOnDeliveryInfoJoin> customerOrderList = await pizzaDb.GetJoinedCustomerOrderListByUserIdAsync(AdminUserName);
             }
         }
 

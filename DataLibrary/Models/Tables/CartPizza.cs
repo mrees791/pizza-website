@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace DataLibrary.Models.Tables
 {
     [Table("CartPizza")]
-    public class CartPizza : CartItemType
+    public class CartPizza : CartItemCategory
     {
         public string Size { get; set; }
         public int MenuPizzaCrustId { get; set; }

@@ -385,26 +385,6 @@ namespace DataLibrary.Models
             return record.GetId();
         }
 
-        public async Task<dynamic> InsertAsync(CartItem cartItem, CartItemType cartItemType)
-        {
-            using (IDbTransaction transaction = Connection.BeginTransaction())
-            {
-                await InsertAsync(cartItem, cartItemType, transaction);
-                transaction.Commit();
-            }
-
-            return cartItem.GetId();
-        }
-
-        internal async Task<dynamic> InsertAsync(CartItem cartItem, CartItemType cartItemType, IDbTransaction transaction)
-        {
-            await cartItem.InsertAsync(this, transaction);
-            cartItemType.CartItemId = cartItem.Id;
-            await cartItemType.InsertAsync(this, transaction);
-
-            return cartItem.GetId();
-        }
-
         public async Task<int> UpdateAsync(Record record)
         {
             int rowsUpdated = 0;
@@ -420,20 +400,6 @@ namespace DataLibrary.Models
             else
             {
                 rowsUpdated = await record.UpdateAsync(this);
-            }
-
-            return rowsUpdated;
-        }
-
-        public async Task<int> UpdateAsync(CartItem cartItem, CartItemType cartItemType)
-        {
-            int rowsUpdated = 0;
-
-            using (IDbTransaction transaction = Connection.BeginTransaction())
-            {
-                rowsUpdated += await cartItem.UpdateAsync(this, transaction);
-                rowsUpdated += await cartItemType.UpdateAsync(this, transaction);
-                transaction.Commit();
             }
 
             return rowsUpdated;

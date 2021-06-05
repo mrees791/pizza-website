@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataLibrary.Models.JoinLists.BaseClasses;
 using DataLibrary.Models.Sql;
 using DataLibrary.Models.Tables;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.JoinLists
 {
-    public class EmployeeLocationOnStoreLocationJoin : JoinListBase<EmployeeLocation, StoreLocation>
+    public class EmployeeLocationOnStoreLocationJoinList : JoinListBase<EmployeeLocation, StoreLocation>
     {
         public async Task LoadListByEmployeeIdAsync(string employeeId, PizzaDatabase pizzaDb)
         {
