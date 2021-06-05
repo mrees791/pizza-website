@@ -37,7 +37,7 @@ namespace PizzaWebsite.Models.ManageWebsite
             }
 
             // Make sure employee ID isn't already taken
-            Employee employee = await pizzaDb.GetAsync<Employee>(Id);
+            DataLibrary.Models.Tables.Employee employee = await pizzaDb.GetAsync<DataLibrary.Models.Tables.Employee>(Id);
 
             if (employee != null)
             {

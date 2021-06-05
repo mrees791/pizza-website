@@ -1,7 +1,8 @@
-﻿
+﻿@using PizzaWebsite.Models.Employees
+@model EmployeeIndexViewModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Employee Panel";
 }
 
-<h2>Index</h2>
-
+<h2>@ViewBag.Title</h2>
+<p>Employee ID: @Model.EmployeeId</p>

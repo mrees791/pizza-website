@@ -36,5 +36,12 @@ namespace DataLibrary.Models.Sql
                       Id, EmployeeId, StoreId
                       FROM EmployeeLocation";
         }
+
+        internal static string GetEmployeeSelectQuery(bool onlySelectFirst)
+        {
+            return $@"SELECT {SqlUtility.CreateTopClause(onlySelectFirst)}
+                      Id, UserId
+                      FROM Employee";
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DataLibrary.Models;
+using DataLibrary.Models.Tables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,10 @@ namespace PizzaWebsite.Models.Employees
     {
         public string EmployeeId { get; set; }
 
-        public async Task InitializeAsync(string userId, PizzaDatabase pizzaDb)
+        public async Task InitializeAsync(SiteUser currentUser, PizzaDatabase pizzaDb)
         {
-            //Employee employee = await pizzaDb.GetEmployeeLocationAsync
+            Employee employee = await pizzaDb.GetEmployeeAsync(currentUser);
+            EmployeeId = employee.Id;
         }
     }
 }

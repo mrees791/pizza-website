@@ -35,9 +35,13 @@
                         </div>
                     </li>
                     <li>@Html.ActionLink("Cart", "Cart", "Shop")</li>
-                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                    @if (User.IsInRole("Admin") || User.IsInRole("Executive"))
                     {
                         <li>@Html.ActionLink("Manage Website", "Index", "ManageWebsite")</li>
+                    }
+                    @if (User.IsInRole("Employee"))
+                    {
+                        <li>@Html.ActionLink("Employee Panel", "Index", "Employee")</li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")

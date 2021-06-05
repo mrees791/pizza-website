@@ -18,6 +18,7 @@ namespace PizzaWebsite.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private PizzaDatabase _pizzaDb;
+        private SiteUser _currentUser;
 
         public PizzaDatabase PizzaDb
         {
@@ -85,7 +86,12 @@ namespace PizzaWebsite.Controllers
 
         protected async Task<SiteUser> GetCurrentUserAsync()
         {
-            return await PizzaDb.GetSiteUserByIdAsync(User.Identity.GetUserId());
+            if (_currentUser == null)
+            {
+                _currentUser = await PizzaDb.GetSiteUserByIdAsync(User.Identity.GetUserId());
+            }
+
+            return _currentUser;
         }
 
         protected override void Dispose(bool disposing)

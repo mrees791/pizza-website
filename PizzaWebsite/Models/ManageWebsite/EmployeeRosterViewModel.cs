@@ -26,7 +26,7 @@ namespace PizzaWebsite.Models.ManageWebsite
             StoreId = storeId;
             StoreName = storeLocation.Name;
 
-            foreach (Join<Employee, EmployeeLocation> join in joinList.Items)
+            foreach (Join<DataLibrary.Models.Tables.Employee, EmployeeLocation> join in joinList.Items)
             {
                 SiteUser siteUser = await pizzaDb.GetSiteUserByIdAsync(join.Table1.UserId);
                 bool isManager = await pizzaDb.UserIsInRole(siteUser, managerRole);

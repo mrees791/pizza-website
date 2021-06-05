@@ -9,15 +9,16 @@ using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
-    [Authorize(Roles = "Admin,Executive,Employee")]
+    [Authorize(Roles = "Employee")]
     public class EmployeeController : BaseController
     {
         public async Task<ActionResult> Index()
         {
-            string userId = User.Identity.Name;
+            SiteUser currentUser = await GetCurrentUserAsync();
             EmployeeIndexViewModel model = new EmployeeIndexViewModel();
+            await model.InitializeAsync(currentUser, PizzaDb);
 
-            return View();
+            return View(model);
         }
     }
 }

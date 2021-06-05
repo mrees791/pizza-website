@@ -20,7 +20,7 @@ namespace PizzaWebsite.Models.ManageWebsite
         {
             EmployeeLocation employeeLocation = await pizzaDb.GetAsync<EmployeeLocation>(employeeLocationId);
             StoreLocation storeLocation = await pizzaDb.GetAsync<StoreLocation>(employeeLocation.StoreId);
-            Employee employee = await pizzaDb.GetAsync<Employee>(employeeLocation.EmployeeId);
+            DataLibrary.Models.Tables.Employee employee = await pizzaDb.GetAsync<DataLibrary.Models.Tables.Employee>(employeeLocation.EmployeeId);
 
             EmployeeLocationId = employeeLocationId;
             StoreId = storeLocation.Id;
@@ -31,7 +31,7 @@ namespace PizzaWebsite.Models.ManageWebsite
         public async Task ValidateAsync(ModelStateDictionary modelState, PizzaDatabase pizzaDb)
         {
             // Make sure employee exists.
-            Employee employee = await pizzaDb.GetAsync<Employee>(EmployeeId);
+            DataLibrary.Models.Tables.Employee employee = await pizzaDb.GetAsync<DataLibrary.Models.Tables.Employee>(EmployeeId);
 
             if (employee == null)
             {
