@@ -331,7 +331,7 @@ namespace DataLibrary.Models
             return list;
         }
 
-        public async Task<IEnumerable<TRecord>> GetPagedListAsync<TRecord>(int pageNumber, int rowsPerPage, string orderByColumn, SortOrder sortOrder, QueryFilterBase filter,
+        public async Task<IEnumerable<TRecord>> GetPagedListAsync<TRecord>(int pageNumber, int rowsPerPage, string orderByColumn, SortOrder sortOrder, QueryBase queryBase,
             IDbTransaction transaction = null) where TRecord : Record
         {
             OrderBy orderBy = new OrderBy()
@@ -340,7 +340,7 @@ namespace DataLibrary.Models
                 SortOrder = sortOrder
             };
 
-            IEnumerable<TRecord> list = await connection.GetListPagedAsync<TRecord>(pageNumber, rowsPerPage, filter.GetWhereConditions(), orderBy.GetConditions(), filter, transaction);
+            IEnumerable<TRecord> list = await connection.GetListPagedAsync<TRecord>(pageNumber, rowsPerPage, queryBase.GetWhereConditions(), orderBy.GetConditions(), queryBase, transaction);
 
             foreach (TRecord record in list)
             {

@@ -24,16 +24,16 @@ namespace DataLibrary.Models.QueryFilters
 
                     if (!queriesAdded)
                     {
-                        sqlWhereConditions += "where ";
+                        sqlWhereConditions += "WHERE ";
                     }
                     else
                     {
-                        sqlWhereConditions += "and ";
+                        sqlWhereConditions += "AND ";
                     }
 
                     // Only uses the column name with a placeholder to avoid SQL injections.
                     // The column name variable is never set by user input.
-                    sqlWhereConditions += $"{columnName} like '%' + @{columnName} + '%' ";
+                    sqlWhereConditions += $"{columnName} LIKE '%' + @{columnName} + '%' ";
                     queriesAdded = true;
                 }
             }

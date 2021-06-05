@@ -24,11 +24,11 @@ namespace DataLibrary.Models.QuerySearches
 
                     if (!queriesAdded)
                     {
-                        sqlWhereConditions += "where ";
+                        sqlWhereConditions += "WHERE ";
                     }
                     else
                     {
-                        sqlWhereConditions += "and ";
+                        sqlWhereConditions += "AND ";
                     }
 
                     // Only uses the column name with a placeholder to avoid SQL injections.

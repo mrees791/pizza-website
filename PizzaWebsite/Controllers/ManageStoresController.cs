@@ -12,7 +12,7 @@ using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
-    [Authorize(Roles = "Admin,Executive")]
+    [Authorize(Roles = "Admin,Executive,Manager")]
     public class ManageStoresController : BaseManageWebsiteController<StoreLocation>
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string storeName, string phoneNumber)
@@ -25,7 +25,17 @@ namespace PizzaWebsite.Controllers
                 PhoneNumber = phoneNumber
             };
 
-            List<StoreLocation> storeList = await LoadPagedRecordsAsync(page, rowsPerPage, "Name", SortOrder.Ascending, searchFilter, PizzaDb, Request, manageStoresVm.PaginationVm);
+            List<StoreLocation> storeList = new List<StoreLocation>();
+
+            if (User.IsInRole("Admin") || User.IsInRole("Executive"))
+            {
+                storeList = await LoadPagedRecordsAsync(page, rowsPerPage, "Name", SortOrder.Ascending, searchFilter, PizzaDb, Request, manageStoresVm.PaginationVm);
+            }
+            else
+            {
+                // todo: Load a paged list of stores that the current employee is employed at.
+                throw new NotImplementedException();
+            }
 
             foreach (StoreLocation store in storeList)
             {
@@ -132,6 +142,7 @@ namespace PizzaWebsite.Controllers
             return View("CreateEditConfirmation", confirmationModel);
         }
 
+        [Authorize(Roles = "Admin,Executive")]
         public ActionResult CreateStore()
         {
             ManageStoreViewModel model = new ManageStoreViewModel();
@@ -140,6 +151,7 @@ namespace PizzaWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Executive")]
         public async Task<ActionResult> CreateStore(ManageStoreViewModel model)
         {
             if (!ModelState.IsValid)
