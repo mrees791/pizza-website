@@ -164,6 +164,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BaseManageMenuController.cs" />
+    <Compile Include="Controllers\BaseManageWebsiteController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -201,7 +202,7 @@
     <Compile Include="Models\Identity\IdentityUser.cs" />
     <Compile Include="Models\Identity\Stores\RoleStore.cs" />
     <Compile Include="Models\Identity\Stores\UserStore.cs" />
-    <Compile Include="Models\ManagePagedListViewModel.cs" />
+    <Compile Include="Models\ManageWebsite\ManagePagedListViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ManageWebsite\AddEmployeeToRosterViewModel.cs" />
     <Compile Include="Models\ManageWebsite\AddEmployeeViewModel.cs" />
@@ -354,6 +355,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\BaseManageWebsite\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -26,7 +26,8 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> SearchUsers(int? page, int? rowsPerPage, string userId, string email)
         {
-            ManagePagedListViewModel<SearchUserViewModel> model = new ManagePagedListViewModel<SearchUserViewModel>();
+            throw new NotImplementedException();
+            /*ManagePagedListViewModel<SearchUserViewModel> model = new ManagePagedListViewModel<SearchUserViewModel>();
 
             SiteUserFilter searchFilter = new SiteUserFilter()
             {
@@ -47,7 +48,7 @@ namespace PizzaWebsite.Controllers
                 model.ItemViewModelList.Add(userVm);
             }
 
-            return View(model);
+            return View(model);*/
         }
     }
 }

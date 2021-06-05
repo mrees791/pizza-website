@@ -13,7 +13,7 @@ using System.Web.Mvc;
 namespace PizzaWebsite.Controllers
 {
     [Authorize(Roles = "Admin,Executive")]
-    public class ManageEmployeesController : BaseController
+    public class ManageEmployeesController : BaseManageWebsiteController<Employee>
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string employeeId, string userId)
         {
@@ -25,7 +25,7 @@ namespace PizzaWebsite.Controllers
                 UserId = userId
             };
 
-            List<Employee> employeeList = await LoadPagedRecordsAsync<Employee>(page, rowsPerPage, "Id", SortOrder.Ascending, searchFilter, PizzaDb, Request,
+            List<Employee> employeeList = await LoadPagedRecordsAsync(page, rowsPerPage, "Id", SortOrder.Ascending, searchFilter, PizzaDb, Request,
                 manageEmployeesVm.PaginationVm);
 
             foreach (Employee employee in employeeList)

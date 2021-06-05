@@ -13,7 +13,7 @@ using System.Web.Mvc;
 namespace PizzaWebsite.Controllers
 {
     [Authorize(Roles = "Admin,Executive")]
-    public class ManageStoresController : BaseController
+    public class ManageStoresController : BaseManageWebsiteController<StoreLocation>
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string storeName, string phoneNumber)
         {
@@ -25,7 +25,7 @@ namespace PizzaWebsite.Controllers
                 PhoneNumber = phoneNumber
             };
 
-            List<StoreLocation> storeList = await LoadPagedRecordsAsync<StoreLocation>(page, rowsPerPage, "Name", SortOrder.Ascending, searchFilter, PizzaDb, Request, manageStoresVm.PaginationVm);
+            List<StoreLocation> storeList = await LoadPagedRecordsAsync(page, rowsPerPage, "Name", SortOrder.Ascending, searchFilter, PizzaDb, Request, manageStoresVm.PaginationVm);
 
             foreach (StoreLocation store in storeList)
             {

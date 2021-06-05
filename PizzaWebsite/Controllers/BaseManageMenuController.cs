@@ -11,13 +11,13 @@ using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
-    public abstract class BaseManageMenuController<TRecord, TViewModel> : BaseController where TRecord : Record, new() where TViewModel : class, new()
+    public abstract class BaseManageMenuController<TRecord, TViewModel> : BaseManageWebsiteController<TRecord> where TRecord : Record, new() where TViewModel : class, new()
     {
         protected async Task<ActionResult> Index(int? page, int? rowsPerPage, string orderByColumn, QueryFilterBase searchFilter)
         {
             var viewModelList = new ManagePagedListViewModel<TViewModel>();
 
-            List<TRecord> recordList = await LoadPagedRecordsAsync<TRecord>(page, rowsPerPage, orderByColumn, SortOrder.Ascending, searchFilter, PizzaDb, Request, viewModelList.PaginationVm);
+            List<TRecord> recordList = await LoadPagedRecordsAsync(page, rowsPerPage, orderByColumn, SortOrder.Ascending, searchFilter, PizzaDb, Request, viewModelList.PaginationVm);
 
             foreach (TRecord record in recordList)
             {

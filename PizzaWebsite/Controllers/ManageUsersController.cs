@@ -13,7 +13,7 @@ using System.Web.Mvc;
 namespace PizzaWebsite.Controllers
 {
     [Authorize(Roles = "Admin,Executive")]
-    public class ManageUsersController : BaseController
+    public class ManageUsersController : BaseManageWebsiteController<SiteUser>
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string userId, string email)
         {
@@ -25,7 +25,7 @@ namespace PizzaWebsite.Controllers
                 Email = email
             };
 
-            List<SiteUser> userList = await LoadPagedRecordsAsync<SiteUser>(page, rowsPerPage, "Id", SortOrder.Ascending, searchFilter, PizzaDb, Request, manageUsersVm.PaginationVm);
+            List<SiteUser> userList = await LoadPagedRecordsAsync(page, rowsPerPage, "Id", SortOrder.Ascending, searchFilter, PizzaDb, Request, manageUsersVm.PaginationVm);
 
             foreach (SiteUser user in userList)
             {
