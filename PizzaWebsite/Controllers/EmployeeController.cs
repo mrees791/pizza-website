@@ -23,32 +23,5 @@ namespace PizzaWebsite.Controllers
 
             return View(model);
         }
-
-        public async Task<ActionResult> SearchUsers(int? page, int? rowsPerPage, string userId, string email)
-        {
-            throw new NotImplementedException();
-            /*ManagePagedListViewModel<SearchUserViewModel> model = new ManagePagedListViewModel<SearchUserViewModel>();
-
-            SiteUserFilter searchFilter = new SiteUserFilter()
-            {
-                Id = userId,
-                Email = email
-            };
-
-            List<SiteUser> userList = await LoadPagedRecordsAsync<SiteUser>(page, rowsPerPage, "Id", SortOrder.Ascending, searchFilter, PizzaDb, Request, model.PaginationVm);
-
-            foreach (SiteUser user in userList)
-            {
-                SearchUserViewModel userVm = new SearchUserViewModel()
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    IsBanned = user.IsBanned
-                };
-                model.ItemViewModelList.Add(userVm);
-            }
-
-            return View(model);*/
-        }
     }
 }

@@ -3,18 +3,24 @@
 @{
     ViewBag.Title = "Employee Panel";
 }
-
 <h2>@ViewBag.Title</h2>
 <p>Employee ID: @Model.EmployeeId</p>
-
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page">Home</li>
     </ol>
 </nav>
-
 <ul class="list-group">
     <li class="list-group-item">
-        <a href="@Url.Action("SearchUsers", "Employee")?Page=1&RowsPerPage=10">Search Users</a>
+        <a href="@Url.Action("Index", "ManageMenu")">Manage Menu</a>
+    </li>
+    <li class="list-group-item">
+        <a href="@Url.Action("Index", "ManageStores")?Page=1&RowsPerPage=10">Manage Stores</a>
+    </li>
+    <li class="list-group-item">
+        <a href="@Url.Action("Index", "ManageUsers")?Page=1&RowsPerPage=10">Manage Users</a>
+    </li>
+    <li class="list-group-item">
+        <a href="@Url.Action("Index", "ManageEmployees")?Page=1&RowsPerPage=10">Manage Employees</a>
     </li>
 </ul>

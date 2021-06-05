@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace PizzaWebsite.Models.ManageWebsite
+namespace PizzaWebsite.Models.ManageEmployees
 {
     public class ViewEmployeeLocationsViewModel
     {

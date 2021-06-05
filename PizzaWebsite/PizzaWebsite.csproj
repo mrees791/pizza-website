@@ -178,7 +178,6 @@
     <Compile Include="Controllers\ManagePizzaToppingTypeMenuController.cs" />
     <Compile Include="Controllers\ManageStoresController.cs" />
     <Compile Include="Controllers\ManageUsersController.cs" />
-    <Compile Include="Controllers\ManageWebsiteController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -205,12 +204,12 @@
     <Compile Include="Models\ManageWebsite\ManagePagedListViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ManageWebsite\AddEmployeeToRosterViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\AddEmployeeViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\EmployeeLocationViewModel.cs" />
+    <Compile Include="Models\ManageEmployees\AddEmployeeViewModel.cs" />
+    <Compile Include="Models\ManageEmployees\EmployeeLocationViewModel.cs" />
     <Compile Include="Models\ManageWebsite\EmployeeRosterItemViewModel.cs" />
     <Compile Include="Models\ManageWebsite\EmployeeRosterViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ErrorViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\ManageEmployeeViewModel.cs" />
+    <Compile Include="Models\ManageEmployees\ManageEmployeeViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ManageStoreViewModel.cs" />
     <Compile Include="Models\ManageWebsite\ManageUserViewModel.cs" />
     <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaCheeseViewModel.cs" />
@@ -219,7 +218,7 @@
     <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaSauceViewModel.cs" />
     <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaToppingTypeViewModel.cs" />
     <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\ViewEmployeeLocationsViewModel.cs" />
+    <Compile Include="Models\ManageEmployees\ViewEmployeeLocationsViewModel.cs" />
     <Compile Include="Models\Manage\DeliveryAddressListItemViewModel.cs" />
     <Compile Include="Models\Manage\ManageAddressesViewModel.cs" />
     <Compile Include="Models\Manage\ManageDeliveryAddressViewModel.cs" />
@@ -302,11 +301,9 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\ManageWebsite\Index.cshtml" />
     <Content Include="Views\ManageStores\Index.cshtml" />
     <Content Include="Views\ManageStores\ManageStore.cshtml" />
     <Content Include="Views\Shared\CreateEditConfirmation.cshtml" />
-    <Content Include="Views\ManageWebsite\Error.cshtml" />
     <Content Include="Views\ManageUsers\Index.cshtml" />
     <Content Include="Views\ManageUsers\ManageUser.cshtml" />
     <Content Include="Views\ManageEmployees\ManageEmployee.cshtml" />
