@@ -84,7 +84,7 @@ namespace PizzaWebsite.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", "Unable to add employee.");
                 return View(model);
             }
 

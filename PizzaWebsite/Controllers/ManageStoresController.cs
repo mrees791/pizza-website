@@ -74,7 +74,7 @@ namespace PizzaWebsite.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", "Error removing employee from roster.");
                 return View(model);
             }
 
@@ -128,7 +128,7 @@ namespace PizzaWebsite.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError("", "Unable to add employee to roster.");
                 return View(model);
             }
 
@@ -159,7 +159,7 @@ namespace PizzaWebsite.Controllers
                 return View("ManageStore", model);
             }
 
-            StoreLocation store = ViewModelToEntity(model);
+            StoreLocation store = ViewModelToRecord(model);
             await PizzaDb.InsertAsync(store);
 
             ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
@@ -186,7 +186,7 @@ namespace PizzaWebsite.Controllers
                 return View("ManageStore", model);
             }
 
-            await PizzaDb.UpdateAsync(ViewModelToEntity(model));
+            await PizzaDb.UpdateAsync(ViewModelToRecord(model));
 
             ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
             confirmationModel.ConfirmationMessage = $"Your changes to {model.Name} have been confirmed.";
@@ -218,7 +218,7 @@ namespace PizzaWebsite.Controllers
             };
         }
 
-        private StoreLocation ViewModelToEntity(ManageStoreViewModel model)
+        private StoreLocation ViewModelToRecord(ManageStoreViewModel model)
         {
             return new StoreLocation()
             {

@@ -7,7 +7,7 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Identity
 {
-    public class IdentityRole : IRole<string>, IRecordConverter<SiteRole>
+    public class IdentityRole : IRole<string>
     {
         private string name;
 
