@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLibrary.Models.Sql;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.QuerySearches
 {
-    public class MenuItemSearch : QuerySearchBase
+    public class MenuItemSearch : WhereClauseBase
     {
         public bool AvailableForPurchase { get; set; }
 
         internal override string GetWhereConditions()
         {
-            List<ColumnValuePair> searchValues = new List<ColumnValuePair>()
+            List<WhereClauseItem> items = new List<WhereClauseItem>()
             {
-                new ColumnValuePair("AvailableForPurchase", AvailableForPurchase.ToString())
+                new WhereClauseItem("AvailableForPurchase", nameof(AvailableForPurchase), AvailableForPurchase.ToString(), ComparisonType.Equals)
             };
 
-            return GetWhereConditions(searchValues);
+            return GetWhereConditions(items);
         }
     }
 }

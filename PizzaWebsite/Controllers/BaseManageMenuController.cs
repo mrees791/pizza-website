@@ -1,5 +1,6 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.QueryFilters;
+using DataLibrary.Models.Sql;
 using PizzaWebsite.Models;
 using PizzaWebsite.Models.ManageWebsite;
 using System;
@@ -11,13 +12,15 @@ using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
-    public abstract class BaseManageMenuController<TRecord, TViewModel> : BaseManageWebsiteController<TRecord> where TRecord : Record, new() where TViewModel : class, new()
+    public abstract class BaseManageMenuController<TRecord, TViewModel> : BaseManageWebsiteController<TRecord>
+        where TRecord : Record, new()
+        where TViewModel : class, new()
     {
-        protected async Task<ActionResult> Index(int? page, int? rowsPerPage, string orderByColumn, QueryFilterBase searchFilter)
+        protected async Task<ActionResult> Index(int? page, int? rowsPerPage, string orderByColumn, WhereClauseBase whereClauseBase)
         {
             var viewModelList = new ManagePagedListViewModel<TViewModel>();
 
-            List<TRecord> recordList = await LoadPagedRecordsAsync(page, rowsPerPage, orderByColumn, SortOrder.Ascending, searchFilter, PizzaDb, Request, viewModelList.PaginationVm);
+            List<TRecord> recordList = await LoadPagedRecordsAsync(page, rowsPerPage, orderByColumn, SortOrder.Ascending, whereClauseBase, PizzaDb, Request, viewModelList.PaginationVm);
 
             foreach (TRecord record in recordList)
             {

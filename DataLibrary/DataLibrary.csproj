@@ -87,7 +87,6 @@
     <Compile Include="Models\JoinLists\EmployeeOnEmployeeLocationJoinList.cs" />
     <Compile Include="Models\JoinLists\BaseClasses\JoinListBase.cs" />
     <Compile Include="Models\OrderBy.cs" />
-    <Compile Include="Models\QueryBase.cs" />
     <Compile Include="Models\QueryFilters\EmployeeFilter.cs" />
     <Compile Include="Models\QueryFilters\MenuPizzaFilter.cs" />
     <Compile Include="Models\QueryFilters\MenuPizzaCheeseFilter.cs" />
@@ -95,14 +94,12 @@
     <Compile Include="Models\QueryFilters\MenuPizzaCrustFlavorFilter.cs" />
     <Compile Include="Models\QueryFilters\MenuPizzaSauceFilter.cs" />
     <Compile Include="Models\QueryFilters\MenuPizzaToppingTypeFilter.cs" />
-    <Compile Include="Models\QueryFilters\QueryFilterBase.cs" />
     <Compile Include="Models\QueryFilters\SiteUserFilter.cs" />
     <Compile Include="Models\QueryFilters\StoreLocationFilter.cs" />
     <Compile Include="Models\QuerySearches\DeliveryAddressSearch.cs" />
     <Compile Include="Models\QuerySearches\MenuItemSearch.cs" />
     <Compile Include="Models\QuerySearches\MenuPizzaSearch.cs" />
     <Compile Include="Models\QuerySearches\PreviousOrderSearch.cs" />
-    <Compile Include="Models\QuerySearches\QuerySearchBase.cs" />
     <Compile Include="Models\QuerySearches\StoreLocationSearch.cs" />
     <Compile Include="Models\Record.cs" />
     <Compile Include="Models\OrderPhase.cs" />
@@ -110,10 +107,12 @@
     <Compile Include="Models\PizzaDatabaseCommands.cs" />
     <Compile Include="Models\PizzaTopping.cs" />
     <Compile Include="Models\ProductCategory.cs" />
-    <Compile Include="Models\ColumnValuePair.cs" />
     <Compile Include="Models\SortOrder.cs" />
+    <Compile Include="Models\Sql\ComparisonType.cs" />
     <Compile Include="Models\Sql\SelectQueries.cs" />
     <Compile Include="Models\Sql\SqlUtility.cs" />
+    <Compile Include="Models\Sql\WhereClauseBase.cs" />
+    <Compile Include="Models\Sql\WhereClauseItem.cs" />
     <Compile Include="Models\Tables\Cart.cs" />
     <Compile Include="Models\Tables\CartItem.cs" />
     <Compile Include="Models\Tables\CartPizza.cs" />

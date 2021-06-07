@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLibrary.Models.Sql;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.QuerySearches
 {
-    public class DeliveryAddressSearch : QuerySearchBase
+    public class DeliveryAddressSearch : WhereClauseBase
     {
         public string UserId { get; set; }
 
         internal override string GetWhereConditions()
         {
-            List<ColumnValuePair> searchValues = new List<ColumnValuePair>()
+            List<WhereClauseItem> items = new List<WhereClauseItem>()
             {
-                new ColumnValuePair("UserId", UserId)
+                new WhereClauseItem("UserId", nameof(UserId), UserId, ComparisonType.Equals)
             };
 
-            return GetWhereConditions(searchValues);
+            return GetWhereConditions(items);
         }
     }
 }

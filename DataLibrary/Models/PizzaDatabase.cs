@@ -267,7 +267,7 @@ namespace DataLibrary.Models
             return list;
         }
 
-        public async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(string orderByColumn, SortOrder sortOrder, QuerySearchBase querySearch, IDbTransaction transaction = null) where TRecord : Record
+        public async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(string orderByColumn, SortOrder sortOrder, WhereClauseBase whereClauseBase, IDbTransaction transaction = null) where TRecord : Record
         {
             OrderBy orderBy = new OrderBy()
             {
@@ -275,9 +275,9 @@ namespace DataLibrary.Models
                 SortOrder = sortOrder
             };
 
-            string conditions = $"{querySearch.GetWhereConditions()} ORDER BY {orderBy.GetConditions()}";
+            string conditions = $"{whereClauseBase.GetWhereConditions()} ORDER BY {orderBy.GetConditions()}";
 
-            IEnumerable<TRecord> list = await connection.GetListAsync<TRecord>(conditions, querySearch, transaction);
+            IEnumerable<TRecord> list = await connection.GetListAsync<TRecord>(conditions, whereClauseBase, transaction);
 
             foreach (TRecord record in list)
             {
@@ -331,7 +331,7 @@ namespace DataLibrary.Models
             return list;
         }
 
-        public async Task<IEnumerable<TRecord>> GetPagedListAsync<TRecord>(int pageNumber, int rowsPerPage, string orderByColumn, SortOrder sortOrder, QueryBase queryBase,
+        public async Task<IEnumerable<TRecord>> GetPagedListAsync<TRecord>(int pageNumber, int rowsPerPage, string orderByColumn, SortOrder sortOrder, WhereClauseBase whereClauseBase,
             IDbTransaction transaction = null) where TRecord : Record
         {
             OrderBy orderBy = new OrderBy()
@@ -340,7 +340,7 @@ namespace DataLibrary.Models
                 SortOrder = sortOrder
             };
 
-            IEnumerable<TRecord> list = await connection.GetListPagedAsync<TRecord>(pageNumber, rowsPerPage, queryBase.GetWhereConditions(), orderBy.GetConditions(), queryBase, transaction);
+            IEnumerable<TRecord> list = await connection.GetListPagedAsync<TRecord>(pageNumber, rowsPerPage, whereClauseBase.GetWhereConditions(), orderBy.GetConditions(), whereClauseBase, transaction);
 
             foreach (TRecord record in list)
             {
@@ -350,40 +350,20 @@ namespace DataLibrary.Models
             return list;
         }
 
-        public async Task<IEnumerable<TRecord>> GetPagedListAsync<TRecord>(int pageNumber, int rowsPerPage, string orderByColumn, SortOrder sortOrder,
-            QuerySearchBase querySearch, IDbTransaction transaction = null) where TRecord : Record
+        public async Task<int> GetNumberOfRecordsAsync<TRecord>(WhereClauseBase whereClauseBase, IDbTransaction transaction = null) where TRecord : Record
         {
-            OrderBy orderBy = new OrderBy()
-            {
-                OrderByColumn = orderByColumn,
-                SortOrder = sortOrder
-            };
-
-            IEnumerable<TRecord> list = await connection.GetListPagedAsync<TRecord>(pageNumber, rowsPerPage, querySearch.GetWhereConditions(), orderBy.GetConditions(),
-                querySearch, transaction);
-
-            foreach (TRecord record in list)
-            {
-                await record.MapEntityAsync(this, transaction);
-            }
-
-            return list;
+            string conditions = whereClauseBase.GetWhereConditions();
+            return await connection.RecordCountAsync<TRecord>(conditions, parameters: whereClauseBase, transaction: transaction);
         }
 
-        public async Task<int> GetNumberOfRecordsAsync<TRecord>(QueryBase query, IDbTransaction transaction = null) where TRecord : Record
-        {
-            string conditions = query.GetWhereConditions();
-            return await connection.RecordCountAsync<TRecord>(conditions, parameters: query, transaction: transaction);
-        }
-
-        public async Task<int> GetNumberOfPagesAsync<TRecord>(int rowsPerPage, QueryBase query, IDbTransaction transaction = null) where TRecord : Record
+        public async Task<int> GetNumberOfPagesAsync<TRecord>(int rowsPerPage, WhereClauseBase whereClauseBase, IDbTransaction transaction = null) where TRecord : Record
         {
             if (rowsPerPage == 0)
             {
                 return 0;
             }
 
-            int recordCount = await GetNumberOfRecordsAsync<TRecord>(query);
+            int recordCount = await GetNumberOfRecordsAsync<TRecord>(whereClauseBase);
 
             if (recordCount == 0)
             {

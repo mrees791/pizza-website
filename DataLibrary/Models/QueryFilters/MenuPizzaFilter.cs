@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLibrary.Models.Sql;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.QueryFilters
 {
-    public class MenuPizzaFilter : QueryFilterBase
+    public class MenuPizzaFilter : WhereClauseBase
     {
         public string PizzaName { get; set; }
 
         internal override string GetWhereConditions()
         {
-            List<ColumnValuePair> filters = new List<ColumnValuePair>()
+            List<WhereClauseItem> items = new List<WhereClauseItem>()
             {
-                new ColumnValuePair("PizzaName", PizzaName)
+                new WhereClauseItem("PizzaName", nameof(PizzaName), PizzaName, ComparisonType.Like)
             };
 
-            return GetWhereConditions(filters);
+            return GetWhereConditions(items);
         }
     }
 }

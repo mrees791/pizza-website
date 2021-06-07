@@ -1,4 +1,5 @@
 ﻿using DataLibrary.Models;
+using DataLibrary.Models.Sql;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -16,10 +17,10 @@ namespace PizzaWebsite.Models
         public int TotalNumberOfItems { get; set; }
         public NameValueCollection QueryString { get; set; }
 
-        public async Task InitializeAsync<TRecord>(int page, int rowsPerPage, QueryBase query, HttpRequestBase request, PizzaDatabase pizzaDb) where TRecord : Record
+        public async Task InitializeAsync<TRecord>(int page, int rowsPerPage, WhereClauseBase whereClauseBase, HttpRequestBase request, PizzaDatabase pizzaDb) where TRecord : Record
         {
-            int totalNumberOfItems = await pizzaDb.GetNumberOfRecordsAsync<TRecord>(query);
-            int numberOfPages = await pizzaDb.GetNumberOfPagesAsync<TRecord>(rowsPerPage, query);
+            int totalNumberOfItems = await pizzaDb.GetNumberOfRecordsAsync<TRecord>(whereClauseBase);
+            int numberOfPages = await pizzaDb.GetNumberOfPagesAsync<TRecord>(rowsPerPage, whereClauseBase);
 
             CurrentPage = page;
             RowsPerPage = rowsPerPage;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLibrary.Models.Sql;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models.QuerySearches
 {
-    public class StoreLocationSearch : QuerySearchBase
+    public class StoreLocationSearch : WhereClauseBase
     {
         public bool IsActiveLocation { get; set; }
 
         internal override string GetWhereConditions()
         {
-            List<ColumnValuePair> searchValues = new List<ColumnValuePair>()
+            List<WhereClauseItem> items = new List<WhereClauseItem>()
             {
-                new ColumnValuePair("IsActiveLocation", IsActiveLocation.ToString())
+                new WhereClauseItem("IsActiveLocation", nameof(IsActiveLocation), IsActiveLocation.ToString(), ComparisonType.Equals)
             };
 
-            return GetWhereConditions(searchValues);
+            return GetWhereConditions(items);
         }
     }
 }
