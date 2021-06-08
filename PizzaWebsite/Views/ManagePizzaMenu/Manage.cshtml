@@ -4,14 +4,13 @@
     if (Model.IsNewRecord())
     {
         ViewBag.Title = "Add New Pizza";
-        <h2>Add New Pizza</h2>
     }
     else
     {
         ViewBag.Title = "Edit Pizza";
-        <h2>Edit Pizza</h2>
     }
 }
+<h2>@ViewBag.Title</h2>
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="@Url.Action("Index", "Employee")">Home</a></li>

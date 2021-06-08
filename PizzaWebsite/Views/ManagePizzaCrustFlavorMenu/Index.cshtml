@@ -4,12 +4,12 @@
 @{
     ViewBag.Title = "Manage Pizza Crust Flavor Menu";
 }
-<h2>Manage Pizza Crust Flavor Menu</h2>
+<h2>@ViewBag.Title</h2>
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="@Url.Action("Index", "Employee")">Home</a></li>
         <li class="breadcrumb-item"><a href="@Url.Action("Index", "ManageMenu")">Manage Menu</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Manage Pizza Crust Flavor Menu</li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
     </ol>
 </nav>
 <hr />
