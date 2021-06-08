@@ -1,13 +1,11 @@
-﻿@using PizzaWebsite.Models
-@using PizzaWebsite.Models.Employees
+﻿@using PizzaWebsite.Models.Employees
+@using PizzaWebsite.Models.ManageStores
 @model ManagePagedListViewModel<ManageStoreViewModel>
 
 @{
     ViewBag.Title = "Manage Stores";
 }
-
 <h2>Manage Stores</h2>
-
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="@Url.Action("Index", "Employee")">Home</a></li>
@@ -15,7 +13,6 @@
     </ol>
 </nav>
 <hr />
-
 <div>
     @using (Html.BeginForm("Index", "ManageStores", FormMethod.Get))
     {
@@ -28,7 +25,6 @@
         <input type="submit" value="Apply Search Filters" class="btn btn-primary" />
     }
 </div>
-
 @if (User.IsInRole("Admin") || User.IsInRole("Executive"))
 {
     <div>
@@ -37,7 +33,6 @@
         </a>
     </div>
 }
-
 <table class="table">
     <tr>
         <th>
@@ -97,7 +92,6 @@
         </tr>
     }
 </table>
-
 <nav>
     <ul id="managePagination" class="pagination">
     </ul>

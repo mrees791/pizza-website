@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace PizzaWebsite.Models.Employees
+namespace PizzaWebsite.Models.ManageStores
 {
     public class EmployeeRosterViewModel
     {
@@ -26,7 +26,7 @@ namespace PizzaWebsite.Models.Employees
             StoreId = storeId;
             StoreName = storeLocation.Name;
 
-            foreach (Join<DataLibrary.Models.Tables.Employee, EmployeeLocation> join in joinList.Items)
+            foreach (Join<Employee, EmployeeLocation> join in joinList.Items)
             {
                 SiteUser siteUser = await pizzaDb.GetSiteUserByIdAsync(join.Table1.UserId);
                 bool isManager = await pizzaDb.UserIsInRole(siteUser, managerRole);

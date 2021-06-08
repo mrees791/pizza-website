@@ -1,4 +1,4 @@
-﻿@using PizzaWebsite.Models.Employees
+﻿@using PizzaWebsite.Models.ManageStores
 @model ManageStoreViewModel
 
 @{
@@ -13,7 +13,6 @@
         <h2>Edit Store</h2>
     }
 }
-
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="@Url.Action("Index", "Employee")">Home</a></li>
@@ -22,11 +21,9 @@
     </ol>
 </nav>
 <hr />
-
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -36,7 +33,6 @@
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.StreetAddress, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -44,7 +40,6 @@
                 @Html.ValidationMessageFor(model => model.StreetAddress, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -52,7 +47,6 @@
                 @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.SelectedState, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -60,7 +54,6 @@
                 @Html.ValidationMessageFor(model => model.SelectedState, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.ZipCode, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -68,7 +61,6 @@
                 @Html.ValidationMessageFor(model => model.ZipCode, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -76,7 +68,6 @@
                 @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.IsActiveLocation, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -86,7 +77,6 @@
                 </div>
             </div>
         </div>
-
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 @if (Model.IsNewRecord())

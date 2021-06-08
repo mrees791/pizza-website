@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-namespace PizzaWebsite.Models.Employees
+namespace PizzaWebsite.Models.ManageStores
 {
     public class AddEmployeeToRosterViewModel
     {

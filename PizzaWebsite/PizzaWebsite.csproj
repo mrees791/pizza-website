@@ -201,14 +201,14 @@
     <Compile Include="Models\Identity\Stores\UserStore.cs" />
     <Compile Include="Models\Employees\ManagePagedListViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Employees\AddEmployeeToRosterViewModel.cs" />
+    <Compile Include="Models\ManageStores\AddEmployeeToRosterViewModel.cs" />
     <Compile Include="Models\ManageEmployees\AddEmployeeViewModel.cs" />
     <Compile Include="Models\ManageEmployees\EmployeeLocationViewModel.cs" />
-    <Compile Include="Models\Employees\EmployeeRosterItemViewModel.cs" />
-    <Compile Include="Models\Employees\EmployeeRosterViewModel.cs" />
+    <Compile Include="Models\ManageStores\EmployeeRosterItemViewModel.cs" />
+    <Compile Include="Models\ManageStores\EmployeeRosterViewModel.cs" />
     <Compile Include="Models\Employees\ErrorViewModel.cs" />
     <Compile Include="Models\ManageEmployees\ManageEmployeeViewModel.cs" />
-    <Compile Include="Models\Employees\ManageStoreViewModel.cs" />
+    <Compile Include="Models\ManageStores\ManageStoreViewModel.cs" />
     <Compile Include="Models\Employees\ManageUserViewModel.cs" />
     <Compile Include="Models\Employees\Menus\ManageMenuPizzaCheeseViewModel.cs" />
     <Compile Include="Models\Employees\Menus\ManageMenuPizzaCrustFlavorViewModel.cs" />
@@ -225,7 +225,7 @@
     <Compile Include="Models\PizzaBuilders\CartPizzaBuilderViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\PizzaBuilderViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\PizzaToppingViewModel.cs" />
-    <Compile Include="Models\Employees\RemoveEmployeeFromRosterViewModel.cs" />
+    <Compile Include="Models\ManageStores\RemoveEmployeeFromRosterViewModel.cs" />
     <Compile Include="Models\Shop\CheckoutViewModel.cs" />
     <Compile Include="Models\Shop\MenuPizzaViewModel.cs" />
     <Compile Include="Models\Shop\OrderStatusViewModel.cs" />
@@ -350,7 +350,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\BaseManageWebsite\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

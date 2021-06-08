@@ -4,6 +4,7 @@ using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Models;
 using PizzaWebsite.Models.Employees;
+using PizzaWebsite.Models.ManageStores;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,15 +60,6 @@ namespace PizzaWebsite.Controllers
         /// <returns></returns>
         private async Task<IEnumerable<StoreLocation>> LoadEmployedStoreLocationListAsync(int? page, int? rowsPerPage, StoreLocationFilter searchFilter, PaginationViewModel paginationVm)
         {
-            /*if (!page.HasValue)
-            {
-                page = 1;
-            }
-            if (!rowsPerPage.HasValue)
-            {
-                rowsPerPage = 10;
-            }*/
-
             Employee employee = await PizzaDb.GetEmployeeAsync(await GetCurrentUserAsync());
             var joinList = new EmployeeLocationOnStoreLocationJoinList();
 
