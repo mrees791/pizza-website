@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-namespace PizzaWebsite.Models.Employees.Menus
+namespace PizzaWebsite.Models.ManageMenus
 {
     public class ManageMenuPizzaViewModel : PizzaBuilderViewModel
     {

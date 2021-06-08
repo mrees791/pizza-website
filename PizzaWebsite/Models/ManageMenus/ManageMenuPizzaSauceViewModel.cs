@@ -5,17 +5,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace PizzaWebsite.Models.Employees.Menus
+namespace PizzaWebsite.Models.ManageMenus
 {
-    public class ManageMenuPizzaToppingTypeViewModel
+    public class ManageMenuPizzaSauceViewModel
     {
-        public List<string> ToppingCategoryList { get; set; }
-
-        public ManageMenuPizzaToppingTypeViewModel()
-        {
-            ToppingCategoryList = new List<string>();
-        }
-
         [HiddenInput(DisplayValue = false)]
         public int Id { get; set; }
         [HiddenInput(DisplayValue = false)]
@@ -35,9 +28,6 @@ namespace PizzaWebsite.Models.Employees.Menus
         [Display(Name = "Price (Extra Amount)")]
         [Range(0.01, 100.0, ErrorMessage = "Price must be between $0.01 and $100.00.")]
         public decimal PriceExtra { get; set; }
-        [Required]
-        [Display(Name = "Category")]
-        public string CategoryName { get; set; }
         [Required]
         [Display(Name = "Description")]
         [MaxLength(512)]

@@ -1,14 +1,10 @@
-﻿@using PizzaWebsite.Models
-@using PizzaWebsite.Models.Employees
-@using PizzaWebsite.Models.Employees.Menus
+﻿@using PizzaWebsite.Models.Employees
+@using PizzaWebsite.Models.ManageMenus
 @model ManagePagedListViewModel<ManageMenuPizzaToppingTypeViewModel>
-
 @{
     ViewBag.Title = "Manage Pizza Topping Menu";
 }
-
 <h2>Manage Pizza Topping Menu</h2>
-
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="@Url.Action("Index", "Employee")">Home</a></li>
@@ -17,7 +13,6 @@
     </ol>
 </nav>
 <hr />
-
 <div>
     @using (Html.BeginForm("Index", "ManagePizzaToppingTypeMenu", FormMethod.Get))
     {
@@ -28,13 +23,11 @@
         <input type="submit" value="Apply Search Filters" class="btn btn-primary" />
     }
 </div>
-
 <div>
     <a href="@Url.Action("Add")?@(Request.QueryString)">
         <input type="button" value="Add New Topping" class="btn btn-primary" />
     </a>
 </div>
-
 <table class="table">
     <tr>
         <th>
@@ -43,9 +36,9 @@
         <th>
             @Html.DisplayNameFor(model => model.ItemViewModel.AvailableForPurchase)
         </th>
-        <th><!-- Empty header for edit column --></th>
+        @* Empy column for Edit button. *@
+        <th></th>
     </tr>
-
     @foreach (var item in Model.ItemViewModelList)
     {
         <tr>
@@ -63,12 +56,10 @@
         </tr>
     }
 </table>
-
 <nav>
     <ul id="managePagination" class="pagination">
     </ul>
 </nav>
-
 @section Scripts {
     <script type="text/javascript">
         $(function () {
