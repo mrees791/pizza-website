@@ -1,38 +1,37 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.Tables;
-using PizzaWebsite.Models.Attributes;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
-namespace PizzaWebsite.Models.ManageWebsite
+namespace PizzaWebsite.Models.Employees
 {
-    public class AddEmployeeToRosterViewModel
+    public class RemoveEmployeeFromRosterViewModel
     {
+        public int EmployeeLocationId { get; set; }
         public int StoreId { get; set; }
         public string StoreName { get; set; }
-
-        [Display(Name = "Employee ID")]
-        [StringLength(256, ErrorMessage = "Employee ID cannot be longer than 256 characters.")]
-        [ValidEmployeeId]
-        [Required]
         public string EmployeeId { get; set; }
 
-        public async Task InitializeAsync(int storeId, PizzaDatabase pizzaDb)
+        public async Task InitializeAsync(int employeeLocationId, PizzaDatabase pizzaDb)
         {
-            StoreLocation storeLocation = await pizzaDb.GetAsync<StoreLocation>(storeId);
+            EmployeeLocation employeeLocation = await pizzaDb.GetAsync<EmployeeLocation>(employeeLocationId);
+            StoreLocation storeLocation = await pizzaDb.GetAsync<StoreLocation>(employeeLocation.StoreId);
+            Employee employee = await pizzaDb.GetAsync<Employee>(employeeLocation.EmployeeId);
 
-            StoreId = storeId;
+            EmployeeLocationId = employeeLocationId;
+            StoreId = storeLocation.Id;
             StoreName = storeLocation.Name;
+            EmployeeId = employee.Id;
         }
 
         public async Task ValidateAsync(ModelStateDictionary modelState, PizzaDatabase pizzaDb)
         {
             // Make sure employee exists.
-            DataLibrary.Models.Tables.Employee employee = await pizzaDb.GetAsync<DataLibrary.Models.Tables.Employee>(EmployeeId);
+            Employee employee = await pizzaDb.GetAsync<Employee>(EmployeeId);
 
             if (employee == null)
             {
@@ -52,9 +51,9 @@ namespace PizzaWebsite.Models.ManageWebsite
                     // Make sure employee isn't already employed at this location.
                     bool alreadyEmployedAtLocation = await pizzaDb.Commands.IsEmployedAtLocation(employee, storeLocation);
 
-                    if (alreadyEmployedAtLocation)
+                    if (!alreadyEmployedAtLocation)
                     {
-                        modelState.AddModelError(nameof(EmployeeId), $"Employee with ID {EmployeeId} is already employed at this location.");
+                        modelState.AddModelError(nameof(EmployeeId), $"Employee with ID {EmployeeId} is not employed at {StoreName}.");
                     }
                 }
             }

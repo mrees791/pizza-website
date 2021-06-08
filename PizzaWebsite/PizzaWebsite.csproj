@@ -199,23 +199,23 @@
     <Compile Include="Models\Identity\IdentityUser.cs" />
     <Compile Include="Models\Identity\Stores\RoleStore.cs" />
     <Compile Include="Models\Identity\Stores\UserStore.cs" />
-    <Compile Include="Models\ManageWebsite\ManagePagedListViewModel.cs" />
+    <Compile Include="Models\Employees\ManagePagedListViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\ManageWebsite\AddEmployeeToRosterViewModel.cs" />
+    <Compile Include="Models\Employees\AddEmployeeToRosterViewModel.cs" />
     <Compile Include="Models\ManageEmployees\AddEmployeeViewModel.cs" />
     <Compile Include="Models\ManageEmployees\EmployeeLocationViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\EmployeeRosterItemViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\EmployeeRosterViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\ErrorViewModel.cs" />
+    <Compile Include="Models\Employees\EmployeeRosterItemViewModel.cs" />
+    <Compile Include="Models\Employees\EmployeeRosterViewModel.cs" />
+    <Compile Include="Models\Employees\ErrorViewModel.cs" />
     <Compile Include="Models\ManageEmployees\ManageEmployeeViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\ManageStoreViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\ManageUserViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaCheeseViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaCrustFlavorViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaCrustViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaSauceViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaToppingTypeViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\Menus\ManageMenuPizzaViewModel.cs" />
+    <Compile Include="Models\Employees\ManageStoreViewModel.cs" />
+    <Compile Include="Models\Employees\ManageUserViewModel.cs" />
+    <Compile Include="Models\Employees\Menus\ManageMenuPizzaCheeseViewModel.cs" />
+    <Compile Include="Models\Employees\Menus\ManageMenuPizzaCrustFlavorViewModel.cs" />
+    <Compile Include="Models\Employees\Menus\ManageMenuPizzaCrustViewModel.cs" />
+    <Compile Include="Models\Employees\Menus\ManageMenuPizzaSauceViewModel.cs" />
+    <Compile Include="Models\Employees\Menus\ManageMenuPizzaToppingTypeViewModel.cs" />
+    <Compile Include="Models\Employees\Menus\ManageMenuPizzaViewModel.cs" />
     <Compile Include="Models\ManageEmployees\ViewEmployeeLocationsViewModel.cs" />
     <Compile Include="Models\Manage\DeliveryAddressListItemViewModel.cs" />
     <Compile Include="Models\Manage\ManageAddressesViewModel.cs" />
@@ -225,7 +225,7 @@
     <Compile Include="Models\PizzaBuilders\CartPizzaBuilderViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\PizzaBuilderViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\PizzaToppingViewModel.cs" />
-    <Compile Include="Models\ManageWebsite\RemoveEmployeeFromRosterViewModel.cs" />
+    <Compile Include="Models\Employees\RemoveEmployeeFromRosterViewModel.cs" />
     <Compile Include="Models\Shop\CheckoutViewModel.cs" />
     <Compile Include="Models\Shop\MenuPizzaViewModel.cs" />
     <Compile Include="Models\Shop\OrderStatusViewModel.cs" />
@@ -350,7 +350,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\ManageStores\" />
     <Folder Include="Views\BaseManageWebsite\" />
   </ItemGroup>
   <ItemGroup>
