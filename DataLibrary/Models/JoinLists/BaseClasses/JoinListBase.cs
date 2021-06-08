@@ -21,9 +21,12 @@ namespace DataLibrary.Models.JoinLists.BaseClasses
 
         protected abstract string GetSqlJoinQuery(bool onlySelectFirst);
 
-        protected async Task LoadListAsync(string whereClause, object parameters, bool onlySelectFirst, string orderByColumn, SortOrder sortOrder, PizzaDatabase pizzaDb, string splitOn = "Id")
+        protected async Task LoadListAsync(string whereClause, object parameters, bool onlySelectFirst, string orderByColumn, SortOrder sortOrder, PizzaDatabase pizzaDb, string splitOn = "Id", string offsetClause = "")
         {
-            string sqlJoinQuery = $"{GetSqlJoinQuery(onlySelectFirst)} {whereClause} {SqlUtility.CreateOrderByClause(orderByColumn, sortOrder)}";
+            string sqlJoinQuery = $@"{GetSqlJoinQuery(onlySelectFirst)}
+                                     {whereClause}
+                                     {SqlUtility.CreateOrderByClause(orderByColumn, sortOrder)}
+                                     {offsetClause}";
 
             Items = await pizzaDb.Connection.QueryAsync<TTable1, TTable2, Join<TTable1, TTable2>>(
                 sqlJoinQuery,

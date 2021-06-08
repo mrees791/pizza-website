@@ -27,7 +27,7 @@ namespace PizzaWebsite.Controllers
 
             List<StoreLocation> storeList = new List<StoreLocation>();
 
-            if (User.IsInRole("Admin") || User.IsInRole("Executive"))
+            if (IsAuthorizedToSeeAllStores())
             {
                 storeList = await LoadPagedRecordsAsync(page, rowsPerPage, "Name", SortOrder.Ascending, searchFilter, PizzaDb, Request, manageStoresVm.PaginationVm);
             }
@@ -44,6 +44,11 @@ namespace PizzaWebsite.Controllers
             }
 
             return View(manageStoresVm);
+        }
+
+        private bool IsAuthorizedToSeeAllStores()
+        {
+            return User.IsInRole("Admin") || User.IsInRole("Executive");
         }
 
         public async Task<ActionResult> RemoveEmployeeFromRoster(int id)

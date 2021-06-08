@@ -202,7 +202,7 @@ namespace DataLibrary.Models
         public async Task<UserRole> GetUserRoleAsync(SiteUser siteUser, SiteRole siteRole, IDbTransaction transaction = null)
         {
             string whereClause = @"WHERE UserId = @UserId
-                           AND RoleName = @RoleName";
+                                   AND RoleName = @RoleName";
 
             object parameters = new
             {
@@ -358,27 +358,8 @@ namespace DataLibrary.Models
 
         public async Task<int> GetNumberOfPagesAsync<TRecord>(int rowsPerPage, WhereClauseBase whereClauseBase, IDbTransaction transaction = null) where TRecord : Record
         {
-            if (rowsPerPage == 0)
-            {
-                return 0;
-            }
-
-            int recordCount = await GetNumberOfRecordsAsync<TRecord>(whereClauseBase);
-
-            if (recordCount == 0)
-            {
-                return 0;
-            }
-
-            int pages = recordCount / rowsPerPage;
-            int remainder = recordCount % rowsPerPage;
-
-            if (remainder != 0)
-            {
-                pages += 1;
-            }
-
-            return pages;
+            int resultCount = await GetNumberOfRecordsAsync<TRecord>(whereClauseBase);
+            return PagedListUtility.GetNumberOfPages(rowsPerPage, resultCount);
         }
 
         public async Task<dynamic> InsertAsync(Record record)

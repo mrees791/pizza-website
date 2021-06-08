@@ -136,6 +136,7 @@
     <Compile Include="Models\Tables\UserLogin.cs" />
     <Compile Include="Models\Tables\UserRole.cs" />
     <Compile Include="Models\Utility\ListUtility.cs" />
+    <Compile Include="Models\Utility\PagedListUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

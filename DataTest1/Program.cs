@@ -1,4 +1,6 @@
 ﻿using DataLibrary.Models;
+using DataLibrary.Models.JoinLists;
+using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
@@ -33,6 +35,28 @@ namespace DataTest1
             //await TestAsyncBAD();
 
             //await TestGetList();
+
+            await TestPagedJoin();
+        }
+
+        private async Task TestPagedJoin()
+        {
+            string employeeId = "DENNIS500";
+            int rowsPerPage = 2;
+            StoreLocationFilter searchFilter = new StoreLocationFilter();
+
+            using (var pizzaDb = new PizzaDatabase())
+            {
+                var list = new EmployeeLocationOnStoreLocationJoinList();
+                int resultCount = await list.GetNumberOfResultsByEmployeeIdAsync(employeeId, searchFilter, rowsPerPage, pizzaDb);
+                int pageCount = await list.GetNumberOfPagesByEmployeeIdAsync(employeeId, searchFilter, rowsPerPage, pizzaDb);
+
+                for (int iPage = 1; iPage < 10; iPage++)
+                {
+                    var currentList = new EmployeeLocationOnStoreLocationJoinList();
+                    await currentList.LoadPagedListByEmployeeIdAsync(employeeId, searchFilter, iPage, rowsPerPage, pizzaDb);
+                }
+            }
         }
 
         // Async task list test causes this exception:

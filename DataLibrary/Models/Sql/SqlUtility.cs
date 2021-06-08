@@ -11,7 +11,7 @@ namespace DataLibrary.Models.Sql
     /// </summary>
     internal static class SqlUtility
     {
-        internal static string GetWhereClause(List<WhereClauseItem> items)
+        internal static string CreateWhereClause(List<WhereClauseItem> items)
         {
             string sqlClause = string.Empty;
             bool queriesAdded = false;
@@ -70,6 +70,12 @@ namespace DataLibrary.Models.Sql
             }
 
             return conditions;
+        }
+
+        internal static string CreateOffsetClause()
+        {
+            return @"OFFSET @CurrentOffset ROWS
+                     FETCH NEXT @RowsPerPage ROWS ONLY";
         }
     }
 }

@@ -12,7 +12,7 @@ namespace DataLibrary.Models.Sql
 
         protected string GetWhereConditions(List<WhereClauseItem> items)
         {
-            return SqlUtility.GetWhereClause(items);
+            return SqlUtility.CreateWhereClause(items);
         }
     }
 }
