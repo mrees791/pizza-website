@@ -19,12 +19,14 @@ namespace PizzaWebsite.Controllers
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
+            ValidatePageQuery(ref page, ref rowsPerPage, 10);
+
             MenuPizzaFilter searchFilter = new MenuPizzaFilter()
             {
                 PizzaName = name
             };
 
-            return await Index(page, rowsPerPage, "PizzaName", searchFilter);
+            return await Index(page.Value, rowsPerPage.Value, "PizzaName", searchFilter);
         }
 
         [HttpPost]

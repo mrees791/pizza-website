@@ -1,4 +1,5 @@
 ﻿using DataLibrary.Models;
+using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Models;
@@ -17,6 +18,7 @@ namespace PizzaWebsite.Controllers
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string storeName, string phoneNumber)
         {
+            ValidatePageQuery(ref page, ref rowsPerPage, 10);
             var manageStoresVm = new ManagePagedListViewModel<ManageStoreViewModel>();
 
             StoreLocationFilter searchFilter = new StoreLocationFilter()
@@ -25,17 +27,7 @@ namespace PizzaWebsite.Controllers
                 PhoneNumber = phoneNumber
             };
 
-            List<StoreLocation> storeList = new List<StoreLocation>();
-
-            if (IsAuthorizedToSeeAllStores())
-            {
-                storeList = await LoadPagedRecordsAsync(page, rowsPerPage, "Name", SortOrder.Ascending, searchFilter, PizzaDb, Request, manageStoresVm.PaginationVm);
-            }
-            else
-            {
-                // todo: Load a paged list of stores that the current employee is employed at.
-                throw new NotImplementedException();
-            }
+            IEnumerable<StoreLocation> storeList = await LoadAuthorizedStoreLocationListAsync(page.Value, rowsPerPage.Value, searchFilter, manageStoresVm.PaginationVm);
 
             foreach (StoreLocation store in storeList)
             {
@@ -44,6 +36,53 @@ namespace PizzaWebsite.Controllers
             }
 
             return View(manageStoresVm);
+        }
+
+        private async Task<IEnumerable<StoreLocation>> LoadAuthorizedStoreLocationListAsync(int page, int rowsPerPage, StoreLocationFilter searchFilter, PaginationViewModel paginationVm)
+        {
+            if (IsAuthorizedToSeeAllStores())
+            {
+                return await LoadPagedRecordsAsync(page, rowsPerPage, "Name", SortOrder.Ascending, searchFilter, PizzaDb, paginationVm);
+            }
+
+            // Only select stores that the current user is employed at.
+            return await LoadEmployedStoreLocationListAsync(page, rowsPerPage, searchFilter, paginationVm);
+        }
+
+        /// <summary>
+        /// Only select stores that the current user is employed at.
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="rowsPerPage"></param>
+        /// <param name="searchFilter"></param>
+        /// <param name="paginationVm"></param>
+        /// <returns></returns>
+        private async Task<IEnumerable<StoreLocation>> LoadEmployedStoreLocationListAsync(int? page, int? rowsPerPage, StoreLocationFilter searchFilter, PaginationViewModel paginationVm)
+        {
+            /*if (!page.HasValue)
+            {
+                page = 1;
+            }
+            if (!rowsPerPage.HasValue)
+            {
+                rowsPerPage = 10;
+            }*/
+
+            Employee employee = await PizzaDb.GetEmployeeAsync(await GetCurrentUserAsync());
+            var joinList = new EmployeeLocationOnStoreLocationJoinList();
+
+            await joinList.LoadPagedListByEmployeeIdAsync(employee.Id, searchFilter, page.Value, rowsPerPage.Value, PizzaDb);
+            int totalNumberOfItems = await joinList.GetNumberOfResultsByEmployeeIdAsync(employee.Id, searchFilter, rowsPerPage.Value, PizzaDb);
+            int totalPages = await joinList.GetNumberOfPagesByEmployeeIdAsync(employee.Id, searchFilter, rowsPerPage.Value, PizzaDb);
+
+            // Navigation pane
+            paginationVm.QueryString = Request.QueryString;
+            paginationVm.CurrentPage = page.Value;
+            paginationVm.RowsPerPage = rowsPerPage.Value;
+            paginationVm.TotalPages = totalPages;
+            paginationVm.TotalNumberOfItems = totalNumberOfItems;
+
+            return joinList.Items.Select(j => j.Table2);
         }
 
         private bool IsAuthorizedToSeeAllStores()

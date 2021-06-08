@@ -36,7 +36,7 @@ namespace DataTest1
 
             //await TestGetList();
 
-            await TestPagedJoin();
+            //await TestPagedJoin();
         }
 
         private async Task TestPagedJoin()

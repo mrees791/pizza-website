@@ -17,6 +17,7 @@ namespace PizzaWebsite.Controllers
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string userId, string email)
         {
+            ValidatePageQuery(ref page, ref rowsPerPage, 10);
             var manageUsersVm = new ManagePagedListViewModel<ManageUserViewModel>();
 
             SiteUserFilter searchFilter = new SiteUserFilter()
@@ -25,7 +26,7 @@ namespace PizzaWebsite.Controllers
                 Email = email
             };
 
-            List<SiteUser> userList = await LoadPagedRecordsAsync(page, rowsPerPage, "Id", SortOrder.Ascending, searchFilter, PizzaDb, Request, manageUsersVm.PaginationVm);
+            IEnumerable<SiteUser> userList = await LoadPagedRecordsAsync(page.Value, rowsPerPage.Value, "Id", SortOrder.Ascending, searchFilter, PizzaDb, manageUsersVm.PaginationVm);
 
             foreach (SiteUser user in userList)
             {

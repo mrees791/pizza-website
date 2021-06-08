@@ -29,11 +29,14 @@
     }
 </div>
 
-<div>
-    <a href="@Url.Action("CreateStore")?@(Request.QueryString)">
-        <input type="button" value="Create New Store" class="btn btn-primary" />
-    </a>
-</div>
+@if (User.IsInRole("Admin") || User.IsInRole("Executive"))
+{
+    <div>
+        <a href="@Url.Action("CreateStore")?@(Request.QueryString)">
+            <input type="button" value="Create New Store" class="btn btn-primary" />
+        </a>
+    </div>
+}
 
 <table class="table">
     <tr>

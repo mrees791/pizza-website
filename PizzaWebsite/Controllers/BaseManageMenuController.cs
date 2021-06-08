@@ -16,11 +16,11 @@ namespace PizzaWebsite.Controllers
         where TRecord : Record, new()
         where TViewModel : class, new()
     {
-        protected async Task<ActionResult> Index(int? page, int? rowsPerPage, string orderByColumn, WhereClauseBase whereClauseBase)
+        protected async Task<ActionResult> Index(int page, int rowsPerPage, string orderByColumn, WhereClauseBase whereClauseBase)
         {
             var viewModelList = new ManagePagedListViewModel<TViewModel>();
 
-            List<TRecord> recordList = await LoadPagedRecordsAsync(page, rowsPerPage, orderByColumn, SortOrder.Ascending, whereClauseBase, PizzaDb, Request, viewModelList.PaginationVm);
+            IEnumerable<TRecord> recordList = await LoadPagedRecordsAsync(page, rowsPerPage, orderByColumn, SortOrder.Ascending, whereClauseBase, PizzaDb, viewModelList.PaginationVm);
 
             foreach (TRecord record in recordList)
             {
