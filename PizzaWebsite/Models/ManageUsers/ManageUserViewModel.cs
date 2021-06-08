@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace PizzaWebsite.Models.Employees
+namespace PizzaWebsite.Models.ManageUsers
 {
     public class ManageUserViewModel
     {
