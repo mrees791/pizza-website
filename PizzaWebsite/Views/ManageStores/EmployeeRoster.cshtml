@@ -3,9 +3,7 @@
 @{
     ViewBag.Title = $"Employee Roster";
 }
-
 <h2>Employee Roster</h2>
-
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="@Url.Action("Index", "Employee")">Home</a></li>
@@ -14,9 +12,7 @@
     </ol>
 </nav>
 <hr />
-
 <h3>@($"{Model.StoreName} Employees")</h3>
-
 @if (Model.RosterIsEmpty())
 {
     <p>This location does not have any employees.</p>

@@ -3,7 +3,6 @@
 @{
     ViewBag.Title = "Add To Roster";
 }
-
 <h2>Add to Roster</h2>
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -17,7 +16,6 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.StoreId)
