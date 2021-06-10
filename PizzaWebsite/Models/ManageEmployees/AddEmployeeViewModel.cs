@@ -21,37 +21,5 @@ namespace PizzaWebsite.Models.ManageEmployees
         public string UserId { get; set; }
         [Display(Name = "Is Manager")]
         public bool IsManager { get; set; }
-
-        public async Task ValidateAsync(ModelStateDictionary modelState, PizzaDatabase pizzaDb)
-        {
-            // Check if user exists
-            SiteUser siteUser = await pizzaDb.GetSiteUserByNameAsync(UserId);
-
-            if (siteUser == null)
-            {
-                modelState.AddModelError(nameof(UserId), "User does not exist.");
-            }
-
-            // Make sure employee ID isn't already taken
-            Employee employee = await pizzaDb.GetAsync<Employee>(Id);
-
-            if (employee != null)
-            {
-                modelState.AddModelError(nameof(Id), "Employee ID is already taken.");
-            }
-
-
-            // Make sure user isn't already employed
-            if (siteUser != null)
-            {
-                SiteRole employeeRole = await pizzaDb.GetSiteRoleByNameAsync("Employee");
-                bool alreadyEmployed = await pizzaDb.UserIsInRole(siteUser, employeeRole);
-
-                if (alreadyEmployed)
-                {
-                    modelState.AddModelError(nameof(UserId), "User is already employed.");
-                }
-            }
-        }
     }
 }
