@@ -1,6 +1,7 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Sql;
+using DataLibrary.Models.Tables;
 using PizzaWebsite.Models;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,11 @@ namespace PizzaWebsite.Controllers
             paginationVm.TotalNumberOfItems = totalNumberOfItems;
 
             return recordList;
+        }
+
+        protected async Task<Employee> GetCurrentEmployeeAsync()
+        {
+            return await PizzaDb.GetEmployeeAsync(await GetCurrentUserAsync());
         }
 
         protected void ValidatePageQuery(ref int? page, ref int? rowsPerPage, int defaultRowsPerPage)
