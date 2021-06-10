@@ -13,13 +13,12 @@ using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
-    [Authorize(Roles = "Admin,Executive")]
+    [Authorize(Roles = "Admin,Executive,Manager")]
     public class ManageUsersController : BaseManageWebsiteController<SiteUser>
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string userId, string email)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);
-            var manageUsersVm = new ManagePagedListViewModel<ManageUserViewModel>();
 
             SiteUserFilter searchFilter = new SiteUserFilter()
             {
@@ -27,20 +26,28 @@ namespace PizzaWebsite.Controllers
                 Email = email
             };
 
-            IEnumerable<SiteUser> userList = await LoadPagedRecordsAsync(page.Value, rowsPerPage.Value, "Id", SortOrder.Ascending, searchFilter, PizzaDb, manageUsersVm.PaginationVm);
+            PaginationViewModel paginationVm = new PaginationViewModel();
+            List<ManageUserViewModel> userVmList = new List<ManageUserViewModel>();
+            IEnumerable<SiteUser> userList = await LoadPagedRecordsAsync(page.Value, rowsPerPage.Value, "Id", SortOrder.Ascending, searchFilter, PizzaDb, paginationVm);
 
             foreach (SiteUser user in userList)
             {
-                ManageUserViewModel model = new ManageUserViewModel()
+                ManageUserViewModel userVm = new ManageUserViewModel()
                 {
                     Id = user.Id,
                     Email = user.Email,
                     IsBanned = user.IsBanned
                 };
-                manageUsersVm.ItemViewModelList.Add(model);
+                userVmList.Add(userVm);
             }
 
-            return View(manageUsersVm);
+            var viewModel = new ManagePagedListViewModel<ManageUserViewModel>()
+            {
+                PaginationVm = paginationVm,
+                ItemViewModelList = userVmList
+            };
+
+            return View(viewModel);
         }
 
         public string FromUrlSafeId(string urlSafeId)
@@ -48,6 +55,7 @@ namespace PizzaWebsite.Controllers
             return urlSafeId.Replace("(dot)", ".");
         }
 
+        [Authorize(Roles = "Admin,Executive")]
         public async Task<ActionResult> ManageUser(string id)
         {
             SiteUser user = await PizzaDb.GetSiteUserByIdAsync(FromUrlSafeId(id));
@@ -64,32 +72,33 @@ namespace PizzaWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ManageUser(ManageUserViewModel model)
+        [Authorize(Roles = "Admin,Executive")]
+        public async Task<ActionResult> ManageUser(ManageUserViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View("ManageUser", model);
+                return View("ManageUser", viewModel);
             }
 
-            string id = FromUrlSafeId(model.Id);
-
+            string id = FromUrlSafeId(viewModel.Id);
             SiteUser user = await PizzaDb.GetSiteUserByIdAsync(id);
+            user.IsBanned = viewModel.IsBanned;
 
-            // Update user record
-            user.IsBanned = model.IsBanned;
             int rowsAffected = await PizzaDb.UpdateAsync(user);
 
             if (rowsAffected == 0)
             {
                 ModelState.AddModelError("", $"Unable to update user with ID: {user.Id}");
-                return View("ManageUser", model);
+                return View("ManageUser", viewModel);
             }
 
-            ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
-            confirmationModel.ConfirmationMessage = $"Your changes to {id} have been confirmed.";
-            confirmationModel.ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}";
+            ConfirmationViewModel confirmationVm = new ConfirmationViewModel()
+            {
+                ConfirmationMessage = $"Your changes to {id} have been confirmed.",
+                ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}"
+            };
 
-            return View("CreateEditConfirmation", confirmationModel);
+            return View("CreateEditConfirmation", confirmationVm);
         }
     }
 }
