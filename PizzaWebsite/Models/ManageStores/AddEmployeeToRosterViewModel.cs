@@ -12,12 +12,12 @@ namespace PizzaWebsite.Models.ManageStores
 {
     public class AddEmployeeToRosterViewModel
     {
-        public int StoreId { get; set; }
-        public string StoreName { get; set; }
         [Display(Name = "Employee ID")]
         [StringLength(256, ErrorMessage = "Employee ID cannot be longer than 256 characters.")]
         [ValidEmployeeId]
         [Required]
         public string EmployeeId { get; set; }
+        public int StoreId { get; set; }
+        public string StoreName { get; set; }
     }
 }
