@@ -193,7 +193,6 @@
     <Compile Include="Models\ConfirmationViewModel.cs" />
     <Compile Include="Models\Databases\DatabaseContext.cs" />
     <Compile Include="Models\Employees\EmployeeIndexViewModel.cs" />
-    <Compile Include="Models\ErrorViewModel.cs" />
     <Compile Include="Models\Geography\State.cs" />
     <Compile Include="Models\Geography\StateListCreator.cs" />
     <Compile Include="Models\Identity\IdentityRole.cs" />
