@@ -16,19 +16,14 @@
 @if (Model.RosterIsEmpty())
 {
     <p>This location does not have any employees.</p>
-    <div>
-        <a href="@Url.Action("AddEmployeeToRoster")/@Model.StoreId?@(Request.QueryString)">
-            <input type="button" value="Add Employee" class="btn btn-primary" />
-        </a>
-    </div>
 }
-else
+<div>
+    <a href="@Url.Action("AddEmployeeToRoster")/@Model.StoreId?@(Request.QueryString)">
+        <input type="button" value="Add Employee" class="btn btn-primary" />
+    </a>
+</div>
+@if (!Model.RosterIsEmpty())
 {
-    <div>
-        <a href="@Url.Action("AddEmployeeToRoster")/@Model.StoreId?@(Request.QueryString)">
-            <input type="button" value="Add Employee" class="btn btn-primary" />
-        </a>
-    </div>
     <table class="table">
         <tr>
             <th>Employee ID</th>

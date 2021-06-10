@@ -101,21 +101,21 @@ namespace PizzaWebsite.Controllers
         {
             Employee currentEmployee = await GetCurrentEmployeeAsync();
             EmployeeLocation employeeLocation = await PizzaDb.GetAsync<EmployeeLocation>(id);
-            StoreLocation storeLocation = await PizzaDb.GetAsync<StoreLocation>(employeeLocation.StoreId);
+            StoreLocation store = await PizzaDb.GetAsync<StoreLocation>(employeeLocation.StoreId);
             Employee employee = await PizzaDb.GetAsync<Employee>(employeeLocation.EmployeeId);
+            bool authorized = await IsAuthorizedToManageStoreAsync(currentEmployee, store);
 
-            bool authorized = await IsAuthorizedToManageStoreAsync(currentEmployee, storeLocation);
             if (!authorized)
             {
-                throw new Exception(CreateManageStoreErrorMessage(currentEmployee.Id, storeLocation.Id));
+                return NotAuthorizedToManageStoreErrorMessage(currentEmployee, store);
             }
 
             RemoveEmployeeFromRosterViewModel model = new RemoveEmployeeFromRosterViewModel()
             {
                 EmployeeId = employee.Id,
                 EmployeeLocationId = employeeLocation.Id,
-                StoreId = storeLocation.Id,
-                StoreName = storeLocation.Name
+                StoreId = store.Id,
+                StoreName = store.Name
             };
 
             return View(model);
@@ -126,12 +126,12 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> RemoveEmployeeFromRoster(RemoveEmployeeFromRosterViewModel model)
         {
             Employee currentEmployee = await GetCurrentEmployeeAsync();
-            StoreLocation storeLocation = await PizzaDb.GetAsync<StoreLocation>(model.StoreId);
+            StoreLocation store = await PizzaDb.GetAsync<StoreLocation>(model.StoreId);
+            bool authorized = await IsAuthorizedToManageStoreAsync(currentEmployee, store);
 
-            bool authorized = await IsAuthorizedToManageStoreAsync(currentEmployee, storeLocation);
             if (!authorized)
             {
-                throw new Exception(CreateManageStoreErrorMessage(model.EmployeeId, model.StoreId));
+                return NotAuthorizedToManageStoreErrorMessage(currentEmployee, store);
             }
 
             await ValidateViewModelAsync(model);
@@ -166,18 +166,18 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> AddEmployeeToRoster(int id)
         {
             Employee currentEmployee = await GetCurrentEmployeeAsync();
-            StoreLocation storeLocation = await PizzaDb.GetAsync<StoreLocation>(id);
+            StoreLocation store = await PizzaDb.GetAsync<StoreLocation>(id);
+            bool authorized = await IsAuthorizedToManageStoreAsync(currentEmployee, store);
 
-            bool authorized = await IsAuthorizedToManageStoreAsync(currentEmployee, storeLocation);
             if (!authorized)
             {
-                throw new Exception(CreateManageStoreErrorMessage(currentEmployee.Id, storeLocation.Id));
+                return NotAuthorizedToManageStoreErrorMessage(currentEmployee, store);
             }
 
             AddEmployeeToRosterViewModel addEmployeeVm = new AddEmployeeToRosterViewModel()
             {
-                StoreId = storeLocation.Id,
-                StoreName = storeLocation.Name
+                StoreId = store.Id,
+                StoreName = store.Name
             };
 
             return View(addEmployeeVm);
@@ -187,18 +187,18 @@ namespace PizzaWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddEmployeeToRoster(AddEmployeeToRosterViewModel model)
         {
-            Employee currentEmployee = await GetCurrentEmployeeAsync();
-            StoreLocation storeLocation = await PizzaDb.GetAsync<StoreLocation>(model.StoreId);
-
-            bool authorized = await IsAuthorizedToManageStoreAsync(currentEmployee, storeLocation);
-            if (!authorized)
-            {
-                throw new Exception(CreateManageStoreErrorMessage(currentEmployee.Id, storeLocation.Id));
-            }
-
             if (!ModelState.IsValid)
             {
                 return View(model);
+            }
+
+            Employee currentEmployee = await GetCurrentEmployeeAsync();
+            StoreLocation store = await PizzaDb.GetAsync<StoreLocation>(model.StoreId);
+            bool authorized = await IsAuthorizedToManageStoreAsync(currentEmployee, store);
+
+            if (!authorized)
+            {
+                return NotAuthorizedToManageStoreErrorMessage(currentEmployee, store);
             }
 
             // Server side validation
@@ -279,11 +279,11 @@ namespace PizzaWebsite.Controllers
 
             Employee currentEmployee = await PizzaDb.GetEmployeeAsync(await GetCurrentUserAsync());
             ManageStoreViewModel model = RecordToViewModel(store);
-
             bool authorized = await IsAuthorizedToManageStoreAsync(currentEmployee, store);
+
             if (!authorized)
             {
-                throw new Exception(CreateManageStoreErrorMessage(currentEmployee.Id, store.Id));
+                return NotAuthorizedToManageStoreErrorMessage(currentEmployee, store);
             }
 
             return View("ManageStore", model);
@@ -300,11 +300,11 @@ namespace PizzaWebsite.Controllers
 
             Employee currentEmployee = await PizzaDb.GetEmployeeAsync(await GetCurrentUserAsync());
             StoreLocation store = await PizzaDb.GetAsync<StoreLocation>(model.Id);
-
             bool authorized = await IsAuthorizedToManageStoreAsync(currentEmployee, store);
+
             if (!authorized)
             {
-                throw new Exception(CreateManageStoreErrorMessage(currentEmployee.Id, store.Id));
+                return NotAuthorizedToManageStoreErrorMessage(currentEmployee, store);
             }
 
             await PizzaDb.UpdateAsync(ViewModelToRecord(model));
@@ -321,16 +321,48 @@ namespace PizzaWebsite.Controllers
             Employee currentEmployee = await PizzaDb.GetEmployeeAsync(await GetCurrentUserAsync());
             StoreLocation store = await PizzaDb.GetAsync<StoreLocation>(id);
 
+            if (store == null)
+            {
+                return StoreDoesNotExistErrorMessage(id);
+            }
+
             bool authorized = await IsAuthorizedToManageStoreAsync(currentEmployee, store);
+
             if (!authorized)
             {
-                throw new Exception(CreateManageStoreErrorMessage(currentEmployee.Id, store.Id));
+                return NotAuthorizedToManageStoreErrorMessage(currentEmployee, store);
             }
 
             EmployeeRosterViewModel rosterVm = new EmployeeRosterViewModel();
             await rosterVm.InitializeAsync(id, PizzaDb);
 
             return View(rosterVm);
+        }
+
+        private ActionResult NotAuthorizedToManageStoreErrorMessage(Employee employee, StoreLocation store)
+        {
+            ErrorMessageViewModel model = new ErrorMessageViewModel()
+            {
+                Header = "Authorization Error",
+                ErrorMessage = CreateManageStoreErrorMessage(employee.Id, store.Name),
+                ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}",
+                ShowReturnLink = true
+            };
+
+            return View("ErrorMessage", model);
+        }
+
+        private ActionResult StoreDoesNotExistErrorMessage(int storeId)
+        {
+            ErrorMessageViewModel model = new ErrorMessageViewModel()
+            {
+                Header = "Error",
+                ErrorMessage = CreateStoreDoesNotExistErrorMessage(storeId),
+                ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}",
+                ShowReturnLink = true
+            };
+
+            return View("ErrorMessage", model);
         }
 
         public ManageStoreViewModel RecordToViewModel(StoreLocation record)
@@ -363,9 +395,14 @@ namespace PizzaWebsite.Controllers
             };
         }
 
-        private string CreateManageStoreErrorMessage(string employeeId, int storeId)
+        private string CreateStoreDoesNotExistErrorMessage(int storeId)
         {
-            return $"Employee with ID {employeeId} is not allowed to manage store with ID {storeId}.";
+            return $"Store with ID {storeId} does not exist.";
+        }
+
+        private string CreateManageStoreErrorMessage(string employeeId, string storeName)
+        {
+            return $"{employeeId} is not authorized to manage {storeName}.";
         }
 
         private async Task ValidateViewModelAsync(AddEmployeeToRosterViewModel model)

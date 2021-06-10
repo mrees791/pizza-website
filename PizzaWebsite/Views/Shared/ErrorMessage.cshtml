@@ -1,0 +1,10 @@
+﻿@model PizzaWebsite.Models.ErrorMessageViewModel
+@{
+    ViewBag.Title = "Error";
+}
+<h2>@Model.Header</h2>
+<p>@Model.ErrorMessage</p>
+@if (Model.ShowReturnLink)
+{
+    <p>Click <a href="@Model.ReturnUrlAction">here</a> to return to where you were.</p>
+}

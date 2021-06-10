@@ -193,6 +193,7 @@
     <Compile Include="Models\ConfirmationViewModel.cs" />
     <Compile Include="Models\Databases\DatabaseContext.cs" />
     <Compile Include="Models\Employees\EmployeeIndexViewModel.cs" />
+    <Compile Include="Models\ErrorMessageViewModel.cs" />
     <Compile Include="Models\Geography\State.cs" />
     <Compile Include="Models\Geography\StateListCreator.cs" />
     <Compile Include="Models\Identity\IdentityRole.cs" />
@@ -346,6 +347,7 @@
     <Content Include="Views\ManageStores\RemoveEmployeeFromRoster.cshtml" />
     <Content Include="Views\Employee\Index.cshtml" />
     <Content Include="Views\ManageEmployees\ViewLocations.cshtml" />
+    <Content Include="Views\Shared\ErrorMessage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
