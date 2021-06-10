@@ -13,16 +13,12 @@ namespace PizzaWebsite.Models.ManageEmployees
 {
     public class AddEmployeeViewModel
     {
-        [Display(Name = "Employee ID")]
-        [StringLength(256, ErrorMessage = "Employee ID cannot be longer than 256 characters.")]
         [ValidEmployeeId]
-        [Required]
+        [Display(Name = "Employee ID")]
         public string Id { get; set; }
-
         [Display(Name = "User Id")]
         [Required]
         public string UserId { get; set; }
-
         [Display(Name = "Is Manager")]
         public bool IsManager { get; set; }
 
@@ -37,7 +33,7 @@ namespace PizzaWebsite.Models.ManageEmployees
             }
 
             // Make sure employee ID isn't already taken
-            DataLibrary.Models.Tables.Employee employee = await pizzaDb.GetAsync<DataLibrary.Models.Tables.Employee>(Id);
+            Employee employee = await pizzaDb.GetAsync<Employee>(Id);
 
             if (employee != null)
             {
