@@ -82,8 +82,9 @@ namespace PizzaWebsite.Controllers
                 SiteUser siteUser = await PizzaDb.GetSiteUserByNameAsync(model.UserId);
                 await PizzaDb.Commands.AddNewEmployeeAsync(model.Id, model.IsManager, siteUser);
             }
-            catch (Exception ex)
+            catch
             {
+                // todo: Report error
                 ModelState.AddModelError("", "Unable to add employee.");
                 return View(model);
             }

@@ -520,32 +520,42 @@ namespace PizzaWebsite.Controllers
             {
                 page = 1;
             }
+
             if (!rowsPerPage.HasValue)
             {
                 rowsPerPage = 10;
             }
-            
-            // Load previous order list
-            PreviousOrderListViewModel previousOrdersVm = new PreviousOrderListViewModel();
-            previousOrdersVm.PaginationVm = new PaginationViewModel();
-            previousOrdersVm.PreviousOrderViewModelList = new List<PreviousOrderViewModel>();
 
             PreviousOrderSearch search = new PreviousOrderSearch()
             {
                 UserId = User.Identity.GetUserId()
             };
 
+            PaginationViewModel paginationVm = new PaginationViewModel()
+            {
+                QueryString = Request.QueryString,
+                CurrentPage = page.Value,
+                RowsPerPage = rowsPerPage.Value,
+                TotalNumberOfItems = await PizzaDb.GetNumberOfRecordsAsync<CustomerOrder>(search),
+                TotalPages = await PizzaDb.GetNumberOfPagesAsync<CustomerOrder>(rowsPerPage.Value, search)
+            };
+
+
+            List<PreviousOrderViewModel> previousOrderVmList = new List<PreviousOrderViewModel>();
             IEnumerable<CustomerOrder> previousOrderList = await PizzaDb.GetPagedListAsync<CustomerOrder>(page.Value, rowsPerPage.Value, "Id", SortOrder.Descending, search);
 
             foreach (CustomerOrder prevOrder in previousOrderList)
             {
                 PreviousOrderViewModel orderVm = new PreviousOrderViewModel();
                 await orderVm.InitializeAsync(false, prevOrder, null, PizzaDb);
-
-                previousOrdersVm.PreviousOrderViewModelList.Add(orderVm);
+                previousOrderVmList.Add(orderVm);
             }
 
-            await previousOrdersVm.PaginationVm.InitializeAsync<CustomerOrder>(page.Value, rowsPerPage.Value, search, Request, PizzaDb);
+            PreviousOrderListViewModel previousOrdersVm = new PreviousOrderListViewModel()
+            {
+                PaginationVm = paginationVm,
+                PreviousOrderVmList = previousOrderVmList
+            };
 
             return View("PreviousOrderList", previousOrdersVm);
         }

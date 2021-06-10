@@ -16,12 +16,12 @@ namespace PizzaWebsite.Controllers
         where TRecord : Record
     {
         protected async Task<IEnumerable<TRecord>> LoadPagedRecordsAsync(int page, int rowsPerPage, string orderByColumn, SortOrder sortOrder,
-            WhereClauseBase whereClauseBase, PizzaDatabase database, PaginationViewModel paginationVm)
+            WhereClauseBase whereClauseBase, PizzaDatabase pizzaDb, PaginationViewModel paginationVm)
         {
             List<TRecord> recordList = new List<TRecord>();
-            int totalNumberOfItems = await database.GetNumberOfRecordsAsync<TRecord>(whereClauseBase);
-            int totalPages = await database.GetNumberOfPagesAsync<TRecord>(rowsPerPage, whereClauseBase);
-            recordList.AddRange(await database.GetPagedListAsync<TRecord>(page, rowsPerPage, orderByColumn, sortOrder, whereClauseBase));
+            int totalNumberOfItems = await pizzaDb.GetNumberOfRecordsAsync<TRecord>(whereClauseBase);
+            int totalPages = await pizzaDb.GetNumberOfPagesAsync<TRecord>(rowsPerPage, whereClauseBase);
+            recordList.AddRange(await pizzaDb.GetPagedListAsync<TRecord>(page, rowsPerPage, orderByColumn, sortOrder, whereClauseBase));
 
             // Navigation pane
             paginationVm.QueryString = Request.QueryString;

@@ -8,11 +8,11 @@ namespace PizzaWebsite.Models.Shop
     public class PreviousOrderListViewModel : PagedListViewModel
     {
         public PreviousOrderViewModel PreviousOrderViewModel { get; set; }
-        public List<PreviousOrderViewModel> PreviousOrderViewModelList { get; set; }
+        public List<PreviousOrderViewModel> PreviousOrderVmList { get; set; }
 
         public bool HasPreviousOrders()
         {
-            return PreviousOrderViewModelList.Any();
+            return PreviousOrderVmList.Any();
         }
     }
 }
