@@ -18,11 +18,14 @@ namespace PizzaWebsite.Controllers
     {
         public async Task<ActionResult> Index()
         {
-            SiteUser currentUser = await GetCurrentUserAsync();
-            EmployeeIndexViewModel model = new EmployeeIndexViewModel();
-            await model.InitializeAsync(currentUser, PizzaDb);
+            Employee employee = await PizzaDb.GetEmployeeAsync(await GetCurrentUserAsync());
 
-            return View(model);
+            EmployeeIndexViewModel viewModel = new EmployeeIndexViewModel()
+            {
+                EmployeeId = employee.Id
+            };
+
+            return View(viewModel);
         }
     }
 }
