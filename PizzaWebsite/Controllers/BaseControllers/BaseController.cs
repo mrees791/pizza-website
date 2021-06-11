@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-namespace PizzaWebsite.Controllers
+namespace PizzaWebsite.Controllers.BaseControllers
 {
-    public class BaseController : Controller
+    public abstract class BaseController : Controller
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;

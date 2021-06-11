@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-namespace PizzaWebsite.Controllers
+namespace PizzaWebsite.Controllers.BaseControllers
 {
     public abstract class BaseManageMenuController<TRecord, TViewModel> : BaseManageWebsiteController<TRecord>
         where TRecord : Record, new()
