@@ -21,12 +21,10 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);
-
             MenuPizzaFilter searchFilter = new MenuPizzaFilter()
             {
                 PizzaName = name
             };
-
             return await Index(page.Value, rowsPerPage.Value, "PizzaName", searchFilter);
         }
 
@@ -48,7 +46,6 @@ namespace PizzaWebsite.Controllers
         {
             ManageMenuPizzaViewModel model = new ManageMenuPizzaViewModel();
             await model.CreateFromRecordAsync(PizzaDb, record);
-
             return model;
         }
 
@@ -71,7 +68,7 @@ namespace PizzaWebsite.Controllers
 
         protected override MenuPizza ViewModelToRecord(ManageMenuPizzaViewModel model)
         {
-            MenuPizza entity = new MenuPizza()
+            MenuPizza record = new MenuPizza()
             {
                 Id = model.Id,
                 AvailableForPurchase = model.AvailableForPurchase,
@@ -85,10 +82,8 @@ namespace PizzaWebsite.Controllers
                 SauceAmount = model.SelectedSauceAmount,
                 SortOrder = model.SortOrder
             };
-
-            AddToppingsToRecord(entity, model.ToppingList);
-
-            return entity;
+            AddToppingsToRecord(record, model.ToppingList);
+            return record;
         }
     }
 }

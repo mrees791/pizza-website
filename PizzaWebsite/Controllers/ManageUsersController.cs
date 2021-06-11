@@ -20,17 +20,14 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string userId, string email)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);
-
             SiteUserFilter searchFilter = new SiteUserFilter()
             {
                 Id = userId,
                 Email = email
             };
-
             PaginationViewModel paginationVm = new PaginationViewModel();
             List<ManageUserViewModel> userVmList = new List<ManageUserViewModel>();
             IEnumerable<SiteUser> userList = await LoadPagedRecordsAsync(page.Value, rowsPerPage.Value, "Id", SortOrder.Ascending, searchFilter, PizzaDb, paginationVm);
-
             foreach (SiteUser user in userList)
             {
                 ManageUserViewModel userVm = new ManageUserViewModel()
@@ -41,14 +38,12 @@ namespace PizzaWebsite.Controllers
                 };
                 userVmList.Add(userVm);
             }
-
-            var viewModel = new ManagePagedListViewModel<ManageUserViewModel>()
+            var model = new ManagePagedListViewModel<ManageUserViewModel>()
             {
                 PaginationVm = paginationVm,
                 ItemViewModelList = userVmList
             };
-
-            return View(viewModel);
+            return View(model);
         }
 
         /// <summary>
@@ -72,45 +67,38 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> ManageUser(string id)
         {
             SiteUser user = await PizzaDb.GetSiteUserByIdAsync(FromUrlSafeId(id));
-
-            ManageUserViewModel manageUserVm = new ManageUserViewModel()
+            ManageUserViewModel model = new ManageUserViewModel()
             {
                 Id = user.Id,
                 Email = user.Email,
                 IsBanned = user.IsBanned
             };
-            
-            return View("ManageUser", manageUserVm);
+            return View("ManageUser", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Executive")]
-        public async Task<ActionResult> ManageUser(ManageUserViewModel viewModel)
+        public async Task<ActionResult> ManageUser(ManageUserViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View("ManageUser", viewModel);
+                return View("ManageUser", model);
             }
-
-            string id = FromUrlSafeId(viewModel.Id);
+            string id = FromUrlSafeId(model.Id);
             SiteUser user = await PizzaDb.GetSiteUserByIdAsync(id);
-            user.IsBanned = viewModel.IsBanned;
-
+            user.IsBanned = model.IsBanned;
             int rowsAffected = await PizzaDb.UpdateAsync(user);
-
             if (rowsAffected == 0)
             {
                 ModelState.AddModelError("", $"Unable to update user with ID: {user.Id}");
-                return View("ManageUser", viewModel);
+                return View("ManageUser", model);
             }
-
             ConfirmationViewModel confirmationVm = new ConfirmationViewModel()
             {
                 ConfirmationMessage = $"Your changes to {id} have been confirmed.",
                 ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}"
             };
-
             return View("CreateEditConfirmation", confirmationVm);
         }
     }
