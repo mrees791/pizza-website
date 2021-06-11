@@ -14,20 +14,21 @@ namespace PizzaWebsite.Models.PizzaBuilders
 {
     public class PizzaBuilderManager
     {
-        public List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<PizzaTopping> toppings, IEnumerable<MenuPizzaToppingType> toppingTypeList)
+        public List<PizzaToppingViewModel> CreateToppingViewModelList(Dictionary<int, PizzaTopping> toppingDictionary, IEnumerable<MenuPizzaToppingType> toppingTypeList)
         {
             List<PizzaToppingViewModel> toppingVmList = new List<PizzaToppingViewModel>();
+
             foreach (MenuPizzaToppingType toppingType in toppingTypeList)
             {
-                PizzaTopping currentTopping = toppings.Where(t => t.ToppingTypeId == toppingType.Id).FirstOrDefault();
-                if (currentTopping == null)
+                PizzaTopping currentTopping = new PizzaTopping()
                 {
-                    currentTopping = new PizzaTopping()
-                    {
-                        ToppingTypeId = toppingType.Id,
-                        ToppingHalf = "Whole",
-                        ToppingAmount = "None"
-                    };
+                    ToppingTypeId = toppingType.Id,
+                    ToppingHalf = "Whole",
+                    ToppingAmount = "None"
+                };
+                if (toppingDictionary.ContainsKey(toppingType.Id))
+                {
+                    currentTopping = toppingDictionary[toppingType.Id];
                 }
                 PizzaToppingViewModel toppingVm = new PizzaToppingViewModel()
                 {
