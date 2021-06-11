@@ -12,12 +12,11 @@ using System.Web;
 
 namespace PizzaWebsite.Models.PizzaBuilders
 {
-    public class PizzaBuilderManager
+    public static class PizzaBuilderManager
     {
-        public List<PizzaToppingViewModel> CreateToppingViewModelList(Dictionary<int, PizzaTopping> toppingDictionary, IEnumerable<MenuPizzaToppingType> toppingTypeList)
+        public static List<PizzaToppingViewModel> CreateToppingViewModelList(Dictionary<int, PizzaTopping> toppingDictionary, IEnumerable<MenuPizzaToppingType> toppingTypeList)
         {
             List<PizzaToppingViewModel> toppingVmList = new List<PizzaToppingViewModel>();
-
             foreach (MenuPizzaToppingType toppingType in toppingTypeList)
             {
                 PizzaTopping currentTopping = new PizzaTopping()

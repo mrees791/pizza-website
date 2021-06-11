@@ -31,44 +31,11 @@ namespace PizzaWebsite.Models.ManageMenus
         [Display(Name = "Description")]
         [MaxLength(512)]
         public string Description { get; set; }
+        public IEnumerable<string> CategoryList { get; set; }
 
         public bool IsNewRecord()
         {
             return Id == 0;
-        }
-
-        protected override async Task LoadBuilderListsAsync(PizzaDatabase pizzaDb, List<PizzaTopping> toppings)
-        {
-            await base.LoadBuilderListsAsync(pizzaDb, toppings);
-            CategoryList = ListUtility.GetPizzaCategoryList();
-        }
-
-        public async Task CreateFromRecordAsync(PizzaDatabase pizzaDb, MenuPizza menuPizza)
-        {
-            Id = menuPizza.Id;
-            Name = menuPizza.PizzaName;
-            AvailableForPurchase = menuPizza.AvailableForPurchase;
-            SelectedCategory = menuPizza.CategoryName;
-            Description = menuPizza.Description;
-            SelectedCheeseAmount = menuPizza.CheeseAmount;
-            SelectedCheeseId = menuPizza.MenuPizzaCheeseId;
-            SelectedCrustFlavorId = menuPizza.MenuPizzaCrustFlavorId;
-            SelectedSauceId = menuPizza.MenuPizzaSauceId;
-            SelectedSauceAmount = menuPizza.SauceAmount;
-
-            List<PizzaTopping> toppings = new List<PizzaTopping>();
-
-            foreach (MenuPizzaTopping topping in menuPizza.Toppings)
-            {
-                toppings.Add(new PizzaTopping()
-                {
-                    ToppingTypeId = topping.MenuPizzaToppingTypeId,
-                    ToppingAmount = topping.ToppingAmount,
-                    ToppingHalf = topping.ToppingHalf
-                });
-            }
-
-            await LoadBuilderListsAsync(pizzaDb, toppings);
         }
     }
 }

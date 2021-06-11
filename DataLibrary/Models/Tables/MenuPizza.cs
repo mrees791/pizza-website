@@ -23,11 +23,11 @@ namespace DataLibrary.Models.Tables
         public int MenuPizzaCheeseId { get; set; }
         public string CheeseAmount { get; set; }
         public int MenuPizzaCrustFlavorId { get; set; }
-        public List<MenuPizzaTopping> Toppings { get; set; }
+        public List<MenuPizzaTopping> ToppingList { get; set; }
 
         public MenuPizza()
         {
-            Toppings = new List<MenuPizzaTopping>();
+            ToppingList = new List<MenuPizzaTopping>();
         }
 
         public override dynamic GetId()
@@ -37,7 +37,7 @@ namespace DataLibrary.Models.Tables
 
         internal override async Task MapEntityAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            Toppings.AddRange(await pizzaDb.GetListAsync<MenuPizzaTopping>(new { MenuPizzaId = Id }));
+            ToppingList.AddRange(await pizzaDb.GetListAsync<MenuPizzaTopping>(new { MenuPizzaId = Id }));
         }
 
         internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
@@ -46,7 +46,7 @@ namespace DataLibrary.Models.Tables
             Id = id.Value;
 
             // Insert toppings
-            foreach (MenuPizzaTopping topping in Toppings)
+            foreach (MenuPizzaTopping topping in ToppingList)
             {
                 topping.MenuPizzaId = Id;
                 await topping.InsertAsync(pizzaDb, transaction);
@@ -61,7 +61,7 @@ namespace DataLibrary.Models.Tables
             await pizzaDb.Connection.DeleteListAsync<MenuPizzaTopping>(new { MenuPizzaId = Id }, transaction);
 
             // Insert new toppings
-            foreach (MenuPizzaTopping topping in Toppings)
+            foreach (MenuPizzaTopping topping in ToppingList)
             {
                 await pizzaDb.Connection.InsertAsync(topping, transaction);
             }
@@ -93,7 +93,7 @@ namespace DataLibrary.Models.Tables
                 Size = size
             };
 
-            foreach (MenuPizzaTopping menuTopping in Toppings)
+            foreach (MenuPizzaTopping menuTopping in ToppingList)
             {
                 cartPizza.Toppings.Add(menuTopping.CreateCartTopping());
             }

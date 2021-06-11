@@ -1,5 +1,7 @@
 ﻿using DataLibrary.Models;
+using DataLibrary.Models.Builders;
 using DataLibrary.Models.QueryFilters;
+using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
 using PizzaWebsite.Controllers.BaseControllers;
@@ -44,31 +46,62 @@ namespace PizzaWebsite.Controllers
 
         protected override async Task<ManageMenuPizzaViewModel> RecordToViewModelAsync(MenuPizza record)
         {
-            ManageMenuPizzaViewModel model = new ManageMenuPizzaViewModel();
-            await model.CreateFromRecordAsync(PizzaDb, record);
-            return model;
-        }
-
-        private void AddToppingsToRecord(MenuPizza record, List<PizzaToppingViewModel> toppings)
-        {
-            foreach (PizzaToppingViewModel topping in toppings)
+            MenuPizzaBuilder pizzaBuilder = new MenuPizzaBuilder();
+            await pizzaBuilder.InitializeAsync(new MenuItemSearch() { AvailableForPurchase = true }, PizzaDb);
+            Dictionary<int, string> cheeseDictionary = new Dictionary<int, string>();
+            foreach (MenuPizzaCheese cheese in pizzaBuilder.CheeseList)
             {
-                if (topping.SelectedAmount != "None")
-                {
-                    record.Toppings.Add(new MenuPizzaTopping()
-                    {
-                        MenuPizzaId = record.Id,
-                        MenuPizzaToppingTypeId = topping.Id,
-                        ToppingAmount = topping.SelectedAmount,
-                        ToppingHalf = topping.SelectedToppingHalf
-                    });
-                }
+                cheeseDictionary.Add(cheese.Id, cheese.Name);
             }
+            Dictionary<int, string> crustFlavorDictionary = new Dictionary<int, string>();
+            foreach (MenuPizzaCrustFlavor crustFlavor in pizzaBuilder.CrustFlavorList)
+            {
+                crustFlavorDictionary.Add(crustFlavor.Id, crustFlavor.Name);
+            }
+            Dictionary<int, string> sauceDictionary = new Dictionary<int, string>();
+            foreach (MenuPizzaSauce sauce in pizzaBuilder.SauceList)
+            {
+                sauceDictionary.Add(sauce.Id, sauce.Name);
+            }
+            Dictionary<int, PizzaTopping> toppingDictionary = new Dictionary<int, PizzaTopping>();
+            foreach (MenuPizzaTopping menuTopping in record.ToppingList)
+            {
+                PizzaTopping topping = new PizzaTopping()
+                {
+                    ToppingTypeId = menuTopping.MenuPizzaToppingTypeId,
+                    ToppingAmount = menuTopping.ToppingAmount,
+                    ToppingHalf = menuTopping.ToppingHalf
+                };
+                toppingDictionary.Add(topping.ToppingTypeId, topping);
+            }
+            List<PizzaToppingViewModel> toppingVmList = PizzaBuilderManager.CreateToppingViewModelList(toppingDictionary, pizzaBuilder.ToppingTypeList);
+            return new ManageMenuPizzaViewModel()
+            {
+                Id = record.Id,
+                Name = record.PizzaName,
+                AvailableForPurchase = record.AvailableForPurchase,
+                SelectedCategory = record.CategoryName,
+                Description = record.Description,
+                SelectedCheeseAmount = record.CheeseAmount,
+                SelectedCheeseId = record.MenuPizzaCheeseId,
+                SelectedCrustFlavorId = record.MenuPizzaCrustFlavorId,
+                SelectedSauceAmount = record.SauceAmount,
+                SelectedSauceId = record.MenuPizzaSauceId,
+                SortOrder = record.SortOrder,
+                CategoryList = pizzaBuilder.CategoryList,
+                MeatToppingVmList = toppingVmList.Where(t => t.Category == "Meats"),
+                VeggieToppingVmList = toppingVmList.Where(t => t.Category == "Veggie"),
+                CheeseAmountList = pizzaBuilder.CheeseAmountList,
+                SauceAmountList = pizzaBuilder.SauceAmountList,
+                CheeseDictionary = cheeseDictionary,
+                CrustFlavorDictionary = crustFlavorDictionary,
+                SauceDictionary = sauceDictionary
+            };
         }
 
         protected override MenuPizza ViewModelToRecord(ManageMenuPizzaViewModel model)
         {
-            MenuPizza record = new MenuPizza()
+            return new MenuPizza()
             {
                 Id = model.Id,
                 AvailableForPurchase = model.AvailableForPurchase,
@@ -80,10 +113,31 @@ namespace PizzaWebsite.Controllers
                 MenuPizzaCrustFlavorId = model.SelectedCrustFlavorId,
                 MenuPizzaSauceId = model.SelectedSauceId,
                 SauceAmount = model.SelectedSauceAmount,
-                SortOrder = model.SortOrder
+                SortOrder = model.SortOrder,
+                ToppingList = GetToppingRecordsFromViewModel(model)
             };
-            AddToppingsToRecord(record, model.ToppingList);
-            return record;
+        }
+
+        private List<MenuPizzaTopping> GetToppingRecordsFromViewModel(ManageMenuPizzaViewModel model)
+        {
+            List<MenuPizzaTopping> toppingRecordList = new List<MenuPizzaTopping>();
+            List<PizzaToppingViewModel> toppingVmList = new List<PizzaToppingViewModel>();
+            toppingVmList.AddRange(model.MeatToppingVmList);
+            toppingVmList.AddRange(model.VeggieToppingVmList);
+            foreach (PizzaToppingViewModel toppingVm in toppingVmList)
+            {
+                if (toppingVm.SelectedAmount != "None")
+                {
+                    toppingRecordList.Add(new MenuPizzaTopping()
+                    {
+                        MenuPizzaId = model.Id,
+                        MenuPizzaToppingTypeId = toppingVm.Id,
+                        ToppingAmount = toppingVm.SelectedAmount,
+                        ToppingHalf = toppingVm.SelectedToppingHalf
+                    });
+                }
+            }
+            return toppingRecordList;
         }
     }
 }

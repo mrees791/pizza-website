@@ -26,6 +26,12 @@ namespace PizzaWebsite.Models.PizzaBuilders
         [Display(Name = "Crust Flavor")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a crust flavor.")]
         public int SelectedCrustFlavorId { get; set; }
-        public List<PizzaToppingViewModel> ToppingList { get; set; }
+        public IEnumerable<PizzaToppingViewModel> MeatToppingVmList { get; set; }
+        public IEnumerable<PizzaToppingViewModel> VeggieToppingVmList { get; set; }
+        public Dictionary<int, string> SauceDictionary { get; set; }
+        public IEnumerable<string> SauceAmountList { get; set; }
+        public Dictionary<int, string> CheeseDictionary { get; set; }
+        public IEnumerable<string> CheeseAmountList { get; set; }
+        public Dictionary<int, string> CrustFlavorDictionary { get; set; }
     }
 }

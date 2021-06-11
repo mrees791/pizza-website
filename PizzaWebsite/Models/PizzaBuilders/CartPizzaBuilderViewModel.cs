@@ -54,7 +54,7 @@ namespace PizzaWebsite.Models.PizzaBuilders
                 Size = SelectedSize
             };
 
-            foreach (PizzaToppingViewModel toppingVm in ToppingList)
+            foreach (PizzaToppingViewModel toppingVm in ToppingVmList)
             {
                 if (toppingVm.SelectedAmount != "None")
                 {
