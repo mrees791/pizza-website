@@ -18,14 +18,12 @@ namespace PizzaWebsite.Models.PizzaBuilders
         [Required]
         [Display(Name = "Quantity")]
         public int SelectedQuantity { get; set; }
-        public List<int> QuantityList { get; set; }
-        public List<string> SizeList { get; set; }
         [Required]
         [Display(Name = "Size")]
         public string SelectedSize { get; set; }
-        [Display(Name = "Crust")]
         public Dictionary<int, string> CrustList { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "You must select a crust.")]
+        [Display(Name = "Crust")]
         public int SelectedCrustId { get; set; }
 
         public bool IsNewRecord()

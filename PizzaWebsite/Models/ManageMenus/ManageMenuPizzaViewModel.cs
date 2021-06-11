@@ -24,7 +24,6 @@ namespace PizzaWebsite.Models.ManageMenus
         public string Name { get; set; }
         [Display(Name = "Available for Purchase")]
         public bool AvailableForPurchase { get; set; }
-        public List<string> CategoryList { get; set; }
         [Required]
         [Display(Name = "Category")]
         public string SelectedCategory { get; set; }
