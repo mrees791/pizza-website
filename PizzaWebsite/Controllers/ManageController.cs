@@ -29,19 +29,37 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> ManageAddresses()
         {
-            ManageAddressesViewModel viewModel = new ManageAddressesViewModel();
-
             DeliveryAddressSearch addressSearch = new DeliveryAddressSearch()
             {
                 UserId = User.Identity.GetUserId()
             };
 
+            List<DeliveryAddressViewModel> addressVmList = new List<DeliveryAddressViewModel>();
             IEnumerable<DeliveryAddress> addressList = await PizzaDb.GetListAsync<DeliveryAddress>("Name", SortOrder.Ascending, addressSearch);
 
             foreach (DeliveryAddress address in addressList)
             {
-                viewModel.AddressList.Add(new DeliveryAddressListItemViewModel(address));
+                DeliveryAddressViewModel addressVm = new DeliveryAddressViewModel()
+                {
+                    Id = address.Id,
+                    Name = address.Name,
+                    AddressType = address.AddressType,
+                    StreetAddress = address.StreetAddress,
+                    City = address.City,
+                    State = address.State,
+                    ZipCode = address.ZipCode,
+                    PhoneNumber = address.PhoneNumber,
+                    DeleteButtonId = $"delete-btn-{address.Id}",
+                    AddressRowId = $"address-row-{address.Id}"
+                };
+
+                addressVmList.Add(addressVm);
             }
+
+            ManageAddressesViewModel viewModel = new ManageAddressesViewModel()
+            {
+                AddressVmList = addressVmList
+            };
 
             return View(viewModel);
         }
@@ -83,7 +101,7 @@ namespace PizzaWebsite.Controllers
 
                 if (!authorized)
                 {
-                    throw new Exception($"Current user is not allowed to modify delivery address ID {addressVm.Id}.");
+                    return NotAuthorizedToModifyAddressErrorMessage();
                 }
 
                 await PizzaDb.UpdateAsync(address);
@@ -100,7 +118,7 @@ namespace PizzaWebsite.Controllers
 
             if (address == null)
             {
-                throw new RecordDoesNotExistException($"Delivery Address with ID {addressId} does not exist.");
+                return AddressNotFoundErrorMessage();
             }
             else
             {
@@ -108,7 +126,7 @@ namespace PizzaWebsite.Controllers
 
                 if (!authorized)
                 {
-                    throw new Exception($"Current user is not allowed to modify delivery address ID {addressId}.");
+                    return NotAuthorizedToModifyAddressErrorMessage();
                 }
 
                 ManageDeliveryAddressViewModel viewModel = new ManageDeliveryAddressViewModel()
@@ -144,11 +162,18 @@ namespace PizzaWebsite.Controllers
             if (!authorized)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json($"Current user is not allowed to delete delivery address ID {addressId}.", MediaTypeNames.Text.Plain);
+                return Json($"Current user is not authorized to delete delivery address ID {addressId}.", MediaTypeNames.Text.Plain);
             }
 
             int rowsDeleted = await PizzaDb.DeleteByIdAsync<DeliveryAddress>(addressId);
-            string responseText = $"{rowsDeleted} rows deleted.";
+
+            if (rowsDeleted == 0)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Unable to delete address.", MediaTypeNames.Text.Plain);
+            }
+
+            string responseText = "Address deleted.";
 
             return Json(responseText, MediaTypeNames.Text.Plain);
         }
@@ -428,7 +453,33 @@ namespace PizzaWebsite.Controllers
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
 
-#region Helpers
+        private ActionResult AddressNotFoundErrorMessage()
+        {
+            ErrorMessageViewModel viewModel = new ErrorMessageViewModel()
+            {
+                Header = "Error",
+                ErrorMessage = "Address not found.",
+                ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}",
+                ShowReturnLink = true
+            };
+
+            return View("ErrorMessage", viewModel);
+        }
+
+        private ActionResult NotAuthorizedToModifyAddressErrorMessage()
+        {
+            ErrorMessageViewModel viewModel = new ErrorMessageViewModel()
+            {
+                Header = "Authorization Error",
+                ErrorMessage = "You are not authorized to modify this address.",
+                ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}",
+                ShowReturnLink = true
+            };
+
+            return View("ErrorMessage", viewModel);
+        }
+
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 

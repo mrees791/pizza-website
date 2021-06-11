@@ -218,7 +218,7 @@
     <Compile Include="Models\ManageMenus\ManageMenuPizzaToppingTypeViewModel.cs" />
     <Compile Include="Models\ManageMenus\ManageMenuPizzaViewModel.cs" />
     <Compile Include="Models\ManageEmployees\ViewEmployeeLocationsViewModel.cs" />
-    <Compile Include="Models\Manage\DeliveryAddressListItemViewModel.cs" />
+    <Compile Include="Models\Manage\DeliveryAddressViewModel.cs" />
     <Compile Include="Models\Manage\ManageAddressesViewModel.cs" />
     <Compile Include="Models\Manage\ManageDeliveryAddressViewModel.cs" />
     <Compile Include="Models\PagedListViewModel.cs" />
