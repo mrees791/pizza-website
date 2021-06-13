@@ -18,13 +18,21 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);
-
             MenuPizzaSauceFilter searchFilter = new MenuPizzaSauceFilter()
             {
                 Name = name
             };
-
             return await Index(page.Value, rowsPerPage.Value, "Name", searchFilter);
+        }
+
+        public override async Task<ActionResult> Add()
+        {
+            MenuPizzaSauce sauceFlavor = new MenuPizzaSauce()
+            {
+                AvailableForPurchase = true
+            };
+            ManageMenuPizzaSauceViewModel model = await RecordToViewModelAsync(sauceFlavor);
+            return View("Manage", model);
         }
 
         [HttpPost]

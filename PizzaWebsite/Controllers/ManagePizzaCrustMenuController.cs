@@ -25,6 +25,16 @@ namespace PizzaWebsite.Controllers
             return await Index(page.Value, rowsPerPage.Value, "Name", searchFilter);
         }
 
+        public override async Task<ActionResult> Add()
+        {
+            MenuPizzaCrust crust = new MenuPizzaCrust()
+            {
+                AvailableForPurchase = true
+            };
+            ManageMenuPizzaCrustViewModel model = await RecordToViewModelAsync(crust);
+            return View("Manage", model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Add(ManageMenuPizzaCrustViewModel model)
