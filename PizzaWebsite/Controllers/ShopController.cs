@@ -353,52 +353,46 @@ namespace PizzaWebsite.Controllers
             MenuPizza menuPizza = await PizzaDb.GetAsync<MenuPizza>(id);
             Tuple<CartItem, CartPizza> cartItemRecords = await menuPizza.CreateCartRecordsAsync(selectedQuantity, selectedSize, selectedCrustId, currentUser, PizzaDb);
             await PizzaDb.Commands.AddItemToCart(currentUser, cartItemRecords.Item1, cartItemRecords.Item2);
-
             return RedirectToAction("Cart");
         }
 
         public async Task<ActionResult> PizzaMenu()
         {
-            PizzaMenuPageViewModel pizzaMenuVm = new PizzaMenuPageViewModel();
-
             List<int> quantityList = ListUtility.CreateQuantityList();
             List<string> sizeList = ListUtility.GetPizzaSizeList();
             Dictionary<int, string> crustListDictionary = await ListUtility.CreateCrustDictionaryAsync(PizzaDb);
-
             MenuPizzaSearch popularPizzaSearch = new MenuPizzaSearch()
             {
                 AvailableForPurchase = true,
                 CategoryName = "Popular"
             };
-
             MenuPizzaSearch meatPizzaSearch = new MenuPizzaSearch()
             {
                 AvailableForPurchase = true,
                 CategoryName = "Meats"
             };
-
             MenuPizzaSearch veggiePizzaSearch = new MenuPizzaSearch()
             {
                 AvailableForPurchase = true,
                 CategoryName = "Veggie"
             };
-
             // Load all menu pizzas in to each category.
             IEnumerable<MenuPizza> popularMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>("SortOrder", SortOrder.Ascending, popularPizzaSearch);
             IEnumerable<MenuPizza> meatsMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>("SortOrder", SortOrder.Ascending, meatPizzaSearch);
             IEnumerable<MenuPizza> veggieMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>("SortOrder", SortOrder.Ascending, veggiePizzaSearch);
             // Separate into categories
-            pizzaMenuVm.PopularPizzaList = CreateMenuPizzaViewModels(popularMenuPizzas, quantityList, sizeList, crustListDictionary);
-            pizzaMenuVm.MeatsPizzaList = CreateMenuPizzaViewModels(meatsMenuPizzas, quantityList, sizeList, crustListDictionary);
-            pizzaMenuVm.VeggiePizzaList = CreateMenuPizzaViewModels(veggieMenuPizzas, quantityList, sizeList, crustListDictionary);
-
-            return View(pizzaMenuVm);
+            PizzaMenuPageViewModel model = new PizzaMenuPageViewModel()
+            {
+                PopularPizzaList = CreateMenuPizzaViewModels(popularMenuPizzas, quantityList, sizeList, crustListDictionary),
+                MeatsPizzaList = CreateMenuPizzaViewModels(meatsMenuPizzas, quantityList, sizeList, crustListDictionary),
+                VeggiePizzaList = CreateMenuPizzaViewModels(veggieMenuPizzas, quantityList, sizeList, crustListDictionary)
+            };
+            return View(model);
         }
 
         private List<MenuPizzaViewModel> CreateMenuPizzaViewModels(IEnumerable<MenuPizza> menuPizzaList, List<int> quantityList, List<string> sizeList, Dictionary<int, string> crustListDictionary)
         {
             List<MenuPizzaViewModel> viewModelList = new List<MenuPizzaViewModel>();
-
             foreach (MenuPizza menuPizza in menuPizzaList)
             {
                 MenuPizzaViewModel viewModel = new MenuPizzaViewModel()
@@ -411,10 +405,8 @@ namespace PizzaWebsite.Controllers
                     SelectedSize = "Medium",
                     CrustList = crustListDictionary
                 };
-
                 viewModelList.Add(viewModel);
             }
-
             return viewModelList;
         }
 
@@ -423,9 +415,7 @@ namespace PizzaWebsite.Controllers
         {
             SiteUser user = await GetCurrentUserAsync();
             CartViewModel cartVm = new CartViewModel();
-
             await cartVm.InitializeAsync(user.CurrentCartId, PizzaDb);
-
             return View(cartVm);
         }
 
@@ -434,24 +424,19 @@ namespace PizzaWebsite.Controllers
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             CartItem cartItem = await PizzaDb.GetAsync<CartItem>(cartItemId);
-
             if (cartItem == null)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json($"Cart Item with ID {cartItemId} does not exist.", MediaTypeNames.Text.Plain);
             }
-
             bool authorized = await AuthorizedToModifyCartItemAsync(cartItem);
-
             if (!authorized)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json($"Current user is not allowed to modify cart item ID {cartItemId}.", MediaTypeNames.Text.Plain);
             }
-
             int rowsDeleted = await PizzaDb.DeleteByIdAsync<CartItem>(cartItemId);
             string responseText = $"{rowsDeleted} rows deleted.";
-
             return Json(responseText, MediaTypeNames.Text.Plain);
         }
 
@@ -460,15 +445,12 @@ namespace PizzaWebsite.Controllers
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             Cart cart = await PizzaDb.GetAsync<Cart>(cartId);
-
             if (cart == null)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json($"Cart with ID {cartId} does not exist.", MediaTypeNames.Text.Plain);
             }
-
             SiteUser user = await GetCurrentUserAsync();
-
             bool authorized = await PizzaDb.Commands.UserOwnsCartAsync(user, cart);
 
             if (!authorized)
@@ -476,10 +458,8 @@ namespace PizzaWebsite.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json($"Current user does not own cart with ID {cartId}.", MediaTypeNames.Text.Plain);
             }
-
             decimal cartSubtotal = await PizzaDb.Commands.CalculateCartSubtotalAsync(cartId);
             string formattedPrice = cartSubtotal.ToString("C", CultureInfo.CurrentCulture);
-
             return Json(formattedPrice);
         }
 
@@ -509,25 +489,19 @@ namespace PizzaWebsite.Controllers
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             CustomerOrder order = await PizzaDb.GetAsync<CustomerOrder>(orderId);
-
             if (order == null)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json($"Order with ID {order} does not exist.", MediaTypeNames.Text.Plain);
             }
-
             SiteUser user = await GetCurrentUserAsync();
-
             bool authorized = await PizzaDb.Commands.UserOwnsCustomerOrderAsync(user, order);
-
             if (!authorized)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json($"Current user does not own order with ID {orderId}.", MediaTypeNames.Text.Plain);
             }
-
             string orderStatus = GetOrderStatusMessage(order.OrderPhase);
-
             return Json(orderStatus);
         }
 
@@ -536,24 +510,19 @@ namespace PizzaWebsite.Controllers
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             CartItem cartItem = await PizzaDb.GetAsync<CartItem>(cartItemId);
-
             if (cartItem == null)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json($"Cart Item with ID {cartItemId} does not exist.", MediaTypeNames.Text.Plain);
             }
-
             bool authorized = await AuthorizedToModifyCartItemAsync(cartItem);
-
             if (!authorized)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json($"Current user is not allowed to modify cart item ID {cartItemId}.", MediaTypeNames.Text.Plain);
             }
-
             cartItem = await PizzaDb.Commands.UpdateCartItemQuantityAsync(cartItem, quantity);
             string updatedPrice = cartItem.Price.ToString("C", CultureInfo.CurrentCulture);
-
             return Json(updatedPrice);
         }
 
@@ -562,21 +531,17 @@ namespace PizzaWebsite.Controllers
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             DeliveryAddress address = await PizzaDb.GetAsync<DeliveryAddress>(addressId);
-
             if (address == null)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json($"Delivery Address with ID {addressId} does not exist.", MediaTypeNames.Text.Plain);
             }
-
             bool authorized = await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId(), address);
-
             if (!authorized)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json($"Current user is not allowed to access delivery address ID {addressId}.", MediaTypeNames.Text.Plain);
             }
-
             // Name, Address Type, Street Address, City, State, Zip Code, Phone Number
             string[] deliveryAddressResponse = new string[]
             {
@@ -588,7 +553,6 @@ namespace PizzaWebsite.Controllers
                 address.ZipCode,
                 address.PhoneNumber
             };
-
             return Json(deliveryAddressResponse);
         }
 
@@ -598,10 +562,8 @@ namespace PizzaWebsite.Controllers
             var join = new CustomerOrderOnDeliveryInfoJoinList();
             await join.LoadFirstOrDefaultByCustomerOrderIdAsync(id.Value, PizzaDb);
             Join<CustomerOrder, DeliveryInfo> result = join.Items.FirstOrDefault();
-
             PreviousOrderViewModel orderVm = new PreviousOrderViewModel();
             await orderVm.InitializeAsync(true, result.Table1, result.Table2, PizzaDb);
-
             return View(orderVm);
         }
 
@@ -613,17 +575,14 @@ namespace PizzaWebsite.Controllers
             {
                 page = 1;
             }
-
             if (!rowsPerPage.HasValue)
             {
                 rowsPerPage = 10;
             }
-
             PreviousOrderSearch search = new PreviousOrderSearch()
             {
                 UserId = User.Identity.GetUserId()
             };
-
             PaginationViewModel paginationVm = new PaginationViewModel()
             {
                 QueryString = Request.QueryString,
@@ -632,24 +591,19 @@ namespace PizzaWebsite.Controllers
                 TotalNumberOfItems = await PizzaDb.GetNumberOfRecordsAsync<CustomerOrder>(search),
                 TotalPages = await PizzaDb.GetNumberOfPagesAsync<CustomerOrder>(rowsPerPage.Value, search)
             };
-
-
             List<PreviousOrderViewModel> previousOrderVmList = new List<PreviousOrderViewModel>();
             IEnumerable<CustomerOrder> previousOrderList = await PizzaDb.GetPagedListAsync<CustomerOrder>(page.Value, rowsPerPage.Value, "Id", SortOrder.Descending, search);
-
             foreach (CustomerOrder prevOrder in previousOrderList)
             {
                 PreviousOrderViewModel orderVm = new PreviousOrderViewModel();
                 await orderVm.InitializeAsync(false, prevOrder, null, PizzaDb);
                 previousOrderVmList.Add(orderVm);
             }
-
             PreviousOrderListViewModel previousOrdersVm = new PreviousOrderListViewModel()
             {
                 PaginationVm = paginationVm,
                 PreviousOrderVmList = previousOrderVmList
             };
-
             return View("PreviousOrderList", previousOrdersVm);
         }
 

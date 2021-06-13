@@ -18,7 +18,7 @@ namespace DataLibrary.Models.Tables
         public int MenuPizzaCheeseId { get; set; }
         public string CheeseAmount { get; set; }
         public int MenuPizzaCrustFlavorId { get; set; }
-        public IEnumerable<CartPizzaTopping> ToppingList { get; set; }
+        public List<CartPizzaTopping> ToppingList { get; set; }
 
         public CartPizza()
         {

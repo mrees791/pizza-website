@@ -49,21 +49,21 @@ namespace PizzaWebsite.Controllers
             MenuPizzaBuilder pizzaBuilder = new MenuPizzaBuilder();
             await pizzaBuilder.InitializeAsync(new MenuItemSearch() { AvailableForPurchase = true }, PizzaDb);
             Dictionary<int, string> cheeseDictionary = new Dictionary<int, string>();
+            Dictionary<int, string> crustFlavorDictionary = new Dictionary<int, string>();
+            Dictionary<int, string> sauceDictionary = new Dictionary<int, string>();
+            List<PizzaTopping> toppingList = new List<PizzaTopping>();
             foreach (MenuPizzaCheese cheese in pizzaBuilder.CheeseList)
             {
                 cheeseDictionary.Add(cheese.Id, cheese.Name);
             }
-            Dictionary<int, string> crustFlavorDictionary = new Dictionary<int, string>();
             foreach (MenuPizzaCrustFlavor crustFlavor in pizzaBuilder.CrustFlavorList)
             {
                 crustFlavorDictionary.Add(crustFlavor.Id, crustFlavor.Name);
             }
-            Dictionary<int, string> sauceDictionary = new Dictionary<int, string>();
             foreach (MenuPizzaSauce sauce in pizzaBuilder.SauceList)
             {
                 sauceDictionary.Add(sauce.Id, sauce.Name);
             }
-            Dictionary<int, PizzaTopping> toppingDictionary = new Dictionary<int, PizzaTopping>();
             foreach (MenuPizzaTopping menuTopping in record.ToppingList)
             {
                 PizzaTopping topping = new PizzaTopping()
@@ -72,9 +72,9 @@ namespace PizzaWebsite.Controllers
                     ToppingAmount = menuTopping.ToppingAmount,
                     ToppingHalf = menuTopping.ToppingHalf
                 };
-                toppingDictionary.Add(topping.ToppingTypeId, topping);
+                toppingList.Add(topping);
             }
-            List<PizzaToppingViewModel> toppingVmList = PizzaBuilderManager.CreateToppingViewModelList(toppingDictionary, pizzaBuilder.ToppingTypeList);
+            List<PizzaToppingViewModel> toppingVmList = PizzaBuilderManager.CreateToppingViewModelList(toppingList, pizzaBuilder.ToppingTypeList);
             return new ManageMenuPizzaViewModel()
             {
                 Id = record.Id,

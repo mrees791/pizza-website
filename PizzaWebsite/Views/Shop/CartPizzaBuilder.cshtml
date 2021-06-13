@@ -9,13 +9,13 @@
 {
     @Html.AntiForgeryToken()
     @* Save list state *@
-    for (int i = 0; i < Model.QuantityList.Count; i++)
+    for (int i = 0; i < Model.QuantityList.Count(); i++)
     {
-        <input type="hidden" name="QuantityList[@i]" value="@Model.QuantityList[i]">
+        <input type="hidden" name="QuantityList[@i]" value="@Model.QuantityList.ElementAt(i)">
     }
-    for (int i = 0; i < Model.SizeList.Count; i++)
+    for (int i = 0; i < Model.SizeList.Count(); i++)
     {
-        <input type="hidden" name="SizeList[@i]" value="@Model.SizeList[i]" />
+        <input type="hidden" name="SizeList[@i]" value="@Model.SizeList.ElementAt(i)" />
     }
     for (int i = 0; i < Model.CrustDictionary.Count; i++)
     {
