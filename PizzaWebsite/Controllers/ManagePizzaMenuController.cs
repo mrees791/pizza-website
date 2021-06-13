@@ -99,8 +99,7 @@ namespace PizzaWebsite.Controllers
                 CheeseDictionary = cheeseDictionary,
                 CrustFlavorDictionary = crustFlavorDictionary,
                 SauceDictionary = sauceDictionary,
-                MeatToppingVmList = toppingVmList.Where(t => t.Category == "Meats"),
-                VeggieToppingVmList = toppingVmList.Where(t => t.Category == "Veggie")
+                ToppingVmList = toppingVmList
             };
         }
 
@@ -126,8 +125,7 @@ namespace PizzaWebsite.Controllers
         private List<MenuPizzaTopping> GetToppingRecordsFromViewModel(ManageMenuPizzaViewModel model)
         {
             List<MenuPizzaTopping> toppingRecordList = new List<MenuPizzaTopping>();
-            IEnumerable<PizzaToppingViewModel> toppingVmList = model.GetToppingVmList();
-            foreach (PizzaToppingViewModel toppingVm in toppingVmList)
+            foreach (PizzaToppingViewModel toppingVm in model.ToppingVmList)
             {
                 if (toppingVm.SelectedAmount != "None")
                 {

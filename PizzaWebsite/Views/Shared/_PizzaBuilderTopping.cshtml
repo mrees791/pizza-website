@@ -1,17 +1,17 @@
 ﻿@using PizzaWebsite.Models.PizzaBuilders
-@model PizzaWebsite.Models.PizzaBuilders.PizzaToppingViewModel
+@model PizzaToppingViewModel
 @* Save list state *@
-<input type="hidden" name="ToppingList[@Model.ListIndex].ListIndex" value="@Model.ListIndex" />
-<input type="hidden" name="ToppingList[@Model.ListIndex].Category" value="@Model.Category" />
-<input type="hidden" name="ToppingList[@Model.ListIndex].Id" value="@Model.Id" />
-<input type="hidden" name="ToppingList[@Model.ListIndex].Name" value="@Model.Name" />
+<input type="hidden" name="ToppingVmList[@Model.ListIndex].ListIndex" value="@Model.ListIndex" />
+<input type="hidden" name="ToppingVmList[@Model.ListIndex].Category" value="@Model.Category" />
+<input type="hidden" name="ToppingVmList[@Model.ListIndex].Id" value="@Model.Id" />
+<input type="hidden" name="ToppingVmList[@Model.ListIndex].Name" value="@Model.Name" />
 @for (int iToppingAmount = 0; iToppingAmount < Model.AmountList.Count; iToppingAmount++)
 {
-    <input type="hidden" name="ToppingList[@Model.ListIndex].AmountList[@iToppingAmount]" value="@Model.AmountList[iToppingAmount]" />
+    <input type="hidden" name="ToppingVmList[@Model.ListIndex].AmountList[@iToppingAmount]" value="@Model.AmountList[iToppingAmount]" />
 }
 @for (int iToppingHalf = 0; iToppingHalf < Model.ToppingHalfList.Count; iToppingHalf++)
 {
-    <input type="hidden" name="ToppingList[@Model.ListIndex].ToppingHalfList[@iToppingHalf]" value="@Model.ToppingHalfList[iToppingHalf]" />
+    <input type="hidden" name="ToppingVmList[@Model.ListIndex].ToppingHalfList[@iToppingHalf]" value="@Model.ToppingHalfList[iToppingHalf]" />
 }
 <div class="form-group pb-topping">
     <div class="col-md-2">
@@ -23,13 +23,13 @@
             string toppingAmount = Model.AmountList[iToppingAmount];
             if (Model.SelectedAmount == toppingAmount)
             {
-                <input type="radio" name="@($"ToppingList[{Model.ListIndex}].SelectedAmount")" id="@($"ToppingList[{Model.ListIndex}].AmountList[{iToppingAmount}]")" value="@toppingAmount" checked />
+                <input type="radio" name="@($"ToppingVmList[{Model.ListIndex}].SelectedAmount")" id="@($"ToppingVmList[{Model.ListIndex}].AmountList[{iToppingAmount}]")" value="@toppingAmount" checked />
             }
             else
             {
-                <input type="radio" name="@($"ToppingList[{Model.ListIndex}].SelectedAmount")" id="@($"ToppingList[{Model.ListIndex}].AmountList[{iToppingAmount}]")" value="@toppingAmount" />
+                <input type="radio" name="@($"ToppingVmList[{Model.ListIndex}].SelectedAmount")" id="@($"ToppingVmList[{Model.ListIndex}].AmountList[{iToppingAmount}]")" value="@toppingAmount" />
             }
-            <label for="@($"ToppingList[{Model.ListIndex}].AmountList[{iToppingAmount}]")">@toppingAmount</label>
+            <label for="@($"ToppingVmList[{Model.ListIndex}].AmountList[{iToppingAmount}]")">@toppingAmount</label>
         }
     </div>
     <div class="col-md-2">
@@ -38,13 +38,13 @@
             string toppingHalf = Model.ToppingHalfList[iToppingHalf];
             if (Model.SelectedToppingHalf == toppingHalf)
             {
-                <input type="radio" name="@($"ToppingList[{Model.ListIndex}].SelectedToppingHalf")" id="@($"ToppingList[{Model.ListIndex}].ToppingHalfList[{iToppingHalf}]")" value="@toppingHalf" checked />
+                <input type="radio" name="@($"ToppingVmList[{Model.ListIndex}].SelectedToppingHalf")" id="@($"ToppingVmList[{Model.ListIndex}].ToppingHalfList[{iToppingHalf}]")" value="@toppingHalf" checked />
             }
             else
             {
-                <input type="radio" name="@($"ToppingList[{Model.ListIndex}].SelectedToppingHalf")" id="@($"ToppingList[{Model.ListIndex}].ToppingHalfList[{iToppingHalf}]")" value="@toppingHalf" />
+                <input type="radio" name="@($"ToppingVmList[{Model.ListIndex}].SelectedToppingHalf")" id="@($"ToppingVmList[{Model.ListIndex}].ToppingHalfList[{iToppingHalf}]")" value="@toppingHalf" />
             }
-            <label for="@($"ToppingList[{Model.ListIndex}].ToppingHalfList[{iToppingHalf}]")">@toppingHalf</label>
+            <label for="@($"ToppingVmList[{Model.ListIndex}].ToppingHalfList[{iToppingHalf}]")">@toppingHalf</label>
         }
     </div>
 </div>

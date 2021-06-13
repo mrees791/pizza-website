@@ -65,12 +65,12 @@
 </div>
 <h4>Toppings</h4>
 <h5>Meats</h5>
-@foreach (PizzaToppingViewModel toppingVm in Model.MeatToppingVmList)
+@foreach (PizzaToppingViewModel toppingVm in Model.GetMeatsToppingVmList())
 {
     @Html.Partial("_PizzaBuilderTopping", toppingVm)
 }
 <h5>Veggies</h5>
-@foreach (PizzaToppingViewModel toppingVm in Model.VeggieToppingVmList)
+@foreach (PizzaToppingViewModel toppingVm in Model.GetVeggieToppingVmList())
 {
     @Html.Partial("_PizzaBuilderTopping", toppingVm)
 }
