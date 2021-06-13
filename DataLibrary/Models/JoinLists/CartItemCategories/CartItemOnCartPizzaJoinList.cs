@@ -11,15 +11,23 @@ namespace DataLibrary.Models.JoinLists.CartItemCategories
 {
     public class CartItemOnCartPizzaJoinList : CartItemJoinListBase<CartPizza>
     {
+        public async Task LoadFirstOrDefaultAsync(int cartItemId, PizzaDatabase pizzaDb)
+        {
+            string whereClause = "WHERE c.Id = @Id";
+            object parameters = new
+            {
+                Id = cartItemId
+            };
+            await LoadListAsync(whereClause, parameters, true, "c.Id", SortOrder.Ascending, pizzaDb);
+        }
+
         public override async Task LoadListByCartIdAsync(int cartId, PizzaDatabase pizzaDb)
         {
             string whereClause = "WHERE c.CartId = @CartId";
-
             object parameters = new
             {
                 CartId = cartId
             };
-
             await LoadListAsync(whereClause, parameters, false, "c.Id", SortOrder.Ascending, pizzaDb);
         }
 

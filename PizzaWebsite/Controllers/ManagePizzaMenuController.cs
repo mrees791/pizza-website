@@ -89,13 +89,13 @@ namespace PizzaWebsite.Controllers
                 SelectedSauceId = record.MenuPizzaSauceId,
                 SortOrder = record.SortOrder,
                 CategoryList = pizzaBuilder.CategoryList,
-                MeatToppingVmList = toppingVmList.Where(t => t.Category == "Meats"),
-                VeggieToppingVmList = toppingVmList.Where(t => t.Category == "Veggie"),
                 CheeseAmountList = pizzaBuilder.CheeseAmountList,
                 SauceAmountList = pizzaBuilder.SauceAmountList,
                 CheeseDictionary = cheeseDictionary,
                 CrustFlavorDictionary = crustFlavorDictionary,
-                SauceDictionary = sauceDictionary
+                SauceDictionary = sauceDictionary,
+                MeatToppingVmList = toppingVmList.Where(t => t.Category == "Meats"),
+                VeggieToppingVmList = toppingVmList.Where(t => t.Category == "Veggie")
             };
         }
 
@@ -121,9 +121,7 @@ namespace PizzaWebsite.Controllers
         private List<MenuPizzaTopping> GetToppingRecordsFromViewModel(ManageMenuPizzaViewModel model)
         {
             List<MenuPizzaTopping> toppingRecordList = new List<MenuPizzaTopping>();
-            List<PizzaToppingViewModel> toppingVmList = new List<PizzaToppingViewModel>();
-            toppingVmList.AddRange(model.MeatToppingVmList);
-            toppingVmList.AddRange(model.VeggieToppingVmList);
+            IEnumerable<PizzaToppingViewModel> toppingVmList = model.GetToppingVmList();
             foreach (PizzaToppingViewModel toppingVm in toppingVmList)
             {
                 if (toppingVm.SelectedAmount != "None")

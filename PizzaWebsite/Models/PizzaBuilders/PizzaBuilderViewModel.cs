@@ -28,10 +28,18 @@ namespace PizzaWebsite.Models.PizzaBuilders
         public int SelectedCrustFlavorId { get; set; }
         public IEnumerable<PizzaToppingViewModel> MeatToppingVmList { get; set; }
         public IEnumerable<PizzaToppingViewModel> VeggieToppingVmList { get; set; }
-        public Dictionary<int, string> SauceDictionary { get; set; }
         public IEnumerable<string> SauceAmountList { get; set; }
-        public Dictionary<int, string> CheeseDictionary { get; set; }
         public IEnumerable<string> CheeseAmountList { get; set; }
+        public Dictionary<int, string> SauceDictionary { get; set; }
+        public Dictionary<int, string> CheeseDictionary { get; set; }
         public Dictionary<int, string> CrustFlavorDictionary { get; set; }
+
+        public IEnumerable<PizzaToppingViewModel> GetToppingVmList()
+        {
+            List<PizzaToppingViewModel> toppingVmList = new List<PizzaToppingViewModel>();
+            toppingVmList.AddRange(MeatToppingVmList);
+            toppingVmList.AddRange(VeggieToppingVmList);
+            return toppingVmList;
+        }
     }
 }

@@ -95,7 +95,7 @@ namespace DataLibrary.Models.Tables
 
             foreach (MenuPizzaTopping menuTopping in ToppingList)
             {
-                cartPizza.Toppings.Add(menuTopping.CreateCartTopping());
+                cartPizza.ToppingList.Add(menuTopping.CreateCartTopping());
             }
 
             decimal pricePerItem = await cartPizza.CalculateItemPriceAsync(pizzaDb);

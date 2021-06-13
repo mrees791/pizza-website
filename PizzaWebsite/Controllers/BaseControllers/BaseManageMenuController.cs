@@ -43,13 +43,12 @@ namespace PizzaWebsite.Controllers.BaseControllers
             {
                 return View("Manage", model);
             }
-
             await PizzaDb.InsertAsync(ViewModelToRecord(model));
-
-            ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
-            confirmationModel.ConfirmationMessage = $"{modelName} has been added to the database.";
-            confirmationModel.ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}";
-
+            ConfirmationViewModel confirmationModel = new ConfirmationViewModel()
+            {
+                ConfirmationMessage = $"{modelName} has been added to the database.",
+                ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}"
+            };
             return View("CreateEditConfirmation", confirmationModel);
         }
 
@@ -57,7 +56,6 @@ namespace PizzaWebsite.Controllers.BaseControllers
         {
             TRecord record = await PizzaDb.GetAsync<TRecord>(id.Value);
             TViewModel model = await RecordToViewModelAsync(record);
-
             return View("Manage", model);
         }
 
@@ -69,13 +67,12 @@ namespace PizzaWebsite.Controllers.BaseControllers
             {
                 return View("Manage", model);
             }
-
             await PizzaDb.UpdateAsync(ViewModelToRecord(model));
-
-            ConfirmationViewModel confirmationModel = new ConfirmationViewModel();
-            confirmationModel.ConfirmationMessage = $"Your changes to {modelName} have been confirmed.";
-            confirmationModel.ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}";
-
+            ConfirmationViewModel confirmationModel = new ConfirmationViewModel()
+            {
+                ConfirmationMessage = $"Your changes to {modelName} have been confirmed.",
+                ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}"
+            };
             return View("CreateEditConfirmation", confirmationModel);
         }
 

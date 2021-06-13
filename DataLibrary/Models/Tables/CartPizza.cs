@@ -18,11 +18,11 @@ namespace DataLibrary.Models.Tables
         public int MenuPizzaCheeseId { get; set; }
         public string CheeseAmount { get; set; }
         public int MenuPizzaCrustFlavorId { get; set; }
-        public List<CartPizzaTopping> Toppings { get; set; }
+        public IEnumerable<CartPizzaTopping> ToppingList { get; set; }
 
         public CartPizza()
         {
-            Toppings = new List<CartPizzaTopping>();
+            ToppingList = new List<CartPizzaTopping>();
         }
 
         public override dynamic GetId()
@@ -42,7 +42,7 @@ namespace DataLibrary.Models.Tables
 
         internal override async Task MapEntityAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            Toppings.AddRange(await pizzaDb.GetListAsync<CartPizzaTopping>(new { CartItemId = CartItemId }));
+            ToppingList.AddRange(await pizzaDb.GetListAsync<CartPizzaTopping>(new { CartItemId = CartItemId }));
         }
 
         internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
@@ -52,7 +52,7 @@ namespace DataLibrary.Models.Tables
                                    VALUES (@CartItemId, @Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId)",
                                       this, transaction);
 
-            foreach (CartPizzaTopping topping in Toppings)
+            foreach (CartPizzaTopping topping in ToppingList)
             {
                 topping.CartItemId = CartItemId;
                 await topping.InsertAsync(pizzaDb, transaction);
@@ -67,7 +67,7 @@ namespace DataLibrary.Models.Tables
             await pizzaDb.Connection.DeleteListAsync<CartPizzaTopping>(new { CartItemId = CartItemId }, transaction);
 
             // Insert new toppings
-            foreach (CartPizzaTopping topping in Toppings)
+            foreach (CartPizzaTopping topping in ToppingList)
             {
                 topping.CartItemId = CartItemId;
                 await topping.InsertAsync(pizzaDb, transaction);
@@ -124,7 +124,7 @@ namespace DataLibrary.Models.Tables
                     break;
             }
 
-            foreach (CartPizzaTopping topping in Toppings)
+            foreach (CartPizzaTopping topping in ToppingList)
             {
                 MenuPizzaToppingType toppingType = await pizzaDb.GetAsync<MenuPizzaToppingType>(topping.MenuPizzaToppingTypeId);
 

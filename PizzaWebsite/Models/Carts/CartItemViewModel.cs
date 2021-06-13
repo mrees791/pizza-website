@@ -53,11 +53,11 @@ namespace PizzaWebsite.Models.Carts
             DescriptionHtml += $"Crust: {crust.Name}<br />";
             DescriptionHtml += $"Crust Flavor: {crustFlavor.Name}<br /><br />";
 
-            if (cartPizza.Toppings.Any())
+            if (cartPizza.ToppingList.Any())
             {
                 DescriptionHtml += $"Toppings<br />";
 
-                foreach (CartPizzaTopping topping in cartPizza.Toppings)
+                foreach (CartPizzaTopping topping in cartPizza.ToppingList)
                 {
                     MenuPizzaToppingType toppingType = await pizzaDb.GetAsync<MenuPizzaToppingType>(topping.MenuPizzaToppingTypeId);
                     DescriptionHtml += $"{toppingType.Name}: {topping.ToppingAmount}, {topping.ToppingHalf}<br />";

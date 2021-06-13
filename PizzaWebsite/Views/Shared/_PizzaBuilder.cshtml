@@ -1,6 +1,33 @@
 ﻿@using PizzaWebsite.Models.PizzaBuilders
-@model PizzaWebsite.Models.PizzaBuilders.PizzaBuilderViewModel
+@model PizzaBuilderViewModel
 @* This partial view must be placed inside a POST form. *@
+@* Save list state *@
+@for (int i = 0; i < Model.SauceDictionary.Count; i++)
+{
+    KeyValuePair<int, string> saucePair = Model.SauceDictionary.ElementAt(i);
+    <input type="hidden" name="SauceDictionary[@i].Key" value="@saucePair.Key" />
+    <input type="hidden" name="SauceDictionary[@i].Value" value="@saucePair.Value" />
+}
+@for (int i = 0; i < Model.SauceAmountList.Count; i++)
+{
+    <input type="hidden" name="SauceAmountList[@i]" value="@Model.SauceAmountList[i]" />
+}
+@for (int i = 0; i < Model.CheeseDictionary.Count; i++)
+{
+    KeyValuePair<int, string> cheesePair = Model.CheeseDictionary.ElementAt(i);
+    <input type="hidden" name="CheeseDictionary[@i].Key" value="@cheesePair.Key" />
+    <input type="hidden" name="CheeseDictionary[@i].Value" value="@cheesePair.Value" />
+}
+@for (int i = 0; i < Model.CheeseAmountList.Count; i++)
+{
+    <input type="hidden" name="CheeseAmountList[@i]" value="@Model.CheeseAmountList[i]" />
+}
+@for (int i = 0; i < Model.CrustFlavorDictionary.Count; i++)
+{
+    KeyValuePair<int, string> crustFlavorPair = Model.CrustFlavorDictionary.ElementAt(i);
+    <input type="hidden" name="CrustFlavorDictionary[@i].Key" value="@crustFlavorPair.Key" />
+    <input type="hidden" name="CrustFlavorDictionaryy[@i].Value" value="@crustFlavorPair.Value" />
+}
 <div class="form-group">
     @Html.LabelFor(model => model.SelectedSauceId, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">

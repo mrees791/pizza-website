@@ -14,11 +14,17 @@ namespace PizzaWebsite.Models.PizzaBuilders
 {
     public static class PizzaBuilderManager
     {
-        public static List<PizzaToppingViewModel> CreateToppingViewModelList(Dictionary<int, PizzaTopping> toppingDictionary, IEnumerable<MenuPizzaToppingType> toppingTypeList)
+        public static List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<PizzaTopping> toppingList, IEnumerable<MenuPizzaToppingType> toppingTypeList)
         {
             List<PizzaToppingViewModel> toppingVmList = new List<PizzaToppingViewModel>();
-            foreach (MenuPizzaToppingType toppingType in toppingTypeList)
+            Dictionary<int, PizzaTopping> toppingDictionary = new Dictionary<int, PizzaTopping>();
+            foreach (PizzaTopping topping in toppingList)
             {
+                toppingDictionary.Add(topping.ToppingTypeId, topping);
+            }
+            for (int iToppingType = 0; iToppingType < toppingTypeList.Count(); iToppingType++)
+            {
+                MenuPizzaToppingType toppingType = toppingTypeList.ElementAt(iToppingType);
                 PizzaTopping currentTopping = new PizzaTopping()
                 {
                     ToppingTypeId = toppingType.Id,
@@ -31,6 +37,7 @@ namespace PizzaWebsite.Models.PizzaBuilders
                 }
                 PizzaToppingViewModel toppingVm = new PizzaToppingViewModel()
                 {
+                    ListIndex = iToppingType,
                     Category = toppingType.CategoryName,
                     Id = toppingType.Id,
                     Name = toppingType.Name,

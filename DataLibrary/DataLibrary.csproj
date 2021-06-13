@@ -74,6 +74,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Builders\CartPizzaBuilder.cs" />
+    <Compile Include="Models\Builders\MenuPizzaBuilder.cs" />
+    <Compile Include="Models\Builders\PizzaBuilder.cs" />
     <Compile Include="Models\CartItemJoin.cs" />
     <Compile Include="Models\CartItemCategory.cs" />
     <Compile Include="Models\CostSummary.cs" />

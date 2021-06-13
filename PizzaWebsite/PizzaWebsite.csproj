@@ -224,6 +224,7 @@
     <Compile Include="Models\PagedListViewModel.cs" />
     <Compile Include="Models\PaginationViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\CartPizzaBuilderViewModel.cs" />
+    <Compile Include="Models\PizzaBuilders\PizzaBuilderManager.cs" />
     <Compile Include="Models\PizzaBuilders\PizzaBuilderViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\PizzaToppingViewModel.cs" />
     <Compile Include="Models\ManageStores\RemoveEmployeeFromRosterViewModel.cs" />

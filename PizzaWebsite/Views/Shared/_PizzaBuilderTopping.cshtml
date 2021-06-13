@@ -1,6 +1,6 @@
 ﻿@using PizzaWebsite.Models.PizzaBuilders
 @model PizzaWebsite.Models.PizzaBuilders.PizzaToppingViewModel
-
+@* Save list state *@
 <input type="hidden" name="ToppingList[@Model.ListIndex].ListIndex" value="@Model.ListIndex" />
 <input type="hidden" name="ToppingList[@Model.ListIndex].Category" value="@Model.Category" />
 <input type="hidden" name="ToppingList[@Model.ListIndex].Id" value="@Model.Id" />
