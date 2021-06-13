@@ -195,6 +195,22 @@ namespace PizzaWebsite.Controllers
             return await CreatePizzaBuilderVmAsync(cartItem, cartPizza);
         }
 
+        private List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<CartPizzaTopping> cartToppingList, IEnumerable<MenuPizzaToppingType> toppingTypeList)
+        {
+            List<PizzaTopping> toppingList = new List<PizzaTopping>();
+            foreach (CartPizzaTopping cartTopping in cartToppingList)
+            {
+                PizzaTopping topping = new PizzaTopping()
+                {
+                    ToppingTypeId = cartTopping.MenuPizzaToppingTypeId,
+                    ToppingAmount = cartTopping.ToppingAmount,
+                    ToppingHalf = cartTopping.ToppingHalf
+                };
+                toppingList.Add(topping);
+            }
+            return PizzaBuilderManager.CreateToppingViewModelList(toppingList, toppingTypeList);
+        }
+
         private async Task<CartPizzaBuilderViewModel> CreatePizzaBuilderVmAsync(CartItem cartItem, CartPizza cartPizza)
         {
             CartPizzaBuilder pizzaBuilder = new CartPizzaBuilder();
@@ -221,16 +237,7 @@ namespace PizzaWebsite.Controllers
             {
                 sauceDictionary.Add(sauce.Id, sauce.Name);
             }
-            foreach (CartPizzaTopping menuTopping in cartPizza.ToppingList)
-            {
-                PizzaTopping topping = new PizzaTopping()
-                {
-                    ToppingTypeId = menuTopping.MenuPizzaToppingTypeId,
-                    ToppingAmount = menuTopping.ToppingAmount,
-                    ToppingHalf = menuTopping.ToppingHalf
-                };
-            }
-            List<PizzaToppingViewModel> toppingVmList = PizzaBuilderManager.CreateToppingViewModelList(toppingList, pizzaBuilder.ToppingTypeList);
+            List<PizzaToppingViewModel> toppingVmList = CreateToppingViewModelList(cartPizza.ToppingList, pizzaBuilder.ToppingTypeList);
             return new CartPizzaBuilderViewModel()
             {
                 Id = cartItem.Id,

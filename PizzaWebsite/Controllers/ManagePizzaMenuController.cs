@@ -44,6 +44,22 @@ namespace PizzaWebsite.Controllers
             return await Edit(model, model.Name);
         }
 
+        private List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<MenuPizzaTopping> menuToppingList, IEnumerable<MenuPizzaToppingType> toppingTypeList)
+        {
+            List<PizzaTopping> toppingList = new List<PizzaTopping>();
+            foreach (MenuPizzaTopping menuTopping in menuToppingList)
+            {
+                PizzaTopping topping = new PizzaTopping()
+                {
+                    ToppingTypeId = menuTopping.MenuPizzaToppingTypeId,
+                    ToppingAmount = menuTopping.ToppingAmount,
+                    ToppingHalf = menuTopping.ToppingHalf
+                };
+                toppingList.Add(topping);
+            }
+            return PizzaBuilderManager.CreateToppingViewModelList(toppingList, toppingTypeList);
+        }
+
         protected override async Task<ManageMenuPizzaViewModel> RecordToViewModelAsync(MenuPizza record)
         {
             MenuPizzaBuilder pizzaBuilder = new MenuPizzaBuilder();
@@ -51,7 +67,6 @@ namespace PizzaWebsite.Controllers
             Dictionary<int, string> cheeseDictionary = new Dictionary<int, string>();
             Dictionary<int, string> crustFlavorDictionary = new Dictionary<int, string>();
             Dictionary<int, string> sauceDictionary = new Dictionary<int, string>();
-            List<PizzaTopping> toppingList = new List<PizzaTopping>();
             foreach (MenuPizzaCheese cheese in pizzaBuilder.CheeseList)
             {
                 cheeseDictionary.Add(cheese.Id, cheese.Name);
@@ -64,17 +79,7 @@ namespace PizzaWebsite.Controllers
             {
                 sauceDictionary.Add(sauce.Id, sauce.Name);
             }
-            foreach (MenuPizzaTopping menuTopping in record.ToppingList)
-            {
-                PizzaTopping topping = new PizzaTopping()
-                {
-                    ToppingTypeId = menuTopping.MenuPizzaToppingTypeId,
-                    ToppingAmount = menuTopping.ToppingAmount,
-                    ToppingHalf = menuTopping.ToppingHalf
-                };
-                toppingList.Add(topping);
-            }
-            List<PizzaToppingViewModel> toppingVmList = PizzaBuilderManager.CreateToppingViewModelList(toppingList, pizzaBuilder.ToppingTypeList);
+            List<PizzaToppingViewModel> toppingVmList = CreateToppingViewModelList(record.ToppingList, pizzaBuilder.ToppingTypeList);
             return new ManageMenuPizzaViewModel()
             {
                 Id = record.Id,

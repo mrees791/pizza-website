@@ -18,16 +18,19 @@ namespace PizzaWebsite.Controllers.BaseControllers
     {
         protected async Task<ActionResult> Index(int page, int rowsPerPage, string orderByColumn, WhereClauseBase whereClauseBase)
         {
-            var viewModelList = new ManagePagedListViewModel<TViewModel>();
-
-            IEnumerable<TRecord> recordList = await LoadPagedRecordsAsync(page, rowsPerPage, orderByColumn, SortOrder.Ascending, whereClauseBase, PizzaDb, viewModelList.PaginationVm);
-
+            PaginationViewModel paginationVm = new PaginationViewModel();
+            IEnumerable<TRecord> recordList = await LoadPagedRecordsAsync(page, rowsPerPage, orderByColumn, SortOrder.Ascending, whereClauseBase, PizzaDb, paginationVm);
+            List<TViewModel> itemViewModelList = new List<TViewModel>();
             foreach (TRecord record in recordList)
             {
-                viewModelList.ItemViewModelList.Add(await RecordToViewModelAsync(record));
+                itemViewModelList.Add(await RecordToViewModelAsync(record));
             }
-
-            return View(viewModelList);
+            ManagePagedListViewModel<TViewModel> model = new ManagePagedListViewModel<TViewModel>()
+            {
+                ItemViewModelList = itemViewModelList,
+                PaginationVm = paginationVm
+            };
+            return View(model);
         }
 
         public virtual async Task<ActionResult> Add()
