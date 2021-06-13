@@ -34,7 +34,8 @@ namespace PizzaWebsite.Controllers
                 {
                     Id = user.Id,
                     Email = user.Email,
-                    IsBanned = user.IsBanned
+                    IsBanned = user.IsBanned,
+                    UrlSafeId = GetUrlSafeId(user.Id)
                 };
                 userVmList.Add(userVm);
             }

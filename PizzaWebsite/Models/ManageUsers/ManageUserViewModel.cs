@@ -14,5 +14,6 @@ namespace PizzaWebsite.Models.ManageUsers
         public string Email { get; set; }
         [Display(Name = "Banned")]
         public bool IsBanned { get; set; }
+        public string UrlSafeId { get; set; }
     }
 }

@@ -17,12 +17,10 @@ namespace DataLibrary.Models.JoinLists
         public async Task LoadListByEmployeeIdAsync(string employeeId, PizzaDatabase pizzaDb)
         {
             string whereClause = "WHERE l.EmployeeId = @EmployeeId";
-
             object parameters = new
             {
                 EmployeeId = employeeId
             };
-
             await LoadListAsync(whereClause, parameters, false, "s.Name", SortOrder.Ascending, pizzaDb);
         }
 
@@ -35,7 +33,6 @@ namespace DataLibrary.Models.JoinLists
                 new WhereClauseItem("s.Name", "StoreName", searchFilter.Name, ComparisonType.Like),
                 new WhereClauseItem("s.PhoneNumber", "PhoneNumber", searchFilter.PhoneNumber, ComparisonType.Like)
             };
-
             object parameters = new
             {
                 EmployeeId = employeeId,
@@ -44,10 +41,8 @@ namespace DataLibrary.Models.JoinLists
                 CurrentOffset = PagedListUtility.GetOffset(pageNumber, rowsPerPage),
                 RowsPerPage = rowsPerPage
             };
-
             string whereClause = SqlUtility.CreateWhereClause(whereClauseList);
             string offsetClause = SqlUtility.CreateOffsetClause();
-
             await LoadListAsync(whereClause, parameters, false, "s.Name", SortOrder.Ascending, pizzaDb, offsetClause: offsetClause);
         }
 
@@ -59,21 +54,18 @@ namespace DataLibrary.Models.JoinLists
                 new WhereClauseItem("s.Name", "StoreName", searchFilter.Name, ComparisonType.Like),
                 new WhereClauseItem("s.PhoneNumber", "PhoneNumber", searchFilter.PhoneNumber, ComparisonType.Like)
             };
-
             string whereClause = SqlUtility.CreateWhereClause(whereClauseList);
             string sql = $@"SELECT COUNT(l.Id)
                             From EmployeeLocation l
                             INNER JOIN StoreLocation s
                             ON l.StoreId = s.Id
                             {whereClause}";
-
             object parameters = new
             {
                 EmployeeId = employeeId,
                 StoreName = searchFilter.Name,
                 PhoneNumber = searchFilter.PhoneNumber
             };
-
             return await pizzaDb.Connection.ExecuteScalarAsync<int>(sql, parameters);
         }
 

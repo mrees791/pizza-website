@@ -8,7 +8,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="@Url.Action("Index", "Employee")">Home</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Manage Users</li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
     </ol>
 </nav>
 <hr />
@@ -57,7 +57,7 @@
             @if (User.IsInRole("Admin") || User.IsInRole("Executive"))
             {
                 <td>
-                    <a href="@Url.Action("ManageUser")/@item.GetUrlSafeId()?@(Request.QueryString)">
+                    <a href="@Url.Action("ManageUser")/@item.UrlSafeId?@(Request.QueryString)">
                         <input type="button" value="Edit" class="btn btn-primary" />
                     </a>
                 </td>
