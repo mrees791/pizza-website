@@ -30,10 +30,26 @@ namespace PizzaWebsite.Controllers
             return await Index(page.Value, rowsPerPage.Value, "PizzaName", searchFilter);
         }
 
+        public override async Task<ActionResult> Add()
+        {
+            MenuPizza menuPizza = new MenuPizza()
+            {
+                AvailableForPurchase = true,
+                CheeseAmount = "Regular",
+                SauceAmount = "Regular"
+            };
+            ManageMenuPizzaViewModel model = await RecordToViewModelAsync(menuPizza);
+            return View("Manage", model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Add(ManageMenuPizzaViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Manage", model);
+            }
             return await Add(model, model.Name);
         }
 

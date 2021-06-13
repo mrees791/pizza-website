@@ -26,7 +26,7 @@
 {
     KeyValuePair<int, string> crustFlavorPair = Model.CrustFlavorDictionary.ElementAt(i);
     <input type="hidden" name="CrustFlavorDictionary[@i].Key" value="@crustFlavorPair.Key" />
-    <input type="hidden" name="CrustFlavorDictionaryy[@i].Value" value="@crustFlavorPair.Value" />
+    <input type="hidden" name="CrustFlavorDictionary[@i].Value" value="@crustFlavorPair.Value" />
 }
 <div class="form-group">
     @Html.LabelFor(model => model.SelectedSauceId, htmlAttributes: new { @class = "control-label col-md-2" })
