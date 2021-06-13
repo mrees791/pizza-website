@@ -11,16 +11,28 @@
     </ol>
 </nav>
 <ul class="list-group">
-    <li class="list-group-item">
-        <a href="@Url.Action("Index", "ManageMenu")">Manage Menu</a>
-    </li>
-    <li class="list-group-item">
-        <a href="@Url.Action("Index", "ManageStores")?Page=1&RowsPerPage=10">Manage Stores</a>
-    </li>
-    <li class="list-group-item">
-        <a href="@Url.Action("Index", "ManageUsers")?Page=1&RowsPerPage=10">Manage Users</a>
-    </li>
-    <li class="list-group-item">
-        <a href="@Url.Action("Index", "ManageEmployees")?Page=1&RowsPerPage=10">Manage Employees</a>
-    </li>
+    @if (Model.AuthorizedToManageMenu)
+    {
+        <li class="list-group-item">
+            <a href="@Url.Action("Index", "ManageMenu")">Manage Menu</a>
+        </li>
+    }
+    @if (Model.AuthorizedToManageStores)
+    {
+        <li class="list-group-item">
+            <a href="@Url.Action("Index", "ManageStores")?Page=1&RowsPerPage=10">Manage Stores</a>
+        </li>
+    }
+    @if (Model.AuthorizedToManageUsers)
+    {
+        <li class="list-group-item">
+            <a href="@Url.Action("Index", "ManageUsers")?Page=1&RowsPerPage=10">Manage Users</a>
+        </li>
+    }
+    @if (Model.AuthorizedToManageEmployees)
+    {
+        <li class="list-group-item">
+            <a href="@Url.Action("Index", "ManageEmployees")?Page=1&RowsPerPage=10">Manage Employees</a>
+        </li>
+    }
 </ul>

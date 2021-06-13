@@ -18,10 +18,18 @@ namespace PizzaWebsite.Controllers
     {
         public async Task<ActionResult> Index()
         {
-            Employee employee = await PizzaDb.GetEmployeeAsync(await GetCurrentUserAsync());
+            SiteUser user = await GetCurrentUserAsync();
+            Employee employee = await PizzaDb.GetEmployeeAsync(user);
+            bool isManager = await UserManager.IsInRoleAsync(user.Id, "Manager");
+            bool isExecutive = await UserManager.IsInRoleAsync(user.Id, "Executive");
+            bool isAdmin = await UserManager.IsInRoleAsync(user.Id, "Admin");
             EmployeeIndexViewModel model = new EmployeeIndexViewModel()
             {
-                EmployeeId = employee.Id
+                EmployeeId = employee.Id,
+                AuthorizedToManageMenu = isExecutive || isAdmin,
+                AuthorizedToManageEmployees = isManager || isExecutive || isAdmin,
+                AuthorizedToManageStores = isManager || isExecutive || isAdmin,
+                AuthorizedToManageUsers = isManager || isExecutive || isAdmin
             };
             return View(model);
         }
