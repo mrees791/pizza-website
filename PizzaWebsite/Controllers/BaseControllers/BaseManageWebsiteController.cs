@@ -18,10 +18,9 @@ namespace PizzaWebsite.Controllers.BaseControllers
         protected async Task<IEnumerable<TRecord>> LoadPagedRecordsAsync(int page, int rowsPerPage, string orderByColumn, SortOrder sortOrder,
             WhereClauseBase whereClauseBase, PizzaDatabase pizzaDb, PaginationViewModel paginationVm)
         {
-            List<TRecord> recordList = new List<TRecord>();
+            IEnumerable<TRecord> recordList = await pizzaDb.GetPagedListAsync<TRecord>(page, rowsPerPage, orderByColumn, sortOrder, whereClauseBase);
             int totalNumberOfItems = await pizzaDb.GetNumberOfRecordsAsync<TRecord>(whereClauseBase);
             int totalPages = await pizzaDb.GetNumberOfPagesAsync<TRecord>(rowsPerPage, whereClauseBase);
-            recordList.AddRange(await pizzaDb.GetPagedListAsync<TRecord>(page, rowsPerPage, orderByColumn, sortOrder, whereClauseBase));
 
             // Navigation pane
             paginationVm.QueryString = Request.QueryString;
@@ -44,17 +43,14 @@ namespace PizzaWebsite.Controllers.BaseControllers
             {
                 page = 1;
             }
-
             if (!rowsPerPage.HasValue)
             {
                 rowsPerPage = defaultRowsPerPage;
             }
-
             if (page < 1)
             {
                 page = 1;
             }
-
             if (rowsPerPage < 1)
             {
                 rowsPerPage = defaultRowsPerPage;
