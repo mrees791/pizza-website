@@ -4,14 +4,11 @@
 @{
     ViewBag.Title = "Manage Addresses";
 }
-
 <h2>Manage Addresses</h2>
-
 <div>
     @Html.ActionLink("Back", "Index", new { }, new { @class = "btn btn-primary" })
     @Html.ActionLink("Add New Address", "AddNewAddress", new { }, new { @class = "btn btn-primary" })
 </div>
-
 <div id="emptyAddressListBlock" style="display: none;">
     <p>You currently have no delivery addresses.</p>
 </div>
@@ -31,7 +28,7 @@
             </tr>
         </thead>
         <tbody id="addressTableBody">
-            @foreach (DeliveryAddressListItemViewModel addressVm in Model.AddressList)
+            @foreach (DeliveryAddressViewModel addressVm in Model.AddressVmList)
             {
                 <tr id="@addressVm.AddressRowId">
                     <td>@addressVm.Name</td>
@@ -57,7 +54,6 @@
         </tbody>
     </table>
 </div>
-
 @section Scripts {
     <script type="text/javascript">
         $(function () {
@@ -65,7 +61,7 @@
         });
     </script>
     @* Delivery address controls. *@
-    @foreach (DeliveryAddressListItemViewModel addressVm in Model.AddressList)
+    @foreach (DeliveryAddressViewModel addressVm in Model.AddressVmList)
     {
         <script type="text/javascript">
             $(function () {

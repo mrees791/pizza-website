@@ -1,18 +1,14 @@
 ﻿@using PizzaWebsite.Models.Shop
 @model PreviousOrderListViewModel
-
 @{
     ViewBag.Title = "Previous Orders";
 }
-
-<h2>Previous Orders</h2>
-
+<h2>@ViewBag.Title</h2>
 <div>
     <a href="@Url.Action("Index", "Manage")?@(Request.QueryString)">
         <input type="button" value="Back" class="btn btn-primary" />
     </a>
 </div>
-
 @if (!Model.HasPreviousOrders())
 {
     <div>
@@ -39,7 +35,7 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (PreviousOrderViewModel prevOrderVm in Model.PreviousOrderViewModelList)
+                @foreach (PreviousOrderViewModel prevOrderVm in Model.PreviousOrderVmList)
                 {
                     <tr>
                         <td>
@@ -71,8 +67,6 @@ else
             </ul>
         </nav>
     </div>
-
-
     @section Scripts {
         <script type="text/javascript">
         $(function () {

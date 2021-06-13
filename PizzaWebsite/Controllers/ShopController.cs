@@ -28,26 +28,24 @@ namespace PizzaWebsite.Controllers
 {
     public class ShopController : BaseController
     {
-        public async Task<ActionResult> OrderAgain(int id)
+        public async Task<ActionResult> OrderAgain(int? id)
         {
+            if (!id.HasValue)
+            {
+                return PreviousOrderMissingIdErrorMessage();
+            }
             CustomerOrder customerOrder = await PizzaDb.GetAsync<CustomerOrder>(id);
-
             if (customerOrder == null)
             {
-                throw new RecordDoesNotExistException($"Customer Order with ID {id} does not exist.");
+                return PreviousOrderDoesNotExistErrorMessage();
             }
-
             SiteUser currentUser = await GetCurrentUserAsync();
-
             bool authorized = await PizzaDb.Commands.UserOwnsCustomerOrderAsync(currentUser, customerOrder);
-
             if (!authorized)
             {
-                throw new Exception($"Current user does not own order with ID {id}.");
+                return PreviousOrderAuthorizationErrorMessage();
             }
-
             await PizzaDb.Commands.ReorderPreviousOrder(currentUser, customerOrder);
-
             return RedirectToAction("Cart");
         }
 
@@ -56,7 +54,6 @@ namespace PizzaWebsite.Controllers
             CheckoutViewModel checkoutModel = new CheckoutViewModel();
             SiteUser currentUser = await GetCurrentUserAsync();
             await checkoutModel.InitializeAsync(false, currentUser, PizzaDb);
-
             return View("Checkout", checkoutModel);
         }
 
@@ -75,10 +72,8 @@ namespace PizzaWebsite.Controllers
             if (!ModelState.IsValid)
             {
                 await checkoutModel.InitializeAsync(true, user, PizzaDb);
-
                 return View("Checkout", checkoutModel);
             }
-
             // todo: Finish client side validation using OrderConfirmationId
             /*bool orderExpired = checkoutModel.OrderConfirmationId != user.OrderConfirmationId;
 
@@ -86,11 +81,9 @@ namespace PizzaWebsite.Controllers
             {
                 return RedirectToAction("OrderExpired");
             }*/
-
-            DataLibrary.Models.JoinLists.CartItemJoinList cartItemJoinList = new DataLibrary.Models.JoinLists.CartItemJoinList();
+            CartItemJoinList cartItemJoinList = new CartItemJoinList();
             await cartItemJoinList.LoadListByCartIdAsync(user.ConfirmOrderCartId, PizzaDb);
             CostSummary costSummary = new CostSummary(cartItemJoinList.Items);
-
             CustomerOrder customerOrder = new CustomerOrder()
             {
                 UserId = user.Id,
@@ -102,7 +95,6 @@ namespace PizzaWebsite.Controllers
                 OrderTax = costSummary.Tax,
                 OrderTotal = costSummary.Total
             };
-
             if (checkoutModel.IsDelivery())
             {
                 if (checkoutModel.IsNewDeliveryAddress() && checkoutModel.SaveNewDeliveryAddress)
@@ -118,10 +110,8 @@ namespace PizzaWebsite.Controllers
                         StreetAddress = checkoutModel.DeliveryStreetAddress,
                         ZipCode = checkoutModel.DeliveryZipCode
                     };
-
                     await PizzaDb.InsertAsync(deliveryAddress);
                 }
-
                 DeliveryInfo deliveryInfo = new DeliveryInfo()
                 {
                     DateOfDelivery = DateTime.Now,
@@ -133,29 +123,40 @@ namespace PizzaWebsite.Controllers
                     DeliveryStreetAddress = checkoutModel.DeliveryStreetAddress,
                     DeliveryZipCode = checkoutModel.DeliveryZipCode
                 };
-
                 await PizzaDb.Commands.AddCustomerOrderAsync(user, customerOrder, deliveryInfo);
             }
             else
             {
                 await PizzaDb.Commands.AddCustomerOrderAsync(user, customerOrder);
             }
-
             OrderStatusViewModel orderStatusVm = new OrderStatusViewModel()
             {
                 CustomerOrderId = customerOrder.Id
             };
-
             return View("OrderStatus", orderStatusVm);
         }
 
-        public ActionResult PreviousOrderStatus(int id)
+        public async Task<ActionResult> PreviousOrderStatus(int? id)
         {
+            if (!id.HasValue)
+            {
+                return PreviousOrderMissingIdErrorMessage();
+            }
+            Join<CustomerOrder, DeliveryInfo> orderJoin = await GetFirstOrDefaultCustomerOrderAsync(id.Value);
+            if (orderJoin == null)
+            {
+                return PreviousOrderDoesNotExistErrorMessage();
+            }
+            SiteUser currentUser = await GetCurrentUserAsync();
+            bool authorizedToViewOrder = !await PizzaDb.Commands.UserOwnsCustomerOrderAsync(currentUser, orderJoin.Table1);
+            if (authorizedToViewOrder)
+            {
+                return PreviousOrderAuthorizationErrorMessage();
+            }
             OrderStatusViewModel orderStatusVm = new OrderStatusViewModel()
             {
-                CustomerOrderId = id
+                CustomerOrderId = id.Value
             };
-
             return View(orderStatusVm);
         }
 
@@ -564,14 +565,33 @@ namespace PizzaWebsite.Controllers
         [Authorize]
         public async Task<ActionResult> PreviousOrder(int? id)
         {
-            var join = new CustomerOrderOnDeliveryInfoJoinList();
-            await join.LoadFirstOrDefaultByCustomerOrderIdAsync(id.Value, PizzaDb);
-            Join<CustomerOrder, DeliveryInfo> result = join.Items.FirstOrDefault();
+            if (!id.HasValue)
+            {
+                return PreviousOrderMissingIdErrorMessage();
+            }
+            Join<CustomerOrder, DeliveryInfo> orderJoin = await GetFirstOrDefaultCustomerOrderAsync(id.Value);
+            if (orderJoin == null)
+            {
+                return PreviousOrderDoesNotExistErrorMessage();
+            }
+            SiteUser currentUser = await GetCurrentUserAsync();
+            bool authorizedToViewOrder = !await PizzaDb.Commands.UserOwnsCustomerOrderAsync(currentUser, orderJoin.Table1);
+            if (authorizedToViewOrder)
+            {
+                return PreviousOrderAuthorizationErrorMessage();
+            }
             PreviousOrderViewModel orderVm = new PreviousOrderViewModel();
-            await orderVm.InitializeAsync(true, result.Table1, result.Table2, PizzaDb);
+            await orderVm.InitializeAsync(true, orderJoin.Table1, orderJoin.Table2, PizzaDb);
             return View(orderVm);
         }
 
+        private async Task<Join<CustomerOrder, DeliveryInfo>> GetFirstOrDefaultCustomerOrderAsync(int customerOrderId)
+        {
+            var join = new CustomerOrderOnDeliveryInfoJoinList();
+            await join.LoadFirstOrDefaultByCustomerOrderIdAsync(customerOrderId, PizzaDb);
+            return join.Items.FirstOrDefault();
+        }
+        
         [Authorize]
         public async Task<ActionResult> PreviousOrders(int? page, int? rowsPerPage)
         {
@@ -610,6 +630,42 @@ namespace PizzaWebsite.Controllers
                 PreviousOrderVmList = previousOrderVmList
             };
             return View("PreviousOrderList", previousOrdersVm);
+        }
+
+        private ActionResult PreviousOrderMissingIdErrorMessage()
+        {
+            ErrorMessageViewModel model = new ErrorMessageViewModel()
+            {
+                Header = "Error",
+                ErrorMessage = "Order ID is missing.",
+                ReturnUrlAction = $"{Url.Action("PreviousOrders")}?{Request.QueryString}",
+                ShowReturnLink = true
+            };
+            return View("ErrorMessage", model);
+        }
+
+        private ActionResult PreviousOrderDoesNotExistErrorMessage()
+        {
+            ErrorMessageViewModel model = new ErrorMessageViewModel()
+            {
+                Header = "Error",
+                ErrorMessage = "This order does not exist.",
+                ReturnUrlAction = $"{Url.Action("PreviousOrders")}?{Request.QueryString}",
+                ShowReturnLink = true
+            };
+            return View("ErrorMessage", model);
+        }
+
+        private ActionResult PreviousOrderAuthorizationErrorMessage()
+        {
+            ErrorMessageViewModel model = new ErrorMessageViewModel()
+            {
+                Header = "Authorization Error",
+                ErrorMessage = "You are not authorized to access this order.",
+                ReturnUrlAction = $"{Url.Action("PreviousOrders")}?{Request.QueryString}",
+                ShowReturnLink = true
+            };
+            return View("ErrorMessage", model);
         }
 
         private ActionResult CartItemAuthorizationErrorMessage()

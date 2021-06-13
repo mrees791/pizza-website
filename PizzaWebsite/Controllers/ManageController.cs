@@ -23,10 +23,6 @@ namespace PizzaWebsite.Controllers
     [Authorize]
     public class ManageController : BaseController
     {
-        public ManageController()
-        {
-        }
-
         public async Task<ActionResult> ManageAddresses()
         {
             DeliveryAddressSearch addressSearch = new DeliveryAddressSearch()

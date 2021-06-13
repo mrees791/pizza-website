@@ -1,19 +1,14 @@
 ﻿@model PizzaWebsite.Models.Shop.OrderStatusViewModel
-
 @{
     ViewBag.Title = "Order Status";
 }
-
-<h2>Order Status</h2>
-
+<h2>@ViewBag.Title</h2>
 <div>
     <a href="@Url.Action("PreviousOrders")?@(Request.QueryString)">
         <input type="button" value="Back" class="btn btn-primary" />
     </a>
 </div>
-
 @Html.Partial("~/Views/Shop/_OrderStatus.cshtml", Model)
-
 @section Scripts {
     <script type="text/javascript">
         $(function () {

@@ -5,10 +5,11 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Shop
 {
-    public class PreviousOrderListViewModel : PagedListViewModel
+    public class PreviousOrderListViewModel
     {
         public PreviousOrderViewModel PreviousOrderViewModel { get; set; }
         public List<PreviousOrderViewModel> PreviousOrderVmList { get; set; }
+        public PaginationViewModel PaginationVm { get; set; }
 
         public bool HasPreviousOrders()
         {
