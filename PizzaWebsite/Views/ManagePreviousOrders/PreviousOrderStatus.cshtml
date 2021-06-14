@@ -1,10 +1,11 @@
-﻿@model PizzaWebsite.Models.Shop.OrderStatusViewModel
+﻿@using PizzaWebsite.Models.Shop
+@model OrderStatusViewModel
 @{
     ViewBag.Title = "Order Status";
 }
 <h2>@ViewBag.Title</h2>
 <div>
-    <a href="@Url.Action("PreviousOrders")?@(Request.QueryString)">
+    <a href="@Url.Action("Index")?@(Request.QueryString)">
         <input type="button" value="Back" class="btn btn-primary" />
     </a>
 </div>

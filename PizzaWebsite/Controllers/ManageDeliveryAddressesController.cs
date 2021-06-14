@@ -16,6 +16,7 @@ using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
+    [Authorize]
     public class ManageDeliveryAddressesController : BaseController
     {
         public async Task<ActionResult> Index()
@@ -142,6 +143,36 @@ namespace PizzaWebsite.Controllers
                 return Json($"Unable to delete address.", MediaTypeNames.Text.Plain);
             }
             return Json("Address deleted.", MediaTypeNames.Text.Plain);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> GetDeliveryAddressAjax(int addressId)
+        {
+            Response.StatusCode = (int)HttpStatusCode.OK;
+            DeliveryAddress address = await PizzaDb.GetAsync<DeliveryAddress>(addressId);
+            if (address == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Delivery Address with ID {addressId} does not exist.", MediaTypeNames.Text.Plain);
+            }
+            bool authorized = await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId(), address);
+            if (!authorized)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Current user is not allowed to access delivery address ID {addressId}.", MediaTypeNames.Text.Plain);
+            }
+            // Name, Address Type, Street Address, City, State, Zip Code, Phone Number
+            string[] deliveryAddressResponse = new string[]
+            {
+                address.Name,
+                address.AddressType,
+                address.StreetAddress,
+                address.City,
+                address.State,
+                address.ZipCode,
+                address.PhoneNumber
+            };
+            return Json(deliveryAddressResponse);
         }
 
         private ActionResult AddressNotFoundErrorMessage()

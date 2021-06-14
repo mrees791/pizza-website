@@ -28,26 +28,6 @@ namespace PizzaWebsite.Controllers
 {
     public class ShopController : BaseController
     {
-        public async Task<ActionResult> OrderAgain(int? id)
-        {
-            if (!id.HasValue)
-            {
-                return PreviousOrderMissingIdErrorMessage();
-            }
-            CustomerOrder customerOrder = await PizzaDb.GetAsync<CustomerOrder>(id);
-            if (customerOrder == null)
-            {
-                return PreviousOrderDoesNotExistErrorMessage();
-            }
-            SiteUser currentUser = await GetCurrentUserAsync();
-            bool authorized = await PizzaDb.Commands.UserOwnsCustomerOrderAsync(currentUser, customerOrder);
-            if (!authorized)
-            {
-                return PreviousOrderAuthorizationErrorMessage();
-            }
-            await PizzaDb.Commands.ReorderPreviousOrder(currentUser, customerOrder);
-            return RedirectToAction("Cart");
-        }
 
         public async Task<ActionResult> Checkout()
         {
@@ -134,30 +114,6 @@ namespace PizzaWebsite.Controllers
                 CustomerOrderId = customerOrder.Id
             };
             return View("OrderStatus", orderStatusVm);
-        }
-
-        public async Task<ActionResult> PreviousOrderStatus(int? id)
-        {
-            if (!id.HasValue)
-            {
-                return PreviousOrderMissingIdErrorMessage();
-            }
-            Join<CustomerOrder, DeliveryInfo> orderJoin = await GetFirstOrDefaultCustomerOrderAsync(id.Value);
-            if (orderJoin == null)
-            {
-                return PreviousOrderDoesNotExistErrorMessage();
-            }
-            SiteUser currentUser = await GetCurrentUserAsync();
-            bool authorizedToViewOrder = !await PizzaDb.Commands.UserOwnsCustomerOrderAsync(currentUser, orderJoin.Table1);
-            if (authorizedToViewOrder)
-            {
-                return PreviousOrderAuthorizationErrorMessage();
-            }
-            OrderStatusViewModel orderStatusVm = new OrderStatusViewModel()
-            {
-                CustomerOrderId = id.Value
-            };
-            return View(orderStatusVm);
         }
 
         public ActionResult OrderConfirmed()
@@ -530,142 +486,6 @@ namespace PizzaWebsite.Controllers
             cartItem = await PizzaDb.Commands.UpdateCartItemQuantityAsync(cartItem, quantity);
             string updatedPrice = cartItem.Price.ToString("C", CultureInfo.CurrentCulture);
             return Json(updatedPrice);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> GetDeliveryAddressAjax(int addressId)
-        {
-            Response.StatusCode = (int)HttpStatusCode.OK;
-            DeliveryAddress address = await PizzaDb.GetAsync<DeliveryAddress>(addressId);
-            if (address == null)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json($"Delivery Address with ID {addressId} does not exist.", MediaTypeNames.Text.Plain);
-            }
-            bool authorized = await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId(), address);
-            if (!authorized)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json($"Current user is not allowed to access delivery address ID {addressId}.", MediaTypeNames.Text.Plain);
-            }
-            // Name, Address Type, Street Address, City, State, Zip Code, Phone Number
-            string[] deliveryAddressResponse = new string[]
-            {
-                address.Name,
-                address.AddressType,
-                address.StreetAddress,
-                address.City,
-                address.State,
-                address.ZipCode,
-                address.PhoneNumber
-            };
-            return Json(deliveryAddressResponse);
-        }
-
-        [Authorize]
-        public async Task<ActionResult> PreviousOrder(int? id)
-        {
-            if (!id.HasValue)
-            {
-                return PreviousOrderMissingIdErrorMessage();
-            }
-            Join<CustomerOrder, DeliveryInfo> orderJoin = await GetFirstOrDefaultCustomerOrderAsync(id.Value);
-            if (orderJoin == null)
-            {
-                return PreviousOrderDoesNotExistErrorMessage();
-            }
-            SiteUser currentUser = await GetCurrentUserAsync();
-            bool authorizedToViewOrder = !await PizzaDb.Commands.UserOwnsCustomerOrderAsync(currentUser, orderJoin.Table1);
-            if (authorizedToViewOrder)
-            {
-                return PreviousOrderAuthorizationErrorMessage();
-            }
-            PreviousOrderViewModel orderVm = new PreviousOrderViewModel();
-            await orderVm.InitializeAsync(true, orderJoin.Table1, orderJoin.Table2, PizzaDb);
-            return View(orderVm);
-        }
-
-        private async Task<Join<CustomerOrder, DeliveryInfo>> GetFirstOrDefaultCustomerOrderAsync(int customerOrderId)
-        {
-            var join = new CustomerOrderOnDeliveryInfoJoinList();
-            await join.LoadFirstOrDefaultByCustomerOrderIdAsync(customerOrderId, PizzaDb);
-            return join.Items.FirstOrDefault();
-        }
-        
-        [Authorize]
-        public async Task<ActionResult> PreviousOrders(int? page, int? rowsPerPage)
-        {
-            // Set default values
-            if (!page.HasValue)
-            {
-                page = 1;
-            }
-            if (!rowsPerPage.HasValue)
-            {
-                rowsPerPage = 10;
-            }
-            PreviousOrderSearch search = new PreviousOrderSearch()
-            {
-                UserId = User.Identity.GetUserId()
-            };
-            PaginationViewModel paginationVm = new PaginationViewModel()
-            {
-                QueryString = Request.QueryString,
-                CurrentPage = page.Value,
-                RowsPerPage = rowsPerPage.Value,
-                TotalNumberOfItems = await PizzaDb.GetNumberOfRecordsAsync<CustomerOrder>(search),
-                TotalPages = await PizzaDb.GetNumberOfPagesAsync<CustomerOrder>(rowsPerPage.Value, search)
-            };
-            List<PreviousOrderViewModel> previousOrderVmList = new List<PreviousOrderViewModel>();
-            IEnumerable<CustomerOrder> previousOrderList = await PizzaDb.GetPagedListAsync<CustomerOrder>(page.Value, rowsPerPage.Value, "Id", SortOrder.Descending, search);
-            foreach (CustomerOrder prevOrder in previousOrderList)
-            {
-                PreviousOrderViewModel orderVm = new PreviousOrderViewModel();
-                await orderVm.InitializeAsync(false, prevOrder, null, PizzaDb);
-                previousOrderVmList.Add(orderVm);
-            }
-            PreviousOrderListViewModel previousOrdersVm = new PreviousOrderListViewModel()
-            {
-                PaginationVm = paginationVm,
-                PreviousOrderVmList = previousOrderVmList
-            };
-            return View("PreviousOrderList", previousOrdersVm);
-        }
-
-        private ActionResult PreviousOrderMissingIdErrorMessage()
-        {
-            ErrorMessageViewModel model = new ErrorMessageViewModel()
-            {
-                Header = "Error",
-                ErrorMessage = "Order ID is missing.",
-                ReturnUrlAction = $"{Url.Action("PreviousOrders")}?{Request.QueryString}",
-                ShowReturnLink = true
-            };
-            return View("ErrorMessage", model);
-        }
-
-        private ActionResult PreviousOrderDoesNotExistErrorMessage()
-        {
-            ErrorMessageViewModel model = new ErrorMessageViewModel()
-            {
-                Header = "Error",
-                ErrorMessage = "This order does not exist.",
-                ReturnUrlAction = $"{Url.Action("PreviousOrders")}?{Request.QueryString}",
-                ShowReturnLink = true
-            };
-            return View("ErrorMessage", model);
-        }
-
-        private ActionResult PreviousOrderAuthorizationErrorMessage()
-        {
-            ErrorMessageViewModel model = new ErrorMessageViewModel()
-            {
-                Header = "Authorization Error",
-                ErrorMessage = "You are not authorized to access this order.",
-                ReturnUrlAction = $"{Url.Action("PreviousOrders")}?{Request.QueryString}",
-                ShowReturnLink = true
-            };
-            return View("ErrorMessage", model);
         }
 
         private ActionResult CartItemAuthorizationErrorMessage()

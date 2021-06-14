@@ -177,6 +177,7 @@
     <Compile Include="Controllers\ManagePizzaMenuController.cs" />
     <Compile Include="Controllers\ManagePizzaSauceMenuController.cs" />
     <Compile Include="Controllers\ManagePizzaToppingTypeMenuController.cs" />
+    <Compile Include="Controllers\ManagePreviousOrdersController.cs" />
     <Compile Include="Controllers\ManageStoresController.cs" />
     <Compile Include="Controllers\ManageUsersController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
@@ -335,12 +336,12 @@
     <Content Include="Views\Shop\OrderExpired.cshtml" />
     <Content Include="Views\Shop\OrderConfirmed.cshtml" />
     <Content Include="Views\Shop\_CheckoutDeliveryInfo.cshtml" />
-    <Content Include="Views\Shop\PreviousOrderList.cshtml" />
-    <Content Include="Views\Shop\PreviousOrder.cshtml" />
+    <Content Include="Views\ManagePreviousOrders\Index.cshtml" />
+    <Content Include="Views\ManagePreviousOrders\PreviousOrder.cshtml" />
     <Content Include="Views\Shared\Carts\_CostSummary.cshtml" />
     <Content Include="Views\Shop\_OrderStatus.cshtml" />
     <Content Include="Views\Shop\OrderStatus.cshtml" />
-    <Content Include="Views\Shop\PreviousOrderStatus.cshtml" />
+    <Content Include="Views\ManagePreviousOrders\PreviousOrderStatus.cshtml" />
     <Content Include="Views\Shop\CurrentOrderStatus.cshtml" />
     <Content Include="Views\ManageEmployees\AddEmployee.cshtml" />
     <Content Include="Views\ManageStores\EmployeeRoster.cshtml" />

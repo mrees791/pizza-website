@@ -1,23 +1,17 @@
 ﻿@using PizzaWebsite.Models.Shop
 @model PreviousOrderViewModel
-
 @{
     ViewBag.Title = "Order";
 }
-
-<h2>Order</h2>
-
+<h2>@ViewBag.Title</h2>
 <div>
-    <a href="@Url.Action("PreviousOrders")?@(Request.QueryString)">
+    <a href="@Url.Action("Index")?@(Request.QueryString)">
         <input type="button" value="Back" class="btn btn-primary" />
     </a>
 </div>
-
 <h3>Date</h3>
 <p>@Model.DateOfOrder</p>
-
 <h3>Order Summary</h3>
 @Html.Partial("~/Views/Shared/Carts/_Cart.cshtml", Model.CartVm)
-
 <h3>Cost Summary</h3>
 @Html.Partial("~/Views/Shared/Carts/_CostSummary.cshtml", Model.CartVm.CostSummaryVm)
