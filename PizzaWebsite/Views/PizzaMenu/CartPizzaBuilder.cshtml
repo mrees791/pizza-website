@@ -20,8 +20,8 @@
     for (int i = 0; i < Model.CrustDictionary.Count; i++)
     {
         KeyValuePair<int, string> crustPair = Model.CrustDictionary.ElementAt(i);
-        <input type="hidden" name="CrustList[@i].Key" value="@crustPair.Key" />
-        <input type="hidden" name="CrustList[@i].Value" value="@crustPair.Value" />
+        <input type="hidden" name="CrustDictionary[@i].Key" value="@crustPair.Key" />
+        <input type="hidden" name="CrustDictionary[@i].Value" value="@crustPair.Value" />
     }
     <div class="form-horizontal">
         <hr />

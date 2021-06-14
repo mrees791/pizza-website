@@ -197,6 +197,18 @@ namespace PizzaWebsite.Controllers
             }
             else
             {
+                CartItem prevCartItem = await PizzaDb.GetAsync<CartItem>(model.Id);
+                if (prevCartItem == null)
+                {
+                    ModelState.AddModelError("", $"Cart item with ID {model.Id} does not exist.");
+                    return View("CartPizzaBuilder", model);
+                }
+                bool authorized = await PizzaDb.Commands.UserOwnsCartItemAsync(currentUser.Id, prevCartItem);
+                if (!authorized)
+                {
+                    ModelState.AddModelError("", $"You are not authorized to modify cart item with ID {model.Id}.");
+                    return View("CartPizzaBuilder", model);
+                }
                 await PizzaDb.Commands.UpdateCartItemAsync(cartItem, cartPizza);
             }
             return RedirectToAction("Cart", "Shop");
