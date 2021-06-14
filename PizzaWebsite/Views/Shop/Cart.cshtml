@@ -24,9 +24,9 @@
         });
     </script>
     @* Cart item controls. *@
-    @foreach (CartItemViewModel cartItemVm in Model.CartItemList)
+    @foreach (CartItemViewModel cartItemVm in Model.CartItemVmList)
     {
-<script type="text/javascript">
+        <script type="text/javascript">
             $(function () {
                 var $cartItemRow = $('#@cartItemVm.CartItemRowId');
                 var $quantitySelect = $('#@cartItemVm.CartItemQuantitySelectId');
@@ -57,8 +57,7 @@
                             pizzaSiteCartNs.updateCartSubtotal(@Model.CartId);
                         });
                 });
-
             });
-</script>
+        </script>
     }
 }

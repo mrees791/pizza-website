@@ -18,7 +18,7 @@ namespace PizzaWebsite.Models.ViewModelServices
             switch (cartItemJoin.CartItem.ProductCategory)
             {
                 case "Pizza":
-                    await InitializeCartPizzaViewModelAsync(model, (CartPizza)cartItemJoin.CartItemType, pizzaDb);
+                    await InitializeViewModelAsync((CartPizza)cartItemJoin.CartItemType, model, pizzaDb);
                     break;
             }
             return model;
@@ -28,7 +28,6 @@ namespace PizzaWebsite.Models.ViewModelServices
         {
             return new CartItemViewModel()
             {
-                CartItemJoin = cartItemJoin,
                 CartItemId = cartItemJoin.CartItem.Id,
                 ProductCategory = cartItemJoin.CartItem.ProductCategory,
                 Price = cartItemJoin.CartItem.Price.ToString("C", CultureInfo.CurrentCulture),
@@ -43,29 +42,40 @@ namespace PizzaWebsite.Models.ViewModelServices
             };
         }
 
-        private async Task InitializeCartPizzaViewModelAsync(CartItemViewModel model, CartPizza cartPizza, PizzaDatabase pizzaDb)
+        private async Task InitializeViewModelAsync(CartPizza cartPizza, CartItemViewModel model, PizzaDatabase pizzaDb)
         {
             MenuPizzaCheese cheese = await pizzaDb.GetAsync<MenuPizzaCheese>(cartPizza.MenuPizzaCheeseId);
             MenuPizzaSauce sauce = await pizzaDb.GetAsync<MenuPizzaSauce>(cartPizza.MenuPizzaSauceId);
             MenuPizzaCrust crust = await pizzaDb.GetAsync<MenuPizzaCrust>(cartPizza.MenuPizzaCrustId);
             MenuPizzaCrustFlavor crustFlavor = await pizzaDb.GetAsync<MenuPizzaCrustFlavor>(cartPizza.MenuPizzaCrustFlavorId);
-            model.DescriptionHtml = string.Empty;
-            model.Name = $"{cartPizza.Size} Pizza";
-            model.DescriptionHtml += $"Size: {cartPizza.Size}<br />";
-            model.DescriptionHtml += $"Cheese: {cheese.Name}<br />";
-            model.DescriptionHtml += $"Sauce: {sauce.Name}<br />";
-            model.DescriptionHtml += $"Crust: {crust.Name}<br />";
-            model.DescriptionHtml += $"Crust Flavor: {crustFlavor.Name}<br /><br />";
+            string name = $"{cartPizza.Size} Pizza";
+            string descriptionHtml = string.Empty;
+            descriptionHtml = string.Empty;
+            descriptionHtml += $"Size: {cartPizza.Size}<br />";
+            descriptionHtml += $"Cheese: {cheese.Name}<br />";
+            descriptionHtml += $"Sauce: {sauce.Name}<br />";
+            descriptionHtml += $"Crust: {crust.Name}<br />";
+            descriptionHtml += $"Crust Flavor: {crustFlavor.Name}<br /><br />";
             if (cartPizza.ToppingList.Any())
             {
-                model.DescriptionHtml += $"Toppings<br />";
+                descriptionHtml += $"Toppings<br />";
                 foreach (CartPizzaTopping topping in cartPizza.ToppingList)
                 {
                     MenuPizzaToppingType toppingType = await pizzaDb.GetAsync<MenuPizzaToppingType>(topping.MenuPizzaToppingTypeId);
-                    model.DescriptionHtml += $"{toppingType.Name}: {topping.ToppingAmount}, {topping.ToppingHalf}<br />";
+                    descriptionHtml += $"{toppingType.Name}: {topping.ToppingAmount}, {topping.ToppingHalf}<br />";
                 }
-                model.DescriptionHtml += "<br />";
+                descriptionHtml += "<br />";
             }
+            InitializeViewModel(model, name, descriptionHtml, "ModifyCartPizza", "PizzaMenu");
+        }
+
+        private void InitializeViewModel(CartItemViewModel model, string name, string descriptionHtml, string modifyActionName, string modifyControllerName)
+        {
+            model.Name = name;
+            model.DescriptionHtml = descriptionHtml;
+            model.ControlsEnabled = true;
+            model.ModifyActionName = modifyActionName;
+            model.ModifyControllerName = modifyControllerName;
         }
     }
 }

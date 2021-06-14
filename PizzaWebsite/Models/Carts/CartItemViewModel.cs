@@ -22,6 +22,8 @@ namespace PizzaWebsite.Models.Carts
         public List<int> QuantityList { get; set; }
         public string Name { get; set; }
         public string DescriptionHtml { get; set; }
-        public CartItemJoin CartItemJoin { get; set; }
+        public string ModifyActionName { get; set; }
+        public string ModifyControllerName { get; set; }
+        public bool ControlsEnabled { get; set; }
     }
 }

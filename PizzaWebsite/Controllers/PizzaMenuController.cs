@@ -6,6 +6,7 @@ using DataLibrary.Models.Tables;
 using DataLibrary.Models.Utility;
 using Microsoft.AspNet.Identity;
 using PizzaWebsite.Controllers.BaseControllers;
+using PizzaWebsite.Models;
 using PizzaWebsite.Models.PizzaBuilders;
 using PizzaWebsite.Models.Shop;
 using System;
@@ -198,7 +199,7 @@ namespace PizzaWebsite.Controllers
             {
                 await PizzaDb.Commands.UpdateCartItemAsync(cartItem, cartPizza);
             }
-            return RedirectToAction("Cart");
+            return RedirectToAction("Cart", "Shop");
         }
 
         [Authorize]
@@ -253,11 +254,27 @@ namespace PizzaWebsite.Controllers
         [Authorize]
         public async Task<ActionResult> AddMenuPizzaToCurrentCart(int id, int selectedQuantity, string selectedSize, int selectedCrustId)
         {
-            SiteUser currentUser = await GetCurrentUserAsync();
             MenuPizza menuPizza = await PizzaDb.GetAsync<MenuPizza>(id);
+            if (menuPizza == null)
+            {
+                return MenuPizzaDoesNotExistErrorMessage(id);
+            }
+            SiteUser currentUser = await GetCurrentUserAsync();
             Tuple<CartItem, CartPizza> cartItemRecords = await menuPizza.CreateCartRecordsAsync(selectedQuantity, selectedSize, selectedCrustId, currentUser, PizzaDb);
             await PizzaDb.Commands.AddItemToCart(currentUser, cartItemRecords.Item1, cartItemRecords.Item2);
-            return RedirectToAction("Cart");
+            return RedirectToAction("Cart", "Shop");
+        }
+
+        private ActionResult MenuPizzaDoesNotExistErrorMessage(int id)
+        {
+            ErrorMessageViewModel model = new ErrorMessageViewModel()
+            {
+                Header = "Error",
+                ErrorMessage = $"A pizza with ID {id} does not exist.",
+                ReturnUrlAction = $"{Url.Action("Index")}",
+                ShowReturnLink = true
+            };
+            return View("ErrorMessage", model);
         }
     }
 }

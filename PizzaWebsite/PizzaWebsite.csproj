@@ -333,7 +333,7 @@
     <Content Include="Views\PizzaMenu\CartPizzaBuilder.cshtml" />
     <Content Include="Views\PizzaMenu\Index.cshtml" />
     <Content Include="Views\PizzaMenu\_MenuPizzaView.cshtml" />
-    <Content Include="Views\ManageDeliveryAddresses\ManageAddresses.cshtml" />
+    <Content Include="Views\ManageDeliveryAddresses\Index.cshtml" />
     <Content Include="Views\ManageDeliveryAddresses\ManageDeliveryAddress.cshtml" />
     <Content Include="Views\Shop\Checkout.cshtml" />
     <Content Include="Views\Shared\Carts\_Cart.cshtml" />

@@ -89,7 +89,7 @@ namespace PizzaWebsite.Controllers
                 }
                 await PizzaDb.UpdateAsync(address);
             }
-            return RedirectToAction("ManageAddresses");
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

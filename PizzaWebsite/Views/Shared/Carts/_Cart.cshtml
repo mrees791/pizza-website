@@ -1,7 +1,6 @@
 ﻿@using PizzaWebsite.Models
 @using PizzaWebsite.Models.Carts
 @model CartViewModel
-
 <table class="table" id="cartTable">
     <thead>
         <tr>
@@ -12,7 +11,7 @@
         </tr>
     </thead>
     <tbody id="cartTableBody">
-        @foreach (CartItemViewModel cartItemVm in Model.CartItemList)
+        @foreach (CartItemViewModel cartItemVm in Model.CartItemVmList)
         {
             <tr id="@cartItemVm.CartItemRowId">
                 <td>@Html.Raw(cartItemVm.Name)</td>
