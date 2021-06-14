@@ -14,6 +14,7 @@ using PizzaWebsite.Models.Geography;
 using PizzaWebsite.Models.Identity.Stores;
 using PizzaWebsite.Models.PizzaBuilders;
 using PizzaWebsite.Models.Shop;
+using PizzaWebsite.Models.ViewModelServices;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -28,6 +29,13 @@ namespace PizzaWebsite.Controllers
 {
     public class ShopController : BaseController
     {
+        private CartServices _cartServices;
+
+        public ShopController()
+        {
+            _cartServices = new CartServices();
+        }
+
         public async Task<ActionResult> Checkout()
         {
             CheckoutViewModel checkoutModel = new CheckoutViewModel();
@@ -131,9 +139,8 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> Cart()
         {
             SiteUser user = await GetCurrentUserAsync();
-            CartViewModel cartVm = new CartViewModel();
-            await cartVm.InitializeAsync(user.CurrentCartId, PizzaDb);
-            return View(cartVm);
+            CartViewModel model = await _cartServices.CreateViewModelAsync(user.CurrentCartId, PizzaDb);
+            return View(model);
         }
 
         [Authorize]

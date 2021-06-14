@@ -1,6 +1,7 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Models.Carts;
+using PizzaWebsite.Models.ViewModelServices;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -30,8 +31,8 @@ namespace PizzaWebsite.Models.Shop
             OrderType = customerOrder.GetOrderType();
             if (loadCartItems)
             {
-                CartVm = new CartViewModel();
-                await CartVm.InitializeAsync(customerOrder.CartId, pizzaDb);
+                CartServices cartServices = new CartServices();
+                CartVm = await cartServices.CreateViewModelAsync(customerOrder.CartId, pizzaDb);
             }
         }
     }

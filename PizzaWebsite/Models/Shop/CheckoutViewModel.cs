@@ -6,6 +6,7 @@ using DataLibrary.Models.Utility;
 using PizzaWebsite.Models.Attributes;
 using PizzaWebsite.Models.Carts;
 using PizzaWebsite.Models.Geography;
+using PizzaWebsite.Models.ViewModelServices;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -28,7 +29,6 @@ namespace PizzaWebsite.Models.Shop
         // Delivery Info
         [Display(Name = "Save New Address")]
         public bool SaveNewDeliveryAddress { get; set; }
-
         [Display(Name = "Delivery Address")]
         public int SelectedDeliveryAddressId { get; set; }
         [RequiredIfDelivery("A delivery address name is required.")]
@@ -80,11 +80,8 @@ namespace PizzaWebsite.Models.Shop
             {
                 SaveNewDeliveryAddress = true;
             }
-
             await pizzaDb.Commands.CheckoutCartAsync(user);
-
             SiteUser updatedUser = await pizzaDb.GetAsync<SiteUser>(user.Id);
-
             StoreLocationSearch storeSearch = new StoreLocationSearch()
             {
                 IsActiveLocation = true
@@ -93,19 +90,15 @@ namespace PizzaWebsite.Models.Shop
             {
                 UserId = updatedUser.Id
             };
-
             IEnumerable<StoreLocation> storeLocationList = await pizzaDb.GetListAsync<StoreLocation>("Name", SortOrder.Ascending, storeSearch);
             IEnumerable<DeliveryAddress> deliveryAddressList = await pizzaDb.GetListAsync<DeliveryAddress>("Name", SortOrder.Ascending, addressSearch);
-
             List<SelectListItem> deliveryAddressSelectList = new List<SelectListItem>();
             List<SelectListItem> storeLocationSelectList = new List<SelectListItem>();
-
             deliveryAddressSelectList.Add(new SelectListItem()
             {
                 Text = "New Address",
                 Value = "0"
             });
-
             foreach (DeliveryAddress deliveryAddress in deliveryAddressList)
             {
                 deliveryAddressSelectList.Add(new SelectListItem()
@@ -114,7 +107,6 @@ namespace PizzaWebsite.Models.Shop
                     Value = deliveryAddress.Id.ToString()
                 });
             }
-
             foreach (StoreLocation storeLocation in storeLocationList)
             {
                 storeLocationSelectList.Add(new SelectListItem()
@@ -123,19 +115,13 @@ namespace PizzaWebsite.Models.Shop
                     Value = storeLocation.Id.ToString()
                 });
             }
-
-            CartVm = new CartViewModel()
-            {
-                CartItemList = new List<CartItemViewModel>()
-            };
-
             OrderTypeList = ListUtility.CreateCustomerOrderTypeList();
             DeliveryStateSelectList = StateListCreator.CreateStateList();
             DeliveryAddressTypeSelectList = ListUtility.CreateDeliveryAddressTypeList();
             DeliveryAddressSelectList = deliveryAddressSelectList;
             StoreLocationSelectList = storeLocationSelectList;
-
-            await CartVm.InitializeAsync(updatedUser.ConfirmOrderCartId, pizzaDb);
+            CartServices cartServices = new CartServices();
+            CartVm = await cartServices.CreateViewModelAsync(updatedUser.ConfirmOrderCartId, pizzaDb);
         }
     }
 }
