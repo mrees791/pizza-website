@@ -72,9 +72,9 @@ namespace PizzaWebsite.Controllers
             {
                 return PreviousOrderAuthorizationErrorMessage();
             }
-            PreviousOrderViewModel orderVm = new PreviousOrderViewModel();
-            await orderVm.InitializeAsync(true, orderJoin.Table1, orderJoin.Table2, PizzaDb);
-            return View(orderVm);
+            PreviousOrderViewModel model = new PreviousOrderViewModel();
+            await model.InitializeAsync(true, orderJoin.Table1, orderJoin.Table2, PizzaDb);
+            return View(model);
         }
 
         public async Task<ActionResult> OrderAgain(int? id)
@@ -115,11 +115,11 @@ namespace PizzaWebsite.Controllers
             {
                 return PreviousOrderAuthorizationErrorMessage();
             }
-            OrderStatusViewModel orderStatusVm = new OrderStatusViewModel()
+            OrderStatusViewModel model = new OrderStatusViewModel()
             {
                 CustomerOrderId = id.Value
             };
-            return View(orderStatusVm);
+            return View(model);
         }
 
         private async Task<Join<CustomerOrder, DeliveryInfo>> GetFirstOrDefaultCustomerOrderAsync(int customerOrderId)

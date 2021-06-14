@@ -28,7 +28,6 @@ namespace PizzaWebsite.Models.Shop
             DateOfOrder = $"{customerOrder.DateOfOrder.ToShortDateString()} {customerOrder.DateOfOrder.ToShortTimeString()}";
             OrderTotal = customerOrder.OrderTotal.ToString("C", CultureInfo.CurrentCulture);
             OrderType = customerOrder.GetOrderType();
-
             if (loadCartItems)
             {
                 CartVm = new CartViewModel();

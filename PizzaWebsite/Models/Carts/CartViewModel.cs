@@ -1,6 +1,7 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.Utility;
+using PizzaWebsite.Models.ViewModelServices;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -19,14 +20,12 @@ namespace PizzaWebsite.Models.Carts
         public async Task InitializeAsync(int cartId, PizzaDatabase pizzaDb)
         {
             CartId = cartId;
-            CostSummaryVm = new CostSummaryViewModel();
             CartItemList = new List<CartItemViewModel>();
-
+            CostSummaryServices costSummaryServices = new CostSummaryServices();
             List<int> quantityList = ListUtility.CreateQuantityList();
             CartItemJoinList cartItemJoinList = new CartItemJoinList();
             await cartItemJoinList.LoadListByCartIdAsync(cartId, pizzaDb);
-            CostSummaryVm.Initialize(new CostSummary(cartItemJoinList.Items));
-
+            CostSummaryVm = costSummaryServices.CreateViewModel(new CostSummary(cartItemJoinList.Items));
             foreach (CartItemJoin cartItemJoin in cartItemJoinList.Items)
             {
                 CartItemViewModel cartItemVm = new CartItemViewModel()
@@ -42,9 +41,7 @@ namespace PizzaWebsite.Models.Carts
                     CartItemPriceCellId = $"cartItemPriceCell-{cartItemJoin.CartItem.Id}",
                     CartItemRowId = $"cartItemRow-{cartItemJoin.CartItem.Id}"
                 };
-
                 await cartItemVm.UpdateAsync(pizzaDb);
-
                 CartItemList.Add(cartItemVm);
             }
         }
