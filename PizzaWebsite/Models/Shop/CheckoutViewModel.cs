@@ -6,7 +6,6 @@ using DataLibrary.Models.Utility;
 using PizzaWebsite.Models.Attributes;
 using PizzaWebsite.Models.Carts;
 using PizzaWebsite.Models.Geography;
-using PizzaWebsite.Models.Manage;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

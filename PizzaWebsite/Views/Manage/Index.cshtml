@@ -2,9 +2,7 @@
 @{
     ViewBag.Title = "Manage";
 }
-
 <h2>@ViewBag.Title.</h2>
-
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
     <h4>Change your account settings</h4>
@@ -88,10 +86,10 @@
         <dd>
             <ul class="list-group">
                 <li class="list-group-item">
-                    @Html.ActionLink("Manage Addresses", "ManageAddresses")
+                    @Html.ActionLink("Manage Addresses", "Index", "ManageDeliveryAddresses")
                 </li>
                 <li class="list-group-item">
-                    <a href="@Url.Action("PreviousOrders", "Shop")?Page=1&RowsPerPage=10">Previous Orders</a>
+                    <a href="@Url.Action("Index", "ManagePreviousOrders")?Page=1&RowsPerPage=10">Previous Orders</a>
                 </li>
             </ul>
         </dd>

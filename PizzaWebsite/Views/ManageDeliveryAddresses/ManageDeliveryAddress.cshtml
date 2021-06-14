@@ -1,15 +1,14 @@
-﻿@using PizzaWebsite.Models.Manage
+﻿@using PizzaWebsite.Models.ManageDeliveryAddresses
 @model ManageDeliveryAddressViewModel
 @if (Model.IsNewRecord())
 {
     ViewBag.Title = "Add New Delivery Address";
-    <h2>Add New Delivery Address</h2>
 }
 else
 {
     ViewBag.Title = "Manage Delivery Address";
-    <h2>Manage Delivery Address</h2>
 }
+<h2>@ViewBag.Title</h2>
 <div>
     @Html.ActionLink("Back", "ManageAddresses", new { }, new { @class = "btn btn-primary" })
 </div>

@@ -168,6 +168,7 @@
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ManageDeliveryAddressesController.cs" />
     <Compile Include="Controllers\ManageEmployeesController.cs" />
     <Compile Include="Controllers\ManageMenuController.cs" />
     <Compile Include="Controllers\ManagePizzaCheeseMenuController.cs" />
@@ -218,9 +219,9 @@
     <Compile Include="Models\ManageMenus\ManageMenuPizzaToppingTypeViewModel.cs" />
     <Compile Include="Models\ManageMenus\ManageMenuPizzaViewModel.cs" />
     <Compile Include="Models\ManageEmployees\ViewEmployeeLocationsViewModel.cs" />
-    <Compile Include="Models\Manage\DeliveryAddressViewModel.cs" />
-    <Compile Include="Models\Manage\ManageAddressesViewModel.cs" />
-    <Compile Include="Models\Manage\ManageDeliveryAddressViewModel.cs" />
+    <Compile Include="Models\ManageDeliveryAddresses\DeliveryAddressViewModel.cs" />
+    <Compile Include="Models\ManageDeliveryAddresses\ManageAddressesViewModel.cs" />
+    <Compile Include="Models\ManageDeliveryAddresses\ManageDeliveryAddressViewModel.cs" />
     <Compile Include="Models\PaginationViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\CartPizzaBuilderViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\PizzaBuilderManager.cs" />
@@ -326,8 +327,8 @@
     <Content Include="Views\Shop\CartPizzaBuilder.cshtml" />
     <Content Include="Views\Shop\PizzaMenu.cshtml" />
     <Content Include="Views\Shop\_MenuPizzaView.cshtml" />
-    <Content Include="Views\Manage\ManageAddresses.cshtml" />
-    <Content Include="Views\Manage\ManageDeliveryAddress.cshtml" />
+    <Content Include="Views\ManageDeliveryAddresses\ManageAddresses.cshtml" />
+    <Content Include="Views\ManageDeliveryAddresses\ManageDeliveryAddress.cshtml" />
     <Content Include="Views\Shop\Checkout.cshtml" />
     <Content Include="Views\Shared\Carts\_Cart.cshtml" />
     <Content Include="Views\Shared\Carts\_CartWithControls.cshtml" />

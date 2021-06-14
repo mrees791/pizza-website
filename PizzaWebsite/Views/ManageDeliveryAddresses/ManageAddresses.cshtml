@@ -1,5 +1,4 @@
-﻿@using PizzaWebsite.Models
-@using PizzaWebsite.Models.Manage
+﻿@using PizzaWebsite.Models.ManageDeliveryAddresses
 @model ManageAddressesViewModel
 @{
     ViewBag.Title = "Manage Addresses";
@@ -39,7 +38,7 @@
                     <td>@addressVm.ZipCode</td>
                     <td>@addressVm.PhoneNumber</td>
                     <td>
-                        @using (Html.BeginForm("ModifyDeliveryAddress", "Manage", FormMethod.Post))
+                        @using (Html.BeginForm("ModifyDeliveryAddress", "ManageDeliveryAddresses", FormMethod.Post))
                         {
                             @Html.AntiForgeryToken()
                             <input name="addressId" type="hidden" value="@addressVm.Id" />
@@ -70,7 +69,7 @@
                 // Delete delivery address
                 $(deleteButtonId).on("click", function () {
                     var params = { addressId: @addressVm.Id };
-                    pizzaSiteNs.ajaxCall('/Manage/DeleteDeliveryAddressAjax', JSON.stringify(params), 'POST').
+                    pizzaSiteNs.ajaxCall('/ManageDeliveryAddresses/DeleteDeliveryAddressAjax', JSON.stringify(params), 'POST').
                         fail(function (response) {
                             console.log(response);
                         }).

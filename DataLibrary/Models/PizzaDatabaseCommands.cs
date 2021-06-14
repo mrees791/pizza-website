@@ -94,7 +94,6 @@ namespace DataLibrary.Models
                 UserId = siteUser.Id,
                 RoleName = siteRole.Name
             };
-
             await userRole.InsertAsync(pizzaDb, transaction);
         }
 
@@ -112,7 +111,6 @@ namespace DataLibrary.Models
             using (var transaction = pizzaDb.Connection.BeginTransaction())
             {
                 await CloneCart(siteUser.CurrentCartId, true, cartItemJoinList.Items, transaction);
-
                 transaction.Commit();
             }
         }
