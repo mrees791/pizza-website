@@ -1,6 +1,5 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.Builders;
-using DataLibrary.Models.Exceptions;
 using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.JoinLists.CartItemCategories;
 using DataLibrary.Models.QuerySearches;
@@ -30,38 +29,38 @@ namespace PizzaWebsite.Controllers
     public class ShopController : BaseController
     {
         private CartServices _cartServices;
+        private CheckoutServices _checkoutServices;
 
         public ShopController()
         {
             _cartServices = new CartServices();
+            _checkoutServices = new CheckoutServices();
         }
 
+        [Authorize]
         public async Task<ActionResult> Checkout()
         {
-            CheckoutViewModel checkoutModel = new CheckoutViewModel();
             SiteUser currentUser = await GetCurrentUserAsync();
-            await checkoutModel.InitializeAsync(false, currentUser, PizzaDb, ListUtility.CreateQuantityList());
-            return View("Checkout", checkoutModel);
+            await PizzaDb.Commands.CheckoutCartAsync(currentUser);
+            CheckoutViewModel model = await _checkoutServices.CreateViewModelAsync(currentUser, PizzaDb, ListUtility.CreateQuantityList());
+            return View("Checkout", model);
         }
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult> Checkout(CheckoutViewModel checkoutModel)
+        public async Task<ActionResult> Checkout(CheckoutViewModel model)
         {
-            return await SubmitOrder(checkoutModel);
+            return await SubmitOrder(model);
         }
 
         // todo: Finish SubmitOrder
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult> SubmitOrder(CheckoutViewModel checkoutModel)
+        public async Task<ActionResult> SubmitOrder(CheckoutViewModel model)
         {
-            SiteUser user = await GetCurrentUserAsync();
-
             if (!ModelState.IsValid)
             {
-                await checkoutModel.InitializeAsync(true, user, PizzaDb, ListUtility.CreateQuantityList());
-                return View("Checkout", checkoutModel);
+                return View("Checkout", model);
             }
             // todo: Finish client side validation using OrderConfirmationId
             /*bool orderExpired = checkoutModel.OrderConfirmationId != user.OrderConfirmationId;
@@ -70,6 +69,7 @@ namespace PizzaWebsite.Controllers
             {
                 return RedirectToAction("OrderExpired");
             }*/
+            SiteUser user = await GetCurrentUserAsync();
             CartItemJoinList cartItemJoinList = new CartItemJoinList();
             await cartItemJoinList.LoadListByCartIdAsync(user.ConfirmOrderCartId, PizzaDb);
             CostSummary costSummary = new CostSummary(cartItemJoinList.Items);
@@ -77,40 +77,40 @@ namespace PizzaWebsite.Controllers
             {
                 UserId = user.Id,
                 DateOfOrder = DateTime.Now,
-                IsDelivery = checkoutModel.IsDelivery(),
-                StoreId = checkoutModel.SelectedStoreLocationId,
+                IsDelivery = model.IsDelivery(),
+                StoreId = model.SelectedStoreLocationId,
                 OrderPhase = OrderPhase.Order_Placed,
                 OrderSubtotal = costSummary.Subtotal,
                 OrderTax = costSummary.Tax,
                 OrderTotal = costSummary.Total
             };
-            if (checkoutModel.IsDelivery())
+            if (model.IsDelivery())
             {
-                if (checkoutModel.IsNewDeliveryAddress() && checkoutModel.SaveNewDeliveryAddress)
+                if (model.IsNewDeliveryAddress() && model.SaveNewDeliveryAddress)
                 {
                     DeliveryAddress deliveryAddress = new DeliveryAddress()
                     {
                         UserId = User.Identity.GetUserId(),
-                        Name = checkoutModel.DeliveryAddressName,
-                        AddressType = checkoutModel.SelectedDeliveryAddressType,
-                        City = checkoutModel.DeliveryCity,
-                        PhoneNumber = checkoutModel.DeliveryPhoneNumber,
-                        State = checkoutModel.SelectedDeliveryState,
-                        StreetAddress = checkoutModel.DeliveryStreetAddress,
-                        ZipCode = checkoutModel.DeliveryZipCode
+                        Name = model.DeliveryAddressName,
+                        AddressType = model.SelectedDeliveryAddressType,
+                        City = model.DeliveryCity,
+                        PhoneNumber = model.DeliveryPhoneNumber,
+                        State = model.SelectedDeliveryState,
+                        StreetAddress = model.DeliveryStreetAddress,
+                        ZipCode = model.DeliveryZipCode
                     };
                     await PizzaDb.InsertAsync(deliveryAddress);
                 }
                 DeliveryInfo deliveryInfo = new DeliveryInfo()
                 {
                     DateOfDelivery = DateTime.Now,
-                    DeliveryAddressName = checkoutModel.DeliveryAddressName,
-                    DeliveryAddressType = checkoutModel.SelectedDeliveryAddressType,
-                    DeliveryCity = checkoutModel.DeliveryCity,
-                    DeliveryPhoneNumber = checkoutModel.DeliveryPhoneNumber,
-                    DeliveryState = checkoutModel.SelectedDeliveryState,
-                    DeliveryStreetAddress = checkoutModel.DeliveryStreetAddress,
-                    DeliveryZipCode = checkoutModel.DeliveryZipCode
+                    DeliveryAddressName = model.DeliveryAddressName,
+                    DeliveryAddressType = model.SelectedDeliveryAddressType,
+                    DeliveryCity = model.DeliveryCity,
+                    DeliveryPhoneNumber = model.DeliveryPhoneNumber,
+                    DeliveryState = model.SelectedDeliveryState,
+                    DeliveryStreetAddress = model.DeliveryStreetAddress,
+                    DeliveryZipCode = model.DeliveryZipCode
                 };
                 await PizzaDb.Commands.AddCustomerOrderAsync(user, customerOrder, deliveryInfo);
             }

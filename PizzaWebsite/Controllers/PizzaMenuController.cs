@@ -95,32 +95,14 @@ namespace PizzaWebsite.Controllers
             return await CreatePizzaBuilderVmAsync(cartItem, cartPizza);
         }
 
-        private List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<CartPizzaTopping> cartToppingList, IEnumerable<MenuPizzaToppingType> toppingTypeList)
-        {
-            List<PizzaTopping> toppingList = new List<PizzaTopping>();
-            foreach (CartPizzaTopping cartTopping in cartToppingList)
-            {
-                PizzaTopping topping = new PizzaTopping()
-                {
-                    ToppingTypeId = cartTopping.MenuPizzaToppingTypeId,
-                    ToppingAmount = cartTopping.ToppingAmount,
-                    ToppingHalf = cartTopping.ToppingHalf
-                };
-                toppingList.Add(topping);
-            }
-            return PizzaBuilderManager.CreateToppingViewModelList(toppingList, toppingTypeList);
-        }
-
         private async Task<CartPizzaBuilderViewModel> CreatePizzaBuilderVmAsync(CartItem cartItem, CartPizza cartPizza)
         {
             CartPizzaBuilder pizzaBuilder = new CartPizzaBuilder();
             await pizzaBuilder.InitializeAsync(new MenuItemSearch { AvailableForPurchase = true }, PizzaDb);
-            IEnumerable<PizzaTopping> toppingList = new List<PizzaTopping>();
             Dictionary<int, string> cheeseDictionary = new Dictionary<int, string>();
             Dictionary<int, string> crustFlavorDictionary = new Dictionary<int, string>();
             Dictionary<int, string> crustDictionary = new Dictionary<int, string>();
             Dictionary<int, string> sauceDictionary = new Dictionary<int, string>();
-            Dictionary<int, PizzaTopping> toppingDictionary = new Dictionary<int, PizzaTopping>();
             foreach (MenuPizzaCheese cheese in pizzaBuilder.CheeseList)
             {
                 cheeseDictionary.Add(cheese.Id, cheese.Name);
@@ -159,6 +141,22 @@ namespace PizzaWebsite.Controllers
                 CrustDictionary = crustDictionary,
                 ToppingVmList = toppingVmList
             };
+        }
+
+        private List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<CartPizzaTopping> cartToppingList, IEnumerable<MenuPizzaToppingType> toppingTypeList)
+        {
+            List<PizzaTopping> toppingList = new List<PizzaTopping>();
+            foreach (CartPizzaTopping cartTopping in cartToppingList)
+            {
+                PizzaTopping topping = new PizzaTopping()
+                {
+                    ToppingTypeId = cartTopping.MenuPizzaToppingTypeId,
+                    ToppingAmount = cartTopping.ToppingAmount,
+                    ToppingHalf = cartTopping.ToppingHalf
+                };
+                toppingList.Add(topping);
+            }
+            return PizzaBuilderManager.CreateToppingViewModelList(toppingList, toppingTypeList);
         }
 
         [Authorize]

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using DataLibrary.Models;
-using DataLibrary.Models.Exceptions;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity;

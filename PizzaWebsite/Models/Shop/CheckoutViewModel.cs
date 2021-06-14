@@ -58,11 +58,11 @@ namespace PizzaWebsite.Models.Shop
         [Display(Name = "Phone Number")]
         public string DeliveryPhoneNumber { get; set; }
         public CartViewModel CartVm { get; set; }
-        public List<string> OrderTypeList { get; set; }
-        public List<SelectListItem> DeliveryAddressSelectList { get; set; }
-        public List<State> DeliveryStateSelectList { get; set; }
-        public List<string> DeliveryAddressTypeSelectList { get; set; }
-        public List<SelectListItem> StoreLocationSelectList { get; set; }
+        public IEnumerable<string> OrderTypeList { get; set; }
+        public IEnumerable<string> DeliveryAddressTypeList { get; set; }
+        public IEnumerable<string> DeliveryStateList { get; set; }
+        public IEnumerable<SelectListItem> StoreLocationSelectList { get; set; }
+        public IEnumerable<SelectListItem> DeliveryAddressSelectList { get; set; }
 
         public bool IsDelivery()
         {
@@ -72,56 +72,6 @@ namespace PizzaWebsite.Models.Shop
         public bool IsNewDeliveryAddress()
         {
             return SelectedDeliveryAddressId == 0;
-        }
-
-        public async Task InitializeAsync(bool isPostBack, SiteUser user, PizzaDatabase pizzaDb, List<int> quantityList)
-        {
-            if (!isPostBack)
-            {
-                SaveNewDeliveryAddress = true;
-            }
-            await pizzaDb.Commands.CheckoutCartAsync(user);
-            SiteUser updatedUser = await pizzaDb.GetAsync<SiteUser>(user.Id);
-            StoreLocationSearch storeSearch = new StoreLocationSearch()
-            {
-                IsActiveLocation = true
-            };
-            DeliveryAddressSearch addressSearch = new DeliveryAddressSearch()
-            {
-                UserId = updatedUser.Id
-            };
-            IEnumerable<StoreLocation> storeLocationList = await pizzaDb.GetListAsync<StoreLocation>("Name", SortOrder.Ascending, storeSearch);
-            IEnumerable<DeliveryAddress> deliveryAddressList = await pizzaDb.GetListAsync<DeliveryAddress>("Name", SortOrder.Ascending, addressSearch);
-            List<SelectListItem> deliveryAddressSelectList = new List<SelectListItem>();
-            List<SelectListItem> storeLocationSelectList = new List<SelectListItem>();
-            deliveryAddressSelectList.Add(new SelectListItem()
-            {
-                Text = "New Address",
-                Value = "0"
-            });
-            foreach (DeliveryAddress deliveryAddress in deliveryAddressList)
-            {
-                deliveryAddressSelectList.Add(new SelectListItem()
-                {
-                    Text = deliveryAddress.Name,
-                    Value = deliveryAddress.Id.ToString()
-                });
-            }
-            foreach (StoreLocation storeLocation in storeLocationList)
-            {
-                storeLocationSelectList.Add(new SelectListItem()
-                {
-                    Text = storeLocation.Name,
-                    Value = storeLocation.Id.ToString()
-                });
-            }
-            OrderTypeList = ListUtility.CreateCustomerOrderTypeList();
-            DeliveryStateSelectList = StateListCreator.CreateStateList();
-            DeliveryAddressTypeSelectList = ListUtility.CreateDeliveryAddressTypeList();
-            DeliveryAddressSelectList = deliveryAddressSelectList;
-            StoreLocationSelectList = storeLocationSelectList;
-            CartServices cartServices = new CartServices();
-            CartVm = await cartServices.CreateViewModelAsync(updatedUser.ConfirmOrderCartId, pizzaDb, quantityList);
         }
     }
 }

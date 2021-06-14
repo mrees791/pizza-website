@@ -1,11 +1,9 @@
-﻿@model PizzaWebsite.Models.Shop.CheckoutViewModel
-
+﻿@using PizzaWebsite.Models.Shop
+@model CheckoutViewModel
 @{
     ViewBag.Title = "Checkout";
 }
-
-<h2>Checkout</h2>
-
+<h2>@ViewBag.Title</h2>
 @if (Model.CartVm.IsEmpty())
 {
     <p>Your cart is empty.</p>
@@ -15,10 +13,31 @@ else
     using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-
+        @* Save list state *@
+        for (int i = 0; i < Model.OrderTypeList.Count(); i++)
+        {
+            <input type="hidden" name="OrderTypeList[@i]" value="@Model.OrderTypeList.ElementAt(i)">
+        }
+        for (int i = 0; i < Model.DeliveryAddressTypeList.Count(); i++)
+        {
+            <input type="hidden" name="DeliveryAddressTypeList[@i]" value="@Model.DeliveryAddressTypeList.ElementAt(i)">
+        }
+        for (int i = 0; i < Model.DeliveryStateList.Count(); i++)
+        {
+            <input type="hidden" name="DeliveryStateList[@i]" value="@Model.DeliveryStateList.ElementAt(i)">
+        }
+        for (int i = 0; i < Model.StoreLocationSelectList.Count(); i++)
+        {
+            <input type="hidden" name="StoreLocationSelectList[@i].Value" value="@Model.StoreLocationSelectList.ElementAt(i).Value">
+            <input type="hidden" name="StoreLocationSelectList[@i].Text" value="@Model.StoreLocationSelectList.ElementAt(i).Text">
+        }
+        for (int i = 0; i < Model.DeliveryAddressSelectList.Count(); i++)
+        {
+            <input type="hidden" name="DeliveryAddressSelectList[@i].Value" value="@Model.DeliveryAddressSelectList.ElementAt(i).Value">
+            <input type="hidden" name="DeliveryAddressSelectList[@i].Text" value="@Model.DeliveryAddressSelectList.ElementAt(i).Text">
+        }
         <div class="form-horizontal">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
             <div class="form-group">
                 @Html.LabelFor(model => model.SelectedStoreLocationId, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -26,7 +45,6 @@ else
                     @Html.ValidationMessageFor(model => model.SelectedStoreLocationId, "", new { @class = "text-danger" })
                 </div>
             </div>
-
             <div class="form-group">
                 @Html.LabelFor(model => model.SelectedOrderType, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -34,7 +52,6 @@ else
                     @Html.ValidationMessageFor(model => model.SelectedOrderType, "", new { @class = "text-danger" })
                 </div>
             </div>
-
             @if (Model.IsDelivery())
             {
                 <div id="deliveryInfoGroup">
@@ -49,13 +66,10 @@ else
                     @Html.Partial("_CheckoutDeliveryInfo")
                 </div>
             }
-
             <h3>Order Summary</h3>
             @Html.Partial("~/Views/Shared/Carts/_Cart.cshtml", Model.CartVm)
-
             <h3>Cost Summary</h3>
             @Html.Partial("~/Views/Shared/Carts/_CostSummary.cshtml", Model.CartVm.CostSummaryVm)
-
             <div class="form-group">
                 <div class="col-md-2">
                     <input type="submit" value="Place Your Order" class="btn btn-success" />

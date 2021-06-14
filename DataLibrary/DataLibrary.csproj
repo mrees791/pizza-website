@@ -80,7 +80,6 @@
     <Compile Include="Models\CartItemJoin.cs" />
     <Compile Include="Models\CartItemCategory.cs" />
     <Compile Include="Models\CostSummary.cs" />
-    <Compile Include="Models\Exceptions\RecordDoesNotExistException.cs" />
     <Compile Include="Models\Join.cs" />
     <Compile Include="Models\JoinLists\BaseClasses\CartItemJoinListBase.cs" />
     <Compile Include="Models\JoinLists\CartItemJoinList.cs" />
@@ -110,6 +109,7 @@
     <Compile Include="Models\PizzaDatabaseCommands.cs" />
     <Compile Include="Models\PizzaTopping.cs" />
     <Compile Include="Models\ProductCategory.cs" />
+    <Compile Include="Models\Services\ListServices.cs" />
     <Compile Include="Models\SortOrder.cs" />
     <Compile Include="Models\Sql\ComparisonType.cs" />
     <Compile Include="Models\Sql\SelectQueries.cs" />

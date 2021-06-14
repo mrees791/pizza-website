@@ -7,20 +7,16 @@ namespace PizzaWebsite.Models.Geography
 {
     public class State
     {
-        private string name;
-        private string abbreviation;
+        private string _name;
+        private string _abbreviation;
 
         public State(string name, string abbreviation)
         {
-            if (abbreviation.Length != 2)
-            {
-                throw new Exception($"State abbreviation must be two characters. {name} {abbreviation}");
-            }
-            this.name = name;
-            this.abbreviation = abbreviation;
+            _name = name;
+            _abbreviation = abbreviation;
         }
 
-        public string Name { get => name; }
-        public string Abbreviation { get => abbreviation; }
+        public string Name { get => _name; }
+        public string Abbreviation { get => _abbreviation; }
     }
 }

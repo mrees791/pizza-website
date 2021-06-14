@@ -3,33 +3,27 @@
 @using (Html.BeginForm("AddMenuPizzaToCurrentCart", "PizzaMenu"))
 {
     @Html.AntiForgeryToken()
-    
     <div class="form-horizontal">
         @Html.HiddenFor(model => model.Id)
-
         <h4>@Model.Name</h4>
-
         <div class="form-group">
             @Html.LabelFor(model => model.SelectedSize, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownListFor(m => m.SelectedSize, new SelectList(Model.SizeList), new { @class = "form-control" })
             </div>
         </div>
-        
         <div class="form-group">
             @Html.LabelFor(model => model.SelectedCrustId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownListFor(m => m.SelectedCrustId, new SelectList(Model.CrustList, "Key", "Value"), new { @class = "form-control" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.SelectedQuantity, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownListFor(m => m.SelectedQuantity, new SelectList(Model.QuantityList), new { @class = "form-control" })
             </div>
         </div>
-
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Add To Cart" class="btn btn-primary" />

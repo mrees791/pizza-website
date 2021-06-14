@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using DataLibrary.Models.Exceptions;
 using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.Tables;
 using System;

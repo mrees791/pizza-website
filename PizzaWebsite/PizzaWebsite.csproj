@@ -239,6 +239,7 @@
     <Compile Include="Models\ValidationError.cs" />
     <Compile Include="Models\ViewModelServices\CartItemServices.cs" />
     <Compile Include="Models\ViewModelServices\CartServices.cs" />
+    <Compile Include="Models\ViewModelServices\CheckoutServices.cs" />
     <Compile Include="Models\ViewModelServices\CostSummaryServices.cs" />
     <Compile Include="Models\ViewModelServices\PreviousOrderServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
