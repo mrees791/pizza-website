@@ -1,11 +1,9 @@
 ﻿@using PizzaWebsite.Models.Shop
 @model PizzaMenuPageViewModel
-
 @{
     ViewBag.Title = "Pizza Menu";
 }
-
-<h2>Pizza Menu</h2>
+<h2>@ViewBag.Title</h2>
 <h3>Popular Pizzas</h3>
 @foreach (MenuPizzaViewModel menuPizza in Model.PopularPizzaList)
 {
@@ -22,4 +20,4 @@
     @Html.Partial("_MenuPizzaView", menuPizza)
 }
 <h3>Custom Pizza</h3>
-@Html.ActionLink("Create a custom pizza", "BuildPizza", "Shop", new { }, new { @class = "btn btn-primary" })
+@Html.ActionLink("Create a custom pizza", "BuildPizza", new { }, new { @class = "btn btn-primary" })

@@ -28,7 +28,6 @@ namespace PizzaWebsite.Controllers
 {
     public class ShopController : BaseController
     {
-
         public async Task<ActionResult> Checkout()
         {
             CheckoutViewModel checkoutModel = new CheckoutViewModel();
@@ -37,6 +36,7 @@ namespace PizzaWebsite.Controllers
             return View("Checkout", checkoutModel);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> Checkout(CheckoutViewModel checkoutModel)
         {
@@ -44,6 +44,7 @@ namespace PizzaWebsite.Controllers
         }
 
         // todo: Finish SubmitOrder
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> SubmitOrder(CheckoutViewModel checkoutModel)
         {
@@ -126,252 +127,6 @@ namespace PizzaWebsite.Controllers
             return View();
         }
 
-        private async Task<bool> AuthorizedToModifyCartItemAsync(CartItem cartItem)
-        {
-            return await PizzaDb.Commands.UserOwnsCartItemAsync(User.Identity.GetUserId(), cartItem);
-        }
-
-        private async Task<CartPizzaBuilderViewModel> CreatePizzaBuilderVmAsync()
-        {
-            CartPizzaBuilder pizzaBuilder = new CartPizzaBuilder();
-            await pizzaBuilder.InitializeAsync(new MenuItemSearch { AvailableForPurchase = true }, PizzaDb);
-            CartItem cartItem = new CartItem()
-            {
-                Quantity = 1
-            };
-            CartPizza cartPizza = new CartPizza()
-            {
-                CheeseAmount = "Regular",
-                SauceAmount = "Regular",
-                Size = "Medium",
-                MenuPizzaCheeseId = pizzaBuilder.CheeseList.First().Id,
-                MenuPizzaCrustFlavorId = pizzaBuilder.CrustFlavorList.First().Id,
-                MenuPizzaCrustId = pizzaBuilder.CrustList.First().Id,
-                MenuPizzaSauceId = pizzaBuilder.SauceList.First().Id
-            };
-            return await CreatePizzaBuilderVmAsync(cartItem, cartPizza);
-        }
-
-        private List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<CartPizzaTopping> cartToppingList, IEnumerable<MenuPizzaToppingType> toppingTypeList)
-        {
-            List<PizzaTopping> toppingList = new List<PizzaTopping>();
-            foreach (CartPizzaTopping cartTopping in cartToppingList)
-            {
-                PizzaTopping topping = new PizzaTopping()
-                {
-                    ToppingTypeId = cartTopping.MenuPizzaToppingTypeId,
-                    ToppingAmount = cartTopping.ToppingAmount,
-                    ToppingHalf = cartTopping.ToppingHalf
-                };
-                toppingList.Add(topping);
-            }
-            return PizzaBuilderManager.CreateToppingViewModelList(toppingList, toppingTypeList);
-        }
-
-        private async Task<CartPizzaBuilderViewModel> CreatePizzaBuilderVmAsync(CartItem cartItem, CartPizza cartPizza)
-        {
-            CartPizzaBuilder pizzaBuilder = new CartPizzaBuilder();
-            await pizzaBuilder.InitializeAsync(new MenuItemSearch { AvailableForPurchase = true }, PizzaDb);
-            IEnumerable<PizzaTopping> toppingList = new List<PizzaTopping>();
-            Dictionary<int, string> cheeseDictionary = new Dictionary<int, string>();
-            Dictionary<int, string> crustFlavorDictionary = new Dictionary<int, string>();
-            Dictionary<int, string> crustDictionary = new Dictionary<int, string>();
-            Dictionary<int, string> sauceDictionary = new Dictionary<int, string>();
-            Dictionary<int, PizzaTopping> toppingDictionary = new Dictionary<int, PizzaTopping>();
-            foreach (MenuPizzaCheese cheese in pizzaBuilder.CheeseList)
-            {
-                cheeseDictionary.Add(cheese.Id, cheese.Name);
-            }
-            foreach (MenuPizzaCrustFlavor crustFlavor in pizzaBuilder.CrustFlavorList)
-            {
-                crustFlavorDictionary.Add(crustFlavor.Id, crustFlavor.Name);
-            }
-            foreach (MenuPizzaCrust crust in pizzaBuilder.CrustList)
-            {
-                crustDictionary.Add(crust.Id, crust.Name);
-            }
-            foreach (MenuPizzaSauce sauce in pizzaBuilder.SauceList)
-            {
-                sauceDictionary.Add(sauce.Id, sauce.Name);
-            }
-            List<PizzaToppingViewModel> toppingVmList = CreateToppingViewModelList(cartPizza.ToppingList, pizzaBuilder.ToppingTypeList);
-            return new CartPizzaBuilderViewModel()
-            {
-                Id = cartItem.Id,
-                SelectedQuantity = cartItem.Quantity,
-                SelectedCheeseAmount = cartPizza.CheeseAmount,
-                SelectedCheeseId = cartPizza.MenuPizzaCheeseId,
-                SelectedCrustFlavorId = cartPizza.MenuPizzaCrustFlavorId,
-                SelectedCrustId = cartPizza.MenuPizzaCrustId,
-                SelectedSauceAmount = cartPizza.SauceAmount,
-                SelectedSauceId = cartPizza.MenuPizzaSauceId,
-                SelectedSize = cartPizza.Size,
-                CheeseAmountList = pizzaBuilder.CheeseAmountList,
-                QuantityList = pizzaBuilder.QuantityList,
-                SizeList = pizzaBuilder.SizeList,
-                SauceAmountList = pizzaBuilder.SauceAmountList,
-                CheeseDictionary = cheeseDictionary,
-                CrustFlavorDictionary = crustFlavorDictionary,
-                SauceDictionary = sauceDictionary,
-                CrustDictionary = crustDictionary,
-                ToppingVmList = toppingVmList
-            };
-        }
-
-        [Authorize]
-        public async Task<ActionResult> BuildPizza()
-        {
-            CartPizzaBuilder pizzaBuilder = new CartPizzaBuilder();
-            await pizzaBuilder.InitializeAsync(new MenuItemSearch() { AvailableForPurchase = true }, PizzaDb);
-            CartPizzaBuilderViewModel model = await CreatePizzaBuilderVmAsync();
-            return View("CartPizzaBuilder", model);
-        }
-
-        [HttpPost]
-        [Authorize]
-        public async Task<ActionResult> BuildPizza(CartPizzaBuilderViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View("CartPizzaBuilder", model);
-            }
-            SiteUser currentUser = await GetCurrentUserAsync();
-            CartPizza cartPizza = CreateCartPizzaFromViewModel(model);
-            decimal pricePerItem = await cartPizza.CalculateItemPriceAsync(PizzaDb);
-            CartItem cartItem = new CartItem()
-            {
-                Id = model.Id,
-                CartId = currentUser.CurrentCartId,
-                UserId = User.Identity.GetUserId(),
-                ProductCategory = ProductCategory.Pizza.ToString(),
-                Quantity = model.SelectedQuantity,
-                PricePerItem = pricePerItem,
-                Price = pricePerItem * model.SelectedQuantity
-            };
-            if (model.IsNewRecord())
-            {
-                await PizzaDb.Commands.AddItemToCart(currentUser, cartItem, cartPizza);
-            }
-            else
-            {
-                await PizzaDb.Commands.UpdateCartItemAsync(cartItem, cartPizza);
-            }
-            return RedirectToAction("Cart");
-        }
-
-        [HttpPost]
-        [Authorize]
-        public async Task<ActionResult> ModifyCartPizza(int cartItemId)
-        {
-            CartItemOnCartPizzaJoinList joinList = new CartItemOnCartPizzaJoinList();
-            await joinList.LoadFirstOrDefaultAsync(cartItemId, PizzaDb);
-            CartItemJoin join = joinList.Items.FirstOrDefault();
-            if (join == null)
-            {
-                return CartItemDoesNotExistErrorMessage();
-            }
-            bool authorized = await AuthorizedToModifyCartItemAsync(join.CartItem);
-            if (!authorized)
-            {
-                return CartItemAuthorizationErrorMessage();
-            }
-            CartPizzaBuilderViewModel cartPizzaVm = await CreatePizzaBuilderVmAsync(join.CartItem, (CartPizza)join.CartItemType);
-            return View("CartPizzaBuilder", cartPizzaVm);
-        }
-
-        private CartPizza CreateCartPizzaFromViewModel(CartPizzaBuilderViewModel model)
-        {
-            List<CartPizzaTopping> toppingList = new List<CartPizzaTopping>();
-            foreach (PizzaToppingViewModel toppingVm in model.ToppingVmList)
-            {
-                if (toppingVm.SelectedAmount != "None")
-                {
-                    toppingList.Add(new CartPizzaTopping()
-                    {
-                        MenuPizzaToppingTypeId = toppingVm.Id,
-                        ToppingAmount = toppingVm.SelectedAmount,
-                        ToppingHalf = toppingVm.SelectedToppingHalf
-                    });
-                }
-            }
-            return new CartPizza()
-            {
-                CartItemId = model.Id,
-                CheeseAmount = model.SelectedCheeseAmount,
-                SauceAmount = model.SelectedSauceAmount,
-                Size = model.SelectedSize,
-                MenuPizzaCheeseId = model.SelectedCheeseId,
-                MenuPizzaCrustId = model.SelectedCrustId,
-                MenuPizzaCrustFlavorId = model.SelectedCrustFlavorId,
-                MenuPizzaSauceId = model.SelectedSauceId,
-                ToppingList = toppingList
-            };
-        }
-
-        [Authorize]
-        public async Task<ActionResult> AddMenuPizzaToCurrentCart(int id, int selectedQuantity, string selectedSize, int selectedCrustId)
-        {
-            SiteUser currentUser = await GetCurrentUserAsync();
-            MenuPizza menuPizza = await PizzaDb.GetAsync<MenuPizza>(id);
-            Tuple<CartItem, CartPizza> cartItemRecords = await menuPizza.CreateCartRecordsAsync(selectedQuantity, selectedSize, selectedCrustId, currentUser, PizzaDb);
-            await PizzaDb.Commands.AddItemToCart(currentUser, cartItemRecords.Item1, cartItemRecords.Item2);
-            return RedirectToAction("Cart");
-        }
-
-        public async Task<ActionResult> PizzaMenu()
-        {
-            List<int> quantityList = ListUtility.CreateQuantityList();
-            List<string> sizeList = ListUtility.GetPizzaSizeList();
-            Dictionary<int, string> crustListDictionary = await ListUtility.CreateCrustDictionaryAsync(PizzaDb);
-            MenuPizzaSearch popularPizzaSearch = new MenuPizzaSearch()
-            {
-                AvailableForPurchase = true,
-                CategoryName = "Popular"
-            };
-            MenuPizzaSearch meatPizzaSearch = new MenuPizzaSearch()
-            {
-                AvailableForPurchase = true,
-                CategoryName = "Meats"
-            };
-            MenuPizzaSearch veggiePizzaSearch = new MenuPizzaSearch()
-            {
-                AvailableForPurchase = true,
-                CategoryName = "Veggie"
-            };
-            // Load all menu pizzas in to each category.
-            IEnumerable<MenuPizza> popularMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>("SortOrder", SortOrder.Ascending, popularPizzaSearch);
-            IEnumerable<MenuPizza> meatsMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>("SortOrder", SortOrder.Ascending, meatPizzaSearch);
-            IEnumerable<MenuPizza> veggieMenuPizzas = await PizzaDb.GetListAsync<MenuPizza>("SortOrder", SortOrder.Ascending, veggiePizzaSearch);
-            // Separate into categories
-            PizzaMenuPageViewModel model = new PizzaMenuPageViewModel()
-            {
-                PopularPizzaList = CreateMenuPizzaViewModels(popularMenuPizzas, quantityList, sizeList, crustListDictionary),
-                MeatsPizzaList = CreateMenuPizzaViewModels(meatsMenuPizzas, quantityList, sizeList, crustListDictionary),
-                VeggiePizzaList = CreateMenuPizzaViewModels(veggieMenuPizzas, quantityList, sizeList, crustListDictionary)
-            };
-            return View(model);
-        }
-
-        private List<MenuPizzaViewModel> CreateMenuPizzaViewModels(IEnumerable<MenuPizza> menuPizzaList, List<int> quantityList, List<string> sizeList, Dictionary<int, string> crustListDictionary)
-        {
-            List<MenuPizzaViewModel> viewModelList = new List<MenuPizzaViewModel>();
-            foreach (MenuPizza menuPizza in menuPizzaList)
-            {
-                MenuPizzaViewModel viewModel = new MenuPizzaViewModel()
-                {
-                    Id = menuPizza.Id,
-                    Name = menuPizza.PizzaName,
-                    QuantityList = quantityList,
-                    SelectedQuantity = 1,
-                    SizeList = sizeList,
-                    SelectedSize = "Medium",
-                    CrustList = crustListDictionary
-                };
-                viewModelList.Add(viewModel);
-            }
-            return viewModelList;
-        }
-
         [Authorize]
         public async Task<ActionResult> Cart()
         {
@@ -381,6 +136,7 @@ namespace PizzaWebsite.Controllers
             return View(cartVm);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> DeleteCartItemAjax(int cartItemId)
         {
@@ -391,7 +147,7 @@ namespace PizzaWebsite.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json($"Cart Item with ID {cartItemId} does not exist.", MediaTypeNames.Text.Plain);
             }
-            bool authorized = await AuthorizedToModifyCartItemAsync(cartItem);
+            bool authorized = await PizzaDb.Commands.UserOwnsCartItemAsync(User.Identity.GetUserId(), cartItem);
             if (!authorized)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -442,7 +198,6 @@ namespace PizzaWebsite.Controllers
                 case OrderPhase.Out_For_Delivery:
                     return "Your order is out for delivery.";
             }
-
             return "Unable to get order status.";
         }
 
@@ -477,7 +232,7 @@ namespace PizzaWebsite.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json($"Cart Item with ID {cartItemId} does not exist.", MediaTypeNames.Text.Plain);
             }
-            bool authorized = await AuthorizedToModifyCartItemAsync(cartItem);
+            bool authorized = await PizzaDb.Commands.UserOwnsCartItemAsync(User.Identity.GetUserId(), cartItem);
             if (!authorized)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;

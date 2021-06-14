@@ -3,9 +3,9 @@
 @{
     ViewBag.Title = "Pizza Builder";
 }
-<h2>Pizza Builder</h2>
-@Html.ActionLink("Back", "PizzaMenu", "Shop", new { }, new { @class = "btn btn-primary" })
-@using (Html.BeginForm("BuildPizza", "Shop", FormMethod.Post))
+<h2>@ViewBag.Title</h2>
+@Html.ActionLink("Back", "Index", new { }, new { @class = "btn btn-primary" })
+@using (Html.BeginForm("BuildPizza", "PizzaMenu", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     @* Save list state *@
