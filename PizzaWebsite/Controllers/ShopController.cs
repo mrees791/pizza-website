@@ -42,24 +42,18 @@ namespace PizzaWebsite.Controllers
         {
             SiteUser currentUser = await GetCurrentUserAsync();
             await PizzaDb.Commands.CheckoutCartAsync(currentUser);
-            CheckoutViewModel model = await _checkoutServices.CreateViewModelAsync(currentUser, PizzaDb, ListUtility.CreateQuantityList());
+            CheckoutViewModel model = await _checkoutServices.CreateViewModelAsync(currentUser, PizzaDb, ListUtility.CreateQuantityList(), StateListCreator.CreateStateList());
             return View("Checkout", model);
         }
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult> Checkout(CheckoutViewModel model)
-        {
-            return await SubmitOrder(model);
-        }
-
-        // todo: Finish SubmitOrder
-        [Authorize]
-        [HttpPost]
         public async Task<ActionResult> SubmitOrder(CheckoutViewModel model)
         {
+            SiteUser user = await GetCurrentUserAsync();
             if (!ModelState.IsValid)
             {
+                model.CartVm = await _cartServices.CreateViewModelAsync(user.ConfirmOrderCartId, PizzaDb, ListUtility.CreateQuantityList());
                 return View("Checkout", model);
             }
             // todo: Finish client side validation using OrderConfirmationId
@@ -69,7 +63,6 @@ namespace PizzaWebsite.Controllers
             {
                 return RedirectToAction("OrderExpired");
             }*/
-            SiteUser user = await GetCurrentUserAsync();
             CartItemJoinList cartItemJoinList = new CartItemJoinList();
             await cartItemJoinList.LoadListByCartIdAsync(user.ConfirmOrderCartId, PizzaDb);
             CostSummary costSummary = new CostSummary(cartItemJoinList.Items);

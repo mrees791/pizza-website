@@ -15,7 +15,7 @@ namespace PizzaWebsite.Models.ViewModelServices
 {
     public class CheckoutServices
     {
-        public async Task<CheckoutViewModel> CreateViewModelAsync(SiteUser user, PizzaDatabase pizzaDb, List<int> quantityList)
+        public async Task<CheckoutViewModel> CreateViewModelAsync(SiteUser user, PizzaDatabase pizzaDb, List<int> quantityList, List<State> stateList)
         {
             SiteUser updatedUser = await pizzaDb.GetAsync<SiteUser>(user.Id);
             StoreLocationSearch storeSearch = new StoreLocationSearch()
@@ -26,12 +26,10 @@ namespace PizzaWebsite.Models.ViewModelServices
             {
                 UserId = updatedUser.Id
             };
-            List<State> stateList = StateListCreator.CreateStateList();
             IEnumerable<StoreLocation> storeLocationList = await pizzaDb.GetListAsync<StoreLocation>("Name", SortOrder.Ascending, storeSearch);
             IEnumerable<DeliveryAddress> deliveryAddressList = await pizzaDb.GetListAsync<DeliveryAddress>("Name", SortOrder.Ascending, addressSearch);
             List<SelectListItem> deliveryAddressSelectList = new List<SelectListItem>();
             List<SelectListItem> storeLocationSelectList = new List<SelectListItem>();
-            List<SelectListItem> stateSelectList = new List<SelectListItem>();
             deliveryAddressSelectList.Add(new SelectListItem()
             {
                 Text = "New Address",
@@ -57,7 +55,7 @@ namespace PizzaWebsite.Models.ViewModelServices
             return new CheckoutViewModel()
             {
                 OrderTypeList = ListUtility.CreateCustomerOrderTypeList(),
-                DeliveryStateList = stateSelectList.Select(s => s.Value),
+                DeliveryStateList = stateList.Select(s => s.Abbreviation),
                 DeliveryAddressTypeList = ListUtility.CreateDeliveryAddressTypeList(),
                 DeliveryAddressSelectList = deliveryAddressSelectList,
                 StoreLocationSelectList = storeLocationSelectList,
