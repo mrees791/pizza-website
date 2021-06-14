@@ -40,7 +40,7 @@ namespace PizzaWebsite.Controllers
         {
             CheckoutViewModel checkoutModel = new CheckoutViewModel();
             SiteUser currentUser = await GetCurrentUserAsync();
-            await checkoutModel.InitializeAsync(false, currentUser, PizzaDb);
+            await checkoutModel.InitializeAsync(false, currentUser, PizzaDb, ListUtility.CreateQuantityList());
             return View("Checkout", checkoutModel);
         }
 
@@ -60,7 +60,7 @@ namespace PizzaWebsite.Controllers
 
             if (!ModelState.IsValid)
             {
-                await checkoutModel.InitializeAsync(true, user, PizzaDb);
+                await checkoutModel.InitializeAsync(true, user, PizzaDb, ListUtility.CreateQuantityList());
                 return View("Checkout", checkoutModel);
             }
             // todo: Finish client side validation using OrderConfirmationId
@@ -139,7 +139,7 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> Cart()
         {
             SiteUser user = await GetCurrentUserAsync();
-            CartViewModel model = await _cartServices.CreateViewModelAsync(user.CurrentCartId, PizzaDb);
+            CartViewModel model = await _cartServices.CreateViewModelAsync(user.CurrentCartId, PizzaDb, ListUtility.CreateQuantityList());
             return View(model);
         }
 

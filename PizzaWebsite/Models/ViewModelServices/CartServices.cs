@@ -13,30 +13,17 @@ namespace PizzaWebsite.Models.ViewModelServices
 {
     public class CartServices
     {
-        public async Task<CartViewModel> CreateViewModelAsync(int cartId, PizzaDatabase pizzaDb)
+        public async Task<CartViewModel> CreateViewModelAsync(int cartId, PizzaDatabase pizzaDb, List<int> quantityList)
         {
-            List<int> quantityList = ListUtility.CreateQuantityList();
             CartItemJoinList cartItemJoinList = new CartItemJoinList();
             await cartItemJoinList.LoadListByCartIdAsync(cartId, pizzaDb);
             CostSummaryServices costSummaryServices = new CostSummaryServices();
             CostSummaryViewModel costSummaryVm = costSummaryServices.CreateViewModel(new CostSummary(cartItemJoinList.Items));
             List<CartItemViewModel> cartItemVmList = new List<CartItemViewModel>();
+            CartItemServices cartItemServices = new CartItemServices();
             foreach (CartItemJoin cartItemJoin in cartItemJoinList.Items)
             {
-                CartItemViewModel cartItemVm = new CartItemViewModel()
-                {
-                    CartItemJoin = cartItemJoin,
-                    CartItemId = cartItemJoin.CartItem.Id,
-                    ProductCategory = cartItemJoin.CartItem.ProductCategory,
-                    Price = cartItemJoin.CartItem.Price.ToString("C", CultureInfo.CurrentCulture),
-                    Quantity = cartItemJoin.CartItem.Quantity,
-                    QuantityList = quantityList,
-                    CartItemQuantitySelectId = $"cartItemQuantitySelect-{cartItemJoin.CartItem.Id}",
-                    CartItemDeleteButtonId = $"cartItemDeleteButton-{cartItemJoin.CartItem.Id}",
-                    CartItemPriceCellId = $"cartItemPriceCell-{cartItemJoin.CartItem.Id}",
-                    CartItemRowId = $"cartItemRow-{cartItemJoin.CartItem.Id}"
-                };
-                await cartItemVm.UpdateAsync(pizzaDb);
+                CartItemViewModel cartItemVm = await cartItemServices.CreateViewModelAsync(cartItemJoin, pizzaDb, quantityList);
                 cartItemVmList.Add(cartItemVm);
             }
             return new CartViewModel()

@@ -2,6 +2,7 @@
 using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
+using DataLibrary.Models.Utility;
 using Microsoft.AspNet.Identity;
 using PizzaWebsite.Controllers.BaseControllers;
 using PizzaWebsite.Models;
@@ -45,7 +46,7 @@ namespace PizzaWebsite.Controllers
             foreach (CustomerOrder prevOrder in previousOrderList)
             {
                 PreviousOrderViewModel orderVm = new PreviousOrderViewModel();
-                await orderVm.InitializeAsync(false, prevOrder, null, PizzaDb);
+                await orderVm.InitializeAsync(false, prevOrder, null, PizzaDb, ListUtility.CreateQuantityList());
                 previousOrderVmList.Add(orderVm);
             }
             PreviousOrderListViewModel previousOrdersVm = new PreviousOrderListViewModel()
@@ -73,7 +74,7 @@ namespace PizzaWebsite.Controllers
                 return PreviousOrderAuthorizationErrorMessage();
             }
             PreviousOrderViewModel model = new PreviousOrderViewModel();
-            await model.InitializeAsync(true, orderJoin.Table1, orderJoin.Table2, PizzaDb);
+            await model.InitializeAsync(true, orderJoin.Table1, orderJoin.Table2, PizzaDb, ListUtility.CreateQuantityList());
             return View(model);
         }
 

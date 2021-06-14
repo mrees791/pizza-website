@@ -74,7 +74,7 @@ namespace PizzaWebsite.Models.Shop
             return SelectedDeliveryAddressId == 0;
         }
 
-        public async Task InitializeAsync(bool isPostBack, SiteUser user, PizzaDatabase pizzaDb)
+        public async Task InitializeAsync(bool isPostBack, SiteUser user, PizzaDatabase pizzaDb, List<int> quantityList)
         {
             if (!isPostBack)
             {
@@ -121,7 +121,7 @@ namespace PizzaWebsite.Models.Shop
             DeliveryAddressSelectList = deliveryAddressSelectList;
             StoreLocationSelectList = storeLocationSelectList;
             CartServices cartServices = new CartServices();
-            CartVm = await cartServices.CreateViewModelAsync(updatedUser.ConfirmOrderCartId, pizzaDb);
+            CartVm = await cartServices.CreateViewModelAsync(updatedUser.ConfirmOrderCartId, pizzaDb, quantityList);
         }
     }
 }
