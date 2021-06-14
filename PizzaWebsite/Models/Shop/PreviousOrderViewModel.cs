@@ -22,18 +22,5 @@ namespace PizzaWebsite.Models.Shop
         [Display(Name = "Total")]
         public string OrderTotal { get; set; }
         public CartViewModel CartVm { get; set; }
-
-        public async Task InitializeAsync(bool loadCartItems, CustomerOrder customerOrder, DeliveryInfo deliveryInfo, PizzaDatabase pizzaDb, List<int> quantityList)
-        {
-            Id = customerOrder.Id;
-            DateOfOrder = $"{customerOrder.DateOfOrder.ToShortDateString()} {customerOrder.DateOfOrder.ToShortTimeString()}";
-            OrderTotal = customerOrder.OrderTotal.ToString("C", CultureInfo.CurrentCulture);
-            OrderType = customerOrder.GetOrderType();
-            if (loadCartItems)
-            {
-                CartServices cartServices = new CartServices();
-                CartVm = await cartServices.CreateViewModelAsync(customerOrder.CartId, pizzaDb, quantityList);
-            }
-        }
     }
 }
