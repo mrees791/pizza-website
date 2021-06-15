@@ -3,7 +3,6 @@ using DataLibrary.Models.JoinLists.BaseClasses;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Sql;
 using DataLibrary.Models.Tables;
-using DataLibrary.Models.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +37,7 @@ namespace DataLibrary.Models.JoinLists
                 EmployeeId = employeeId,
                 StoreName = searchFilter.Name,
                 PhoneNumber = searchFilter.PhoneNumber,
-                CurrentOffset = PagedListUtility.GetOffset(pageNumber, rowsPerPage),
+                CurrentOffset = pagedListServices.GetOffset(pageNumber, rowsPerPage),
                 RowsPerPage = rowsPerPage
             };
             string whereClause = SqlUtility.CreateWhereClause(whereClauseList);
@@ -72,7 +71,7 @@ namespace DataLibrary.Models.JoinLists
         public async Task<int> GetNumberOfPagesByEmployeeIdAsync(string employeeId, StoreLocationFilter searchFilter, int rowsPerPage, PizzaDatabase pizzaDb)
         {
             int resultCount = await GetNumberOfResultsByEmployeeIdAsync(employeeId, searchFilter, rowsPerPage, pizzaDb);
-            return PagedListUtility.GetNumberOfPages(rowsPerPage, resultCount);
+            return pagedListServices.GetNumberOfPages(rowsPerPage, resultCount);
         }
 
         protected override string GetSqlJoinQuery(bool onlySelectFirst)

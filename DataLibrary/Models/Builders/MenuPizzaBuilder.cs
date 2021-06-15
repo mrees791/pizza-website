@@ -1,5 +1,4 @@
 ﻿using DataLibrary.Models.QuerySearches;
-using DataLibrary.Models.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +14,7 @@ namespace DataLibrary.Models.Builders
         public override async Task InitializeAsync(MenuItemSearch search, PizzaDatabase pizzaDb)
         {
             await base.InitializeAsync(search, pizzaDb);
-            CategoryList = ListUtility.GetPizzaCategoryList();
+            CategoryList = listServices.PizzaCategoryList;
         }
     }
 }

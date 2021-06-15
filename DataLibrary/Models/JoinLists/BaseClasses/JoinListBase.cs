@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataLibrary.Models.Services;
 using DataLibrary.Models.Sql;
 using System;
 using System.Collections.Generic;
@@ -12,11 +13,13 @@ namespace DataLibrary.Models.JoinLists.BaseClasses
         where TTable1 : Record
         where TTable2 : Record
     {
+        protected PagedListServices pagedListServices;
         public IEnumerable<Join<TTable1, TTable2>> Items { get; protected set; }
 
         public JoinListBase()
         {
             Items = new List<Join<TTable1, TTable2>>();
+            pagedListServices = new PagedListServices();
         }
 
         protected abstract string GetSqlJoinQuery(bool onlySelectFirst);

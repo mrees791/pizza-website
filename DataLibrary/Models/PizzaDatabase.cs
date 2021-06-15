@@ -1,9 +1,9 @@
 ﻿using Dapper;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.QuerySearches;
+using DataLibrary.Models.Services;
 using DataLibrary.Models.Sql;
 using DataLibrary.Models.Tables;
-using DataLibrary.Models.Utility;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -18,28 +18,29 @@ namespace DataLibrary.Models
 {
     public class PizzaDatabase : IDisposable
     {
-        private IDbConnection connection;
-        private PizzaDatabaseCommands commands;
+        private IDbConnection _connection;
+        private PizzaDatabaseCommands _commands;
+        private PagedListServices _pagedListServices;
 
         public PizzaDatabase(string connectionName = "PizzaDatabase")
         {
             string connectionString = ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
-            connection = new SqlConnection(connectionString);
-            connection.Open();
-
-            commands = new PizzaDatabaseCommands(this);
+            _connection = new SqlConnection(connectionString);
+            _connection.Open();
+            _commands = new PizzaDatabaseCommands(this);
+            _pagedListServices = new PagedListServices();
         }
 
         public void Dispose()
         {
-            connection.Close();
-            connection.Dispose();
+            _connection.Close();
+            _connection.Dispose();
         }
 
         // CRUD
         public async Task<TRecord> GetAsync<TRecord>(object id, IDbTransaction transaction = null) where TRecord : Record
         {
-            TRecord record = await connection.GetAsync<TRecord>(id, transaction);
+            TRecord record = await _connection.GetAsync<TRecord>(id, transaction);
 
             if (record != null)
             {
@@ -63,7 +64,7 @@ namespace DataLibrary.Models
                 ProviderKey = providerKey
             };
 
-            return await connection.ExecuteAsync(sql, parameters, transaction);
+            return await _connection.ExecuteAsync(sql, parameters, transaction);
         }
 
         public async Task<int> RemoveClaimAsync(string userId, string claimType, string claimValue, IDbTransaction transaction = null)
@@ -80,7 +81,7 @@ namespace DataLibrary.Models
                 ClaimValue = claimValue
             };
 
-            return await connection.ExecuteAsync(sql, parameters, transaction);
+            return await _connection.ExecuteAsync(sql, parameters, transaction);
         }
 
         public async Task<bool> UserIsInRole(SiteUser siteUser, SiteRole siteRole, IDbTransaction transaction = null)
@@ -137,7 +138,7 @@ namespace DataLibrary.Models
         private async Task<SiteUser> GetSiteUserAsync(string whereClause, object parameters, IDbTransaction transaction = null)
         {
             string sql = $"{SelectQueries.GetSiteUserSelectQuery(true)} {whereClause}";
-            SiteUser user = await connection.QuerySingleOrDefaultAsync<SiteUser>(sql, parameters, transaction);
+            SiteUser user = await _connection.QuerySingleOrDefaultAsync<SiteUser>(sql, parameters, transaction);
 
             if (user != null)
             {
@@ -164,7 +165,7 @@ namespace DataLibrary.Models
         private async Task<EmployeeLocation> GetEmployeeLocationAsync(string whereClause, object parameters, IDbTransaction transaction = null)
         {
             string sql = $"{SelectQueries.GetEmployeeLocationSelectQuery(true)} {whereClause}";
-            EmployeeLocation employeeLocation = await connection.QuerySingleOrDefaultAsync<EmployeeLocation>(sql, parameters, transaction);
+            EmployeeLocation employeeLocation = await _connection.QuerySingleOrDefaultAsync<EmployeeLocation>(sql, parameters, transaction);
 
             if (employeeLocation != null)
             {
@@ -189,7 +190,7 @@ namespace DataLibrary.Models
         private async Task<Employee> GetEmployeeAsync(string whereClause, object parameters, IDbTransaction transaction = null)
         {
             string sql = $"{SelectQueries.GetEmployeeSelectQuery(true)} {whereClause}";
-            Employee employee = await connection.QuerySingleOrDefaultAsync<Employee>(sql, parameters, transaction);
+            Employee employee = await _connection.QuerySingleOrDefaultAsync<Employee>(sql, parameters, transaction);
 
             if (employee != null)
             {
@@ -217,7 +218,7 @@ namespace DataLibrary.Models
         {
             string sql = $"{SelectQueries.GetUserRoleSelectQuery(true)} {whereClause}";
 
-            UserRole userRole = await connection.QuerySingleOrDefaultAsync<UserRole>(sql, parameters, transaction);
+            UserRole userRole = await _connection.QuerySingleOrDefaultAsync<UserRole>(sql, parameters, transaction);
 
             if (userRole != null)
             {
@@ -245,7 +246,7 @@ namespace DataLibrary.Models
         {
             string sql = $"{SelectQueries.GetUserLoginSelectQuery(true)} {whereClause}";
 
-            UserLogin userLogin = await connection.QuerySingleOrDefaultAsync<UserLogin>(sql, parameters, transaction);
+            UserLogin userLogin = await _connection.QuerySingleOrDefaultAsync<UserLogin>(sql, parameters, transaction);
 
             if (userLogin != null)
             {
@@ -257,7 +258,7 @@ namespace DataLibrary.Models
 
         public async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(IDbTransaction transaction = null) where TRecord : Record
         {
-            IEnumerable<TRecord> list = await connection.GetListAsync<TRecord>(new { }, transaction);
+            IEnumerable<TRecord> list = await _connection.GetListAsync<TRecord>(new { }, transaction);
 
             foreach (TRecord record in list)
             {
@@ -277,7 +278,7 @@ namespace DataLibrary.Models
 
             string conditions = $"{whereClauseBase.GetWhereConditions()} ORDER BY {orderBy.GetConditions()}";
 
-            IEnumerable<TRecord> list = await connection.GetListAsync<TRecord>(conditions, whereClauseBase, transaction);
+            IEnumerable<TRecord> list = await _connection.GetListAsync<TRecord>(conditions, whereClauseBase, transaction);
 
             foreach (TRecord record in list)
             {
@@ -309,7 +310,7 @@ namespace DataLibrary.Models
 
         internal async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(string conditions, object parameters, IDbTransaction transaction = null) where TRecord : Record
         {
-            IEnumerable<TRecord> list = await connection.GetListAsync<TRecord>(conditions, parameters, transaction);
+            IEnumerable<TRecord> list = await _connection.GetListAsync<TRecord>(conditions, parameters, transaction);
 
             foreach (TRecord record in list)
             {
@@ -321,7 +322,7 @@ namespace DataLibrary.Models
 
         public async Task<IEnumerable<TRecord>> GetListAsync<TRecord>(object whereConditions, IDbTransaction transaction = null) where TRecord : Record
         {
-            IEnumerable<TRecord> list = await connection.GetListAsync<TRecord>(whereConditions, transaction);
+            IEnumerable<TRecord> list = await _connection.GetListAsync<TRecord>(whereConditions, transaction);
 
             foreach (TRecord record in list)
             {
@@ -340,7 +341,7 @@ namespace DataLibrary.Models
                 SortOrder = sortOrder
             };
 
-            IEnumerable<TRecord> list = await connection.GetListPagedAsync<TRecord>(pageNumber, rowsPerPage, whereClauseBase.GetWhereConditions(), orderBy.GetConditions(), whereClauseBase, transaction);
+            IEnumerable<TRecord> list = await _connection.GetListPagedAsync<TRecord>(pageNumber, rowsPerPage, whereClauseBase.GetWhereConditions(), orderBy.GetConditions(), whereClauseBase, transaction);
 
             foreach (TRecord record in list)
             {
@@ -353,13 +354,13 @@ namespace DataLibrary.Models
         public async Task<int> GetNumberOfRecordsAsync<TRecord>(WhereClauseBase whereClauseBase, IDbTransaction transaction = null) where TRecord : Record
         {
             string conditions = whereClauseBase.GetWhereConditions();
-            return await connection.RecordCountAsync<TRecord>(conditions, parameters: whereClauseBase, transaction: transaction);
+            return await _connection.RecordCountAsync<TRecord>(conditions, parameters: whereClauseBase, transaction: transaction);
         }
 
         public async Task<int> GetNumberOfPagesAsync<TRecord>(int rowsPerPage, WhereClauseBase whereClauseBase, IDbTransaction transaction = null) where TRecord : Record
         {
             int resultCount = await GetNumberOfRecordsAsync<TRecord>(whereClauseBase);
-            return PagedListUtility.GetNumberOfPages(rowsPerPage, resultCount);
+            return _pagedListServices.GetNumberOfPages(rowsPerPage, resultCount);
         }
 
         public async Task<dynamic> InsertAsync(Record record)
@@ -402,25 +403,25 @@ namespace DataLibrary.Models
 
         public async Task<int> DeleteByIdAsync<TRecord>(object id, IDbTransaction transaction = null) where TRecord : Record
         {
-            return await connection.DeleteAsync<TRecord>(id, null);
+            return await _connection.DeleteAsync<TRecord>(id, null);
         }
 
         public async Task<int> DeleteAsync(Record record, IDbTransaction transaction = null)
         {
-            return await connection.DeleteAsync(record, transaction);
+            return await _connection.DeleteAsync(record, transaction);
         }
 
         internal async Task<int> DeleteListAsync<TRecord>(object whereConditions, IDbTransaction transaction = null) where TRecord : Record
         {
-            return await connection.DeleteListAsync<TRecord>(whereConditions, transaction);
+            return await _connection.DeleteListAsync<TRecord>(whereConditions, transaction);
         }
 
         public async Task<int> DeleteListAsync<TRecord>(object whereConditions) where TRecord : Record
         {
-            return await connection.DeleteListAsync<TRecord>(whereConditions, null);
+            return await _connection.DeleteListAsync<TRecord>(whereConditions, null);
         }
 
-        public PizzaDatabaseCommands Commands { get => commands; }
-        internal IDbConnection Connection { get => connection; }
+        public PizzaDatabaseCommands Commands { get => _commands; }
+        internal IDbConnection Connection { get => _connection; }
     }
 }
