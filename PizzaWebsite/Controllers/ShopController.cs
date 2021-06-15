@@ -79,32 +79,61 @@ namespace PizzaWebsite.Controllers
             };
             if (model.IsDelivery())
             {
-                if (model.IsNewDeliveryAddress() && model.SaveNewDeliveryAddress)
+                // Initialize delivery info
+                DeliveryInfo deliveryInfo = null;
+                if (model.IsNewDeliveryAddress())
                 {
-                    DeliveryAddress deliveryAddress = new DeliveryAddress()
+                    deliveryInfo = new DeliveryInfo()
                     {
-                        UserId = User.Identity.GetUserId(),
-                        Name = model.DeliveryAddressName,
-                        AddressType = model.SelectedDeliveryAddressType,
-                        City = model.DeliveryCity,
-                        PhoneNumber = model.DeliveryPhoneNumber,
-                        State = model.SelectedDeliveryState,
-                        StreetAddress = model.DeliveryStreetAddress,
-                        ZipCode = model.DeliveryZipCode
+                        DateOfDelivery = DateTime.Now,
+                        DeliveryAddressName = model.DeliveryAddressName,
+                        DeliveryAddressType = model.SelectedDeliveryAddressType,
+                        DeliveryCity = model.DeliveryCity,
+                        DeliveryPhoneNumber = model.DeliveryPhoneNumber,
+                        DeliveryState = model.SelectedDeliveryState,
+                        DeliveryStreetAddress = model.DeliveryStreetAddress,
+                        DeliveryZipCode = model.DeliveryZipCode
                     };
-                    await PizzaDb.InsertAsync(deliveryAddress);
+                    if (model.SaveNewDeliveryAddress)
+                    {
+                        DeliveryAddress deliveryAddress = new DeliveryAddress()
+                        {
+                            UserId = User.Identity.GetUserId(),
+                            Name = model.DeliveryAddressName,
+                            AddressType = model.SelectedDeliveryAddressType,
+                            City = model.DeliveryCity,
+                            PhoneNumber = model.DeliveryPhoneNumber,
+                            State = model.SelectedDeliveryState,
+                            StreetAddress = model.DeliveryStreetAddress,
+                            ZipCode = model.DeliveryZipCode
+                        };
+                        await PizzaDb.InsertAsync(deliveryAddress);
+                    }
                 }
-                DeliveryInfo deliveryInfo = new DeliveryInfo()
+                else
                 {
-                    DateOfDelivery = DateTime.Now,
-                    DeliveryAddressName = model.DeliveryAddressName,
-                    DeliveryAddressType = model.SelectedDeliveryAddressType,
-                    DeliveryCity = model.DeliveryCity,
-                    DeliveryPhoneNumber = model.DeliveryPhoneNumber,
-                    DeliveryState = model.SelectedDeliveryState,
-                    DeliveryStreetAddress = model.DeliveryStreetAddress,
-                    DeliveryZipCode = model.DeliveryZipCode
-                };
+                    DeliveryAddress deliveryAddress = await PizzaDb.GetAsync<DeliveryAddress>(model.SelectedDeliveryAddressId);
+                    if (deliveryAddress == null)
+                    {
+                        throw new Exception($"Delivery address with ID {model.SelectedDeliveryAddressId} does not exist.");
+                    }
+                    bool isAuthorized = await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId(), deliveryAddress);
+                    if (!isAuthorized)
+                    {
+                        throw new Exception($"User does not have authorization to access delivery address with ID {model.SelectedDeliveryAddressId}.");
+                    }
+                    deliveryInfo = new DeliveryInfo()
+                    {
+                        DateOfDelivery = DateTime.Now,
+                        DeliveryAddressName = deliveryAddress.Name,
+                        DeliveryAddressType = deliveryAddress.AddressType,
+                        DeliveryCity = deliveryAddress.City,
+                        DeliveryPhoneNumber = deliveryAddress.PhoneNumber,
+                        DeliveryState = deliveryAddress.State,
+                        DeliveryStreetAddress = deliveryAddress.StreetAddress,
+                        DeliveryZipCode = deliveryAddress.ZipCode
+                    };
+                }
                 await PizzaDb.Commands.AddCustomerOrderAsync(user, customerOrder, deliveryInfo);
             }
             else

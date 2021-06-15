@@ -1,4 +1,5 @@
-﻿@model PizzaWebsite.Models.Shop.CheckoutViewModel
+﻿@using PizzaWebsite.Models.Shop
+@model CheckoutViewModel
 <div class="form-group">
     @Html.LabelFor(model => model.SelectedDeliveryAddressId, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
@@ -6,58 +7,15 @@
         @Html.ValidationMessageFor(model => model.SelectedDeliveryAddressId, "", new { @class = "text-danger" })
     </div>
 </div>
-<div class="form-group" id="saveNewDeliveryAddressGroup">
-    @Html.LabelFor(model => model.SaveNewDeliveryAddress, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.CheckBoxFor(model => model.SaveNewDeliveryAddress, new { htmlAttributes = new { @class = "form-control" } })
+@if (Model.IsNewDeliveryAddress())
+{
+    <div id="deliveryFieldsGroup">
+        @Html.Partial("_CheckoutDeliveryFields")
     </div>
-</div>
-<div class="form-group">
-    @Html.LabelFor(model => model.DeliveryAddressName, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.EditorFor(model => model.DeliveryAddressName, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.DeliveryAddressName, "", new { @class = "text-danger" })
+}
+else
+{
+    <div id="deliveryFieldsGroup" style="display: none;">
+        @Html.Partial("_CheckoutDeliveryFields")
     </div>
-</div>
-<div class="form-group">
-    @Html.LabelFor(model => model.SelectedDeliveryAddressType, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.DropDownListFor(m => m.SelectedDeliveryAddressType, new SelectList(Model.DeliveryAddressTypeList), "Address Type")
-        @Html.ValidationMessageFor(model => model.SelectedDeliveryAddressType, "", new { @class = "text-danger" })
-    </div>
-</div>
-<div class="form-group">
-    @Html.LabelFor(model => model.DeliveryStreetAddress, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.EditorFor(model => model.DeliveryStreetAddress, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.DeliveryStreetAddress, "", new { @class = "text-danger" })
-    </div>
-</div>
-<div class="form-group">
-    @Html.LabelFor(model => model.DeliveryCity, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.EditorFor(model => model.DeliveryCity, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.DeliveryCity, "", new { @class = "text-danger" })
-    </div>
-</div>
-<div class="form-group">
-    @Html.LabelFor(model => model.SelectedDeliveryState, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.DropDownListFor(m => m.SelectedDeliveryState, new SelectList(Model.DeliveryStateList), "State")
-        @Html.ValidationMessageFor(model => model.SelectedDeliveryState, "", new { @class = "text-danger" })
-    </div>
-</div>
-<div class="form-group">
-    @Html.LabelFor(model => model.DeliveryZipCode, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.EditorFor(model => model.DeliveryZipCode, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.DeliveryZipCode, "", new { @class = "text-danger" })
-    </div>
-</div>
-<div class="form-group">
-    @Html.LabelFor(model => model.DeliveryPhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.EditorFor(model => model.DeliveryPhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.DeliveryPhoneNumber, "", new { @class = "text-danger" })
-    </div>
-</div>
+}

@@ -59,6 +59,7 @@ namespace PizzaWebsite.Models.ViewModelServices
                 DeliveryAddressTypeList = ListUtility.CreateDeliveryAddressTypeList(),
                 DeliveryAddressSelectList = deliveryAddressSelectList,
                 StoreLocationSelectList = storeLocationSelectList,
+                SaveNewDeliveryAddress = true,
                 CartVm = await cartServices.CreateViewModelAsync(updatedUser.ConfirmOrderCartId, pizzaDb, quantityList)
             };
         }

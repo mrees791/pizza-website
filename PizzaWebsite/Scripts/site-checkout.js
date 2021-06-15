@@ -37,16 +37,14 @@ const pizzaSiteCheckoutNs = {
     },
     initializeDeliveryAddressSelect: () => {
         var $deliveryAddressSelect = $('#SelectedDeliveryAddressId')
-        var $saveNewDeliveryGroup = $('#saveNewDeliveryAddressGroup');
+        var $deliveryFieldsGroup = $('#deliveryFieldsGroup');
 
         $deliveryAddressSelect.on("change", function () {
             var addressId = $deliveryAddressSelect.val();
             addressIsSelected = addressId != 0;
-
             if (addressIsSelected) {
-                
                 var params = { addressId: addressId };
-                pizzaSiteNs.ajaxCall('/Shop/GetDeliveryAddressAjax', JSON.stringify(params), 'POST').
+                pizzaSiteNs.ajaxCall('/ManageDeliveryAddresses/GetDeliveryAddressAjax', JSON.stringify(params), 'POST').
                     fail(function (response) {
                         console.log(response);
                     }).
@@ -60,11 +58,11 @@ const pizzaSiteCheckoutNs = {
                         var phoneNumber = response[6];
 
                         pizzaSiteCheckoutNs.fillDeliveryFeilds(name, addressType, streetAddress, city, state, zipCode, phoneNumber);
-                        $saveNewDeliveryGroup.hide();
+                        $deliveryFieldsGroup.hide();
                     });
             } else {
                 pizzaSiteCheckoutNs.resetDeliveryFields();
-                $saveNewDeliveryGroup.show();
+                $deliveryFieldsGroup.show();
             }
         });
     },

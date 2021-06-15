@@ -358,6 +358,7 @@
     <Content Include="Views\Employee\Index.cshtml" />
     <Content Include="Views\ManageEmployees\ViewLocations.cshtml" />
     <Content Include="Views\Shared\ErrorMessage.cshtml" />
+    <Content Include="Views\Shop\_CheckoutDeliveryFields.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
