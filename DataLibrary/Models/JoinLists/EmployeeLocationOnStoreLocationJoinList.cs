@@ -40,8 +40,8 @@ namespace DataLibrary.Models.JoinLists
                 CurrentOffset = pagedListServices.GetOffset(pageNumber, rowsPerPage),
                 RowsPerPage = rowsPerPage
             };
-            string whereClause = SqlUtility.CreateWhereClause(whereClauseList);
-            string offsetClause = SqlUtility.CreateOffsetClause();
+            string whereClause = sqlServices.CreateWhereClause(whereClauseList);
+            string offsetClause = sqlServices.CreateOffsetClause();
             await LoadListAsync(whereClause, parameters, false, "s.Name", SortOrder.Ascending, pizzaDb, offsetClause: offsetClause);
         }
 
@@ -53,7 +53,7 @@ namespace DataLibrary.Models.JoinLists
                 new WhereClauseItem("s.Name", "StoreName", searchFilter.Name, ComparisonType.Like),
                 new WhereClauseItem("s.PhoneNumber", "PhoneNumber", searchFilter.PhoneNumber, ComparisonType.Like)
             };
-            string whereClause = SqlUtility.CreateWhereClause(whereClauseList);
+            string whereClause = sqlServices.CreateWhereClause(whereClauseList);
             string sql = $@"SELECT COUNT(l.Id)
                             From EmployeeLocation l
                             INNER JOIN StoreLocation s
@@ -76,7 +76,7 @@ namespace DataLibrary.Models.JoinLists
 
         protected override string GetSqlJoinQuery(bool onlySelectFirst)
         {
-            return $@"SELECT {SqlUtility.CreateTopClause(onlySelectFirst)}
+            return $@"SELECT {sqlServices.CreateTopClause(onlySelectFirst)}
                       l.Id, l.EmployeeId, l.StoreId,
                       s.Id, s.Name, s.StreetAddress, s.City, s.State, s.ZipCode, s.PhoneNumber, s.isActiveLocation
                       FROM EmployeeLocation l

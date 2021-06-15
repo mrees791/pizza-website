@@ -37,7 +37,7 @@ namespace DataLibrary.Models.JoinLists
 
         protected override string GetSqlJoinQuery(bool onlySelectFirst)
         {
-            return $@"SELECT {SqlUtility.CreateTopClause(onlySelectFirst)}
+            return $@"SELECT {sqlServices.CreateTopClause(onlySelectFirst)}
                       e.Id, e.UserId, l.Id, l.EmployeeId, l.StoreId
                       FROM Employee e
                       INNER JOIN EmployeeLocation l

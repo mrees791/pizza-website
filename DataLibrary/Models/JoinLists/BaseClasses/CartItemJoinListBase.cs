@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataLibrary.Models.Services;
 using DataLibrary.Models.Sql;
 using DataLibrary.Models.Tables;
 using System;
@@ -19,15 +20,17 @@ namespace DataLibrary.Models.JoinLists.BaseClasses
         public IEnumerable<CartItemJoin> Items { get; protected set; }
         public abstract Task LoadListByCartIdAsync(int cartId, PizzaDatabase pizzaDb);
         protected abstract string GetSqlJoinQuery(bool onlySelectFirst);
+        internal SqlServices sqlServices;
 
         public CartItemJoinListBase()
         {
             Items = new List<CartItemJoin>();
+            sqlServices = new SqlServices();
         }
 
         protected async Task LoadListAsync(string whereClause, object parameters, bool onlySelectFirst, string orderByColumn, SortOrder sortOrder, PizzaDatabase pizzaDb)
         {
-            string sqlJoinQuery = $"{GetSqlJoinQuery(onlySelectFirst)} {whereClause} {SqlUtility.CreateOrderByClause(orderByColumn, sortOrder)}";
+            string sqlJoinQuery = $"{GetSqlJoinQuery(onlySelectFirst)} {whereClause} {sqlServices.CreateOrderByClause(orderByColumn, sortOrder)}";
 
             Items = await pizzaDb.Connection.QueryAsync<CartItem, TCategoryTable, CartItemJoin>(
                 sqlJoinQuery,

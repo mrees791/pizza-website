@@ -14,12 +14,14 @@ namespace DataLibrary.Models.JoinLists.BaseClasses
         where TTable2 : Record
     {
         protected PagedListServices pagedListServices;
+        internal SqlServices sqlServices;
         public IEnumerable<Join<TTable1, TTable2>> Items { get; protected set; }
 
         public JoinListBase()
         {
             Items = new List<Join<TTable1, TTable2>>();
             pagedListServices = new PagedListServices();
+            sqlServices = new SqlServices();
         }
 
         protected abstract string GetSqlJoinQuery(bool onlySelectFirst);
@@ -28,7 +30,7 @@ namespace DataLibrary.Models.JoinLists.BaseClasses
         {
             string sqlJoinQuery = $@"{GetSqlJoinQuery(onlySelectFirst)}
                                      {whereClause}
-                                     {SqlUtility.CreateOrderByClause(orderByColumn, sortOrder)}
+                                     {sqlServices.CreateOrderByClause(orderByColumn, sortOrder)}
                                      {offsetClause}";
 
             Items = await pizzaDb.Connection.QueryAsync<TTable1, TTable2, Join<TTable1, TTable2>>(
