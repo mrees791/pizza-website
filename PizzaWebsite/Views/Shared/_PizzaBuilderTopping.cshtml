@@ -5,22 +5,22 @@
 <input type="hidden" name="ToppingVmList[@Model.ListIndex].Category" value="@Model.Category" />
 <input type="hidden" name="ToppingVmList[@Model.ListIndex].Id" value="@Model.Id" />
 <input type="hidden" name="ToppingVmList[@Model.ListIndex].Name" value="@Model.Name" />
-@for (int iToppingAmount = 0; iToppingAmount < Model.AmountList.Count; iToppingAmount++)
+@for (int iToppingAmount = 0; iToppingAmount < Model.AmountList.Count(); iToppingAmount++)
 {
-    <input type="hidden" name="ToppingVmList[@Model.ListIndex].AmountList[@iToppingAmount]" value="@Model.AmountList[iToppingAmount]" />
+    <input type="hidden" name="ToppingVmList[@Model.ListIndex].AmountList[@iToppingAmount]" value="@Model.AmountList.ElementAt(iToppingAmount)" />
 }
-@for (int iToppingHalf = 0; iToppingHalf < Model.ToppingHalfList.Count; iToppingHalf++)
+@for (int iToppingHalf = 0; iToppingHalf < Model.ToppingHalfList.Count(); iToppingHalf++)
 {
-    <input type="hidden" name="ToppingVmList[@Model.ListIndex].ToppingHalfList[@iToppingHalf]" value="@Model.ToppingHalfList[iToppingHalf]" />
+    <input type="hidden" name="ToppingVmList[@Model.ListIndex].ToppingHalfList[@iToppingHalf]" value="@Model.ToppingHalfList.ElementAt(iToppingHalf)" />
 }
 <div class="form-group pb-topping">
     <div class="col-md-2">
         <label class="control-label">@Model.Name</label>
     </div>
     <div class="col-md-3">
-        @for (int iToppingAmount = 0; iToppingAmount < Model.AmountList.Count; iToppingAmount++)
+        @for (int iToppingAmount = 0; iToppingAmount < Model.AmountList.Count(); iToppingAmount++)
         {
-            string toppingAmount = Model.AmountList[iToppingAmount];
+            string toppingAmount = Model.AmountList.ElementAt(iToppingAmount);
             if (Model.SelectedAmount == toppingAmount)
             {
                 <input type="radio" name="@($"ToppingVmList[{Model.ListIndex}].SelectedAmount")" id="@($"ToppingVmList[{Model.ListIndex}].AmountList[{iToppingAmount}]")" value="@toppingAmount" checked />
@@ -33,9 +33,9 @@
         }
     </div>
     <div class="col-md-2">
-        @for (int iToppingHalf = 0; iToppingHalf < Model.ToppingHalfList.Count; iToppingHalf++)
+        @for (int iToppingHalf = 0; iToppingHalf < Model.ToppingHalfList.Count(); iToppingHalf++)
         {
-            string toppingHalf = Model.ToppingHalfList[iToppingHalf];
+            string toppingHalf = Model.ToppingHalfList.ElementAt(iToppingHalf);
             if (Model.SelectedToppingHalf == toppingHalf)
             {
                 <input type="radio" name="@($"ToppingVmList[{Model.ListIndex}].SelectedToppingHalf")" id="@($"ToppingVmList[{Model.ListIndex}].ToppingHalfList[{iToppingHalf}]")" value="@toppingHalf" checked />
