@@ -8,7 +8,6 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Carts
 {
-
     public class CartItemViewModel
     {
         public int CartItemId { get; set; }
