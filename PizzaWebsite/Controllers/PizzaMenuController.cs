@@ -19,6 +19,13 @@ namespace PizzaWebsite.Controllers
 {
     public class PizzaMenuController : BaseController
     {
+        private PizzaBuilderServices _pizzaBuilderServices;
+
+        public PizzaMenuController()
+        {
+            _pizzaBuilderServices = new PizzaBuilderServices();
+        }
+
         public async Task<ActionResult> Index()
         {
             IEnumerable<int> quantityList = ListServices.DefaultQuantityList;
@@ -157,7 +164,7 @@ namespace PizzaWebsite.Controllers
                 };
                 toppingList.Add(topping);
             }
-            return PizzaBuilderManager.CreateToppingViewModelList(toppingList, toppingTypeList, toppingAmountList, toppingHalfList);
+            return _pizzaBuilderServices.CreateToppingViewModelList(toppingList, toppingTypeList, toppingAmountList, toppingHalfList);
         }
 
         [Authorize]

@@ -19,6 +19,13 @@ namespace PizzaWebsite.Controllers
     [Authorize(Roles = "Admin,Executive")]
     public class ManagePizzaMenuController : BaseManageMenuController<MenuPizza, ManageMenuPizzaViewModel>
     {
+        private PizzaBuilderServices _pizzaBuilderServices;
+
+        public ManagePizzaMenuController()
+        {
+            _pizzaBuilderServices = new PizzaBuilderServices();
+        }
+
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);
@@ -135,7 +142,7 @@ namespace PizzaWebsite.Controllers
                 };
                 toppingList.Add(topping);
             }
-            return PizzaBuilderManager.CreateToppingViewModelList(toppingList, toppingTypeList, toppingAmountList, toppingHalfList);
+            return _pizzaBuilderServices.CreateToppingViewModelList(toppingList, toppingTypeList, toppingAmountList, toppingHalfList);
         }
 
         private List<MenuPizzaTopping> GetToppingRecordsFromViewModel(ManageMenuPizzaViewModel model)

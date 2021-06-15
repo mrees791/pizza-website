@@ -11,9 +11,9 @@ using System.Web;
 
 namespace PizzaWebsite.Models.PizzaBuilders
 {
-    public static class PizzaBuilderManager
+    public class PizzaBuilderServices
     {
-        public static List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<PizzaTopping> toppingList, IEnumerable<MenuPizzaToppingType> toppingTypeList,
+        public List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<PizzaTopping> toppingList, IEnumerable<MenuPizzaToppingType> toppingTypeList,
             IEnumerable<string> toppingAmountList, IEnumerable<string> toppingHalfList)
         {
             List<PizzaToppingViewModel> toppingVmList = new List<PizzaToppingViewModel>();
