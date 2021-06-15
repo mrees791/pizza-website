@@ -1,24 +1,21 @@
-﻿using DataLibrary.Models.QueryFilters;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
+using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Controllers.BaseControllers;
-using PizzaWebsite.Models;
 using PizzaWebsite.Models.ManageMenus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
     [Authorize(Roles = "Admin,Executive")]
-    public class ManagePizzaToppingTypeMenuController : BaseManageMenuController<MenuPizzaToppingType, ManageMenuPizzaToppingTypeViewModel>
+    public class
+        ManagePizzaToppingTypeMenuController : BaseManageMenuController<MenuPizzaToppingType,
+            ManageMenuPizzaToppingTypeViewModel>
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);
-            MenuPizzaToppingTypeFilter searchFilter = new MenuPizzaToppingTypeFilter()
+            MenuPizzaToppingTypeFilter searchFilter = new MenuPizzaToppingTypeFilter
             {
                 Name = name
             };
@@ -27,7 +24,7 @@ namespace PizzaWebsite.Controllers
 
         public override async Task<ActionResult> Add()
         {
-            MenuPizzaToppingType topping = new MenuPizzaToppingType()
+            MenuPizzaToppingType topping = new MenuPizzaToppingType
             {
                 AvailableForPurchase = true
             };
@@ -49,7 +46,8 @@ namespace PizzaWebsite.Controllers
             return await Edit(model, model.Name);
         }
 
-        protected override async Task<ManageMenuPizzaToppingTypeViewModel> RecordToViewModelAsync(MenuPizzaToppingType record)
+        protected override async Task<ManageMenuPizzaToppingTypeViewModel> RecordToViewModelAsync(
+            MenuPizzaToppingType record)
         {
             return await Task.FromResult(new ManageMenuPizzaToppingTypeViewModel
             {
@@ -72,7 +70,7 @@ namespace PizzaWebsite.Controllers
 
         protected override MenuPizzaToppingType ViewModelToRecord(ManageMenuPizzaToppingTypeViewModel model)
         {
-            return new MenuPizzaToppingType()
+            return new MenuPizzaToppingType
             {
                 Id = model.Id,
                 AvailableForPurchase = model.AvailableForPurchase,

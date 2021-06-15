@@ -1,13 +1,10 @@
-﻿using Dapper;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Dapper;
 using DataLibrary.Models.JoinLists.BaseClasses;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Sql;
 using DataLibrary.Models.Tables;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataLibrary.Models.JoinLists
 {
@@ -24,9 +21,10 @@ namespace DataLibrary.Models.JoinLists
         }
 
         // Paged lists
-        public async Task LoadPagedListByEmployeeIdAsync(string employeeId, StoreLocationFilter searchFilter, int pageNumber, int rowsPerPage, PizzaDatabase pizzaDb)
+        public async Task LoadPagedListByEmployeeIdAsync(string employeeId, StoreLocationFilter searchFilter,
+            int pageNumber, int rowsPerPage, PizzaDatabase pizzaDb)
         {
-            List<WhereClauseItem> whereClauseList = new List<WhereClauseItem>()
+            List<WhereClauseItem> whereClauseList = new List<WhereClauseItem>
             {
                 new WhereClauseItem("l.EmployeeId", "EmployeeId", employeeId, ComparisonType.Equals),
                 new WhereClauseItem("s.Name", "StoreName", searchFilter.Name, ComparisonType.Like),
@@ -36,24 +34,26 @@ namespace DataLibrary.Models.JoinLists
             {
                 EmployeeId = employeeId,
                 StoreName = searchFilter.Name,
-                PhoneNumber = searchFilter.PhoneNumber,
-                CurrentOffset = pagedListServices.GetOffset(pageNumber, rowsPerPage),
+                searchFilter.PhoneNumber,
+                CurrentOffset = PagedListServices.GetOffset(pageNumber, rowsPerPage),
                 RowsPerPage = rowsPerPage
             };
-            string whereClause = sqlServices.CreateWhereClause(whereClauseList);
-            string offsetClause = sqlServices.CreateOffsetClause();
-            await LoadListAsync(whereClause, parameters, false, "s.Name", SortOrder.Ascending, pizzaDb, offsetClause: offsetClause);
+            string whereClause = SqlServices.CreateWhereClause(whereClauseList);
+            string offsetClause = SqlServices.CreateOffsetClause();
+            await LoadListAsync(whereClause, parameters, false, "s.Name", SortOrder.Ascending, pizzaDb,
+                offsetClause: offsetClause);
         }
 
-        public async Task<int> GetNumberOfResultsByEmployeeIdAsync(string employeeId, StoreLocationFilter searchFilter, int rowsPerPage, PizzaDatabase pizzaDb)
+        public async Task<int> GetNumberOfResultsByEmployeeIdAsync(string employeeId, StoreLocationFilter searchFilter,
+            int rowsPerPage, PizzaDatabase pizzaDb)
         {
-            List<WhereClauseItem> whereClauseList = new List<WhereClauseItem>()
+            List<WhereClauseItem> whereClauseList = new List<WhereClauseItem>
             {
                 new WhereClauseItem("l.EmployeeId", "EmployeeId", employeeId, ComparisonType.Equals),
                 new WhereClauseItem("s.Name", "StoreName", searchFilter.Name, ComparisonType.Like),
                 new WhereClauseItem("s.PhoneNumber", "PhoneNumber", searchFilter.PhoneNumber, ComparisonType.Like)
             };
-            string whereClause = sqlServices.CreateWhereClause(whereClauseList);
+            string whereClause = SqlServices.CreateWhereClause(whereClauseList);
             string sql = $@"SELECT COUNT(l.Id)
                             From EmployeeLocation l
                             INNER JOIN StoreLocation s
@@ -63,20 +63,21 @@ namespace DataLibrary.Models.JoinLists
             {
                 EmployeeId = employeeId,
                 StoreName = searchFilter.Name,
-                PhoneNumber = searchFilter.PhoneNumber
+                searchFilter.PhoneNumber
             };
             return await pizzaDb.Connection.ExecuteScalarAsync<int>(sql, parameters);
         }
 
-        public async Task<int> GetNumberOfPagesByEmployeeIdAsync(string employeeId, StoreLocationFilter searchFilter, int rowsPerPage, PizzaDatabase pizzaDb)
+        public async Task<int> GetNumberOfPagesByEmployeeIdAsync(string employeeId, StoreLocationFilter searchFilter,
+            int rowsPerPage, PizzaDatabase pizzaDb)
         {
             int resultCount = await GetNumberOfResultsByEmployeeIdAsync(employeeId, searchFilter, rowsPerPage, pizzaDb);
-            return pagedListServices.GetNumberOfPages(rowsPerPage, resultCount);
+            return PagedListServices.GetNumberOfPages(rowsPerPage, resultCount);
         }
 
         protected override string GetSqlJoinQuery(bool onlySelectFirst)
         {
-            return $@"SELECT {sqlServices.CreateTopClause(onlySelectFirst)}
+            return $@"SELECT {SqlServices.CreateTopClause(onlySelectFirst)}
                       l.Id, l.EmployeeId, l.StoreId,
                       s.Id, s.Name, s.StreetAddress, s.City, s.State, s.ZipCode, s.PhoneNumber, s.isActiveLocation
                       FROM EmployeeLocation l

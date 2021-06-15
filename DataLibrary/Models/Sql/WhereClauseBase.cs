@@ -1,21 +1,18 @@
-﻿using DataLibrary.Models.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using DataLibrary.Models.Services;
 
 namespace DataLibrary.Models.Sql
 {
     public abstract class WhereClauseBase
     {
-        private SqlServices _sqlServices;
-        internal abstract string GetWhereConditions();
+        private readonly SqlServices _sqlServices;
 
         public WhereClauseBase()
         {
             _sqlServices = new SqlServices();
         }
+
+        internal abstract string GetWhereConditions();
 
         protected string GetWhereConditions(List<WhereClauseItem> items)
         {

@@ -1,4 +1,8 @@
-﻿using DataLibrary.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using DataLibrary.Models;
 using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
@@ -7,19 +11,13 @@ using PizzaWebsite.Controllers.BaseControllers;
 using PizzaWebsite.Models;
 using PizzaWebsite.Models.Shop;
 using PizzaWebsite.Models.ViewModelServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
     [Authorize]
     public class ManagePreviousOrdersController : BaseController
     {
-        private PreviousOrderServices _previousOrderServices;
+        private readonly PreviousOrderServices _previousOrderServices;
 
         public ManagePreviousOrdersController()
         {
@@ -32,15 +30,17 @@ namespace PizzaWebsite.Controllers
             {
                 page = 1;
             }
+
             if (!rowsPerPage.HasValue)
             {
                 rowsPerPage = 10;
             }
-            PreviousOrderSearch search = new PreviousOrderSearch()
+
+            PreviousOrderSearch search = new PreviousOrderSearch
             {
                 UserId = User.Identity.GetUserId()
             };
-            PaginationViewModel paginationVm = new PaginationViewModel()
+            PaginationViewModel paginationVm = new PaginationViewModel
             {
                 QueryString = Request.QueryString,
                 CurrentPage = page.Value,
@@ -50,13 +50,17 @@ namespace PizzaWebsite.Controllers
             };
             IEnumerable<int> quantityList = ListServices.DefaultQuantityList;
             List<PreviousOrderViewModel> previousOrderVmList = new List<PreviousOrderViewModel>();
-            IEnumerable<CustomerOrder> previousOrderList = await PizzaDb.GetPagedListAsync<CustomerOrder>(page.Value, rowsPerPage.Value, "Id", SortOrder.Descending, search);
+            IEnumerable<CustomerOrder> previousOrderList =
+                await PizzaDb.GetPagedListAsync<CustomerOrder>(page.Value, rowsPerPage.Value, "Id",
+                    SortOrder.Descending, search);
             foreach (CustomerOrder prevOrder in previousOrderList)
             {
-                PreviousOrderViewModel orderVm = await _previousOrderServices.CreateViewModelAsync(false, prevOrder, null, PizzaDb, quantityList);
+                PreviousOrderViewModel orderVm =
+                    await _previousOrderServices.CreateViewModelAsync(false, prevOrder, null, PizzaDb, quantityList);
                 previousOrderVmList.Add(orderVm);
             }
-            PreviousOrderListViewModel previousOrdersVm = new PreviousOrderListViewModel()
+
+            PreviousOrderListViewModel previousOrdersVm = new PreviousOrderListViewModel
             {
                 PaginationVm = paginationVm,
                 PreviousOrderVmList = previousOrderVmList
@@ -70,18 +74,23 @@ namespace PizzaWebsite.Controllers
             {
                 return PreviousOrderMissingIdErrorMessage();
             }
+
             Join<CustomerOrder, DeliveryInfo> orderJoin = await GetFirstOrDefaultCustomerOrderAsync(id.Value);
             if (orderJoin == null)
             {
                 return PreviousOrderDoesNotExistErrorMessage();
             }
+
             SiteUser currentUser = await GetCurrentUserAsync();
-            bool authorizedToViewOrder = !await PizzaDb.Commands.UserOwnsCustomerOrderAsync(currentUser, orderJoin.Table1);
+            bool authorizedToViewOrder =
+                !await PizzaDb.Commands.UserOwnsCustomerOrderAsync(currentUser, orderJoin.Table1);
             if (authorizedToViewOrder)
             {
                 return PreviousOrderAuthorizationErrorMessage();
             }
-            PreviousOrderViewModel model = await _previousOrderServices.CreateViewModelAsync(true, orderJoin.Table1, orderJoin.Table2, PizzaDb, ListServices.DefaultQuantityList);
+
+            PreviousOrderViewModel model = await _previousOrderServices.CreateViewModelAsync(true, orderJoin.Table1,
+                orderJoin.Table2, PizzaDb, ListServices.DefaultQuantityList);
             return View(model);
         }
 
@@ -91,17 +100,20 @@ namespace PizzaWebsite.Controllers
             {
                 return PreviousOrderMissingIdErrorMessage();
             }
+
             CustomerOrder customerOrder = await PizzaDb.GetAsync<CustomerOrder>(id);
             if (customerOrder == null)
             {
                 return PreviousOrderDoesNotExistErrorMessage();
             }
+
             SiteUser currentUser = await GetCurrentUserAsync();
             bool authorized = await PizzaDb.Commands.UserOwnsCustomerOrderAsync(currentUser, customerOrder);
             if (!authorized)
             {
                 return PreviousOrderAuthorizationErrorMessage();
             }
+
             await PizzaDb.Commands.ReorderPreviousOrder(currentUser, customerOrder);
             return RedirectToAction("Cart", "Shop");
         }
@@ -112,18 +124,22 @@ namespace PizzaWebsite.Controllers
             {
                 return PreviousOrderMissingIdErrorMessage();
             }
+
             Join<CustomerOrder, DeliveryInfo> orderJoin = await GetFirstOrDefaultCustomerOrderAsync(id.Value);
             if (orderJoin == null)
             {
                 return PreviousOrderDoesNotExistErrorMessage();
             }
+
             SiteUser currentUser = await GetCurrentUserAsync();
-            bool authorizedToViewOrder = !await PizzaDb.Commands.UserOwnsCustomerOrderAsync(currentUser, orderJoin.Table1);
+            bool authorizedToViewOrder =
+                !await PizzaDb.Commands.UserOwnsCustomerOrderAsync(currentUser, orderJoin.Table1);
             if (authorizedToViewOrder)
             {
                 return PreviousOrderAuthorizationErrorMessage();
             }
-            OrderStatusViewModel model = new OrderStatusViewModel()
+
+            OrderStatusViewModel model = new OrderStatusViewModel
             {
                 CustomerOrderId = id.Value
             };
@@ -132,14 +148,14 @@ namespace PizzaWebsite.Controllers
 
         private async Task<Join<CustomerOrder, DeliveryInfo>> GetFirstOrDefaultCustomerOrderAsync(int customerOrderId)
         {
-            var join = new CustomerOrderOnDeliveryInfoJoinList();
+            CustomerOrderOnDeliveryInfoJoinList join = new CustomerOrderOnDeliveryInfoJoinList();
             await join.LoadFirstOrDefaultByCustomerOrderIdAsync(customerOrderId, PizzaDb);
             return join.Items.FirstOrDefault();
         }
 
         private ActionResult PreviousOrderMissingIdErrorMessage()
         {
-            ErrorMessageViewModel model = new ErrorMessageViewModel()
+            ErrorMessageViewModel model = new ErrorMessageViewModel
             {
                 Header = "Error",
                 ErrorMessage = "Order ID is missing.",
@@ -151,7 +167,7 @@ namespace PizzaWebsite.Controllers
 
         private ActionResult PreviousOrderDoesNotExistErrorMessage()
         {
-            ErrorMessageViewModel model = new ErrorMessageViewModel()
+            ErrorMessageViewModel model = new ErrorMessageViewModel
             {
                 Header = "Error",
                 ErrorMessage = "This order does not exist.",
@@ -163,7 +179,7 @@ namespace PizzaWebsite.Controllers
 
         private ActionResult PreviousOrderAuthorizationErrorMessage()
         {
-            ErrorMessageViewModel model = new ErrorMessageViewModel()
+            ErrorMessageViewModel model = new ErrorMessageViewModel
             {
                 Header = "Authorization Error",
                 ErrorMessage = "You are not authorized to access this order.",

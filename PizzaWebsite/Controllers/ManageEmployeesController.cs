@@ -1,17 +1,14 @@
-﻿using DataLibrary.Models;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using DataLibrary.Models;
+using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
-using PizzaWebsite.Models;
-using PizzaWebsite.Models.ManageEmployees;
-using PizzaWebsite.Models.Employees;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using DataLibrary.Models.JoinLists;
 using PizzaWebsite.Controllers.BaseControllers;
+using PizzaWebsite.Models;
+using PizzaWebsite.Models.Employees;
+using PizzaWebsite.Models.ManageEmployees;
 
 namespace PizzaWebsite.Controllers
 {
@@ -21,18 +18,19 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string employeeId, string userId)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);
-            EmployeeFilter searchFilter = new EmployeeFilter()
+            EmployeeFilter searchFilter = new EmployeeFilter
             {
                 Id = employeeId,
                 UserId = userId
             };
             PaginationViewModel paginationVm = new PaginationViewModel();
             List<ManageEmployeeViewModel> employeeVmList = new List<ManageEmployeeViewModel>();
-            IEnumerable<Employee> employeeList = await LoadPagedRecordsAsync(page.Value, rowsPerPage.Value, "Id", SortOrder.Ascending, searchFilter, PizzaDb, paginationVm);
+            IEnumerable<Employee> employeeList = await LoadPagedRecordsAsync(page.Value, rowsPerPage.Value, "Id",
+                SortOrder.Ascending, searchFilter, PizzaDb, paginationVm);
             foreach (Employee employee in employeeList)
             {
                 bool isManager = await UserManager.IsInRoleAsync(employee.UserId, "Manager");
-                ManageEmployeeViewModel employeeVm = new ManageEmployeeViewModel()
+                ManageEmployeeViewModel employeeVm = new ManageEmployeeViewModel
                 {
                     Id = employee.Id,
                     UserId = employee.UserId,
@@ -40,22 +38,24 @@ namespace PizzaWebsite.Controllers
                 };
                 employeeVmList.Add(employeeVm);
             }
-            var model = new ManagePagedListViewModel<ManageEmployeeViewModel>()
-            {
-                ItemViewModelList = employeeVmList,
-                PaginationVm = paginationVm
-            };
+
+            ManagePagedListViewModel<ManageEmployeeViewModel> model =
+                new ManagePagedListViewModel<ManageEmployeeViewModel>
+                {
+                    ItemViewModelList = employeeVmList,
+                    PaginationVm = paginationVm
+                };
             return View(model);
         }
 
         public async Task<ActionResult> ViewLocations(string id)
         {
             List<EmployeeLocationViewModel> employeeLocationVmList = new List<EmployeeLocationViewModel>();
-            var joinList = new EmployeeLocationOnStoreLocationJoinList();
+            EmployeeLocationOnStoreLocationJoinList joinList = new EmployeeLocationOnStoreLocationJoinList();
             await joinList.LoadListByEmployeeIdAsync(id, PizzaDb);
             foreach (Join<EmployeeLocation, StoreLocation> join in joinList.Items)
             {
-                EmployeeLocationViewModel employeeLocationVm = new EmployeeLocationViewModel()
+                EmployeeLocationViewModel employeeLocationVm = new EmployeeLocationViewModel
                 {
                     Name = join.Table2.Name,
                     PhoneNumber = join.Table2.PhoneNumber,
@@ -66,7 +66,8 @@ namespace PizzaWebsite.Controllers
                 };
                 employeeLocationVmList.Add(employeeLocationVm);
             }
-            ViewEmployeeLocationsViewModel model = new ViewEmployeeLocationsViewModel()
+
+            ViewEmployeeLocationsViewModel model = new ViewEmployeeLocationsViewModel
             {
                 EmployeeId = id,
                 EmployeeLocationVmList = employeeLocationVmList
@@ -87,11 +88,13 @@ namespace PizzaWebsite.Controllers
             {
                 return View(model);
             }
+
             await ValidateViewModelAsync(model);
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+
             // Attempt to add employee to database
             try
             {
@@ -104,7 +107,8 @@ namespace PizzaWebsite.Controllers
                 ModelState.AddModelError("", "Unable to add employee.");
                 return View(model);
             }
-            ConfirmationViewModel confirmationVm = new ConfirmationViewModel()
+
+            ConfirmationViewModel confirmationVm = new ConfirmationViewModel
             {
                 ConfirmationMessage = $"Employee {model.Id} has been added.",
                 ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}"
@@ -116,7 +120,7 @@ namespace PizzaWebsite.Controllers
         {
             Employee employee = await PizzaDb.GetAsync<Employee>(id);
             bool isManager = await UserManager.IsInRoleAsync(employee.UserId, "Manager");
-            ManageEmployeeViewModel model = new ManageEmployeeViewModel()
+            ManageEmployeeViewModel model = new ManageEmployeeViewModel
             {
                 Id = employee.Id,
                 UserId = employee.UserId,
@@ -133,6 +137,7 @@ namespace PizzaWebsite.Controllers
             {
                 return View(model);
             }
+
             Employee employee = await PizzaDb.GetAsync<Employee>(model.Id);
             await PizzaDb.UpdateAsync(employee);
             if (model.IsManager)
@@ -143,7 +148,8 @@ namespace PizzaWebsite.Controllers
             {
                 await UserManager.RemoveFromRoleAsync(employee.UserId, "Manager");
             }
-            ConfirmationViewModel confirmationVm = new ConfirmationViewModel()
+
+            ConfirmationViewModel confirmationVm = new ConfirmationViewModel
             {
                 ConfirmationMessage = $"Your changes to {model.Id} have been confirmed.",
                 ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}"
@@ -158,10 +164,12 @@ namespace PizzaWebsite.Controllers
             {
                 ModelState.AddModelError("UserId", "User does not exist.");
             }
+
             if (!await EmployeeIdIsAvailable(model.Id))
             {
                 ModelState.AddModelError("Id", "Employee ID is already taken.");
             }
+
             if (siteUser != null)
             {
                 if (await AlreadyEmployed(siteUser, model.Id))

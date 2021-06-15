@@ -1,10 +1,7 @@
-﻿using PizzaWebsite.Models.Attributes;
-using PizzaWebsite.Models.Geography;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+using PizzaWebsite.Models.Attributes;
+using PizzaWebsite.Models.Geography;
 
 namespace PizzaWebsite.Models.ManageStores
 {
@@ -43,6 +40,7 @@ namespace PizzaWebsite.Models.ManageStores
 
         [Display(Name = "Is Active")]
         public bool IsActiveLocation { get; set; }
+
         public IEnumerable<State> StateList { get; set; }
 
         public bool IsNewRecord()

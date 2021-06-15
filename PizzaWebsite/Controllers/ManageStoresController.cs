@@ -1,4 +1,8 @@
-﻿using DataLibrary.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using DataLibrary.Models;
 using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
@@ -6,12 +10,6 @@ using PizzaWebsite.Controllers.BaseControllers;
 using PizzaWebsite.Models;
 using PizzaWebsite.Models.Employees;
 using PizzaWebsite.Models.ManageStores;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
@@ -21,19 +19,21 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string storeName, string phoneNumber)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);
-            StoreLocationFilter searchFilter = new StoreLocationFilter()
+            StoreLocationFilter searchFilter = new StoreLocationFilter
             {
                 Name = storeName,
                 PhoneNumber = phoneNumber
             };
             PaginationViewModel paginationVm = new PaginationViewModel();
             List<ManageStoreViewModel> storeVmList = new List<ManageStoreViewModel>();
-            IEnumerable<StoreLocation> storeList = await LoadAuthorizedStoreLocationListAsync(page.Value, rowsPerPage.Value, searchFilter, paginationVm);
+            IEnumerable<StoreLocation> storeList =
+                await LoadAuthorizedStoreLocationListAsync(page.Value, rowsPerPage.Value, searchFilter, paginationVm);
             foreach (StoreLocation store in storeList)
             {
                 storeVmList.Add(RecordToViewModel(store));
             }
-            var model = new ManagePagedListViewModel<ManageStoreViewModel>()
+
+            ManagePagedListViewModel<ManageStoreViewModel> model = new ManagePagedListViewModel<ManageStoreViewModel>
             {
                 ItemViewModelList = storeVmList,
                 PaginationVm = paginationVm
@@ -41,31 +41,39 @@ namespace PizzaWebsite.Controllers
             return View(model);
         }
 
-        private async Task<IEnumerable<StoreLocation>> LoadAuthorizedStoreLocationListAsync(int page, int rowsPerPage, StoreLocationFilter searchFilter, PaginationViewModel paginationVm)
+        private async Task<IEnumerable<StoreLocation>> LoadAuthorizedStoreLocationListAsync(int page, int rowsPerPage,
+            StoreLocationFilter searchFilter, PaginationViewModel paginationVm)
         {
             if (IsAuthorizedToManageAllStores())
             {
-                return await LoadPagedRecordsAsync(page, rowsPerPage, "Name", SortOrder.Ascending, searchFilter, PizzaDb, paginationVm);
+                return await LoadPagedRecordsAsync(page, rowsPerPage, "Name", SortOrder.Ascending, searchFilter,
+                    PizzaDb, paginationVm);
             }
+
             // Only select stores that the current user is employed at.
             return await LoadEmployedStoreLocationListAsync(page, rowsPerPage, searchFilter, paginationVm);
         }
 
         /// <summary>
-        /// Only select stores that the current user is employed at.
+        ///     Only select stores that the current user is employed at.
         /// </summary>
         /// <param name="page"></param>
         /// <param name="rowsPerPage"></param>
         /// <param name="searchFilter"></param>
         /// <param name="paginationVm"></param>
         /// <returns></returns>
-        private async Task<IEnumerable<StoreLocation>> LoadEmployedStoreLocationListAsync(int page, int rowsPerPage, StoreLocationFilter searchFilter, PaginationViewModel paginationVm)
+        private async Task<IEnumerable<StoreLocation>> LoadEmployedStoreLocationListAsync(int page, int rowsPerPage,
+            StoreLocationFilter searchFilter, PaginationViewModel paginationVm)
         {
             Employee currentEmployee = await PizzaDb.GetEmployeeAsync(await GetCurrentUserAsync());
-            var joinList = new EmployeeLocationOnStoreLocationJoinList();
+            EmployeeLocationOnStoreLocationJoinList joinList = new EmployeeLocationOnStoreLocationJoinList();
             await joinList.LoadPagedListByEmployeeIdAsync(currentEmployee.Id, searchFilter, page, rowsPerPage, PizzaDb);
-            int totalNumberOfItems = await joinList.GetNumberOfResultsByEmployeeIdAsync(currentEmployee.Id, searchFilter, rowsPerPage, PizzaDb);
-            int totalPages = await joinList.GetNumberOfPagesByEmployeeIdAsync(currentEmployee.Id, searchFilter, rowsPerPage, PizzaDb);
+            int totalNumberOfItems =
+                await joinList.GetNumberOfResultsByEmployeeIdAsync(currentEmployee.Id, searchFilter, rowsPerPage,
+                    PizzaDb);
+            int totalPages =
+                await joinList.GetNumberOfPagesByEmployeeIdAsync(currentEmployee.Id, searchFilter, rowsPerPage,
+                    PizzaDb);
             // Navigation pane
             paginationVm.QueryString = Request.QueryString;
             paginationVm.CurrentPage = page;
@@ -86,11 +94,13 @@ namespace PizzaWebsite.Controllers
             {
                 return true;
             }
+
             // Authorized if the employee is both currently employed at that store and is a manager.
             if (User.IsInRole("Manager"))
             {
                 return await PizzaDb.Commands.IsEmployedAtLocation(employee, storeLocation);
             }
+
             return false;
         }
 
@@ -105,7 +115,8 @@ namespace PizzaWebsite.Controllers
             {
                 return NotAuthorizedToManageStoreErrorMessage(currentEmployee, store);
             }
-            RemoveEmployeeFromRosterViewModel model = new RemoveEmployeeFromRosterViewModel()
+
+            RemoveEmployeeFromRosterViewModel model = new RemoveEmployeeFromRosterViewModel
             {
                 EmployeeId = employee.Id,
                 EmployeeLocationId = employeeLocation.Id,
@@ -126,11 +137,13 @@ namespace PizzaWebsite.Controllers
             {
                 return NotAuthorizedToManageStoreErrorMessage(currentEmployee, store);
             }
+
             await ValidateViewModelAsync(model);
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+
             // Attempt to remove employee from store roster
             try
             {
@@ -143,7 +156,8 @@ namespace PizzaWebsite.Controllers
                 ModelState.AddModelError("", "Error removing employee from roster.");
                 return View(model);
             }
-            ConfirmationViewModel confirmationVm = new ConfirmationViewModel()
+
+            ConfirmationViewModel confirmationVm = new ConfirmationViewModel
             {
                 ConfirmationMessage = $"Employee {model.EmployeeId} has been removed from {model.StoreName}'s roster.",
                 ReturnUrlAction = $"{Url.Action("EmployeeRoster")}/{model.StoreId}?{Request.QueryString}"
@@ -160,7 +174,8 @@ namespace PizzaWebsite.Controllers
             {
                 return NotAuthorizedToManageStoreErrorMessage(currentEmployee, store);
             }
-            AddEmployeeToRosterViewModel model = new AddEmployeeToRosterViewModel()
+
+            AddEmployeeToRosterViewModel model = new AddEmployeeToRosterViewModel
             {
                 StoreId = store.Id,
                 StoreName = store.Name
@@ -176,6 +191,7 @@ namespace PizzaWebsite.Controllers
             {
                 return View(model);
             }
+
             Employee currentEmployee = await GetCurrentEmployeeAsync();
             StoreLocation store = await PizzaDb.GetAsync<StoreLocation>(model.StoreId);
             bool authorized = await IsAuthorizedToManageStoreAsync(currentEmployee, store);
@@ -184,15 +200,17 @@ namespace PizzaWebsite.Controllers
             {
                 return NotAuthorizedToManageStoreErrorMessage(currentEmployee, store);
             }
+
             await ValidateViewModelAsync(model);
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+
             // Attempt to add employee to store roster
             try
             {
-                EmployeeLocation employeeLocation = new EmployeeLocation()
+                EmployeeLocation employeeLocation = new EmployeeLocation
                 {
                     EmployeeId = model.EmployeeId,
                     StoreId = model.StoreId
@@ -205,7 +223,8 @@ namespace PizzaWebsite.Controllers
                 ModelState.AddModelError("", "Unable to add employee to roster.");
                 return View(model);
             }
-            ConfirmationViewModel confirmationVm = new ConfirmationViewModel()
+
+            ConfirmationViewModel confirmationVm = new ConfirmationViewModel
             {
                 ConfirmationMessage = $"Employee {model.EmployeeId} has been added to {model.StoreName}'s roster.",
                 ReturnUrlAction = $"{Url.Action("EmployeeRoster")}/{model.StoreId}?{Request.QueryString}"
@@ -216,7 +235,7 @@ namespace PizzaWebsite.Controllers
         [Authorize(Roles = "Admin,Executive")]
         public ActionResult CreateStore()
         {
-            ManageStoreViewModel model = new ManageStoreViewModel()
+            ManageStoreViewModel model = new ManageStoreViewModel
             {
                 StateList = GeographyServices.StateList
             };
@@ -232,9 +251,10 @@ namespace PizzaWebsite.Controllers
             {
                 return View("ManageStore", model);
             }
+
             StoreLocation store = ViewModelToRecord(model);
             await PizzaDb.InsertAsync(store);
-            ConfirmationViewModel confirmationVm = new ConfirmationViewModel()
+            ConfirmationViewModel confirmationVm = new ConfirmationViewModel
             {
                 ConfirmationMessage = $"{model.Name} has been added to the database.",
                 ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}"
@@ -248,17 +268,20 @@ namespace PizzaWebsite.Controllers
             {
                 return MissingStoreIdErrorMessage();
             }
+
             StoreLocation store = await PizzaDb.GetAsync<StoreLocation>(id.Value);
             if (store == null)
             {
                 return StoreDoesNotExistErrorMessage(id.Value);
             }
+
             Employee currentEmployee = await PizzaDb.GetEmployeeAsync(await GetCurrentUserAsync());
             bool authorized = await IsAuthorizedToManageStoreAsync(currentEmployee, store);
             if (!authorized)
             {
                 return NotAuthorizedToManageStoreErrorMessage(currentEmployee, store);
             }
+
             ManageStoreViewModel model = RecordToViewModel(store);
             return View("ManageStore", model);
         }
@@ -271,19 +294,22 @@ namespace PizzaWebsite.Controllers
             {
                 return View("ManageStore", model);
             }
+
             StoreLocation store = await PizzaDb.GetAsync<StoreLocation>(model.Id);
             if (store == null)
             {
                 return StoreDoesNotExistErrorMessage(model.Id);
             }
+
             Employee currentEmployee = await PizzaDb.GetEmployeeAsync(await GetCurrentUserAsync());
             bool authorized = await IsAuthorizedToManageStoreAsync(currentEmployee, store);
             if (!authorized)
             {
                 return NotAuthorizedToManageStoreErrorMessage(currentEmployee, store);
             }
+
             await PizzaDb.UpdateAsync(ViewModelToRecord(model));
-            ConfirmationViewModel confirmationVm = new ConfirmationViewModel()
+            ConfirmationViewModel confirmationVm = new ConfirmationViewModel
             {
                 ConfirmationMessage = $"Your changes to {model.Name} have been confirmed.",
                 ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}"
@@ -298,21 +324,23 @@ namespace PizzaWebsite.Controllers
             {
                 return StoreDoesNotExistErrorMessage(id);
             }
+
             Employee currentEmployee = await PizzaDb.GetEmployeeAsync(await GetCurrentUserAsync());
             bool authorized = await IsAuthorizedToManageStoreAsync(currentEmployee, store);
             if (!authorized)
             {
                 return NotAuthorizedToManageStoreErrorMessage(currentEmployee, store);
             }
+
             SiteRole managerRole = await PizzaDb.GetSiteRoleByNameAsync("Manager");
-            var rosterVmList = new List<EmployeeRosterItemViewModel>();
-            var joinList = new EmployeeOnEmployeeLocationJoinList();
+            List<EmployeeRosterItemViewModel> rosterVmList = new List<EmployeeRosterItemViewModel>();
+            EmployeeOnEmployeeLocationJoinList joinList = new EmployeeOnEmployeeLocationJoinList();
             await joinList.LoadListByStoreIdAsync(store.Id, PizzaDb);
             foreach (Join<Employee, EmployeeLocation> join in joinList.Items)
             {
                 SiteUser siteUser = await PizzaDb.GetSiteUserByIdAsync(join.Table1.UserId);
                 bool isManager = await PizzaDb.UserIsInRole(siteUser, managerRole);
-                EmployeeRosterItemViewModel itemVm = new EmployeeRosterItemViewModel()
+                EmployeeRosterItemViewModel itemVm = new EmployeeRosterItemViewModel
                 {
                     EmployeeId = join.Table1.Id,
                     EmployeeLocationId = join.Table2.Id,
@@ -321,7 +349,8 @@ namespace PizzaWebsite.Controllers
                 };
                 rosterVmList.Add(itemVm);
             }
-            EmployeeRosterViewModel model = new EmployeeRosterViewModel()
+
+            EmployeeRosterViewModel model = new EmployeeRosterViewModel
             {
                 StoreId = store.Id,
                 StoreName = store.Name,
@@ -332,7 +361,7 @@ namespace PizzaWebsite.Controllers
 
         private ActionResult NotAuthorizedToManageStoreErrorMessage(Employee employee, StoreLocation store)
         {
-            ErrorMessageViewModel model = new ErrorMessageViewModel()
+            ErrorMessageViewModel model = new ErrorMessageViewModel
             {
                 Header = "Authorization Error",
                 ErrorMessage = CreateManageStoreErrorMessage(employee.Id, store.Name),
@@ -344,7 +373,7 @@ namespace PizzaWebsite.Controllers
 
         private ActionResult MissingStoreIdErrorMessage()
         {
-            ErrorMessageViewModel model = new ErrorMessageViewModel()
+            ErrorMessageViewModel model = new ErrorMessageViewModel
             {
                 Header = "Error",
                 ErrorMessage = CreateMissingStoreIdMessage(),
@@ -356,7 +385,7 @@ namespace PizzaWebsite.Controllers
 
         private ActionResult StoreDoesNotExistErrorMessage(int storeId)
         {
-            ErrorMessageViewModel model = new ErrorMessageViewModel()
+            ErrorMessageViewModel model = new ErrorMessageViewModel
             {
                 Header = "Error",
                 ErrorMessage = CreateStoreDoesNotExistErrorMessage(storeId),
@@ -368,7 +397,7 @@ namespace PizzaWebsite.Controllers
 
         public ManageStoreViewModel RecordToViewModel(StoreLocation record)
         {
-            return new ManageStoreViewModel()
+            return new ManageStoreViewModel
             {
                 Id = record.Id,
                 City = record.City,
@@ -384,7 +413,7 @@ namespace PizzaWebsite.Controllers
 
         private StoreLocation ViewModelToRecord(ManageStoreViewModel model)
         {
-            return new StoreLocation()
+            return new StoreLocation
             {
                 Id = model.Id,
                 City = model.City,
@@ -399,7 +428,7 @@ namespace PizzaWebsite.Controllers
 
         private string CreateMissingStoreIdMessage()
         {
-            return $"Store ID is missing.";
+            return "Store ID is missing.";
         }
 
         private string CreateStoreDoesNotExistErrorMessage(int storeId)
@@ -431,10 +460,12 @@ namespace PizzaWebsite.Controllers
                 else
                 {
                     // Make sure employee isn't already employed at this location.
-                    bool alreadyEmployedAtLocation = await PizzaDb.Commands.IsEmployedAtLocation(employee, storeLocation);
+                    bool alreadyEmployedAtLocation =
+                        await PizzaDb.Commands.IsEmployedAtLocation(employee, storeLocation);
                     if (alreadyEmployedAtLocation)
                     {
-                        ModelState.AddModelError("EmployeeId", $"Employee with ID {model.EmployeeId} is already employed at this location.");
+                        ModelState.AddModelError("EmployeeId",
+                            $"Employee with ID {model.EmployeeId} is already employed at this location.");
                     }
                 }
             }
@@ -463,7 +494,8 @@ namespace PizzaWebsite.Controllers
                     bool isEmployedAtLocation = await PizzaDb.Commands.IsEmployedAtLocation(employee, storeLocation);
                     if (!isEmployedAtLocation)
                     {
-                        ModelState.AddModelError("EmployeeId", $"Employee with ID {model.EmployeeId} is not employed at {model.StoreId}.");
+                        ModelState.AddModelError("EmployeeId",
+                            $"Employee with ID {model.EmployeeId} is not employed at {model.StoreId}.");
                     }
                 }
             }

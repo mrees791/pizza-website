@@ -1,9 +1,9 @@
 ﻿// Namespace for Manage Addresses view scripts
 const pizzaSiteManageAddressesNs = {
     updateAddressListElementVisibility: () => {
-        var $addressTableBody = $('#addressTableBody');
-        var $addressListBlock = $('#addressListBlock');
-        var $emptyAddressListBlock = $('#emptyAddressListBlock');
+        var $addressTableBody = $("#addressTableBody");
+        var $addressListBlock = $("#addressListBlock");
+        var $emptyAddressListBlock = $("#emptyAddressListBlock");
 
         // Get number of rows in table
         var numberOfAddressItems = $addressTableBody.children().length;

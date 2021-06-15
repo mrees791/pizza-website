@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataLibrary.Models
+﻿namespace DataLibrary.Models
 {
     // todo: Remove. SqlUtility will create order by keywords.
     internal class OrderBy
     {
-        public string OrderByColumn { get; set; }
-        public SortOrder SortOrder { get; set; }
-
         public OrderBy()
         {
             SortOrder = SortOrder.Ascending;
         }
+
+        public string OrderByColumn { get; set; }
+        public SortOrder SortOrder { get; set; }
 
         public string GetConditions()
         {

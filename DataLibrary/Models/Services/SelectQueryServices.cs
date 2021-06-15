@@ -1,15 +1,8 @@
-﻿using DataLibrary.Models.Sql;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataLibrary.Models.Services
+﻿namespace DataLibrary.Models.Services
 {
     internal class SelectQueryServices
     {
-        private SqlServices _sqlServices;
+        private readonly SqlServices _sqlServices;
 
         internal SelectQueryServices()
         {

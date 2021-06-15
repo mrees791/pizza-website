@@ -1,19 +1,14 @@
-﻿using DataLibrary.Models;
-using DataLibrary.Models.Builders;
-using DataLibrary.Models.QuerySearches;
-using DataLibrary.Models.Tables;
-using PizzaWebsite.Models.ManageMenus;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
+using DataLibrary.Models;
+using DataLibrary.Models.Tables;
 
 namespace PizzaWebsite.Models.PizzaBuilders
 {
     public class PizzaBuilderServices
     {
-        public List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<PizzaTopping> toppingList, IEnumerable<MenuPizzaToppingType> toppingTypeList,
+        public List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<PizzaTopping> toppingList,
+            IEnumerable<MenuPizzaToppingType> toppingTypeList,
             IEnumerable<string> toppingAmountList, IEnumerable<string> toppingHalfList)
         {
             List<PizzaToppingViewModel> toppingVmList = new List<PizzaToppingViewModel>();
@@ -22,10 +17,11 @@ namespace PizzaWebsite.Models.PizzaBuilders
             {
                 toppingDictionary.Add(topping.ToppingTypeId, topping);
             }
+
             for (int iToppingType = 0; iToppingType < toppingTypeList.Count(); iToppingType++)
             {
                 MenuPizzaToppingType toppingType = toppingTypeList.ElementAt(iToppingType);
-                PizzaTopping currentTopping = new PizzaTopping()
+                PizzaTopping currentTopping = new PizzaTopping
                 {
                     ToppingTypeId = toppingType.Id,
                     ToppingHalf = "Whole",
@@ -35,7 +31,8 @@ namespace PizzaWebsite.Models.PizzaBuilders
                 {
                     currentTopping = toppingDictionary[toppingType.Id];
                 }
-                PizzaToppingViewModel toppingVm = new PizzaToppingViewModel()
+
+                PizzaToppingViewModel toppingVm = new PizzaToppingViewModel
                 {
                     ListIndex = iToppingType,
                     Category = toppingType.CategoryName,
@@ -48,6 +45,7 @@ namespace PizzaWebsite.Models.PizzaBuilders
                 };
                 toppingVmList.Add(toppingVm);
             }
+
             return toppingVmList;
         }
     }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.Owin;
 using Owin;
+using PizzaWebsite;
 
-[assembly: OwinStartupAttribute(typeof(PizzaWebsite.Startup))]
+[assembly: OwinStartupAttribute(typeof(Startup))]
+
 namespace PizzaWebsite
 {
     public partial class Startup

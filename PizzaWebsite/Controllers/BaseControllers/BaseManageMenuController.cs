@@ -1,14 +1,10 @@
-﻿using DataLibrary.Models;
-using DataLibrary.Models.QueryFilters;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using DataLibrary.Models;
 using DataLibrary.Models.Sql;
 using PizzaWebsite.Models;
 using PizzaWebsite.Models.Employees;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers.BaseControllers
 {
@@ -16,16 +12,19 @@ namespace PizzaWebsite.Controllers.BaseControllers
         where TRecord : Record, new()
         where TViewModel : class, new()
     {
-        protected async Task<ActionResult> Index(int page, int rowsPerPage, string orderByColumn, WhereClauseBase whereClauseBase)
+        protected async Task<ActionResult> Index(int page, int rowsPerPage, string orderByColumn,
+            WhereClauseBase whereClauseBase)
         {
             PaginationViewModel paginationVm = new PaginationViewModel();
-            IEnumerable<TRecord> recordList = await LoadPagedRecordsAsync(page, rowsPerPage, orderByColumn, SortOrder.Ascending, whereClauseBase, PizzaDb, paginationVm);
+            IEnumerable<TRecord> recordList = await LoadPagedRecordsAsync(page, rowsPerPage, orderByColumn,
+                SortOrder.Ascending, whereClauseBase, PizzaDb, paginationVm);
             List<TViewModel> itemViewModelList = new List<TViewModel>();
             foreach (TRecord record in recordList)
             {
                 itemViewModelList.Add(await RecordToViewModelAsync(record));
             }
-            ManagePagedListViewModel<TViewModel> model = new ManagePagedListViewModel<TViewModel>()
+
+            ManagePagedListViewModel<TViewModel> model = new ManagePagedListViewModel<TViewModel>
             {
                 ItemViewModelList = itemViewModelList,
                 PaginationVm = paginationVm
@@ -46,8 +45,9 @@ namespace PizzaWebsite.Controllers.BaseControllers
             {
                 return View("Manage", model);
             }
+
             await PizzaDb.InsertAsync(ViewModelToRecord(model));
-            ConfirmationViewModel confirmationModel = new ConfirmationViewModel()
+            ConfirmationViewModel confirmationModel = new ConfirmationViewModel
             {
                 ConfirmationMessage = $"{modelName} has been added to the database.",
                 ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}"
@@ -70,8 +70,9 @@ namespace PizzaWebsite.Controllers.BaseControllers
             {
                 return View("Manage", model);
             }
+
             await PizzaDb.UpdateAsync(ViewModelToRecord(model));
-            ConfirmationViewModel confirmationModel = new ConfirmationViewModel()
+            ConfirmationViewModel confirmationModel = new ConfirmationViewModel
             {
                 ConfirmationMessage = $"Your changes to {modelName} have been confirmed.",
                 ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}"

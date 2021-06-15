@@ -1,12 +1,5 @@
-﻿using DataLibrary.Models.Tables;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace PizzaWebsite.Models.ManageDeliveryAddresses
+﻿namespace PizzaWebsite.Models.ManageDeliveryAddresses
 {
-
     public class DeliveryAddressViewModel
     {
         public int Id { get; set; }

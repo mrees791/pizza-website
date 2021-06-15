@@ -1,10 +1,6 @@
-﻿using Dapper;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
+﻿using System.Data;
 using System.Threading.Tasks;
+using Dapper;
 
 namespace DataLibrary.Models.Tables
 {
@@ -13,6 +9,7 @@ namespace DataLibrary.Models.Tables
     {
         [Key]
         public int Id { get; set; }
+
         public int MenuPizzaId { get; set; }
         public string ToppingHalf { get; set; }
         public string ToppingAmount { get; set; }
@@ -52,7 +49,7 @@ namespace DataLibrary.Models.Tables
 
         internal CartPizzaTopping CreateCartTopping()
         {
-            return new CartPizzaTopping()
+            return new CartPizzaTopping
             {
                 MenuPizzaToppingTypeId = MenuPizzaToppingTypeId,
                 ToppingAmount = ToppingAmount,

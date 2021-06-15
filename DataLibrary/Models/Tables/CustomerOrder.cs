@@ -1,10 +1,7 @@
-﻿using Dapper;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Dapper;
 
 namespace DataLibrary.Models.Tables
 {
@@ -13,6 +10,7 @@ namespace DataLibrary.Models.Tables
     {
         [Key]
         public int Id { get; set; }
+
         public string UserId { get; set; }
         public int StoreId { get; set; }
         public int CartId { get; set; }

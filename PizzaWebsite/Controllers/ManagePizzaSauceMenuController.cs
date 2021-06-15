@@ -1,24 +1,20 @@
-﻿using DataLibrary.Models.QueryFilters;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
+using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Controllers.BaseControllers;
-using PizzaWebsite.Models;
 using PizzaWebsite.Models.ManageMenus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
     [Authorize(Roles = "Admin,Executive")]
-    public class ManagePizzaSauceMenuController : BaseManageMenuController<MenuPizzaSauce, ManageMenuPizzaSauceViewModel>
+    public class
+        ManagePizzaSauceMenuController : BaseManageMenuController<MenuPizzaSauce, ManageMenuPizzaSauceViewModel>
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);
-            MenuPizzaSauceFilter searchFilter = new MenuPizzaSauceFilter()
+            MenuPizzaSauceFilter searchFilter = new MenuPizzaSauceFilter
             {
                 Name = name
             };
@@ -27,7 +23,7 @@ namespace PizzaWebsite.Controllers
 
         public override async Task<ActionResult> Add()
         {
-            MenuPizzaSauce sauceFlavor = new MenuPizzaSauce()
+            MenuPizzaSauce sauceFlavor = new MenuPizzaSauce
             {
                 AvailableForPurchase = true
             };
@@ -70,7 +66,7 @@ namespace PizzaWebsite.Controllers
 
         protected override MenuPizzaSauce ViewModelToRecord(ManageMenuPizzaSauceViewModel model)
         {
-            return new MenuPizzaSauce()
+            return new MenuPizzaSauce
             {
                 Id = model.Id,
                 AvailableForPurchase = model.AvailableForPurchase,

@@ -1,11 +1,6 @@
-﻿using DataLibrary.Models.JoinLists.BaseClasses;
-using DataLibrary.Models.Sql;
+﻿using System.Threading.Tasks;
+using DataLibrary.Models.JoinLists.BaseClasses;
 using DataLibrary.Models.Tables;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataLibrary.Models.JoinLists
 {
@@ -37,7 +32,7 @@ namespace DataLibrary.Models.JoinLists
 
         protected override string GetSqlJoinQuery(bool onlySelectFirst)
         {
-            return $@"SELECT {sqlServices.CreateTopClause(onlySelectFirst)}
+            return $@"SELECT {SqlServices.CreateTopClause(onlySelectFirst)}
                       e.Id, e.UserId, l.Id, l.EmployeeId, l.StoreId
                       FROM Employee e
                       INNER JOIN EmployeeLocation l

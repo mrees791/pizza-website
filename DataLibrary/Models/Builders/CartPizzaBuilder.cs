@@ -1,10 +1,7 @@
-﻿using DataLibrary.Models.QuerySearches;
-using DataLibrary.Models.Tables;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using DataLibrary.Models.QuerySearches;
+using DataLibrary.Models.Tables;
 
 namespace DataLibrary.Models.Builders
 {
@@ -17,8 +14,8 @@ namespace DataLibrary.Models.Builders
         public override async Task InitializeAsync(MenuItemSearch search, PizzaDatabase pizzaDb)
         {
             await base.InitializeAsync(search, pizzaDb);
-            QuantityList = listServices.DefaultQuantityList;
-            SizeList = listServices.PizzaSizeList;
+            QuantityList = ListServices.DefaultQuantityList;
+            SizeList = ListServices.PizzaSizeList;
             CrustList = await pizzaDb.GetListAsync<MenuPizzaCrust>("SortOrder", SortOrder.Ascending, search);
         }
     }

@@ -1,66 +1,66 @@
 ﻿@using PizzaWebsite.Models.PizzaBuilders
-@model PizzaBuilderViewModel
+@model PizzaWebsite.Models.PizzaBuilders.PizzaBuilderViewModel
 @* This partial view must be placed inside a POST form. *@
 @* Save list state *@
 @for (int i = 0; i < Model.SauceDictionary.Count; i++)
 {
     KeyValuePair<int, string> saucePair = Model.SauceDictionary.ElementAt(i);
-    <input type="hidden" name="SauceDictionary[@i].Key" value="@saucePair.Key" />
-    <input type="hidden" name="SauceDictionary[@i].Value" value="@saucePair.Value" />
+    <input type="hidden" name="SauceDictionary[@i].Key" value="@saucePair.Key"/>
+    <input type="hidden" name="SauceDictionary[@i].Value" value="@saucePair.Value"/>
 }
 @for (int i = 0; i < Model.SauceAmountList.Count(); i++)
 {
-    <input type="hidden" name="SauceAmountList[@i]" value="@Model.SauceAmountList.ElementAt(i)" />
+    <input type="hidden" name="SauceAmountList[@i]" value="@Model.SauceAmountList.ElementAt(i)"/>
 }
 @for (int i = 0; i < Model.CheeseDictionary.Count; i++)
 {
     KeyValuePair<int, string> cheesePair = Model.CheeseDictionary.ElementAt(i);
-    <input type="hidden" name="CheeseDictionary[@i].Key" value="@cheesePair.Key" />
-    <input type="hidden" name="CheeseDictionary[@i].Value" value="@cheesePair.Value" />
+    <input type="hidden" name="CheeseDictionary[@i].Key" value="@cheesePair.Key"/>
+    <input type="hidden" name="CheeseDictionary[@i].Value" value="@cheesePair.Value"/>
 }
 @for (int i = 0; i < Model.CheeseAmountList.Count(); i++)
 {
-    <input type="hidden" name="CheeseAmountList[@i]" value="@Model.CheeseAmountList.ElementAt(i)" />
+    <input type="hidden" name="CheeseAmountList[@i]" value="@Model.CheeseAmountList.ElementAt(i)"/>
 }
 @for (int i = 0; i < Model.CrustFlavorDictionary.Count; i++)
 {
     KeyValuePair<int, string> crustFlavorPair = Model.CrustFlavorDictionary.ElementAt(i);
-    <input type="hidden" name="CrustFlavorDictionary[@i].Key" value="@crustFlavorPair.Key" />
-    <input type="hidden" name="CrustFlavorDictionary[@i].Value" value="@crustFlavorPair.Value" />
+    <input type="hidden" name="CrustFlavorDictionary[@i].Key" value="@crustFlavorPair.Key"/>
+    <input type="hidden" name="CrustFlavorDictionary[@i].Value" value="@crustFlavorPair.Value"/>
 }
 <div class="form-group">
-    @Html.LabelFor(model => model.SelectedSauceId, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.SelectedSauceId, new {@class = "control-label col-md-2"})
     <div class="col-md-10">
-        @Html.DropDownListFor(m => m.SelectedSauceId, new SelectList(Model.SauceDictionary, "Key", "Value"), new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.SelectedSauceId, "", new { @class = "text-danger" })
+        @Html.DropDownListFor(m => m.SelectedSauceId, new SelectList(Model.SauceDictionary, "Key", "Value"), new {@class = "form-control"})
+        @Html.ValidationMessageFor(model => model.SelectedSauceId, "", new {@class = "text-danger"})
     </div>
 </div>
 <div class="form-group">
-    @Html.LabelFor(model => model.SelectedSauceAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.SelectedSauceAmount, new {@class = "control-label col-md-2"})
     <div class="col-md-10">
-        @Html.DropDownListFor(m => m.SelectedSauceAmount, new SelectList(Model.SauceAmountList), new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.SelectedSauceAmount, "", new { @class = "text-danger" })
+        @Html.DropDownListFor(m => m.SelectedSauceAmount, new SelectList(Model.SauceAmountList), new {@class = "form-control"})
+        @Html.ValidationMessageFor(model => model.SelectedSauceAmount, "", new {@class = "text-danger"})
     </div>
 </div>
 <div class="form-group">
-    @Html.LabelFor(model => model.SelectedCheeseId, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.SelectedCheeseId, new {@class = "control-label col-md-2"})
     <div class="col-md-10">
-        @Html.DropDownListFor(m => m.SelectedCheeseId, new SelectList(Model.CheeseDictionary, "Key", "Value"), new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.SelectedCheeseId, "", new { @class = "text-danger" })
+        @Html.DropDownListFor(m => m.SelectedCheeseId, new SelectList(Model.CheeseDictionary, "Key", "Value"), new {@class = "form-control"})
+        @Html.ValidationMessageFor(model => model.SelectedCheeseId, "", new {@class = "text-danger"})
     </div>
 </div>
 <div class="form-group">
-    @Html.LabelFor(model => model.SelectedCheeseAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.SelectedCheeseAmount, new {@class = "control-label col-md-2"})
     <div class="col-md-10">
-        @Html.DropDownListFor(m => m.SelectedCheeseAmount, new SelectList(Model.CheeseAmountList), new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.SelectedCheeseAmount, "", new { @class = "text-danger" })
+        @Html.DropDownListFor(m => m.SelectedCheeseAmount, new SelectList(Model.CheeseAmountList), new {@class = "form-control"})
+        @Html.ValidationMessageFor(model => model.SelectedCheeseAmount, "", new {@class = "text-danger"})
     </div>
 </div>
 <div class="form-group">
-    @Html.LabelFor(model => model.SelectedCrustFlavorId, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.SelectedCrustFlavorId, new {@class = "control-label col-md-2"})
     <div class="col-md-10">
-        @Html.DropDownListFor(m => m.SelectedCrustFlavorId, new SelectList(Model.CrustFlavorDictionary, "Key", "Value"), new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.SelectedCrustFlavorId, "", new { @class = "text-danger" })
+        @Html.DropDownListFor(m => m.SelectedCrustFlavorId, new SelectList(Model.CrustFlavorDictionary, "Key", "Value"), new {@class = "form-control"})
+        @Html.ValidationMessageFor(model => model.SelectedCrustFlavorId, "", new {@class = "text-danger"})
     </div>
 </div>
 <h4>Toppings</h4>

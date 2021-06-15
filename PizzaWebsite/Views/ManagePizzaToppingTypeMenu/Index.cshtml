@@ -1,31 +1,34 @@
-﻿@using PizzaWebsite.Models.Employees
-@using PizzaWebsite.Models.ManageMenus
-@model ManagePagedListViewModel<ManageMenuPizzaToppingTypeViewModel>
+﻿@using PizzaWebsite.Models.ManageMenus
+@model PizzaWebsite.Models.Employees.ManagePagedListViewModel<PizzaWebsite.Models.ManageMenus.ManageMenuPizzaToppingTypeViewModel>
 @{
     ViewBag.Title = "Manage Pizza Topping Menu";
 }
 <h2>@ViewBag.Title</h2>
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Employee")">Home</a></li>
-        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ManageMenu")">Manage Menu</a></li>
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "Employee")">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "ManageMenu")">Manage Menu</a>
+        </li>
         <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
     </ol>
 </nav>
-<hr />
+<hr/>
 <div>
     @using (Html.BeginForm("Index", "ManagePizzaToppingTypeMenu", FormMethod.Get))
     {
-        <input type="hidden" name="Page" value="1" />
+        <input type="hidden" name="Page" value="1"/>
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
         @Html.Label("Name", "Name")
-        @Html.TextBox("Name", Request["Name"], new { @class = "form-control" })
-        <input type="submit" value="Apply Search Filters" class="btn btn-primary" />
+        @Html.TextBox("Name", Request["Name"], new {@class = "form-control"})
+        <input type="submit" value="Apply Search Filters" class="btn btn-primary"/>
     }
 </div>
 <div>
     <a href="@Url.Action("Add")?@(Request.QueryString)">
-        <input type="button" value="Add New Topping" class="btn btn-primary" />
+        <input type="button" value="Add New Topping" class="btn btn-primary"/>
     </a>
 </div>
 <table class="table">
@@ -39,7 +42,7 @@
         @* Empy column for Edit button. *@
         <th></th>
     </tr>
-    @foreach (var item in Model.ItemViewModelList)
+    @foreach (ManageMenuPizzaToppingTypeViewModel item in Model.ItemViewModelList)
     {
         <tr>
             <td>
@@ -50,7 +53,7 @@
             </td>
             <td>
                 <a href="@Url.Action("Edit")/@item.Id?@(Request.QueryString)">
-                    <input type="button" value="Edit" class="btn btn-primary" />
+                    <input type="button" value="Edit" class="btn btn-primary"/>
                 </a>
             </td>
         </tr>
@@ -60,9 +63,10 @@
     <ul id="managePagination" class="pagination">
     </ul>
 </nav>
+
 @section Scripts {
     <script type="text/javascript">
-        $(function () {
+        $(function() {
             pizzaSiteNs.createPagination('#managePagination', @Model.PaginationVm.CurrentPage, @Model.PaginationVm.RowsPerPage, @Model.PaginationVm.TotalPages, @Model.PaginationVm.TotalNumberOfItems);
         });
     </script>

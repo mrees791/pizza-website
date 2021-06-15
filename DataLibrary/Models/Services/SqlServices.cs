@@ -1,14 +1,10 @@
-﻿using DataLibrary.Models.Sql;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using DataLibrary.Models.Sql;
 
 namespace DataLibrary.Models.Services
 {
     /// <summary>
-    /// Used for creating SQL query strings.
+    ///     Used for creating SQL query strings.
     /// </summary>
     internal class SqlServices
     {
@@ -32,6 +28,7 @@ namespace DataLibrary.Models.Services
                     {
                         sqlClause += "AND ";
                     }
+
                     // A placeholder is used to avoid SQL injections.
                     // The column name variable is never set by user input.
                     switch (item.ComparisonType)
@@ -43,9 +40,11 @@ namespace DataLibrary.Models.Services
                             sqlClause += $"{columnName} LIKE '%' + @{placeholderName} + '%' ";
                             break;
                     }
+
                     queriesAdded = true;
                 }
             }
+
             return sqlClause;
         }
 
@@ -66,6 +65,7 @@ namespace DataLibrary.Models.Services
                     conditions += "DESC";
                     break;
             }
+
             return conditions;
         }
 

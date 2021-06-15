@@ -1,5 +1,4 @@
-﻿@using PizzaWebsite.Models.Shop
-@model CheckoutViewModel
+﻿@model PizzaWebsite.Models.Shop.CheckoutViewModel
 @{
     ViewBag.Title = "Checkout";
 }
@@ -37,19 +36,19 @@ else
             <input type="hidden" name="DeliveryAddressSelectList[@i].Text" value="@Model.DeliveryAddressSelectList.ElementAt(i).Text">
         }
         <div class="form-horizontal">
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.ValidationSummary(true, "", new {@class = "text-danger"})
             <div class="form-group">
-                @Html.LabelFor(model => model.SelectedStoreLocationId, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.SelectedStoreLocationId, new {@class = "control-label col-md-2"})
                 <div class="col-md-10">
                     @Html.DropDownListFor(m => m.SelectedStoreLocationId, new SelectList(Model.StoreLocationSelectList, "Value", "Text"), "Location")
-                    @Html.ValidationMessageFor(model => model.SelectedStoreLocationId, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.SelectedStoreLocationId, "", new {@class = "text-danger"})
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(model => model.SelectedOrderType, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.SelectedOrderType, new {@class = "control-label col-md-2"})
                 <div class="col-md-10">
                     @Html.DropDownListFor(m => m.SelectedOrderType, new SelectList(Model.OrderTypeList), "Order Type")
-                    @Html.ValidationMessageFor(model => model.SelectedOrderType, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.SelectedOrderType, "", new {@class = "text-danger"})
                 </div>
             </div>
             @if (Model.IsDelivery())
@@ -72,15 +71,16 @@ else
             @Html.Partial("~/Views/Shared/Carts/_CostSummary.cshtml", Model.CartVm.CostSummaryVm)
             <div class="form-group">
                 <div class="col-md-2">
-                    <input type="submit" value="Place Your Order" class="btn btn-success" />
+                    <input type="submit" value="Place Your Order" class="btn btn-success"/>
                 </div>
             </div>
         </div>
     }
 }
+
 @section Scripts {
     <script type="text/javascript">
-        $(function () {
+        $(function() {
             pizzaSiteCheckoutNs.initializeCheckoutView();
         });
     </script>

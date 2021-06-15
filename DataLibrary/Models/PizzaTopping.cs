@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataLibrary.Models
+﻿namespace DataLibrary.Models
 {
     /// <summary>
-    /// Serves as a generic pizza topping model for either menu pizza toppings or cart pizza toppings.
+    ///     Serves as a generic pizza topping model for either menu pizza toppings or cart pizza toppings.
     /// </summary>
     public class PizzaTopping
     {

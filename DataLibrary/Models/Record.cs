@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
+﻿using System.Data;
 using System.Threading.Tasks;
 
 namespace DataLibrary.Models
 {
     public abstract class Record
     {
-        abstract public dynamic GetId();
-        abstract internal bool InsertRequiresTransaction();
-        abstract internal bool UpdateRequiresTransaction();
-        abstract internal Task MapEntityAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null);
-        abstract internal Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null);
-        abstract internal Task<int> UpdateAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null);
+        public abstract dynamic GetId();
+        internal abstract bool InsertRequiresTransaction();
+        internal abstract bool UpdateRequiresTransaction();
+        internal abstract Task MapEntityAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null);
+        internal abstract Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null);
+        internal abstract Task<int> UpdateAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null);
     }
 }

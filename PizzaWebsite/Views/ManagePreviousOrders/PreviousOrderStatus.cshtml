@@ -1,19 +1,19 @@
-﻿@using PizzaWebsite.Models.Shop
-@model OrderStatusViewModel
+﻿@model PizzaWebsite.Models.Shop.OrderStatusViewModel
 @{
     ViewBag.Title = "Order Status";
 }
 <h2>@ViewBag.Title</h2>
 <div>
     <a href="@Url.Action("Index")?@(Request.QueryString)">
-        <input type="button" value="Back" class="btn btn-primary" />
+        <input type="button" value="Back" class="btn btn-primary"/>
     </a>
 </div>
 @Html.Partial("~/Views/Shop/_OrderStatus.cshtml", Model)
+
 @section Scripts {
     <script type="text/javascript">
-        $(function () {
-            pizzaSiteOrderStatusNs.updateOrderStatus(@Model.CustomerOrderId)
+        $(function() {
+            pizzaSiteOrderStatusNs.updateOrderStatus(@Model.CustomerOrderId);
         });
     </script>
 }

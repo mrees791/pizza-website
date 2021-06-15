@@ -1,24 +1,21 @@
-﻿using DataLibrary.Models.QueryFilters;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
+using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Controllers.BaseControllers;
-using PizzaWebsite.Models;
 using PizzaWebsite.Models.ManageMenus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
     [Authorize(Roles = "Admin,Executive")]
-    public class ManagePizzaCrustFlavorMenuController : BaseManageMenuController<MenuPizzaCrustFlavor, ManageMenuPizzaCrustFlavorViewModel>
+    public class
+        ManagePizzaCrustFlavorMenuController : BaseManageMenuController<MenuPizzaCrustFlavor,
+            ManageMenuPizzaCrustFlavorViewModel>
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);
-            MenuPizzaCrustFlavorFilter searchFilter = new MenuPizzaCrustFlavorFilter()
+            MenuPizzaCrustFlavorFilter searchFilter = new MenuPizzaCrustFlavorFilter
             {
                 Name = name
             };
@@ -27,7 +24,7 @@ namespace PizzaWebsite.Controllers
 
         public override async Task<ActionResult> Add()
         {
-            MenuPizzaCrustFlavor crustFlavor = new MenuPizzaCrustFlavor()
+            MenuPizzaCrustFlavor crustFlavor = new MenuPizzaCrustFlavor
             {
                 AvailableForPurchase = true
             };
@@ -49,7 +46,8 @@ namespace PizzaWebsite.Controllers
             return await Edit(model, model.Name);
         }
 
-        protected override async Task<ManageMenuPizzaCrustFlavorViewModel> RecordToViewModelAsync(MenuPizzaCrustFlavor record)
+        protected override async Task<ManageMenuPizzaCrustFlavorViewModel> RecordToViewModelAsync(
+            MenuPizzaCrustFlavor record)
         {
             return await Task.FromResult(new ManageMenuPizzaCrustFlavorViewModel
             {
@@ -67,7 +65,7 @@ namespace PizzaWebsite.Controllers
 
         protected override MenuPizzaCrustFlavor ViewModelToRecord(ManageMenuPizzaCrustFlavorViewModel model)
         {
-            return new MenuPizzaCrustFlavor()
+            return new MenuPizzaCrustFlavor
             {
                 Id = model.Id,
                 AvailableForPurchase = model.AvailableForPurchase,

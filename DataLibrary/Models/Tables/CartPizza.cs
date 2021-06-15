@@ -1,16 +1,18 @@
-﻿using Dapper;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Dapper;
 
 namespace DataLibrary.Models.Tables
 {
     [Table("CartPizza")]
     public class CartPizza : CartItemCategory
     {
+        public CartPizza()
+        {
+            ToppingList = new List<CartPizzaTopping>();
+        }
+
         public string Size { get; set; }
         public int MenuPizzaCrustId { get; set; }
         public int MenuPizzaSauceId { get; set; }
@@ -19,11 +21,6 @@ namespace DataLibrary.Models.Tables
         public string CheeseAmount { get; set; }
         public int MenuPizzaCrustFlavorId { get; set; }
         public List<CartPizzaTopping> ToppingList { get; set; }
-
-        public CartPizza()
-        {
-            ToppingList = new List<CartPizzaTopping>();
-        }
 
         public override dynamic GetId()
         {
@@ -42,7 +39,7 @@ namespace DataLibrary.Models.Tables
 
         internal override async Task MapEntityAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            ToppingList.AddRange(await pizzaDb.GetListAsync<CartPizzaTopping>(new { CartItemId = CartItemId }));
+            ToppingList.AddRange(await pizzaDb.GetListAsync<CartPizzaTopping>(new {CartItemId}));
         }
 
         internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
@@ -50,7 +47,7 @@ namespace DataLibrary.Models.Tables
             await pizzaDb.Connection.QueryAsync(@"INSERT INTO
                                    CartPizza (CartItemId, Size, MenuPizzaCrustId, MenuPizzaSauceId, SauceAmount, MenuPizzaCheeseId, CheeseAmount, MenuPizzaCrustFlavorId)
                                    VALUES (@CartItemId, @Size, @MenuPizzaCrustId, @MenuPizzaSauceId, @SauceAmount, @MenuPizzaCheeseId, @CheeseAmount, @MenuPizzaCrustFlavorId)",
-                                      this, transaction);
+                this, transaction);
 
             foreach (CartPizzaTopping topping in ToppingList)
             {
@@ -64,7 +61,7 @@ namespace DataLibrary.Models.Tables
         internal override async Task<int> UpdateAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
             // Delete previous toppings
-            await pizzaDb.Connection.DeleteListAsync<CartPizzaTopping>(new { CartItemId = CartItemId }, transaction);
+            await pizzaDb.Connection.DeleteListAsync<CartPizzaTopping>(new {CartItemId}, transaction);
 
             // Insert new toppings
             foreach (CartPizzaTopping topping in ToppingList)
@@ -80,11 +77,9 @@ namespace DataLibrary.Models.Tables
         public override async Task<decimal> CalculateItemPriceAsync(PizzaDatabase pizzaDb)
         {
             decimal total = 0.0m;
-
             MenuPizzaCheese cheese = await pizzaDb.GetAsync<MenuPizzaCheese>(MenuPizzaCheeseId);
             MenuPizzaSauce sauce = await pizzaDb.GetAsync<MenuPizzaSauce>(MenuPizzaSauceId);
             MenuPizzaCrust crust = await pizzaDb.GetAsync<MenuPizzaCrust>(MenuPizzaCrustId);
-
             switch (CheeseAmount)
             {
                 case "Light":
@@ -126,10 +121,9 @@ namespace DataLibrary.Models.Tables
 
             foreach (CartPizzaTopping topping in ToppingList)
             {
-                MenuPizzaToppingType toppingType = await pizzaDb.GetAsync<MenuPizzaToppingType>(topping.MenuPizzaToppingTypeId);
-
+                MenuPizzaToppingType toppingType =
+                    await pizzaDb.GetAsync<MenuPizzaToppingType>(topping.MenuPizzaToppingTypeId);
                 decimal toppingAmount = 0.0m;
-
                 switch (topping.ToppingAmount)
                 {
                     case "Light":

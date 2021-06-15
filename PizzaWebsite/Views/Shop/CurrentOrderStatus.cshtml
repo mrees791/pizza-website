@@ -1,14 +1,14 @@
-﻿@using PizzaWebsite.Models.Shop
-@model OrderStatusViewModel
+﻿@model PizzaWebsite.Models.Shop.OrderStatusViewModel
 @{
     ViewBag.Title = "Order Status";
 }
 <h2>@ViewBag.Title</h2>
 @Html.Partial("~/Views/Shop/_OrderStatus.cshtml", Model)
+
 @section Scripts {
     <script type="text/javascript">
-        $(function () {
-            pizzaSiteOrderStatusNs.updateOrderStatus(@Model.CustomerOrderId)
+        $(function() {
+            pizzaSiteOrderStatusNs.updateOrderStatus(@Model.CustomerOrderId);
         });
     </script>
 }

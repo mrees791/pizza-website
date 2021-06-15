@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace DataLibrary.Models
 {
     public class CostSummary
     {
-        public decimal Subtotal { get; private set; }
-        public decimal Tax { get; private set; }
-        public decimal Total { get; private set; }
-
         public CostSummary(IEnumerable<CartItemJoin> cartItemJoinList)
         {
             UpdateTotals(cartItemJoinList);
         }
+
+        public decimal Subtotal { get; private set; }
+        public decimal Tax { get; private set; }
+        public decimal Total { get; private set; }
 
         private void UpdateTotals(IEnumerable<CartItemJoin> cartItemJoinList)
         {

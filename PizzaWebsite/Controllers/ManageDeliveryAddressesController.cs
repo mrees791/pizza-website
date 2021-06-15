@@ -1,18 +1,15 @@
-﻿using DataLibrary.Models;
+﻿using System.Collections.Generic;
+using System.Net;
+using System.Net.Mime;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using DataLibrary.Models;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity;
 using PizzaWebsite.Controllers.BaseControllers;
 using PizzaWebsite.Models;
 using PizzaWebsite.Models.ManageDeliveryAddresses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Mime;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
@@ -21,15 +18,16 @@ namespace PizzaWebsite.Controllers
     {
         public async Task<ActionResult> Index()
         {
-            DeliveryAddressSearch addressSearch = new DeliveryAddressSearch()
+            DeliveryAddressSearch addressSearch = new DeliveryAddressSearch
             {
                 UserId = User.Identity.GetUserId()
             };
             List<DeliveryAddressViewModel> addressVmList = new List<DeliveryAddressViewModel>();
-            IEnumerable<DeliveryAddress> addressList = await PizzaDb.GetListAsync<DeliveryAddress>("Name", SortOrder.Ascending, addressSearch);
+            IEnumerable<DeliveryAddress> addressList =
+                await PizzaDb.GetListAsync<DeliveryAddress>("Name", SortOrder.Ascending, addressSearch);
             foreach (DeliveryAddress address in addressList)
             {
-                DeliveryAddressViewModel addressVm = new DeliveryAddressViewModel()
+                DeliveryAddressViewModel addressVm = new DeliveryAddressViewModel
                 {
                     Id = address.Id,
                     Name = address.Name,
@@ -44,7 +42,8 @@ namespace PizzaWebsite.Controllers
                 };
                 addressVmList.Add(addressVm);
             }
-            ManageAddressesViewModel model = new ManageAddressesViewModel()
+
+            ManageAddressesViewModel model = new ManageAddressesViewModel
             {
                 AddressVmList = addressVmList
             };
@@ -53,7 +52,7 @@ namespace PizzaWebsite.Controllers
 
         public ActionResult AddNewAddress()
         {
-            ManageDeliveryAddressViewModel model = new ManageDeliveryAddressViewModel()
+            ManageDeliveryAddressViewModel model = new ManageDeliveryAddressViewModel
             {
                 StateList = GeographyServices.StateList,
                 AddressTypeList = ListServices.DeliveryAddressTypeList
@@ -69,7 +68,8 @@ namespace PizzaWebsite.Controllers
             {
                 return View("ManageDeliveryAddress", model);
             }
-            DeliveryAddress address = new DeliveryAddress()
+
+            DeliveryAddress address = new DeliveryAddress
             {
                 Id = model.Id,
                 UserId = User.Identity.GetUserId(),
@@ -87,13 +87,16 @@ namespace PizzaWebsite.Controllers
             }
             else
             {
-                bool authorized = await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId(), address);
+                bool authorized =
+                    await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId(), address);
                 if (!authorized)
                 {
                     return NotAuthorizedToModifyAddressErrorMessage();
                 }
+
                 await PizzaDb.UpdateAsync(address);
             }
+
             return RedirectToAction("Index");
         }
 
@@ -106,12 +109,14 @@ namespace PizzaWebsite.Controllers
             {
                 return AddressNotFoundErrorMessage();
             }
+
             bool authorized = await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId(), address);
             if (!authorized)
             {
                 return NotAuthorizedToModifyAddressErrorMessage();
             }
-            ManageDeliveryAddressViewModel model = new ManageDeliveryAddressViewModel()
+
+            ManageDeliveryAddressViewModel model = new ManageDeliveryAddressViewModel
             {
                 Id = addressId,
                 Name = address.Name,
@@ -130,46 +135,53 @@ namespace PizzaWebsite.Controllers
         [HttpPost]
         public async Task<ActionResult> DeleteDeliveryAddressAjax(int addressId)
         {
-            Response.StatusCode = (int)HttpStatusCode.OK;
+            Response.StatusCode = (int) HttpStatusCode.OK;
             DeliveryAddress address = await PizzaDb.GetAsync<DeliveryAddress>(addressId);
             if (address == null)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
                 return Json($"Delivery Address with ID {addressId} does not exist.", MediaTypeNames.Text.Plain);
             }
+
             bool authorized = await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId(), address);
             if (!authorized)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json($"Current user is not authorized to delete delivery address ID {addressId}.", MediaTypeNames.Text.Plain);
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return Json($"Current user is not authorized to delete delivery address ID {addressId}.",
+                    MediaTypeNames.Text.Plain);
             }
+
             int rowsDeleted = await PizzaDb.DeleteByIdAsync<DeliveryAddress>(addressId);
             if (rowsDeleted == 0)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json($"Unable to delete address.", MediaTypeNames.Text.Plain);
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return Json("Unable to delete address.", MediaTypeNames.Text.Plain);
             }
+
             return Json("Address deleted.", MediaTypeNames.Text.Plain);
         }
 
         [HttpPost]
         public async Task<ActionResult> GetDeliveryAddressAjax(int addressId)
         {
-            Response.StatusCode = (int)HttpStatusCode.OK;
+            Response.StatusCode = (int) HttpStatusCode.OK;
             DeliveryAddress address = await PizzaDb.GetAsync<DeliveryAddress>(addressId);
             if (address == null)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
                 return Json($"Delivery Address with ID {addressId} does not exist.", MediaTypeNames.Text.Plain);
             }
+
             bool authorized = await PizzaDb.Commands.UserOwnsDeliveryAddressAsync(User.Identity.GetUserId(), address);
             if (!authorized)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json($"Current user is not allowed to access delivery address ID {addressId}.", MediaTypeNames.Text.Plain);
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return Json($"Current user is not allowed to access delivery address ID {addressId}.",
+                    MediaTypeNames.Text.Plain);
             }
+
             // Name, Address Type, Street Address, City, State, Zip Code, Phone Number
-            string[] deliveryAddressResponse = new string[]
+            string[] deliveryAddressResponse =
             {
                 address.Name,
                 address.AddressType,
@@ -184,7 +196,7 @@ namespace PizzaWebsite.Controllers
 
         private ActionResult AddressNotFoundErrorMessage()
         {
-            ErrorMessageViewModel model = new ErrorMessageViewModel()
+            ErrorMessageViewModel model = new ErrorMessageViewModel
             {
                 Header = "Error",
                 ErrorMessage = "Address not found.",
@@ -196,7 +208,7 @@ namespace PizzaWebsite.Controllers
 
         private ActionResult NotAuthorizedToModifyAddressErrorMessage()
         {
-            ErrorMessageViewModel model = new ErrorMessageViewModel()
+            ErrorMessageViewModel model = new ErrorMessageViewModel
             {
                 Header = "Authorization Error",
                 ErrorMessage = "You are not authorized to modify this address.",

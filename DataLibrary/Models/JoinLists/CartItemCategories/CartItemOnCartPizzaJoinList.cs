@@ -1,11 +1,6 @@
-﻿using DataLibrary.Models.JoinLists.BaseClasses;
-using DataLibrary.Models.Sql;
+﻿using System.Threading.Tasks;
+using DataLibrary.Models.JoinLists.BaseClasses;
 using DataLibrary.Models.Tables;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataLibrary.Models.JoinLists.CartItemCategories
 {
@@ -33,7 +28,7 @@ namespace DataLibrary.Models.JoinLists.CartItemCategories
 
         protected override string GetSqlJoinQuery(bool onlySelectFirst)
         {
-            return $@"SELECT {sqlServices.CreateTopClause(onlySelectFirst)}
+            return $@"SELECT {SqlServices.CreateTopClause(onlySelectFirst)}
                       c.Id, c.CartId, c.UserId, c.Price, c.PricePerItem, c.Quantity, c.ProductCategory, c.Quantity,
                       p.CartItemId, p.CheeseAmount, p.MenuPizzaCheeseId, p.MenuPizzaCrustFlavorId, p.MenuPizzaCrustId, p.MenuPizzaSauceId, p.SauceAmount, p.size
 	                  FROM CartItem c

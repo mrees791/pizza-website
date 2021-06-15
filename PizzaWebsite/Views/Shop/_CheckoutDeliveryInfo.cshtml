@@ -1,10 +1,9 @@
-﻿@using PizzaWebsite.Models.Shop
-@model CheckoutViewModel
+﻿@model PizzaWebsite.Models.Shop.CheckoutViewModel
 <div class="form-group">
-    @Html.LabelFor(model => model.SelectedDeliveryAddressId, htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.SelectedDeliveryAddressId, new {@class = "control-label col-md-2"})
     <div class="col-md-10">
         @Html.DropDownListFor(m => m.SelectedDeliveryAddressId, new SelectList(Model.DeliveryAddressSelectList, "Value", "Text"))
-        @Html.ValidationMessageFor(model => model.SelectedDeliveryAddressId, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(model => model.SelectedDeliveryAddressId, "", new {@class = "text-danger"})
     </div>
 </div>
 @if (Model.IsNewDeliveryAddress())

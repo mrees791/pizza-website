@@ -1,19 +1,17 @@
-﻿using DataLibrary.Models;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Threading.Tasks;
+using DataLibrary.Models;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Models.Carts;
 using PizzaWebsite.Models.Shop;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
 
 namespace PizzaWebsite.Models.ViewModelServices
 {
     public class PreviousOrderServices
     {
-        public async Task<PreviousOrderViewModel> CreateViewModelAsync(bool loadCartItems, CustomerOrder customerOrder, DeliveryInfo deliveryInfo, PizzaDatabase pizzaDb, IEnumerable<int> quantityList)
+        public async Task<PreviousOrderViewModel> CreateViewModelAsync(bool loadCartItems, CustomerOrder customerOrder,
+            DeliveryInfo deliveryInfo, PizzaDatabase pizzaDb, IEnumerable<int> quantityList)
         {
             CartViewModel cartVm = new CartViewModel();
             if (loadCartItems)
@@ -21,10 +19,12 @@ namespace PizzaWebsite.Models.ViewModelServices
                 CartServices cartServices = new CartServices();
                 cartVm = await cartServices.CreateViewModelAsync(customerOrder.CartId, pizzaDb, quantityList);
             }
-            return new PreviousOrderViewModel()
+
+            return new PreviousOrderViewModel
             {
                 Id = customerOrder.Id,
-                DateOfOrder = $"{customerOrder.DateOfOrder.ToShortDateString()} {customerOrder.DateOfOrder.ToShortTimeString()}",
+                DateOfOrder =
+                    $"{customerOrder.DateOfOrder.ToShortDateString()} {customerOrder.DateOfOrder.ToShortTimeString()}",
                 OrderTotal = customerOrder.OrderTotal.ToString("C", CultureInfo.CurrentCulture),
                 OrderType = customerOrder.GetOrderType(),
                 CartVm = cartVm

@@ -1,86 +1,51 @@
-﻿using DataLibrary.Models;
-using DataLibrary.Models.QueryFilters;
+﻿using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
+using DataLibrary.Models;
 using DataLibrary.Models.Services;
 using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using PizzaWebsite.Models;
 using PizzaWebsite.Models.Geography;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers.BaseControllers
 {
     public abstract class BaseController : Controller
     {
+        private GeographyServices _geographyServices;
+        private ListServices _listServices;
+        private PizzaDatabase _pizzaDb;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private PizzaDatabase _pizzaDb;
-        private ListServices _listServices;
-        private GeographyServices _geographyServices;
 
         public ListServices ListServices
         {
-            get
-            {
-                return _listServices ?? new ListServices();
-            }
-            private set
-            {
-                _listServices = value;
-            }
+            get => _listServices ?? new ListServices();
+            private set => _listServices = value;
         }
 
         public PizzaDatabase PizzaDb
         {
-            get
-            {
-                return _pizzaDb ?? HttpContext.GetOwinContext().Get<PizzaDatabase>();
-            }
-            private set
-            {
-                _pizzaDb = value;
-            }
+            get => _pizzaDb ?? HttpContext.GetOwinContext().Get<PizzaDatabase>();
+            private set => _pizzaDb = value;
         }
 
         public ApplicationSignInManager SignInManager
         {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set
-            {
-                _signInManager = value;
-            }
+            get => _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+            private set => _signInManager = value;
         }
 
         public ApplicationUserManager UserManager
         {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
+            get => _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            private set => _userManager = value;
         }
 
         public GeographyServices GeographyServices
         {
-            get
-            {
-                return _geographyServices ?? new GeographyServices();
-            }
-            private set
-            {
-                _geographyServices = value;
-            }
+            get => _geographyServices ?? new GeographyServices();
+            private set => _geographyServices = value;
         }
 
         protected async Task<SiteUser> GetCurrentUserAsync()

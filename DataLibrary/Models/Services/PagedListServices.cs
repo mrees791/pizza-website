@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataLibrary.Models.Services
+﻿namespace DataLibrary.Models.Services
 {
     public class PagedListServices
     {
@@ -14,6 +8,7 @@ namespace DataLibrary.Models.Services
             {
                 return 0;
             }
+
             return (pageNumber - 1) * rowsPerPage;
         }
 
@@ -23,12 +18,14 @@ namespace DataLibrary.Models.Services
             {
                 return 0;
             }
+
             int pages = resultCount / rowsPerPage;
             int remainder = resultCount % rowsPerPage;
             if (remainder != 0)
             {
                 pages += 1;
             }
+
             return pages;
         }
     }

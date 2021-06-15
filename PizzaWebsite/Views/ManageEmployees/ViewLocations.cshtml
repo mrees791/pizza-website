@@ -1,17 +1,21 @@
 ﻿@using PizzaWebsite.Models.ManageEmployees
-@model ViewEmployeeLocationsViewModel
+@model PizzaWebsite.Models.ManageEmployees.ViewEmployeeLocationsViewModel
 @{
     ViewBag.Title = "Employee Locations";
 }
 <h2>@ViewBag.Title</h2>
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Employee")">Home</a></li>
-        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ManageEmployees")?@Request.QueryString">Manage Employees</a></li>
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "Employee")">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "ManageEmployees")?@Request.QueryString">Manage Employees</a>
+        </li>
         <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
     </ol>
 </nav>
-<hr />
+<hr/>
 <h3>@Model.EmployeeId Locations</h3>
 <table class="table">
     <tr>
@@ -34,7 +38,7 @@
             @Html.DisplayNameFor(model => model.ItemViewModel.IsActiveLocation)
         </th>
     </tr>
-    @foreach (var item in Model.EmployeeLocationVmList)
+    @foreach (EmployeeLocationViewModel item in Model.EmployeeLocationVmList)
     {
         <tr>
             <td>

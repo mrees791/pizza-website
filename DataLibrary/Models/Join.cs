@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
+﻿using System.Data;
 using System.Threading.Tasks;
 
 namespace DataLibrary.Models
@@ -20,6 +16,7 @@ namespace DataLibrary.Models
             {
                 await Table1.MapEntityAsync(pizzaDb, transaction);
             }
+
             if (Table2 != null)
             {
                 await Table2.MapEntityAsync(pizzaDb, transaction);

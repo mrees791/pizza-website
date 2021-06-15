@@ -1,24 +1,20 @@
-﻿using DataLibrary.Models.QueryFilters;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
+using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Controllers.BaseControllers;
-using PizzaWebsite.Models;
 using PizzaWebsite.Models.ManageMenus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
     [Authorize(Roles = "Admin,Executive")]
-    public class ManagePizzaCheeseMenuController : BaseManageMenuController<MenuPizzaCheese, ManageMenuPizzaCheeseViewModel>
+    public class
+        ManagePizzaCheeseMenuController : BaseManageMenuController<MenuPizzaCheese, ManageMenuPizzaCheeseViewModel>
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);
-            MenuPizzaCheeseFilter searchFilter = new MenuPizzaCheeseFilter()
+            MenuPizzaCheeseFilter searchFilter = new MenuPizzaCheeseFilter
             {
                 Name = name
             };
@@ -27,7 +23,7 @@ namespace PizzaWebsite.Controllers
 
         public override async Task<ActionResult> Add()
         {
-            MenuPizzaCheese cheese = new MenuPizzaCheese()
+            MenuPizzaCheese cheese = new MenuPizzaCheese
             {
                 AvailableForPurchase = true
             };
@@ -70,7 +66,7 @@ namespace PizzaWebsite.Controllers
 
         protected override MenuPizzaCheese ViewModelToRecord(ManageMenuPizzaCheeseViewModel model)
         {
-            return new MenuPizzaCheese()
+            return new MenuPizzaCheese
             {
                 Id = model.Id,
                 SortOrder = model.SortOrder,

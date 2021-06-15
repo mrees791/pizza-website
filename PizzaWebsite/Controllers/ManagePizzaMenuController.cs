@@ -1,25 +1,21 @@
-﻿using DataLibrary.Models;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using DataLibrary.Models;
 using DataLibrary.Models.Builders;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Controllers.BaseControllers;
-using PizzaWebsite.Models;
 using PizzaWebsite.Models.ManageMenus;
 using PizzaWebsite.Models.PizzaBuilders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
     [Authorize(Roles = "Admin,Executive")]
     public class ManagePizzaMenuController : BaseManageMenuController<MenuPizza, ManageMenuPizzaViewModel>
     {
-        private PizzaBuilderServices _pizzaBuilderServices;
+        private readonly PizzaBuilderServices _pizzaBuilderServices;
 
         public ManagePizzaMenuController()
         {
@@ -29,7 +25,7 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);
-            MenuPizzaFilter searchFilter = new MenuPizzaFilter()
+            MenuPizzaFilter searchFilter = new MenuPizzaFilter
             {
                 PizzaName = name
             };
@@ -38,7 +34,7 @@ namespace PizzaWebsite.Controllers
 
         public override async Task<ActionResult> Add()
         {
-            MenuPizza pizza = new MenuPizza()
+            MenuPizza pizza = new MenuPizza
             {
                 AvailableForPurchase = true,
                 CheeseAmount = "Regular",
@@ -56,6 +52,7 @@ namespace PizzaWebsite.Controllers
             {
                 return View("Manage", model);
             }
+
             return await Add(model, model.Name);
         }
 
@@ -69,7 +66,7 @@ namespace PizzaWebsite.Controllers
         protected override async Task<ManageMenuPizzaViewModel> RecordToViewModelAsync(MenuPizza record)
         {
             MenuPizzaBuilder pizzaBuilder = new MenuPizzaBuilder();
-            await pizzaBuilder.InitializeAsync(new MenuItemSearch() { AvailableForPurchase = true }, PizzaDb);
+            await pizzaBuilder.InitializeAsync(new MenuItemSearch {AvailableForPurchase = true}, PizzaDb);
             Dictionary<int, string> cheeseDictionary = new Dictionary<int, string>();
             Dictionary<int, string> crustFlavorDictionary = new Dictionary<int, string>();
             Dictionary<int, string> sauceDictionary = new Dictionary<int, string>();
@@ -77,16 +74,20 @@ namespace PizzaWebsite.Controllers
             {
                 cheeseDictionary.Add(cheese.Id, cheese.Name);
             }
+
             foreach (MenuPizzaCrustFlavor crustFlavor in pizzaBuilder.CrustFlavorList)
             {
                 crustFlavorDictionary.Add(crustFlavor.Id, crustFlavor.Name);
             }
+
             foreach (MenuPizzaSauce sauce in pizzaBuilder.SauceList)
             {
                 sauceDictionary.Add(sauce.Id, sauce.Name);
             }
-            List<PizzaToppingViewModel> toppingVmList = CreateToppingViewModelList(record.ToppingList, pizzaBuilder.ToppingTypeList, ListServices.ToppingAmountList, ListServices.ToppingHalfList);
-            return new ManageMenuPizzaViewModel()
+
+            List<PizzaToppingViewModel> toppingVmList = CreateToppingViewModelList(record.ToppingList,
+                pizzaBuilder.ToppingTypeList, ListServices.ToppingAmountList, ListServices.ToppingHalfList);
+            return new ManageMenuPizzaViewModel
             {
                 Id = record.Id,
                 Name = record.PizzaName,
@@ -111,7 +112,7 @@ namespace PizzaWebsite.Controllers
 
         protected override MenuPizza ViewModelToRecord(ManageMenuPizzaViewModel model)
         {
-            return new MenuPizza()
+            return new MenuPizza
             {
                 Id = model.Id,
                 AvailableForPurchase = model.AvailableForPurchase,
@@ -128,13 +129,14 @@ namespace PizzaWebsite.Controllers
             };
         }
 
-        private List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<MenuPizzaTopping> menuToppingList, IEnumerable<MenuPizzaToppingType> toppingTypeList,
+        private List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<MenuPizzaTopping> menuToppingList,
+            IEnumerable<MenuPizzaToppingType> toppingTypeList,
             IEnumerable<string> toppingAmountList, IEnumerable<string> toppingHalfList)
         {
             List<PizzaTopping> toppingList = new List<PizzaTopping>();
             foreach (MenuPizzaTopping menuTopping in menuToppingList)
             {
-                PizzaTopping topping = new PizzaTopping()
+                PizzaTopping topping = new PizzaTopping
                 {
                     ToppingTypeId = menuTopping.MenuPizzaToppingTypeId,
                     ToppingAmount = menuTopping.ToppingAmount,
@@ -142,7 +144,9 @@ namespace PizzaWebsite.Controllers
                 };
                 toppingList.Add(topping);
             }
-            return _pizzaBuilderServices.CreateToppingViewModelList(toppingList, toppingTypeList, toppingAmountList, toppingHalfList);
+
+            return _pizzaBuilderServices.CreateToppingViewModelList(toppingList, toppingTypeList, toppingAmountList,
+                toppingHalfList);
         }
 
         private List<MenuPizzaTopping> GetToppingRecordsFromViewModel(ManageMenuPizzaViewModel model)
@@ -152,7 +156,7 @@ namespace PizzaWebsite.Controllers
             {
                 if (toppingVm.SelectedAmount != "None")
                 {
-                    toppingRecordList.Add(new MenuPizzaTopping()
+                    toppingRecordList.Add(new MenuPizzaTopping
                     {
                         MenuPizzaId = model.Id,
                         MenuPizzaToppingTypeId = toppingVm.Id,
@@ -161,6 +165,7 @@ namespace PizzaWebsite.Controllers
                     });
                 }
             }
+
             return toppingRecordList;
         }
     }

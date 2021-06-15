@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
-using System.Web;
 
 namespace PizzaWebsite.Models.Attributes
 {
@@ -30,7 +26,7 @@ namespace PizzaWebsite.Models.Attributes
 
             if (!Regex.IsMatch(employeeId, EmployeeIdRegex))
             {
-                ErrorMessage = $"Employee ID's can only have numeric digits and upper-case letters.";
+                ErrorMessage = "Employee ID's can only have numeric digits and upper-case letters.";
                 return false;
             }
 

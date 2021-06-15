@@ -1,24 +1,20 @@
-﻿using DataLibrary.Models.QueryFilters;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
+using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Controllers.BaseControllers;
-using PizzaWebsite.Models;
 using PizzaWebsite.Models.ManageMenus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
     [Authorize(Roles = "Admin,Executive")]
-    public class ManagePizzaCrustMenuController : BaseManageMenuController<MenuPizzaCrust, ManageMenuPizzaCrustViewModel>
+    public class
+        ManagePizzaCrustMenuController : BaseManageMenuController<MenuPizzaCrust, ManageMenuPizzaCrustViewModel>
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);
-            MenuPizzaCrustFilter searchFilter = new MenuPizzaCrustFilter()
+            MenuPizzaCrustFilter searchFilter = new MenuPizzaCrustFilter
             {
                 Name = name
             };
@@ -27,7 +23,7 @@ namespace PizzaWebsite.Controllers
 
         public override async Task<ActionResult> Add()
         {
-            MenuPizzaCrust crust = new MenuPizzaCrust()
+            MenuPizzaCrust crust = new MenuPizzaCrust
             {
                 AvailableForPurchase = true
             };
@@ -70,7 +66,7 @@ namespace PizzaWebsite.Controllers
 
         protected override MenuPizzaCrust ViewModelToRecord(ManageMenuPizzaCrustViewModel model)
         {
-            return new MenuPizzaCrust()
+            return new MenuPizzaCrust
             {
                 Id = model.Id,
                 AvailableForPurchase = model.AvailableForPurchase,

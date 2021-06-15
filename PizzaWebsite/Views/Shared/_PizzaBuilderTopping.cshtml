@@ -1,17 +1,16 @@
-﻿@using PizzaWebsite.Models.PizzaBuilders
-@model PizzaToppingViewModel
+﻿@model PizzaWebsite.Models.PizzaBuilders.PizzaToppingViewModel
 @* Save list state *@
-<input type="hidden" name="ToppingVmList[@Model.ListIndex].ListIndex" value="@Model.ListIndex" />
-<input type="hidden" name="ToppingVmList[@Model.ListIndex].Category" value="@Model.Category" />
-<input type="hidden" name="ToppingVmList[@Model.ListIndex].Id" value="@Model.Id" />
-<input type="hidden" name="ToppingVmList[@Model.ListIndex].Name" value="@Model.Name" />
+<input type="hidden" name="ToppingVmList[@Model.ListIndex].ListIndex" value="@Model.ListIndex"/>
+<input type="hidden" name="ToppingVmList[@Model.ListIndex].Category" value="@Model.Category"/>
+<input type="hidden" name="ToppingVmList[@Model.ListIndex].Id" value="@Model.Id"/>
+<input type="hidden" name="ToppingVmList[@Model.ListIndex].Name" value="@Model.Name"/>
 @for (int iToppingAmount = 0; iToppingAmount < Model.AmountList.Count(); iToppingAmount++)
 {
-    <input type="hidden" name="ToppingVmList[@Model.ListIndex].AmountList[@iToppingAmount]" value="@Model.AmountList.ElementAt(iToppingAmount)" />
+    <input type="hidden" name="ToppingVmList[@Model.ListIndex].AmountList[@iToppingAmount]" value="@Model.AmountList.ElementAt(iToppingAmount)"/>
 }
 @for (int iToppingHalf = 0; iToppingHalf < Model.ToppingHalfList.Count(); iToppingHalf++)
 {
-    <input type="hidden" name="ToppingVmList[@Model.ListIndex].ToppingHalfList[@iToppingHalf]" value="@Model.ToppingHalfList.ElementAt(iToppingHalf)" />
+    <input type="hidden" name="ToppingVmList[@Model.ListIndex].ToppingHalfList[@iToppingHalf]" value="@Model.ToppingHalfList.ElementAt(iToppingHalf)"/>
 }
 <div class="form-group pb-topping">
     <div class="col-md-2">
@@ -23,11 +22,11 @@
             string toppingAmount = Model.AmountList.ElementAt(iToppingAmount);
             if (Model.SelectedAmount == toppingAmount)
             {
-                <input type="radio" name="@($"ToppingVmList[{Model.ListIndex}].SelectedAmount")" id="@($"ToppingVmList[{Model.ListIndex}].AmountList[{iToppingAmount}]")" value="@toppingAmount" checked />
+                <input type="radio" name="@($"ToppingVmList[{Model.ListIndex}].SelectedAmount")" id="@($"ToppingVmList[{Model.ListIndex}].AmountList[{iToppingAmount}]")" value="@toppingAmount" checked/>
             }
             else
             {
-                <input type="radio" name="@($"ToppingVmList[{Model.ListIndex}].SelectedAmount")" id="@($"ToppingVmList[{Model.ListIndex}].AmountList[{iToppingAmount}]")" value="@toppingAmount" />
+                <input type="radio" name="@($"ToppingVmList[{Model.ListIndex}].SelectedAmount")" id="@($"ToppingVmList[{Model.ListIndex}].AmountList[{iToppingAmount}]")" value="@toppingAmount"/>
             }
             <label for="@($"ToppingVmList[{Model.ListIndex}].AmountList[{iToppingAmount}]")">@toppingAmount</label>
         }
@@ -38,11 +37,11 @@
             string toppingHalf = Model.ToppingHalfList.ElementAt(iToppingHalf);
             if (Model.SelectedToppingHalf == toppingHalf)
             {
-                <input type="radio" name="@($"ToppingVmList[{Model.ListIndex}].SelectedToppingHalf")" id="@($"ToppingVmList[{Model.ListIndex}].ToppingHalfList[{iToppingHalf}]")" value="@toppingHalf" checked />
+                <input type="radio" name="@($"ToppingVmList[{Model.ListIndex}].SelectedToppingHalf")" id="@($"ToppingVmList[{Model.ListIndex}].ToppingHalfList[{iToppingHalf}]")" value="@toppingHalf" checked/>
             }
             else
             {
-                <input type="radio" name="@($"ToppingVmList[{Model.ListIndex}].SelectedToppingHalf")" id="@($"ToppingVmList[{Model.ListIndex}].ToppingHalfList[{iToppingHalf}]")" value="@toppingHalf" />
+                <input type="radio" name="@($"ToppingVmList[{Model.ListIndex}].SelectedToppingHalf")" id="@($"ToppingVmList[{Model.ListIndex}].ToppingHalfList[{iToppingHalf}]")" value="@toppingHalf"/>
             }
             <label for="@($"ToppingVmList[{Model.ListIndex}].ToppingHalfList[{iToppingHalf}]")">@toppingHalf</label>
         }

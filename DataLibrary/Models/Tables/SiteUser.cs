@@ -1,11 +1,7 @@
-﻿using Dapper;
-using DataLibrary.Models.Sql;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Dapper;
 
 namespace DataLibrary.Models.Tables
 {
@@ -14,6 +10,7 @@ namespace DataLibrary.Models.Tables
     {
         [Key]
         public string Id { get; set; }
+
         public int CurrentCartId { get; set; }
         public int ConfirmOrderCartId { get; set; }
         public int OrderConfirmationId { get; set; }
@@ -69,7 +66,8 @@ namespace DataLibrary.Models.Tables
 
         private string GetInsertQuery()
         {
-            return @"INSERT INTO SiteUser (Id, CurrentCartId, ConfirmOrderCartId, OrderConfirmationId, IsBanned, ZipCode, Email, EmailConfirmed, PasswordHash, SecurityStamp, PhoneNumber, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEndDateUtc, LockoutEnabled, AccessFailedCount)
+            return
+                @"INSERT INTO SiteUser (Id, CurrentCartId, ConfirmOrderCartId, OrderConfirmationId, IsBanned, ZipCode, Email, EmailConfirmed, PasswordHash, SecurityStamp, PhoneNumber, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEndDateUtc, LockoutEnabled, AccessFailedCount)
                      VALUES (@Id, @CurrentCartId, @ConfirmOrderCartId, @OrderConfirmationId, @IsBanned, @ZipCode, @Email, @EmailConfirmed, @PasswordHash, @SecurityStamp, @PhoneNumber, @PhoneNumberConfirmed, @TwoFactorEnabled, @LockoutEndDateUtc, @LockoutEnabled, @AccessFailedCount)";
         }
     }

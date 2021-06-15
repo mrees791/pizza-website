@@ -1,10 +1,6 @@
-﻿using DataLibrary.Models;
+﻿using System.Globalization;
+using DataLibrary.Models;
 using PizzaWebsite.Models.Carts;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Web;
 
 namespace PizzaWebsite.Models.ViewModelServices
 {
@@ -12,7 +8,7 @@ namespace PizzaWebsite.Models.ViewModelServices
     {
         public CostSummaryViewModel CreateViewModel(CostSummary costSummary)
         {
-            return new CostSummaryViewModel()
+            return new CostSummaryViewModel
             {
                 Subtotal = costSummary.Subtotal.ToString("C", CultureInfo.CurrentCulture),
                 Tax = costSummary.Tax.ToString("C", CultureInfo.CurrentCulture),

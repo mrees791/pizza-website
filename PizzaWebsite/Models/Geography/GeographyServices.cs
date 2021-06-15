@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace PizzaWebsite.Models.Geography
 {
     public class GeographyServices
     {
-        private IEnumerable<State> _stateList;
-
         public GeographyServices()
         {
-            _stateList = CreateStateList();
+            StateList = CreateStateList();
         }
+
+        public IEnumerable<State> StateList { get; }
 
         private IEnumerable<State> CreateStateList()
         {
-            return new List<State>()
+            return new List<State>
             {
                 new State("Alabama", "AL"),
                 new State("Alaska", "AK"),
@@ -70,7 +67,5 @@ namespace PizzaWebsite.Models.Geography
                 new State("Wyoming", "WY")
             };
         }
-
-        public IEnumerable<State> StateList { get => _stateList; }
     }
 }

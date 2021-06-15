@@ -1,32 +1,33 @@
-﻿@using PizzaWebsite.Models.Employees
-@using PizzaWebsite.Models.ManageEmployees
-@model ManagePagedListViewModel<ManageEmployeeViewModel>
+﻿@using PizzaWebsite.Models.ManageEmployees
+@model PizzaWebsite.Models.Employees.ManagePagedListViewModel<PizzaWebsite.Models.ManageEmployees.ManageEmployeeViewModel>
 @{
     ViewBag.Title = "Manage Employees";
 }
 <h2>Manage Employees</h2>
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Employee")">Home</a></li>
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "Employee")">Home</a>
+        </li>
         <li class="breadcrumb-item active" aria-current="page">Manage Employees</li>
     </ol>
 </nav>
-<hr />
+<hr/>
 <div>
     @using (Html.BeginForm("Index", "ManageEmployees", FormMethod.Get))
     {
-        <input type="hidden" name="Page" value="1" />
+        <input type="hidden" name="Page" value="1"/>
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
         @Html.Label("EmployeeId", "Employee ID")
-        @Html.TextBox("EmployeeId", Request["EmployeeId"], new { @class = "form-control" })
+        @Html.TextBox("EmployeeId", Request["EmployeeId"], new {@class = "form-control"})
         @Html.Label("UserId", "User ID")
-        @Html.TextBox("UserId", Request["UserId"], new { @class = "form-control" })
-        <input type="submit" value="Apply Search Filters" class="btn btn-primary" />
+        @Html.TextBox("UserId", Request["UserId"], new {@class = "form-control"})
+        <input type="submit" value="Apply Search Filters" class="btn btn-primary"/>
     }
 </div>
 <div>
     <a href="@Url.Action("AddEmployee")?@(Request.QueryString)">
-        <input type="button" value="Add New Employee" class="btn btn-primary" />
+        <input type="button" value="Add New Employee" class="btn btn-primary"/>
     </a>
 </div>
 <table class="table">
@@ -44,7 +45,7 @@
         <th></th>
         <th></th>
     </tr>
-    @foreach (var item in Model.ItemViewModelList)
+    @foreach (ManageEmployeeViewModel item in Model.ItemViewModelList)
     {
         <tr>
             <td>
@@ -58,12 +59,12 @@
             </td>
             <td>
                 <a href="@Url.Action("ManageEmployee")/@item.Id?@(Request.QueryString)">
-                    <input type="button" value="Edit" class="btn btn-primary" />
+                    <input type="button" value="Edit" class="btn btn-primary"/>
                 </a>
             </td>
             <td>
                 <a href="@Url.Action("ViewLocations")/@item.Id?@(Request.QueryString)">
-                    <input type="button" value="View Locations" class="btn btn-primary" />
+                    <input type="button" value="View Locations" class="btn btn-primary"/>
                 </a>
             </td>
         </tr>
@@ -73,9 +74,10 @@
     <ul id="managePagination" class="pagination">
     </ul>
 </nav>
+
 @section Scripts {
     <script type="text/javascript">
-        $(function () {
+        $(function() {
             pizzaSiteNs.createPagination('#managePagination', @Model.PaginationVm.CurrentPage, @Model.PaginationVm.RowsPerPage, @Model.PaginationVm.TotalPages, @Model.PaginationVm.TotalNumberOfItems);
         });
     </script>

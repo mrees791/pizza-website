@@ -1,6 +1,5 @@
-﻿@using PizzaWebsite.Models
-@using PizzaWebsite.Models.Carts
-@model CartViewModel
+﻿@using PizzaWebsite.Models.Carts
+@model PizzaWebsite.Models.Carts.CartViewModel
 
 @{
     ViewBag.Title = "Cart";
@@ -13,12 +12,12 @@
 </div>
 <div id="cartBlock" style="display: none;">
     @Html.Partial("~/Views/Shared/Carts/_CartWithControls.cshtml")
-    @Html.ActionLink("Checkout", "Checkout", new { }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Checkout", "Checkout", new {}, new {@class = "btn btn-primary"})
 </div>
 
 @section Scripts {
     <script type="text/javascript">
-        $(function () {
+        $(function() {
             pizzaSiteCartNs.updateCartElementVisibility();
             pizzaSiteCartNs.updateCartSubtotal(@Model.CartId);
         });
@@ -27,36 +26,36 @@
     @foreach (CartItemViewModel cartItemVm in Model.CartItemVmList)
     {
         <script type="text/javascript">
-            $(function () {
+            $(function() {
                 var $cartItemRow = $('#@cartItemVm.CartItemRowId');
                 var $quantitySelect = $('#@cartItemVm.CartItemQuantitySelectId');
                 var $deleteButton = $('#@cartItemVm.CartItemDeleteButtonId');
                 var $priceCell = $('#@cartItemVm.CartItemPriceCellId');
                 // Update cart item quantity
-                $quantitySelect.on("change", function () {
-                    var quantity = $quantitySelect.val();
-                    var params = { cartItemId: @cartItemVm.CartItemId, quantity: quantity };
-                    pizzaSiteNs.ajaxCall('/Shop/UpdateCartItemQuantityAjax', JSON.stringify(params), 'POST').fail(function (response) {
-                        console.log(response);
-                    })
-                    .done(function (response) {
-                        $priceCell.html(response);
-                        pizzaSiteCartNs.updateCartSubtotal(@Model.CartId);
+                $quantitySelect.on("change",
+                    function() {
+                        var quantity = $quantitySelect.val();
+                        var params = { cartItemId: @cartItemVm.CartItemId, quantity: quantity };
+                        pizzaSiteNs.ajaxCall('/Shop/UpdateCartItemQuantityAjax', JSON.stringify(params), 'POST').fail(function(response) {
+                                console.log(response);
+                            })
+                            .done(function(response) {
+                                $priceCell.html(response);
+                                pizzaSiteCartNs.updateCartSubtotal(@Model.CartId);
+                            });
                     });
-                });
                 // Delete cart item
-                $deleteButton.on("click", function () {
-                    var params = { cartItemId: @cartItemVm.CartItemId };
-                    pizzaSiteNs.ajaxCall('/Shop/DeleteCartItemAjax', JSON.stringify(params), 'POST').
-                        fail(function (response) {
+                $deleteButton.on("click",
+                    function() {
+                        var params = { cartItemId: @cartItemVm.CartItemId };
+                        pizzaSiteNs.ajaxCall('/Shop/DeleteCartItemAjax', JSON.stringify(params), 'POST').fail(function(response) {
                             console.log(response);
-                        }).
-                        done(function (response) {
+                        }).done(function(response) {
                             $cartItemRow.remove();
                             pizzaSiteCartNs.updateCartElementVisibility();
                             pizzaSiteCartNs.updateCartSubtotal(@Model.CartId);
                         });
-                });
+                    });
             });
         </script>
     }

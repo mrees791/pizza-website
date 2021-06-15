@@ -1,12 +1,11 @@
-﻿@using PizzaWebsite.Models.Shop
-@model PreviousOrderViewModel
+﻿@model PizzaWebsite.Models.Shop.PreviousOrderViewModel
 @{
     ViewBag.Title = "Order";
 }
 <h2>@ViewBag.Title</h2>
 <div>
     <a href="@Url.Action("Index")?@(Request.QueryString)">
-        <input type="button" value="Back" class="btn btn-primary" />
+        <input type="button" value="Back" class="btn btn-primary"/>
     </a>
 </div>
 <h3>Date</h3>

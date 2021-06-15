@@ -1,17 +1,24 @@
-﻿using DataLibrary.Models.Tables;
-using Microsoft.AspNet.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
+using DataLibrary.Models.Tables;
+using Microsoft.AspNet.Identity;
 
 namespace PizzaWebsite.Models.Identity
 {
     public class IdentityUser : IUser<string>
     {
-        public string Id { get; set; }
+        // This constructor will be used when users use external logins (UserLogin)
+        public IdentityUser()
+        {
+            LockoutEndDateUtc = DateTimeOffset.Now;
+        }
+
+        public IdentityUser(SiteUser dbModel)
+        {
+            FromRecord(dbModel);
+        }
+
         public string PasswordHash { get; set; }
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
@@ -27,30 +34,31 @@ namespace PizzaWebsite.Models.Identity
         public int ConfirmOrderCartId { get; set; }
         public bool IsBanned { get; set; }
         public int OrderConfirmationId { get; set; }
-        public string UserName { get => Id; set => Id = value; }
+        public string Id { get; set; }
+
+        public string UserName
+        {
+            get => Id;
+            set => Id = value;
+        }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
-            var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+            ClaimsIdentity userIdentity =
+                await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
             return userIdentity;
         }
 
-        // This constructor will be used when users use external logins (UserLogin)
-        public IdentityUser()
-        {
-            LockoutEndDateUtc = DateTimeOffset.Now;
-        }
-
         public bool HasPassword()
         {
-            return !(string.IsNullOrEmpty(PasswordHash));
+            return !string.IsNullOrEmpty(PasswordHash);
         }
 
         public bool HasEmail()
         {
-            return !(string.IsNullOrEmpty(Email));
+            return !string.IsNullOrEmpty(Email);
         }
 
         public int IncrementAccessFailedCount()
@@ -65,7 +73,7 @@ namespace PizzaWebsite.Models.Identity
 
         public SiteUser ToRecord()
         {
-            return new SiteUser()
+            return new SiteUser
             {
                 AccessFailedCount = AccessFailedCount,
                 CurrentCartId = CurrentCartId,
@@ -104,11 +112,6 @@ namespace PizzaWebsite.Models.Identity
             SecurityStamp = dbModel.SecurityStamp;
             TwoFactorEnabled = dbModel.TwoFactorEnabled;
             ZipCode = dbModel.ZipCode;
-        }
-
-        public IdentityUser(SiteUser dbModel)
-        {
-            FromRecord(dbModel);
         }
     }
 }

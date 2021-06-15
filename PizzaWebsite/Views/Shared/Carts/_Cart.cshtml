@@ -1,24 +1,23 @@
-﻿@using PizzaWebsite.Models
-@using PizzaWebsite.Models.Carts
-@model CartViewModel
+﻿@using PizzaWebsite.Models.Carts
+@model PizzaWebsite.Models.Carts.CartViewModel
 <table class="table" id="cartTable">
     <thead>
-        <tr>
-            <th>Item</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Quantity</th>
-        </tr>
+    <tr>
+        <th>Item</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Quantity</th>
+    </tr>
     </thead>
     <tbody id="cartTableBody">
-        @foreach (CartItemViewModel cartItemVm in Model.CartItemVmList)
-        {
-            <tr id="@cartItemVm.CartItemRowId">
-                <td>@Html.Raw(cartItemVm.Name)</td>
-                <td>@Html.Raw(cartItemVm.DescriptionHtml)</td>
-                <td>@cartItemVm.Price</td>
-                <td>@Html.Raw(cartItemVm.Quantity)</td>
-            </tr>
-        }
+    @foreach (CartItemViewModel cartItemVm in Model.CartItemVmList)
+    {
+        <tr id="@cartItemVm.CartItemRowId">
+            <td>@Html.Raw(cartItemVm.Name)</td>
+            <td>@Html.Raw(cartItemVm.DescriptionHtml)</td>
+            <td>@cartItemVm.Price</td>
+            <td>@Html.Raw(cartItemVm.Quantity)</td>
+        </tr>
+    }
     </tbody>
 </table>

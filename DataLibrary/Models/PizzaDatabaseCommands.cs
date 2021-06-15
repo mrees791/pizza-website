@@ -1,30 +1,28 @@
-﻿using Dapper;
-using DataLibrary.Models.JoinLists;
-using DataLibrary.Models.Tables;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Dapper;
+using DataLibrary.Models.JoinLists;
+using DataLibrary.Models.Tables;
 
 namespace DataLibrary.Models
 {
     /// <summary>
-    /// Provides special commands for the PizzaDatabase class that go beyond simple CRUD operations
+    ///     Provides special commands for the PizzaDatabase class that go beyond simple CRUD operations
     /// </summary>
     public class PizzaDatabaseCommands
     {
-        private PizzaDatabase pizzaDb;
+        private readonly PizzaDatabase _pizzaDb;
 
         public PizzaDatabaseCommands(PizzaDatabase pizzaDb)
         {
-            this.pizzaDb = pizzaDb;
+            _pizzaDb = pizzaDb;
         }
 
         public async Task<int> AddItemToCart(SiteUser siteUser, CartItem cartItem, CartItemCategory cartItemCategory)
         {
-            using (IDbTransaction transaction = pizzaDb.Connection.BeginTransaction())
+            using (IDbTransaction transaction = _pizzaDb.Connection.BeginTransaction())
             {
                 await InsertAsync(cartItem, cartItemCategory, transaction);
                 transaction.Commit();
@@ -33,11 +31,12 @@ namespace DataLibrary.Models
             return cartItem.GetId();
         }
 
-        private async Task<int> InsertAsync(CartItem cartItem, CartItemCategory cartItemCategory, IDbTransaction transaction)
+        private async Task<int> InsertAsync(CartItem cartItem, CartItemCategory cartItemCategory,
+            IDbTransaction transaction)
         {
-            await cartItem.InsertAsync(pizzaDb, transaction);
+            await cartItem.InsertAsync(_pizzaDb, transaction);
             cartItemCategory.CartItemId = cartItem.Id;
-            await cartItemCategory.InsertAsync(pizzaDb, transaction);
+            await cartItemCategory.InsertAsync(_pizzaDb, transaction);
 
             return cartItem.GetId();
         }
@@ -46,35 +45,36 @@ namespace DataLibrary.Models
         {
             int rowsUpdated = 0;
 
-            using (IDbTransaction transaction = pizzaDb.Connection.BeginTransaction())
+            using (IDbTransaction transaction = _pizzaDb.Connection.BeginTransaction())
             {
-                rowsUpdated += await cartItem.UpdateAsync(pizzaDb, transaction);
-                rowsUpdated += await cartItemCategory.UpdateAsync(pizzaDb, transaction);
+                rowsUpdated += await cartItem.UpdateAsync(_pizzaDb, transaction);
+                rowsUpdated += await cartItemCategory.UpdateAsync(_pizzaDb, transaction);
                 transaction.Commit();
             }
 
             return rowsUpdated;
         }
 
-        public async Task<bool> IsEmployedAtLocation(Employee employee, StoreLocation storeLocation, IDbTransaction transaction = null)
+        public async Task<bool> IsEmployedAtLocation(Employee employee, StoreLocation storeLocation,
+            IDbTransaction transaction = null)
         {
-            return await pizzaDb.GetEmployeeLocationAsync(employee, storeLocation, transaction) != null;
+            return await _pizzaDb.GetEmployeeLocationAsync(employee, storeLocation, transaction) != null;
         }
 
         public async Task AddNewEmployeeAsync(string employeeId, bool isManager, SiteUser user)
         {
-            SiteRole employeeRole = await pizzaDb.GetAsync<SiteRole>("Employee");
-            SiteRole managerRole = await pizzaDb.GetAsync<SiteRole>("Manager");
+            SiteRole employeeRole = await _pizzaDb.GetAsync<SiteRole>("Employee");
+            SiteRole managerRole = await _pizzaDb.GetAsync<SiteRole>("Manager");
 
-            using (IDbTransaction transaction = pizzaDb.Connection.BeginTransaction())
+            using (IDbTransaction transaction = _pizzaDb.Connection.BeginTransaction())
             {
-                Employee employee = new Employee()
+                Employee employee = new Employee
                 {
                     Id = employeeId,
                     UserId = user.Id
                 };
 
-                await employee.InsertAsync(pizzaDb, transaction);
+                await employee.InsertAsync(_pizzaDb, transaction);
                 await AddUserToRoleAsync(user, employeeRole, transaction);
 
                 if (isManager)
@@ -88,26 +88,27 @@ namespace DataLibrary.Models
 
         public async Task AddUserToRoleAsync(SiteUser siteUser, SiteRole siteRole, IDbTransaction transaction = null)
         {
-            UserRole userRole = new UserRole()
+            UserRole userRole = new UserRole
             {
                 UserId = siteUser.Id,
                 RoleName = siteRole.Name
             };
-            await userRole.InsertAsync(pizzaDb, transaction);
+            await userRole.InsertAsync(_pizzaDb, transaction);
         }
 
-        public async Task<int> RemoveUserFromRoleAsync(SiteUser user, SiteRole siteRole, IDbTransaction transaction = null)
+        public async Task<int> RemoveUserFromRoleAsync(SiteUser user, SiteRole siteRole,
+            IDbTransaction transaction = null)
         {
-            UserRole userRole = await pizzaDb.GetUserRoleAsync(user, siteRole, transaction);
-            return await pizzaDb.DeleteAsync(userRole, transaction);
+            UserRole userRole = await _pizzaDb.GetUserRoleAsync(user, siteRole, transaction);
+            return await _pizzaDb.DeleteAsync(userRole, transaction);
         }
 
         public async Task ReorderPreviousOrder(SiteUser siteUser, CustomerOrder previousOrder)
         {
-            JoinLists.CartItemJoinList cartItemJoinList = new JoinLists.CartItemJoinList();
-            await cartItemJoinList.LoadListByCartIdAsync(previousOrder.CartId, pizzaDb);
+            CartItemJoinList cartItemJoinList = new CartItemJoinList();
+            await cartItemJoinList.LoadListByCartIdAsync(previousOrder.CartId, _pizzaDb);
 
-            using (var transaction = pizzaDb.Connection.BeginTransaction())
+            using (IDbTransaction transaction = _pizzaDb.Connection.BeginTransaction())
             {
                 await CloneCart(siteUser.CurrentCartId, true, cartItemJoinList.Items, transaction);
                 transaction.Commit();
@@ -116,13 +117,13 @@ namespace DataLibrary.Models
 
         public async Task CheckoutCartAsync(SiteUser siteUser)
         {
-            JoinLists.CartItemJoinList cartItemJoinList = new JoinLists.CartItemJoinList();
-            await cartItemJoinList.LoadListByCartIdAsync(siteUser.CurrentCartId, pizzaDb);
+            CartItemJoinList cartItemJoinList = new CartItemJoinList();
+            await cartItemJoinList.LoadListByCartIdAsync(siteUser.CurrentCartId, _pizzaDb);
 
-            using (var transaction = pizzaDb.Connection.BeginTransaction())
+            using (IDbTransaction transaction = _pizzaDb.Connection.BeginTransaction())
             {
                 siteUser.OrderConfirmationId++;
-                await siteUser.UpdateAsync(pizzaDb, transaction);
+                await siteUser.UpdateAsync(_pizzaDb, transaction);
                 await CloneCart(siteUser.ConfirmOrderCartId, true, cartItemJoinList.Items, transaction);
 
                 transaction.Commit();
@@ -131,25 +132,26 @@ namespace DataLibrary.Models
 
         public async Task<decimal> CalculateCartSubtotalAsync(int cartId)
         {
-            IEnumerable<CartItem> cartItems = await pizzaDb.GetListAsync<CartItem>(new { CartId = cartId });
+            IEnumerable<CartItem> cartItems = await _pizzaDb.GetListAsync<CartItem>(new {CartId = cartId});
             return cartItems.Sum(i => i.Price);
         }
 
-        public async Task AddCustomerOrderAsync(SiteUser siteUser, CustomerOrder customerOrder, DeliveryInfo deliveryInfo = null)
+        public async Task AddCustomerOrderAsync(SiteUser siteUser, CustomerOrder customerOrder,
+            DeliveryInfo deliveryInfo = null)
         {
-            using (var transaction = pizzaDb.Connection.BeginTransaction())
+            using (IDbTransaction transaction = _pizzaDb.Connection.BeginTransaction())
             {
                 Cart cart = new Cart();
-                customerOrder.CartId = await cart.InsertAsync(pizzaDb, transaction);
+                customerOrder.CartId = await cart.InsertAsync(_pizzaDb, transaction);
                 await MoveCartItems(siteUser.ConfirmOrderCartId, cart.Id, transaction);
 
                 if (deliveryInfo != null)
                 {
                     customerOrder.IsDelivery = true;
-                    customerOrder.DeliveryInfoId = await deliveryInfo.InsertAsync(pizzaDb, transaction);
+                    customerOrder.DeliveryInfoId = await deliveryInfo.InsertAsync(_pizzaDb, transaction);
                 }
 
-                await customerOrder.InsertAsync(pizzaDb, transaction);
+                await customerOrder.InsertAsync(_pizzaDb, transaction);
                 await DeleteAllCartItemsAsync(siteUser.CurrentCartId, transaction);
                 await DeleteAllCartItemsAsync(siteUser.ConfirmOrderCartId, transaction);
 
@@ -180,10 +182,11 @@ namespace DataLibrary.Models
         public async Task<int> DeleteAllCartItemsAsync(int cartId, IDbTransaction transaction)
         {
             string deleteQuerySql = @"delete from dbo.CartItem where CartId = @CartId;";
-            return await pizzaDb.Connection.ExecuteAsync(deleteQuerySql, new { CartId = cartId }, transaction);
+            return await _pizzaDb.Connection.ExecuteAsync(deleteQuerySql, new {CartId = cartId}, transaction);
         }
 
-        private async Task CloneCart(int destinationCartId, bool clearDestinationCart, IEnumerable<CartItemJoin> cartItems, IDbTransaction transaction)
+        private async Task CloneCart(int destinationCartId, bool clearDestinationCart,
+            IEnumerable<CartItemJoin> cartItems, IDbTransaction transaction)
         {
             if (clearDestinationCart)
             {
@@ -209,16 +212,16 @@ namespace DataLibrary.Models
                 DestinationCartId = destinationCartId
             };
 
-            return await pizzaDb.Connection.ExecuteAsync(updateQuerySql, queryParameters, transaction);
+            return await _pizzaDb.Connection.ExecuteAsync(updateQuerySql, queryParameters, transaction);
         }
 
         public async Task<CartItem> UpdateCartItemQuantityAsync(CartItem cartItem, int quantity)
         {
-            using (IDbTransaction transaction = pizzaDb.Connection.BeginTransaction())
+            using (IDbTransaction transaction = _pizzaDb.Connection.BeginTransaction())
             {
                 cartItem.Quantity = quantity;
                 cartItem.Price = cartItem.Quantity * cartItem.PricePerItem;
-                await cartItem.UpdateAsync(pizzaDb, transaction);
+                await cartItem.UpdateAsync(_pizzaDb, transaction);
 
                 transaction.Commit();
             }

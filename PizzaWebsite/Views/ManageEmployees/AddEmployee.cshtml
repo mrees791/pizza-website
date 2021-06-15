@@ -1,48 +1,51 @@
-﻿@using PizzaWebsite.Models.ManageEmployees
-@model AddEmployeeViewModel
+﻿@model PizzaWebsite.Models.ManageEmployees.AddEmployeeViewModel
 @{
     ViewBag.Title = "Add Employee";
 }
 <h2>@ViewBag.Title</h2>
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Employee")">Home</a></li>
-        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ManageEmployees")?@Request.QueryString">Manage Employees</a></li>
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "Employee")">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "ManageEmployees")?@Request.QueryString">Manage Employees</a>
+        </li>
         <li class="breadcrumb-item active" aria-current="page">Add Employee</li>
     </ol>
 </nav>
-<hr />
+<hr/>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     <div class="form-horizontal">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
         <div class="form-group">
-            @Html.LabelFor(model => model.Id, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Id, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Id, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Id, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.Id, "", new {@class = "text-danger"})
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.UserId, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.UserId, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.UserId, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.UserId, "", new {@class = "text-danger"})
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.IsManager, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.IsManager, new {@class = "control-label col-md-2"})
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.IsManager)
-                    @Html.ValidationMessageFor(model => model.IsManager, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.IsManager, "", new {@class = "text-danger"})
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Submit" class="btn btn-success" />
+                <input type="submit" value="Submit" class="btn btn-success"/>
             </div>
         </div>
     </div>

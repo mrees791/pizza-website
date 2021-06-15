@@ -1,19 +1,13 @@
 ﻿using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace PizzaWebsite.Models.Identity
 {
     public class IdentityRole : IRole<string>
     {
-        private string name;
-
         public IdentityRole(string name)
         {
-            this.name = name;
+            Id = name;
         }
 
         public IdentityRole(SiteRole siteRole)
@@ -21,25 +15,15 @@ namespace PizzaWebsite.Models.Identity
             FromRecord(siteRole);
         }
 
+        public string Id { get; set; }
+
         public string Name { get; set; }
 
-        string IRole<string>.Id => name;
-
-        public string Id
-        {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                name = value;
-            }
-        }
+        string IRole<string>.Id => Id;
 
         public SiteRole ToRecord()
         {
-            return new SiteRole()
+            return new SiteRole
             {
                 Name = Name
             };

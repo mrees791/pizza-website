@@ -1,12 +1,5 @@
-﻿using DataLibrary.Models;
-using DataLibrary.Models.Tables;
+﻿using System.ComponentModel.DataAnnotations;
 using PizzaWebsite.Models.Attributes;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace PizzaWebsite.Models.ManageStores
 {
@@ -15,6 +8,7 @@ namespace PizzaWebsite.Models.ManageStores
         [ValidEmployeeId]
         [Display(Name = "Employee ID")]
         public string EmployeeId { get; set; }
+
         public int StoreId { get; set; }
         public string StoreName { get; set; }
     }

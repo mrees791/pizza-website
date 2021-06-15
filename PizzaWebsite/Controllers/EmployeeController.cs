@@ -1,15 +1,8 @@
-﻿using DataLibrary.Models;
-using DataLibrary.Models.QueryFilters;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Controllers.BaseControllers;
-using PizzaWebsite.Models;
 using PizzaWebsite.Models.Employees;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
@@ -23,7 +16,7 @@ namespace PizzaWebsite.Controllers
             bool isManager = await UserManager.IsInRoleAsync(user.Id, "Manager");
             bool isExecutive = await UserManager.IsInRoleAsync(user.Id, "Executive");
             bool isAdmin = await UserManager.IsInRoleAsync(user.Id, "Admin");
-            EmployeeIndexViewModel model = new EmployeeIndexViewModel()
+            EmployeeIndexViewModel model = new EmployeeIndexViewModel
             {
                 EmployeeId = employee.Id,
                 AuthorizedToManageMenu = isExecutive || isAdmin,

@@ -1,9 +1,5 @@
-﻿using DataLibrary.Models.Sql;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using DataLibrary.Models.Sql;
 
 namespace DataLibrary.Models.QueryFilters
 {
@@ -14,10 +10,10 @@ namespace DataLibrary.Models.QueryFilters
 
         internal override string GetWhereConditions()
         {
-            List<WhereClauseItem> items = new List<WhereClauseItem>()
+            List<WhereClauseItem> items = new List<WhereClauseItem>
             {
                 new WhereClauseItem("Name", nameof(Name), Name, ComparisonType.Like),
-                new WhereClauseItem("PhoneNumber", nameof(PhoneNumber), PhoneNumber, ComparisonType.Like),
+                new WhereClauseItem("PhoneNumber", nameof(PhoneNumber), PhoneNumber, ComparisonType.Like)
             };
 
             return GetWhereConditions(items);

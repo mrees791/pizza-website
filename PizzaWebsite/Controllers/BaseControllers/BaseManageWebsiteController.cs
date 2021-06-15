@@ -1,24 +1,21 @@
-﻿using DataLibrary.Models;
-using DataLibrary.Models.QueryFilters;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using DataLibrary.Models;
 using DataLibrary.Models.Sql;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers.BaseControllers
 {
     public abstract class BaseManageWebsiteController<TRecord> : BaseController
         where TRecord : Record
     {
-        protected async Task<IEnumerable<TRecord>> LoadPagedRecordsAsync(int page, int rowsPerPage, string orderByColumn, SortOrder sortOrder,
+        protected async Task<IEnumerable<TRecord>> LoadPagedRecordsAsync(int page, int rowsPerPage,
+            string orderByColumn, SortOrder sortOrder,
             WhereClauseBase whereClauseBase, PizzaDatabase pizzaDb, PaginationViewModel paginationVm)
         {
-            IEnumerable<TRecord> recordList = await pizzaDb.GetPagedListAsync<TRecord>(page, rowsPerPage, orderByColumn, sortOrder, whereClauseBase);
+            IEnumerable<TRecord> recordList =
+                await pizzaDb.GetPagedListAsync<TRecord>(page, rowsPerPage, orderByColumn, sortOrder, whereClauseBase);
             int totalNumberOfItems = await pizzaDb.GetNumberOfRecordsAsync<TRecord>(whereClauseBase);
             int totalPages = await pizzaDb.GetNumberOfPagesAsync<TRecord>(rowsPerPage, whereClauseBase);
 
@@ -43,14 +40,17 @@ namespace PizzaWebsite.Controllers.BaseControllers
             {
                 page = 1;
             }
+
             if (!rowsPerPage.HasValue)
             {
                 rowsPerPage = defaultRowsPerPage;
             }
+
             if (page < 1)
             {
                 page = 1;
             }
+
             if (rowsPerPage < 1)
             {
                 rowsPerPage = defaultRowsPerPage;

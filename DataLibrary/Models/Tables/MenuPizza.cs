@@ -1,18 +1,22 @@
-﻿using Dapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Dapper;
 
 namespace DataLibrary.Models.Tables
 {
     [Table("MenuPizza")]
     public class MenuPizza : Record
     {
+        public MenuPizza()
+        {
+            ToppingList = new List<MenuPizzaTopping>();
+        }
+
         [Key]
         public int Id { get; set; }
+
         public int SortOrder { get; set; }
         public string CategoryName { get; set; }
         public bool AvailableForPurchase { get; set; }
@@ -25,11 +29,6 @@ namespace DataLibrary.Models.Tables
         public int MenuPizzaCrustFlavorId { get; set; }
         public List<MenuPizzaTopping> ToppingList { get; set; }
 
-        public MenuPizza()
-        {
-            ToppingList = new List<MenuPizzaTopping>();
-        }
-
         public override dynamic GetId()
         {
             return Id;
@@ -37,7 +36,7 @@ namespace DataLibrary.Models.Tables
 
         internal override async Task MapEntityAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
-            ToppingList.AddRange(await pizzaDb.GetListAsync<MenuPizzaTopping>(new { MenuPizzaId = Id }));
+            ToppingList.AddRange(await pizzaDb.GetListAsync<MenuPizzaTopping>(new {MenuPizzaId = Id}));
         }
 
         internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
@@ -58,7 +57,7 @@ namespace DataLibrary.Models.Tables
         internal override async Task<int> UpdateAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)
         {
             // Delete previous toppings
-            await pizzaDb.Connection.DeleteListAsync<MenuPizzaTopping>(new { MenuPizzaId = Id }, transaction);
+            await pizzaDb.Connection.DeleteListAsync<MenuPizzaTopping>(new {MenuPizzaId = Id}, transaction);
 
             // Insert new toppings
             foreach (MenuPizzaTopping topping in ToppingList)
@@ -80,9 +79,10 @@ namespace DataLibrary.Models.Tables
             return true;
         }
 
-        public async Task<Tuple<CartItem, CartPizza>> CreateCartRecordsAsync(int quantity, string size, int menuCrustId, SiteUser siteUser, PizzaDatabase pizzaDb)
+        public async Task<Tuple<CartItem, CartPizza>> CreateCartRecordsAsync(int quantity, string size, int menuCrustId,
+            SiteUser siteUser, PizzaDatabase pizzaDb)
         {
-            CartPizza cartPizza = new CartPizza()
+            CartPizza cartPizza = new CartPizza
             {
                 CheeseAmount = CheeseAmount,
                 MenuPizzaCheeseId = MenuPizzaCheeseId,
@@ -100,7 +100,7 @@ namespace DataLibrary.Models.Tables
 
             decimal pricePerItem = await cartPizza.CalculateItemPriceAsync(pizzaDb);
 
-            CartItem cartItem = new CartItem()
+            CartItem cartItem = new CartItem
             {
                 CartId = siteUser.CurrentCartId,
                 UserId = siteUser.Id,

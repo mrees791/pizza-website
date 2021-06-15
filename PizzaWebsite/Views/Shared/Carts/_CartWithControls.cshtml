@@ -1,65 +1,64 @@
-﻿@using PizzaWebsite.Models
-@using PizzaWebsite.Models.Carts
-@model CartViewModel
+﻿@using PizzaWebsite.Models.Carts
+@model PizzaWebsite.Models.Carts.CartViewModel
 <table class="table" id="cartTable">
     <thead>
-        <tr>
-            <th>Item</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            @* Empty table header for controls. *@
-            <th></th>
-        </tr>
+    <tr>
+        <th>Item</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        @* Empty table header for controls. *@
+        <th></th>
+    </tr>
     </thead>
     <tbody id="cartTableBody">
-        @foreach (CartItemViewModel cartItemVm in Model.CartItemVmList)
-        {
-            <tr id="@cartItemVm.CartItemRowId">
-                <td>
-                    @using (Html.BeginForm(cartItemVm.ModifyActionName, cartItemVm.ModifyControllerName, FormMethod.Post))
+    @foreach (CartItemViewModel cartItemVm in Model.CartItemVmList)
+    {
+        <tr id="@cartItemVm.CartItemRowId">
+            <td>
+                @using (Html.BeginForm(cartItemVm.ModifyActionName, cartItemVm.ModifyControllerName, FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <input name="cartItemId" type="hidden" value="@cartItemVm.CartItemId"/>
+                    if (cartItemVm.ControlsEnabled)
                     {
-                        @Html.AntiForgeryToken()
-                        <input name="cartItemId" type="hidden" value="@cartItemVm.CartItemId" />
-                        if (cartItemVm.ControlsEnabled)
-                        {
-                            <input type="submit" value="@cartItemVm.Name" class="form-control btn-primary" />
-                        }
-                        else
-                        {
-                            <input type="submit" value="@cartItemVm.Name" class="form-control btn-primary" disabled/>
-                        }
-                    }
-                </td>
-                <td>@Html.Raw(cartItemVm.DescriptionHtml)</td>
-                <td id="@cartItemVm.CartItemPriceCellId">@cartItemVm.Price</td>
-                <td>
-                    @Html.DropDownList("Quantity", new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity),
-                        new
-                        {
-                            @class = "form-control",
-                            id = cartItemVm.CartItemQuantitySelectId,
-                            name = "Quantity"
-                        })
-                </td>
-                <td>
-                    @if (cartItemVm.ControlsEnabled)
-                    {
-                        <input type="button" value="Remove" id="@cartItemVm.CartItemDeleteButtonId" class="form-control btn-danger" />
+                        <input type="submit" value="@cartItemVm.Name" class="form-control btn-primary"/>
                     }
                     else
                     {
-                        <input type="button" value="Remove" id="@cartItemVm.CartItemDeleteButtonId" class="form-control btn-danger" disabled/>
+                        <input type="submit" value="@cartItemVm.Name" class="form-control btn-primary" disabled/>
                     }
-                </td>
-            </tr>
-        }
-        <tr>
-            <td>Subtotal</td>
-            <td></td>
-            <td id="subtotalCell"></td>
-            <td></td>
-            <td></td>
+                }
+            </td>
+            <td>@Html.Raw(cartItemVm.DescriptionHtml)</td>
+            <td id="@cartItemVm.CartItemPriceCellId">@cartItemVm.Price</td>
+            <td>
+                @Html.DropDownList("Quantity", new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity),
+                    new
+                    {
+                        @class = "form-control",
+                        id = cartItemVm.CartItemQuantitySelectId,
+                        name = "Quantity"
+                    })
+            </td>
+            <td>
+                @if (cartItemVm.ControlsEnabled)
+                {
+                    <input type="button" value="Remove" id="@cartItemVm.CartItemDeleteButtonId" class="form-control btn-danger"/>
+                }
+                else
+                {
+                    <input type="button" value="Remove" id="@cartItemVm.CartItemDeleteButtonId" class="form-control btn-danger" disabled/>
+                }
+            </td>
         </tr>
+    }
+    <tr>
+        <td>Subtotal</td>
+        <td></td>
+        <td id="subtotalCell"></td>
+        <td></td>
+        <td></td>
+    </tr>
     </tbody>
 </table>

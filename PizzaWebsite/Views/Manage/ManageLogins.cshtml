@@ -1,15 +1,16 @@
-﻿@model PizzaWebsite.Models.ManageLoginsViewModel
+﻿@using Microsoft.AspNet.Identity
 @using Microsoft.Owin.Security
+@model PizzaWebsite.Models.ManageLoginsViewModel
 @{
     ViewBag.Title = "Manage your external logins";
 }
 
 <h2>@ViewBag.Title.</h2>
-<hr />
+<hr/>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
 @{
-    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+    IEnumerable<AuthenticationDescription> loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
     if (loginProviders.Count() == 0)
     {
         <div>
@@ -25,30 +26,30 @@
             <h4>Registered Logins</h4>
             <table class="table">
                 <tbody>
-                    @foreach (var account in Model.CurrentLogins)
-                    {
-                        <tr>
-                            <td>@account.LoginProvider</td>
-                            <td>
-                                @if (ViewBag.ShowRemoveButton)
+                @foreach (UserLoginInfo account in Model.CurrentLogins)
+                {
+                    <tr>
+                        <td>@account.LoginProvider</td>
+                        <td>
+                            @if (ViewBag.ShowRemoveButton)
+                            {
+                                using (Html.BeginForm("RemoveLogin", "Manage"))
                                 {
-                                    using (Html.BeginForm("RemoveLogin", "Manage"))
-                                    {
-                                        @Html.AntiForgeryToken()
-                                        <div>
-                                            @Html.Hidden("loginProvider", account.LoginProvider)
-                                            @Html.Hidden("providerKey", account.ProviderKey)
-                                            <input type="submit" class="btn btn-danger" value="Remove" title="Remove this @account.LoginProvider login from your account" />
-                                        </div>
-                                    }
+                                    @Html.AntiForgeryToken()
+                                    <div>
+                                        @Html.Hidden("loginProvider", account.LoginProvider)
+                                        @Html.Hidden("providerKey", account.ProviderKey)
+                                        <input type="submit" class="btn btn-danger" value="Remove" title="Remove this @account.LoginProvider login from your account"/>
+                                    </div>
                                 }
-                                else
-                                {
-                                    @: &nbsp;
-                                }
-                            </td>
-                        </tr>
-                    }
+                            }
+                            else
+                            {
+                                @: &nbsp;
+                            }
+                        </td>
+                    </tr>
+                }
                 </tbody>
             </table>
         }
