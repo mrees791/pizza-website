@@ -43,7 +43,7 @@ namespace PizzaWebsite.Controllers
             SiteUser currentUser = await GetCurrentUserAsync();
             await PizzaDb.Commands.CheckoutCartAsync(currentUser);
             CheckoutViewModel model = await _checkoutServices.CreateViewModelAsync(currentUser, PizzaDb, ListUtility.CreateQuantityList(), StateListCreator.CreateStateList());
-            return View("Checkout", model);
+            return View(model);
         }
 
         [Authorize]

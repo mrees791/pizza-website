@@ -187,7 +187,8 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Attributes\PhoneNumberAttribute.cs" />
-    <Compile Include="Models\Attributes\RequiredIfDeliveryAttribute.cs" />
+    <Compile Include="Models\Shop\CheckoutAttributes\PhoneNumberRequiredIfDeliveryAttribute.cs" />
+    <Compile Include="Models\Shop\CheckoutAttributes\RequiredIfDeliveryAttribute.cs" />
     <Compile Include="Models\Attributes\ValidEmployeeIdAttribute.cs" />
     <Compile Include="Models\Attributes\ZipCodeAttribute.cs" />
     <Compile Include="Models\Carts\CartItemViewModel.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="Models\PizzaBuilders\PizzaBuilderViewModel.cs" />
     <Compile Include="Models\PizzaBuilders\PizzaToppingViewModel.cs" />
     <Compile Include="Models\ManageStores\RemoveEmployeeFromRosterViewModel.cs" />
+    <Compile Include="Models\Shop\CheckoutAttributes\ZipCodeRequiredIfDeliveryAttribute.cs" />
     <Compile Include="Models\Shop\CheckoutViewModel.cs" />
     <Compile Include="Models\Shop\MenuPizzaViewModel.cs" />
     <Compile Include="Models\Shop\OrderStatusViewModel.cs" />

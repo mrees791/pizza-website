@@ -9,7 +9,7 @@ namespace PizzaWebsite.Models.Attributes
 {
     public class PhoneNumberAttribute : ValidationAttribute
     {
-        private const string phoneRegex = @"^\d{10}$";
+        protected const string phoneRegex = @"^\d{10}$";
 
         public PhoneNumberAttribute()
         {

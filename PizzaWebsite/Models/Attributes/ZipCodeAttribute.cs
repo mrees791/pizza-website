@@ -9,9 +9,9 @@ namespace PizzaWebsite.Models.Attributes
 {
     public class ZipCodeAttribute : ValidationAttribute
     {
-        private const string zipRegex = @"^\d{5}$";
+        protected const string zipRegex = @"^\d{5}$";
 
-        public ZipCodeAttribute()
+        public ZipCodeAttribute() : base()
         {
             ErrorMessage = "Your zip code should have five digits.";
         }

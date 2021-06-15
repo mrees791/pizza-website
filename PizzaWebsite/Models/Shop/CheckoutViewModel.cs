@@ -6,6 +6,7 @@ using DataLibrary.Models.Utility;
 using PizzaWebsite.Models.Attributes;
 using PizzaWebsite.Models.Carts;
 using PizzaWebsite.Models.Geography;
+using PizzaWebsite.Models.Shop.CheckoutAttributes;
 using PizzaWebsite.Models.ViewModelServices;
 using System;
 using System.Collections.Generic;
@@ -49,12 +50,10 @@ namespace PizzaWebsite.Models.Shop
         [RequiredIfDelivery("A delivery state is required.")]
         [Display(Name = "State")]
         public string SelectedDeliveryState { get; set; }
-        [RequiredIfDelivery("A delivery zip code is required.")]
-        [ZipCode]
+        [ZipCodeRequiredIfDelivery]
         [Display(Name = "Zip Code")]
         public string DeliveryZipCode { get; set; }
-        [RequiredIfDelivery("A delivery phone number is required.")]
-        [PhoneNumber]
+        [PhoneNumberRequiredIfDelivery]
         [Display(Name = "Phone Number")]
         public string DeliveryPhoneNumber { get; set; }
         public CartViewModel CartVm { get; set; }
