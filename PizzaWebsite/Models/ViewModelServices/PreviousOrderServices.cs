@@ -13,7 +13,7 @@ namespace PizzaWebsite.Models.ViewModelServices
 {
     public class PreviousOrderServices
     {
-        public async Task<PreviousOrderViewModel> CreateViewModelAsync(bool loadCartItems, CustomerOrder customerOrder, DeliveryInfo deliveryInfo, PizzaDatabase pizzaDb, List<int> quantityList)
+        public async Task<PreviousOrderViewModel> CreateViewModelAsync(bool loadCartItems, CustomerOrder customerOrder, DeliveryInfo deliveryInfo, PizzaDatabase pizzaDb, IEnumerable<int> quantityList)
         {
             CartViewModel cartVm = new CartViewModel();
             if (loadCartItems)

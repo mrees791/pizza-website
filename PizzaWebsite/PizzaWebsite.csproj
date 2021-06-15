@@ -187,6 +187,7 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Attributes\PhoneNumberAttribute.cs" />
+    <Compile Include="Models\Geography\GeographyServices.cs" />
     <Compile Include="Models\Shop\CheckoutAttributes\PhoneNumberRequiredIfDeliveryAttribute.cs" />
     <Compile Include="Models\Shop\CheckoutAttributes\RequiredIfDeliveryAttribute.cs" />
     <Compile Include="Models\Attributes\ValidEmployeeIdAttribute.cs" />
@@ -199,7 +200,6 @@
     <Compile Include="Models\Employees\EmployeeIndexViewModel.cs" />
     <Compile Include="Models\ErrorMessageViewModel.cs" />
     <Compile Include="Models\Geography\State.cs" />
-    <Compile Include="Models\Geography\StateListCreator.cs" />
     <Compile Include="Models\Identity\IdentityRole.cs" />
     <Compile Include="Models\Identity\IdentityUser.cs" />
     <Compile Include="Models\Identity\Stores\RoleStore.cs" />

@@ -1,6 +1,5 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.Tables;
-using DataLibrary.Models.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

@@ -3,7 +3,6 @@ using DataLibrary.Models.Builders;
 using DataLibrary.Models.JoinLists.CartItemCategories;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
-using DataLibrary.Models.Utility;
 using Microsoft.AspNet.Identity;
 using PizzaWebsite.Controllers.BaseControllers;
 using PizzaWebsite.Models;
@@ -22,9 +21,9 @@ namespace PizzaWebsite.Controllers
     {
         public async Task<ActionResult> Index()
         {
-            List<int> quantityList = ListUtility.CreateQuantityList();
-            List<string> sizeList = ListUtility.GetPizzaSizeList();
-            Dictionary<int, string> crustListDictionary = await ListUtility.CreateCrustDictionaryAsync(PizzaDb);
+            IEnumerable<int> quantityList = ListServices.DefaultQuantityList;
+            IEnumerable<string> sizeList = ListServices.PizzaSizeList;
+            Dictionary<int, string> crustListDictionary = await ListServices.CreateCrustDictionaryAsync(PizzaDb);
             MenuPizzaSearch popularPizzaSearch = new MenuPizzaSearch()
             {
                 AvailableForPurchase = true,
@@ -54,7 +53,7 @@ namespace PizzaWebsite.Controllers
             return View(model);
         }
 
-        private List<MenuPizzaViewModel> CreateMenuPizzaViewModels(IEnumerable<MenuPizza> menuPizzaList, List<int> quantityList, List<string> sizeList, Dictionary<int, string> crustListDictionary)
+        private List<MenuPizzaViewModel> CreateMenuPizzaViewModels(IEnumerable<MenuPizza> menuPizzaList, IEnumerable<int> quantityList, IEnumerable<string> sizeList, Dictionary<int, string> crustListDictionary)
         {
             List<MenuPizzaViewModel> viewModelList = new List<MenuPizzaViewModel>();
             foreach (MenuPizza menuPizza in menuPizzaList)
@@ -119,7 +118,8 @@ namespace PizzaWebsite.Controllers
             {
                 sauceDictionary.Add(sauce.Id, sauce.Name);
             }
-            List<PizzaToppingViewModel> toppingVmList = CreateToppingViewModelList(cartPizza.ToppingList, pizzaBuilder.ToppingTypeList);
+            List<PizzaToppingViewModel> toppingVmList = CreateToppingViewModelList(cartPizza.ToppingList, pizzaBuilder.ToppingTypeList,
+                ListServices.ToppingAmountList, ListServices.ToppingHalfList);
             return new CartPizzaBuilderViewModel()
             {
                 Id = cartItem.Id,
@@ -143,7 +143,8 @@ namespace PizzaWebsite.Controllers
             };
         }
 
-        private List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<CartPizzaTopping> cartToppingList, IEnumerable<MenuPizzaToppingType> toppingTypeList)
+        private List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<CartPizzaTopping> cartToppingList, IEnumerable<MenuPizzaToppingType> toppingTypeList,
+            IEnumerable<string> toppingAmountList, IEnumerable<string> toppingHalfList)
         {
             List<PizzaTopping> toppingList = new List<PizzaTopping>();
             foreach (CartPizzaTopping cartTopping in cartToppingList)
@@ -156,7 +157,7 @@ namespace PizzaWebsite.Controllers
                 };
                 toppingList.Add(topping);
             }
-            return PizzaBuilderManager.CreateToppingViewModelList(toppingList, toppingTypeList);
+            return PizzaBuilderManager.CreateToppingViewModelList(toppingList, toppingTypeList, toppingAmountList, toppingHalfList);
         }
 
         [Authorize]

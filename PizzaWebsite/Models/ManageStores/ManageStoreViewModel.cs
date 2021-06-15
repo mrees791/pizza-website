@@ -10,12 +10,6 @@ namespace PizzaWebsite.Models.ManageStores
 {
     public class ManageStoreViewModel
     {
-        public ManageStoreViewModel()
-        {
-            StateList = StateListCreator.CreateStateList();
-        }
-
-        public List<State> StateList { get; set; }
         public int Id { get; set; }
 
         [Required]
@@ -49,6 +43,7 @@ namespace PizzaWebsite.Models.ManageStores
 
         [Display(Name = "Is Active")]
         public bool IsActiveLocation { get; set; }
+        public IEnumerable<State> StateList { get; set; }
 
         public bool IsNewRecord()
         {

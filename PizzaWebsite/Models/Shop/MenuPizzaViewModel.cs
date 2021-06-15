@@ -12,12 +12,12 @@ namespace PizzaWebsite.Models.Shop
         public string Name { get; set; }
         [Display(Name = "Size")]
         public string SelectedSize { get; set; }
-        public List<string> SizeList { get; set; }
+        public IEnumerable<string> SizeList { get; set; }
         public Dictionary<int, string> CrustList { get; set; }
         [Display(Name = "Crust")]
         public int SelectedCrustId { get; set; }
         [Display(Name = "Quantity")]
         public int SelectedQuantity { get; set; }
-        public List<int> QuantityList { get; set; }
+        public IEnumerable<int> QuantityList { get; set; }
     }
 }

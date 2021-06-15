@@ -15,6 +15,16 @@ else
 @using (Html.BeginForm("SubmitDeliveryAddress", "ManageDeliveryAddresses", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
+    @* Save list state *@
+    for (int i = 0; i < Model.StateList.Count(); i++)
+    {
+        <input type="hidden" name="StateList[@i].Name" value="@Model.StateList.ElementAt(i).Name">
+        <input type="hidden" name="StateList[@i].Abbreviation" value="@Model.StateList.ElementAt(i).Abbreviation">
+    }
+    for (int i = 0; i < Model.AddressTypeList.Count(); i++)
+    {
+        <input type="hidden" name="AddressTypeList[@i]" value="@Model.AddressTypeList.ElementAt(i)">
+    }
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })

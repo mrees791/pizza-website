@@ -11,14 +11,9 @@ namespace PizzaWebsite.Models.PizzaBuilders
         public int Id { get; set; }
         public string Category { get; set; }
         public string Name { get; set; }
-        public List<string> AmountList { get; set; }
         public string SelectedAmount { get; set; }
-        public List<string> ToppingHalfList { get; set; }
         public string SelectedToppingHalf { get; set; }
-
-        public PizzaToppingViewModel()
-        {
-
-        }
+        public IEnumerable<string> AmountList { get; set; }
+        public IEnumerable<string> ToppingHalfList { get; set; }
     }
 }

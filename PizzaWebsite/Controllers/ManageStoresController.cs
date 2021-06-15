@@ -216,7 +216,11 @@ namespace PizzaWebsite.Controllers
         [Authorize(Roles = "Admin,Executive")]
         public ActionResult CreateStore()
         {
-            return View("ManageStore", new ManageStoreViewModel());
+            ManageStoreViewModel model = new ManageStoreViewModel()
+            {
+                StateList = GeographyServices.StateList
+            };
+            return View("ManageStore", model);
         }
 
         [HttpPost]
@@ -250,13 +254,13 @@ namespace PizzaWebsite.Controllers
                 return StoreDoesNotExistErrorMessage(id.Value);
             }
             Employee currentEmployee = await PizzaDb.GetEmployeeAsync(await GetCurrentUserAsync());
-            ManageStoreViewModel viewModel = RecordToViewModel(store);
             bool authorized = await IsAuthorizedToManageStoreAsync(currentEmployee, store);
             if (!authorized)
             {
                 return NotAuthorizedToManageStoreErrorMessage(currentEmployee, store);
             }
-            return View("ManageStore", viewModel);
+            ManageStoreViewModel model = RecordToViewModel(store);
+            return View("ManageStore", model);
         }
 
         [HttpPost]
@@ -373,7 +377,8 @@ namespace PizzaWebsite.Controllers
                 PhoneNumber = record.PhoneNumber,
                 SelectedState = record.State,
                 StreetAddress = record.StreetAddress,
-                ZipCode = record.ZipCode
+                ZipCode = record.ZipCode,
+                StateList = GeographyServices.StateList
             };
         }
 

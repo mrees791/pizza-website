@@ -12,7 +12,7 @@ namespace PizzaWebsite.Models.ViewModelServices
 {
     public class CartItemServices
     {
-        public async Task<CartItemViewModel> CreateViewModelAsync(CartItemJoin cartItemJoin, PizzaDatabase pizzaDb, List<int> quantityList)
+        public async Task<CartItemViewModel> CreateViewModelAsync(CartItemJoin cartItemJoin, PizzaDatabase pizzaDb, IEnumerable<int> quantityList)
         {
             CartItemViewModel model = CreateDefaultCartItemViewModel(cartItemJoin, quantityList);
             switch (cartItemJoin.CartItem.ProductCategory)
@@ -24,7 +24,7 @@ namespace PizzaWebsite.Models.ViewModelServices
             return model;
         }
 
-        private CartItemViewModel CreateDefaultCartItemViewModel(CartItemJoin cartItemJoin, List<int> quantityList)
+        private CartItemViewModel CreateDefaultCartItemViewModel(CartItemJoin cartItemJoin, IEnumerable<int> quantityList)
         {
             return new CartItemViewModel()
             {

@@ -53,7 +53,12 @@ namespace PizzaWebsite.Controllers
 
         public ActionResult AddNewAddress()
         {
-            return View("ManageDeliveryAddress", new ManageDeliveryAddressViewModel());
+            ManageDeliveryAddressViewModel model = new ManageDeliveryAddressViewModel()
+            {
+                StateList = GeographyServices.StateList,
+                AddressTypeList = ListServices.DeliveryAddressTypeList
+            };
+            return View("ManageDeliveryAddress", model);
         }
 
         [HttpPost]
@@ -115,7 +120,9 @@ namespace PizzaWebsite.Controllers
                 SelectedAddressType = address.AddressType,
                 SelectedState = address.State,
                 StreetAddress = address.StreetAddress,
-                ZipCode = address.ZipCode
+                ZipCode = address.ZipCode,
+                AddressTypeList = ListServices.DeliveryAddressTypeList,
+                StateList = GeographyServices.StateList
             };
             return View("ManageDeliveryAddress", model);
         }

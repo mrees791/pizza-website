@@ -1,5 +1,4 @@
-﻿using DataLibrary.Models.Utility;
-using PizzaWebsite.Models.Attributes;
+﻿using PizzaWebsite.Models.Attributes;
 using PizzaWebsite.Models.Geography;
 using System;
 using System.Collections.Generic;
@@ -11,12 +10,6 @@ namespace PizzaWebsite.Models.ManageDeliveryAddresses
 {
     public class ManageDeliveryAddressViewModel
     {
-        public ManageDeliveryAddressViewModel()
-        {
-            StateList = StateListCreator.CreateStateList();
-            AddressTypeList = ListUtility.CreateDeliveryAddressTypeList();
-        }
-
         public int Id { get; set; }
         [Required]
         [Display(Name = "Name")]
@@ -44,8 +37,8 @@ namespace PizzaWebsite.Models.ManageDeliveryAddresses
         [Display(Name = "Phone Number")]
         [PhoneNumber]
         public string PhoneNumber { get; set; }
-        public List<State> StateList { get; set; }
-        public List<string> AddressTypeList { get; set; }
+        public IEnumerable<State> StateList { get; set; }
+        public IEnumerable<string> AddressTypeList { get; set; }
 
         public bool IsNewRecord()
         {

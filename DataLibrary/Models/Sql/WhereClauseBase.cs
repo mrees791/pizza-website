@@ -9,8 +9,8 @@ namespace DataLibrary.Models.Sql
 {
     public abstract class WhereClauseBase
     {
-        internal abstract string GetWhereConditions();
         private SqlServices _sqlServices;
+        internal abstract string GetWhereConditions();
 
         public WhereClauseBase()
         {

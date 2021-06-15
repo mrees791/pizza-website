@@ -1,9 +1,11 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.QueryFilters;
+using DataLibrary.Models.Services;
 using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using PizzaWebsite.Models;
+using PizzaWebsite.Models.Geography;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +20,20 @@ namespace PizzaWebsite.Controllers.BaseControllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private PizzaDatabase _pizzaDb;
+        private ListServices _listServices;
+        private GeographyServices _geographyServices;
+
+        public ListServices ListServices
+        {
+            get
+            {
+                return _listServices ?? new ListServices();
+            }
+            private set
+            {
+                _listServices = value;
+            }
+        }
 
         public PizzaDatabase PizzaDb
         {
@@ -52,6 +68,18 @@ namespace PizzaWebsite.Controllers.BaseControllers
             private set
             {
                 _userManager = value;
+            }
+        }
+
+        public GeographyServices GeographyServices
+        {
+            get
+            {
+                return _geographyServices ?? new GeographyServices();
+            }
+            private set
+            {
+                _geographyServices = value;
             }
         }
 

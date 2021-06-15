@@ -1,7 +1,6 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
-using DataLibrary.Models.Utility;
 using PizzaWebsite.Models.Geography;
 using PizzaWebsite.Models.Shop;
 using System;
@@ -15,7 +14,8 @@ namespace PizzaWebsite.Models.ViewModelServices
 {
     public class CheckoutServices
     {
-        public async Task<CheckoutViewModel> CreateViewModelAsync(SiteUser user, PizzaDatabase pizzaDb, List<int> quantityList, List<State> stateList)
+        public async Task<CheckoutViewModel> CreateViewModelAsync(SiteUser user, PizzaDatabase pizzaDb, IEnumerable<int> quantityList, IEnumerable<State> stateList,
+            IEnumerable<string> customerOrderTypeList, IEnumerable<string> deliveryAddressTypeList)
         {
             SiteUser updatedUser = await pizzaDb.GetAsync<SiteUser>(user.Id);
             StoreLocationSearch storeSearch = new StoreLocationSearch()
@@ -54,9 +54,9 @@ namespace PizzaWebsite.Models.ViewModelServices
             CartServices cartServices = new CartServices();
             return new CheckoutViewModel()
             {
-                OrderTypeList = ListUtility.CreateCustomerOrderTypeList(),
+                OrderTypeList = customerOrderTypeList,
                 DeliveryStateList = stateList.Select(s => s.Abbreviation),
-                DeliveryAddressTypeList = ListUtility.CreateDeliveryAddressTypeList(),
+                DeliveryAddressTypeList = deliveryAddressTypeList,
                 DeliveryAddressSelectList = deliveryAddressSelectList,
                 StoreLocationSelectList = storeLocationSelectList,
                 SaveNewDeliveryAddress = true,

@@ -4,7 +4,6 @@ using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.JoinLists.CartItemCategories;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
-using DataLibrary.Models.Utility;
 using Microsoft.AspNet.Identity;
 using PizzaWebsite.Controllers.BaseControllers;
 using PizzaWebsite.Models;
@@ -42,7 +41,8 @@ namespace PizzaWebsite.Controllers
         {
             SiteUser currentUser = await GetCurrentUserAsync();
             await PizzaDb.Commands.CheckoutCartAsync(currentUser);
-            CheckoutViewModel model = await _checkoutServices.CreateViewModelAsync(currentUser, PizzaDb, ListUtility.CreateQuantityList(), StateListCreator.CreateStateList());
+            CheckoutViewModel model = await _checkoutServices.CreateViewModelAsync(currentUser, PizzaDb, ListServices.DefaultQuantityList, GeographyServices.StateList,
+                ListServices.CustomerOrderTypeList, ListServices.DeliveryAddressTypeList);
             return View(model);
         }
 
@@ -53,7 +53,7 @@ namespace PizzaWebsite.Controllers
             SiteUser user = await GetCurrentUserAsync();
             if (!ModelState.IsValid)
             {
-                model.CartVm = await _cartServices.CreateViewModelAsync(user.ConfirmOrderCartId, PizzaDb, ListUtility.CreateQuantityList());
+                model.CartVm = await _cartServices.CreateViewModelAsync(user.ConfirmOrderCartId, PizzaDb, ListServices.DefaultQuantityList);
                 return View("Checkout", model);
             }
             // todo: Finish client side validation using OrderConfirmationId
@@ -161,7 +161,7 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> Cart()
         {
             SiteUser user = await GetCurrentUserAsync();
-            CartViewModel model = await _cartServices.CreateViewModelAsync(user.CurrentCartId, PizzaDb, ListUtility.CreateQuantityList());
+            CartViewModel model = await _cartServices.CreateViewModelAsync(user.CurrentCartId, PizzaDb, ListServices.DefaultQuantityList);
             return View(model);
         }
 

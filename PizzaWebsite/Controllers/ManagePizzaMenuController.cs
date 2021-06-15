@@ -3,7 +3,6 @@ using DataLibrary.Models.Builders;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
-using DataLibrary.Models.Utility;
 using PizzaWebsite.Controllers.BaseControllers;
 using PizzaWebsite.Models;
 using PizzaWebsite.Models.ManageMenus;
@@ -79,7 +78,7 @@ namespace PizzaWebsite.Controllers
             {
                 sauceDictionary.Add(sauce.Id, sauce.Name);
             }
-            List<PizzaToppingViewModel> toppingVmList = CreateToppingViewModelList(record.ToppingList, pizzaBuilder.ToppingTypeList);
+            List<PizzaToppingViewModel> toppingVmList = CreateToppingViewModelList(record.ToppingList, pizzaBuilder.ToppingTypeList, ListServices.ToppingAmountList, ListServices.ToppingHalfList);
             return new ManageMenuPizzaViewModel()
             {
                 Id = record.Id,
@@ -122,7 +121,8 @@ namespace PizzaWebsite.Controllers
             };
         }
 
-        private List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<MenuPizzaTopping> menuToppingList, IEnumerable<MenuPizzaToppingType> toppingTypeList)
+        private List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<MenuPizzaTopping> menuToppingList, IEnumerable<MenuPizzaToppingType> toppingTypeList,
+            IEnumerable<string> toppingAmountList, IEnumerable<string> toppingHalfList)
         {
             List<PizzaTopping> toppingList = new List<PizzaTopping>();
             foreach (MenuPizzaTopping menuTopping in menuToppingList)
@@ -135,7 +135,7 @@ namespace PizzaWebsite.Controllers
                 };
                 toppingList.Add(topping);
             }
-            return PizzaBuilderManager.CreateToppingViewModelList(toppingList, toppingTypeList);
+            return PizzaBuilderManager.CreateToppingViewModelList(toppingList, toppingTypeList, toppingAmountList, toppingHalfList);
         }
 
         private List<MenuPizzaTopping> GetToppingRecordsFromViewModel(ManageMenuPizzaViewModel model)

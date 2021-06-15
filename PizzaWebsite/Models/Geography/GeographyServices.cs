@@ -5,9 +5,16 @@ using System.Web;
 
 namespace PizzaWebsite.Models.Geography
 {
-    public class StateListCreator
+    public class GeographyServices
     {
-        public static List<State> CreateStateList()
+        private IEnumerable<State> _stateList;
+
+        public GeographyServices()
+        {
+            _stateList = CreateStateList();
+        }
+
+        private IEnumerable<State> CreateStateList()
         {
             return new List<State>()
             {
@@ -63,5 +70,7 @@ namespace PizzaWebsite.Models.Geography
                 new State("Wyoming", "WY")
             };
         }
+
+        public IEnumerable<State> StateList { get => _stateList; }
     }
 }

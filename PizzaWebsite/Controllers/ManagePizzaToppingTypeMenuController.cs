@@ -1,6 +1,5 @@
 ﻿using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
-using DataLibrary.Models.Utility;
 using PizzaWebsite.Controllers.BaseControllers;
 using PizzaWebsite.Models;
 using PizzaWebsite.Models.ManageMenus;
@@ -67,7 +66,7 @@ namespace PizzaWebsite.Controllers
                 PriceLight = record.PriceLight,
                 PriceRegular = record.PriceRegular,
                 PriceExtra = record.PriceExtra,
-                ToppingCategoryList = ListUtility.GetToppingCategoryList()
+                ToppingCategoryList = ListServices.ToppingCategoryList
             });
         }
 

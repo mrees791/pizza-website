@@ -7,16 +7,15 @@ namespace PizzaWebsite.Models.Geography
 {
     public class State
     {
-        private string _name;
-        private string _abbreviation;
+        public State() { }
 
         public State(string name, string abbreviation)
         {
-            _name = name;
-            _abbreviation = abbreviation;
+            Name = name;
+            Abbreviation = abbreviation;
         }
 
-        public string Name { get => _name; }
-        public string Abbreviation { get => _abbreviation; }
+        public string Name { get; set; }
+        public string Abbreviation { get; set; }
     }
 }

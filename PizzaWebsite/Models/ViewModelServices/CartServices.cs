@@ -1,6 +1,5 @@
 ﻿using DataLibrary.Models;
 using DataLibrary.Models.JoinLists;
-using DataLibrary.Models.Utility;
 using PizzaWebsite.Models.Carts;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,7 @@ namespace PizzaWebsite.Models.ViewModelServices
 {
     public class CartServices
     {
-        public async Task<CartViewModel> CreateViewModelAsync(int cartId, PizzaDatabase pizzaDb, List<int> quantityList)
+        public async Task<CartViewModel> CreateViewModelAsync(int cartId, PizzaDatabase pizzaDb, IEnumerable<int> quantityList)
         {
             CartItemJoinList cartItemJoinList = new CartItemJoinList();
             await cartItemJoinList.LoadListByCartIdAsync(cartId, pizzaDb);

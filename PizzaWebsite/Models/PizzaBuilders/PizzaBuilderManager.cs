@@ -2,7 +2,6 @@
 using DataLibrary.Models.Builders;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
-using DataLibrary.Models.Utility;
 using PizzaWebsite.Models.ManageMenus;
 using System;
 using System.Collections.Generic;
@@ -14,7 +13,8 @@ namespace PizzaWebsite.Models.PizzaBuilders
 {
     public static class PizzaBuilderManager
     {
-        public static List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<PizzaTopping> toppingList, IEnumerable<MenuPizzaToppingType> toppingTypeList)
+        public static List<PizzaToppingViewModel> CreateToppingViewModelList(IEnumerable<PizzaTopping> toppingList, IEnumerable<MenuPizzaToppingType> toppingTypeList,
+            IEnumerable<string> toppingAmountList, IEnumerable<string> toppingHalfList)
         {
             List<PizzaToppingViewModel> toppingVmList = new List<PizzaToppingViewModel>();
             Dictionary<int, PizzaTopping> toppingDictionary = new Dictionary<int, PizzaTopping>();
@@ -41,8 +41,8 @@ namespace PizzaWebsite.Models.PizzaBuilders
                     Category = toppingType.CategoryName,
                     Id = toppingType.Id,
                     Name = toppingType.Name,
-                    AmountList = ListUtility.GetToppingAmountList(),
-                    ToppingHalfList = ListUtility.GetToppingHalfList(),
+                    AmountList = toppingAmountList,
+                    ToppingHalfList = toppingHalfList,
                     SelectedAmount = currentTopping.ToppingAmount,
                     SelectedToppingHalf = currentTopping.ToppingHalf
                 };

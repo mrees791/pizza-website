@@ -9,13 +9,6 @@ namespace PizzaWebsite.Models.ManageMenus
 {
     public class ManageMenuPizzaToppingTypeViewModel
     {
-        public List<string> ToppingCategoryList { get; set; }
-
-        public ManageMenuPizzaToppingTypeViewModel()
-        {
-            ToppingCategoryList = new List<string>();
-        }
-
         [HiddenInput(DisplayValue = false)]
         public int Id { get; set; }
         [HiddenInput(DisplayValue = false)]
@@ -46,6 +39,7 @@ namespace PizzaWebsite.Models.ManageMenus
         public string MenuIconFile { get; set; }
         public bool HasPizzaBuilderImage { get; set; }
         public string PizzaBuilderImageFile { get; set; }
+        public IEnumerable<string> ToppingCategoryList { get; set; }
 
         public bool IsNewRecord()
         {

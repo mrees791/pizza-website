@@ -2,7 +2,6 @@
 using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
-using DataLibrary.Models.Utility;
 using Microsoft.AspNet.Identity;
 using PizzaWebsite.Controllers.BaseControllers;
 using PizzaWebsite.Models;
@@ -49,7 +48,7 @@ namespace PizzaWebsite.Controllers
                 TotalNumberOfItems = await PizzaDb.GetNumberOfRecordsAsync<CustomerOrder>(search),
                 TotalPages = await PizzaDb.GetNumberOfPagesAsync<CustomerOrder>(rowsPerPage.Value, search)
             };
-            List<int> quantityList = ListUtility.CreateQuantityList();
+            IEnumerable<int> quantityList = ListServices.DefaultQuantityList;
             List<PreviousOrderViewModel> previousOrderVmList = new List<PreviousOrderViewModel>();
             IEnumerable<CustomerOrder> previousOrderList = await PizzaDb.GetPagedListAsync<CustomerOrder>(page.Value, rowsPerPage.Value, "Id", SortOrder.Descending, search);
             foreach (CustomerOrder prevOrder in previousOrderList)
@@ -82,8 +81,7 @@ namespace PizzaWebsite.Controllers
             {
                 return PreviousOrderAuthorizationErrorMessage();
             }
-            List<int> quantityList = ListUtility.CreateQuantityList();
-            PreviousOrderViewModel model = await _previousOrderServices.CreateViewModelAsync(true, orderJoin.Table1, orderJoin.Table2, PizzaDb, quantityList);
+            PreviousOrderViewModel model = await _previousOrderServices.CreateViewModelAsync(true, orderJoin.Table1, orderJoin.Table2, PizzaDb, ListServices.DefaultQuantityList);
             return View(model);
         }
 
