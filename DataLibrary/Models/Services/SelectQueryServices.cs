@@ -1,28 +1,34 @@
-﻿using System;
+﻿using DataLibrary.Models.Sql;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLibrary.Models.Sql
+namespace DataLibrary.Models.Services
 {
-    internal static class SelectQueries
+    internal class SelectQueryServices
     {
-        internal static string GetUserRoleSelectQuery(bool onlySelectFirst)
+        internal SelectQueryServices()
+        {
+
+        }
+
+        internal string GetUserRoleSelectQuery(bool onlySelectFirst)
         {
             return $@"SELECT {SqlUtility.CreateTopClause(onlySelectFirst)}
                       Id, UserId, RoleName
                       FROM UserRole";
         }
 
-        internal static string GetUserLoginSelectQuery(bool onlySelectFirst)
+        internal string GetUserLoginSelectQuery(bool onlySelectFirst)
         {
             return $@"SELECT {SqlUtility.CreateTopClause(onlySelectFirst)}
                       Id, UserId, LoginProvider, ProviderKey
                       FROM UserLogin";
         }
 
-        internal static string GetSiteUserSelectQuery(bool onlySelectFirst)
+        internal string GetSiteUserSelectQuery(bool onlySelectFirst)
         {
             return $@"SELECT {SqlUtility.CreateTopClause(onlySelectFirst)}
                       Id, CurrentCartId, ConfirmOrderCartId, OrderConfirmationId, IsBanned, ZipCode, Email, EmailConfirmed, PasswordHash,
@@ -30,14 +36,14 @@ namespace DataLibrary.Models.Sql
                       FROM SiteUser";
         }
 
-        internal static string GetEmployeeLocationSelectQuery(bool onlySelectFirst)
+        internal string GetEmployeeLocationSelectQuery(bool onlySelectFirst)
         {
             return $@"SELECT {SqlUtility.CreateTopClause(onlySelectFirst)}
                       Id, EmployeeId, StoreId
                       FROM EmployeeLocation";
         }
 
-        internal static string GetEmployeeSelectQuery(bool onlySelectFirst)
+        internal string GetEmployeeSelectQuery(bool onlySelectFirst)
         {
             return $@"SELECT {SqlUtility.CreateTopClause(onlySelectFirst)}
                       Id, UserId

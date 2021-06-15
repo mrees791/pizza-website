@@ -21,6 +21,7 @@ namespace DataLibrary.Models
         private IDbConnection _connection;
         private PizzaDatabaseCommands _commands;
         private PagedListServices _pagedListServices;
+        private SelectQueryServices _selectQueryServices;
 
         public PizzaDatabase(string connectionName = "PizzaDatabase")
         {
@@ -29,6 +30,7 @@ namespace DataLibrary.Models
             _connection.Open();
             _commands = new PizzaDatabaseCommands(this);
             _pagedListServices = new PagedListServices();
+            _selectQueryServices = new SelectQueryServices();
         }
 
         public void Dispose()
@@ -137,7 +139,7 @@ namespace DataLibrary.Models
 
         private async Task<SiteUser> GetSiteUserAsync(string whereClause, object parameters, IDbTransaction transaction = null)
         {
-            string sql = $"{SelectQueries.GetSiteUserSelectQuery(true)} {whereClause}";
+            string sql = $"{_selectQueryServices.GetSiteUserSelectQuery(true)} {whereClause}";
             SiteUser user = await _connection.QuerySingleOrDefaultAsync<SiteUser>(sql, parameters, transaction);
 
             if (user != null)
@@ -164,7 +166,7 @@ namespace DataLibrary.Models
 
         private async Task<EmployeeLocation> GetEmployeeLocationAsync(string whereClause, object parameters, IDbTransaction transaction = null)
         {
-            string sql = $"{SelectQueries.GetEmployeeLocationSelectQuery(true)} {whereClause}";
+            string sql = $"{_selectQueryServices.GetEmployeeLocationSelectQuery(true)} {whereClause}";
             EmployeeLocation employeeLocation = await _connection.QuerySingleOrDefaultAsync<EmployeeLocation>(sql, parameters, transaction);
 
             if (employeeLocation != null)
@@ -189,7 +191,7 @@ namespace DataLibrary.Models
 
         private async Task<Employee> GetEmployeeAsync(string whereClause, object parameters, IDbTransaction transaction = null)
         {
-            string sql = $"{SelectQueries.GetEmployeeSelectQuery(true)} {whereClause}";
+            string sql = $"{_selectQueryServices.GetEmployeeSelectQuery(true)} {whereClause}";
             Employee employee = await _connection.QuerySingleOrDefaultAsync<Employee>(sql, parameters, transaction);
 
             if (employee != null)
@@ -216,7 +218,7 @@ namespace DataLibrary.Models
 
         private async Task<UserRole> GetUserRoleAsync(string whereClause, object parameters, IDbTransaction transaction = null)
         {
-            string sql = $"{SelectQueries.GetUserRoleSelectQuery(true)} {whereClause}";
+            string sql = $"{_selectQueryServices.GetUserRoleSelectQuery(true)} {whereClause}";
 
             UserRole userRole = await _connection.QuerySingleOrDefaultAsync<UserRole>(sql, parameters, transaction);
 
@@ -244,7 +246,7 @@ namespace DataLibrary.Models
 
         private async Task<UserLogin> GetLoginAsync(string whereClause, object parameters, IDbTransaction transaction = null)
         {
-            string sql = $"{SelectQueries.GetUserLoginSelectQuery(true)} {whereClause}";
+            string sql = $"{_selectQueryServices.GetUserLoginSelectQuery(true)} {whereClause}";
 
             UserLogin userLogin = await _connection.QuerySingleOrDefaultAsync<UserLogin>(sql, parameters, transaction);
 

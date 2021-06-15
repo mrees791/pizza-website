@@ -111,9 +111,9 @@
     <Compile Include="Models\ProductCategory.cs" />
     <Compile Include="Models\Services\ListServices.cs" />
     <Compile Include="Models\Services\PagedListServices.cs" />
+    <Compile Include="Models\Services\SelectQueryServices.cs" />
     <Compile Include="Models\SortOrder.cs" />
     <Compile Include="Models\Sql\ComparisonType.cs" />
-    <Compile Include="Models\Sql\SelectQueries.cs" />
     <Compile Include="Models\Sql\SqlUtility.cs" />
     <Compile Include="Models\Sql\WhereClauseBase.cs" />
     <Compile Include="Models\Sql\WhereClauseItem.cs" />
