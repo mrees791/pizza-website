@@ -13,7 +13,7 @@ namespace PizzaWebsite.Models.ManageStores
     {
         public int StoreId { get; set; }
         public string StoreName { get; set; }
-        public List<EmployeeRosterItemViewModel> EmployeeRosterVmList { get; set; }
+        public IEnumerable<EmployeeRosterItemViewModel> EmployeeRosterVmList { get; set; }
 
         public bool RosterIsEmpty()
         {
