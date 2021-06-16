@@ -20,6 +20,23 @@ namespace PizzaWebsite.Models.ViewModelServices
                 cartVm = await cartServices.CreateViewModelAsync(customerOrder.CartId, pizzaDb, quantityList);
             }
 
+            DeliveryInfoViewModel deliveryInfoVm = null;
+
+            if (deliveryInfo != null)
+            {
+                deliveryInfoVm = new DeliveryInfoViewModel()
+                {
+                    AddressName = deliveryInfo.DeliveryAddressName,
+                    AddressType = deliveryInfo.DeliveryAddressType,
+                    City = deliveryInfo.DeliveryCity,
+                    PhoneNumber = deliveryInfo.DeliveryPhoneNumber,
+                    State = deliveryInfo.DeliveryState,
+                    StreetAddress = deliveryInfo.DeliveryStreetAddress,
+                    ZipCode = deliveryInfo.DeliveryZipCode,
+                    DeliveryDate = $"{deliveryInfo.DateOfDelivery.ToShortDateString()} {deliveryInfo.DateOfDelivery.ToShortTimeString()}"
+                };
+            }
+
             return new CustomerOrderViewModel
             {
                 Id = customerOrder.Id,
@@ -27,7 +44,8 @@ namespace PizzaWebsite.Models.ViewModelServices
                     $"{customerOrder.DateOfOrder.ToShortDateString()} {customerOrder.DateOfOrder.ToShortTimeString()}",
                 OrderTotal = customerOrder.OrderTotal.ToString("C", CultureInfo.CurrentCulture),
                 OrderType = customerOrder.GetOrderType(),
-                CartVm = cartVm
+                CartVm = cartVm,
+                DeliveryInfoVm = deliveryInfoVm
             };
         }
     }

@@ -30,7 +30,7 @@ namespace PizzaWebsite.Controllers
             _customerOrderServices = new CustomerOrderServices();
             _storeServices = new StoreServices();
         }
-
+        
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string storeName, string phoneNumber)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);

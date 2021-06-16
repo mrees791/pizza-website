@@ -189,6 +189,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Attributes\PhoneNumberAttribute.cs" />
     <Compile Include="Models\CustomerOrderViewModel.cs" />
+    <Compile Include="Models\DeliveryInfoViewModel.cs" />
     <Compile Include="Models\Geography\GeographyServices.cs" />
     <Compile Include="Models\ManageOrders\SearchStoresViewModel.cs" />
     <Compile Include="Models\ManageOrders\StoreViewModel.cs" />
@@ -364,6 +365,7 @@
     <Content Include="Views\Shared\ErrorMessage.cshtml" />
     <Content Include="Views\Shop\_CheckoutDeliveryFields.cshtml" />
     <Content Include="Views\ManageOrders\SearchStores.cshtml" />
+    <Content Include="Views\Shared\_DeliveryInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

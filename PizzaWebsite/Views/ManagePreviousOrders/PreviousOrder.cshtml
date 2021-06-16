@@ -12,5 +12,10 @@
 <p>@Model.DateOfOrder</p>
 <h3>Order Summary</h3>
 @Html.Partial("~/Views/Shared/Carts/_Cart.cshtml", Model.CartVm)
+@if (Model.IsDelivery())
+{
+    <h3>Delivery Address</h3>
+    @Html.Partial("~/Views/Shared/_DeliveryInfo.cshtml", Model.DeliveryInfoVm)
+}
 <h3>Cost Summary</h3>
 @Html.Partial("~/Views/Shared/Carts/_CostSummary.cshtml", Model.CartVm.CostSummaryVm)

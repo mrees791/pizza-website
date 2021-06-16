@@ -19,7 +19,12 @@ namespace PizzaWebsite.Models
 
         [Display(Name = "Total")]
         public string OrderTotal { get; set; }
-
         public CartViewModel CartVm { get; set; }
+        public DeliveryInfoViewModel DeliveryInfoVm { get; set; }
+
+        public bool IsDelivery()
+        {
+            return DeliveryInfoVm != null;
+        }
     }
 }
