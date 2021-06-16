@@ -14,14 +14,17 @@ using PizzaWebsite.Models.ViewModelServices;
 
 namespace PizzaWebsite.Controllers
 {
+    /// <summary>
+    /// Used for managing the current user's previous orders.
+    /// </summary>
     [Authorize]
     public class ManagePreviousOrdersController : BaseController
     {
-        private readonly PreviousOrderServices _previousOrderServices;
+        private readonly CustomerOrderServices _customerOrderServices;
 
         public ManagePreviousOrdersController()
         {
-            _previousOrderServices = new PreviousOrderServices();
+            _customerOrderServices = new CustomerOrderServices();
         }
 
         public async Task<ActionResult> Index(int? page, int? rowsPerPage)
@@ -49,14 +52,14 @@ namespace PizzaWebsite.Controllers
                 TotalPages = await PizzaDb.GetNumberOfPagesAsync<CustomerOrder>(rowsPerPage.Value, search)
             };
             IEnumerable<int> quantityList = ListServices.DefaultQuantityList;
-            List<PreviousOrderViewModel> previousOrderVmList = new List<PreviousOrderViewModel>();
+            List<CustomerOrderViewModel> previousOrderVmList = new List<CustomerOrderViewModel>();
             IEnumerable<CustomerOrder> previousOrderList =
                 await PizzaDb.GetPagedListAsync<CustomerOrder>(page.Value, rowsPerPage.Value, "Id",
                     SortOrder.Descending, search);
             foreach (CustomerOrder prevOrder in previousOrderList)
             {
-                PreviousOrderViewModel orderVm =
-                    await _previousOrderServices.CreateViewModelAsync(false, prevOrder, null, PizzaDb, quantityList);
+                CustomerOrderViewModel orderVm =
+                    await _customerOrderServices.CreateViewModelAsync(false, prevOrder, null, PizzaDb, quantityList);
                 previousOrderVmList.Add(orderVm);
             }
 
@@ -89,7 +92,7 @@ namespace PizzaWebsite.Controllers
                 return PreviousOrderAuthorizationErrorMessage();
             }
 
-            PreviousOrderViewModel model = await _previousOrderServices.CreateViewModelAsync(true, orderJoin.Table1,
+            CustomerOrderViewModel model = await _customerOrderServices.CreateViewModelAsync(true, orderJoin.Table1,
                 orderJoin.Table2, PizzaDb, ListServices.DefaultQuantityList);
             return View(model);
         }

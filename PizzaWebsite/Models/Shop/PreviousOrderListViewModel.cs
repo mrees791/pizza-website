@@ -5,8 +5,8 @@ namespace PizzaWebsite.Models.Shop
 {
     public class PreviousOrderListViewModel
     {
-        public PreviousOrderViewModel PreviousOrderViewModel { get; set; }
-        public IEnumerable<PreviousOrderViewModel> PreviousOrderVmList { get; set; }
+        public CustomerOrderViewModel PreviousOrderViewModel { get; set; }
+        public IEnumerable<CustomerOrderViewModel> PreviousOrderVmList { get; set; }
         public PaginationViewModel PaginationVm { get; set; }
 
         public bool HasPreviousOrders()

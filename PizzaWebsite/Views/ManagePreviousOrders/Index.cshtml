@@ -1,5 +1,6 @@
-﻿@using PizzaWebsite.Models.Shop
-@model PizzaWebsite.Models.Shop.PreviousOrderListViewModel
+﻿@using PizzaWebsite.Models
+@using PizzaWebsite.Models.Shop
+@model PreviousOrderListViewModel
 @{
     ViewBag.Title = "Previous Orders";
 }
@@ -34,7 +35,7 @@ else
         </tr>
         </thead>
         <tbody>
-        @foreach (PreviousOrderViewModel prevOrderVm in Model.PreviousOrderVmList)
+        @foreach (CustomerOrderViewModel prevOrderVm in Model.PreviousOrderVmList)
         {
             <tr>
                 <td>

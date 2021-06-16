@@ -1,9 +1,10 @@
 ﻿@using PizzaWebsite.Models.ManageStores
-@model PizzaWebsite.Models.Employees.ManagePagedListViewModel<PizzaWebsite.Models.ManageStores.ManageStoreViewModel>
+@using PizzaWebsite.Models.Employees
+@model ManagePagedListViewModel<ManageStoreViewModel>
 @{
     ViewBag.Title = "Manage Stores";
 }
-<h2>Manage Stores</h2>
+<h2>@ViewBag.Title</h2>
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
@@ -57,7 +58,6 @@
         <th></th>
         <th></th>
     </tr>
-
     @foreach (ManageStoreViewModel item in Model.ItemViewModelList)
     {
         <tr>
@@ -96,7 +96,6 @@
     <ul id="managePagination" class="pagination">
     </ul>
 </nav>
-
 @section Scripts {
     <script type="text/javascript">
         $(function() {

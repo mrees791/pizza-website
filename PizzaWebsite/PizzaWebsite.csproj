@@ -171,6 +171,7 @@
     <Compile Include="Controllers\ManageDeliveryAddressesController.cs" />
     <Compile Include="Controllers\ManageEmployeesController.cs" />
     <Compile Include="Controllers\ManageMenuController.cs" />
+    <Compile Include="Controllers\ManageOrdersController.cs" />
     <Compile Include="Controllers\ManagePizzaCheeseMenuController.cs" />
     <Compile Include="Controllers\ManagePizzaCrustFlavorMenuController.cs" />
     <Compile Include="Controllers\ManagePizzaCrustMenuController.cs" />
@@ -187,7 +188,9 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Attributes\PhoneNumberAttribute.cs" />
+    <Compile Include="Models\CustomerOrderViewModel.cs" />
     <Compile Include="Models\Geography\GeographyServices.cs" />
+    <Compile Include="Models\ManageOrders\ManageOrdersIndexViewModel.cs" />
     <Compile Include="Models\Shop\CheckoutAttributes\PhoneNumberRequiredIfDeliveryAttribute.cs" />
     <Compile Include="Models\Shop\CheckoutAttributes\RequiredIfDeliveryAttribute.cs" />
     <Compile Include="Models\Attributes\ValidEmployeeIdAttribute.cs" />
@@ -237,13 +240,12 @@
     <Compile Include="Models\Shop\OrderStatusViewModel.cs" />
     <Compile Include="Models\Shop\PizzaMenuPageViewModel.cs" />
     <Compile Include="Models\Shop\PreviousOrderListViewModel.cs" />
-    <Compile Include="Models\Shop\PreviousOrderViewModel.cs" />
     <Compile Include="Models\ValidationError.cs" />
     <Compile Include="Models\ViewModelServices\CartItemServices.cs" />
     <Compile Include="Models\ViewModelServices\CartServices.cs" />
     <Compile Include="Models\ViewModelServices\CheckoutServices.cs" />
     <Compile Include="Models\ViewModelServices\CostSummaryServices.cs" />
-    <Compile Include="Models\ViewModelServices\PreviousOrderServices.cs" />
+    <Compile Include="Models\ViewModelServices\CustomerOrderServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -362,6 +364,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\ManageOrders\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

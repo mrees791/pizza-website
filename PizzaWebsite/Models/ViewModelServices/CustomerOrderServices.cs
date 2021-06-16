@@ -8,9 +8,9 @@ using PizzaWebsite.Models.Shop;
 
 namespace PizzaWebsite.Models.ViewModelServices
 {
-    public class PreviousOrderServices
+    public class CustomerOrderServices
     {
-        public async Task<PreviousOrderViewModel> CreateViewModelAsync(bool loadCartItems, CustomerOrder customerOrder,
+        public async Task<CustomerOrderViewModel> CreateViewModelAsync(bool loadCartItems, CustomerOrder customerOrder,
             DeliveryInfo deliveryInfo, PizzaDatabase pizzaDb, IEnumerable<int> quantityList)
         {
             CartViewModel cartVm = new CartViewModel();
@@ -20,7 +20,7 @@ namespace PizzaWebsite.Models.ViewModelServices
                 cartVm = await cartServices.CreateViewModelAsync(customerOrder.CartId, pizzaDb, quantityList);
             }
 
-            return new PreviousOrderViewModel
+            return new CustomerOrderViewModel
             {
                 Id = customerOrder.Id,
                 DateOfOrder =

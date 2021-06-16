@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
 using PizzaWebsite.Models.Carts;
 
-namespace PizzaWebsite.Models.Shop
+namespace PizzaWebsite.Models
 {
-    public class PreviousOrderViewModel
+    public class CustomerOrderViewModel
     {
         public int Id { get; set; }
 
