@@ -190,7 +190,7 @@
     <Compile Include="Models\Attributes\PhoneNumberAttribute.cs" />
     <Compile Include="Models\CustomerOrderViewModel.cs" />
     <Compile Include="Models\Geography\GeographyServices.cs" />
-    <Compile Include="Models\ManageOrders\ManageOrdersIndexViewModel.cs" />
+    <Compile Include="Models\ManageOrders\SearchStoresViewModel.cs" />
     <Compile Include="Models\ManageOrders\StoreViewModel.cs" />
     <Compile Include="Models\Services\StoreServices.cs" />
     <Compile Include="Models\Shop\CheckoutAttributes\PhoneNumberRequiredIfDeliveryAttribute.cs" />
@@ -363,7 +363,7 @@
     <Content Include="Views\ManageEmployees\ViewLocations.cshtml" />
     <Content Include="Views\Shared\ErrorMessage.cshtml" />
     <Content Include="Views\Shop\_CheckoutDeliveryFields.cshtml" />
-    <Content Include="Views\ManageOrders\Index.cshtml" />
+    <Content Include="Views\ManageOrders\SearchStores.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

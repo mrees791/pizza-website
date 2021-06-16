@@ -63,13 +63,13 @@ namespace PizzaWebsite.Controllers
                 });
             }
 
-            ManageOrdersIndexViewModel model = new ManageOrdersIndexViewModel()
+            SearchStoresViewModel model = new SearchStoresViewModel()
             {
                 StoreVmList = storeVmList,
                 PaginationVm = paginationVm
             };
 
-            return View(model);
+            return View("SearchStores", model);
         }
     }
 }

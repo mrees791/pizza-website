@@ -5,7 +5,7 @@ using System.Web;
 
 namespace PizzaWebsite.Models.ManageOrders
 {
-    public class ManageOrdersIndexViewModel
+    public class SearchStoresViewModel
     {
         public StoreViewModel StoreVm { get; set; }
         public IEnumerable<StoreViewModel> StoreVmList { get; set; }
