@@ -33,28 +33,5 @@ namespace PizzaWebsite.Controllers.BaseControllers
         {
             return await PizzaDb.GetEmployeeAsync(await GetCurrentUserAsync());
         }
-
-        protected void ValidatePageQuery(ref int? page, ref int? rowsPerPage, int defaultRowsPerPage)
-        {
-            if (!page.HasValue)
-            {
-                page = 1;
-            }
-
-            if (!rowsPerPage.HasValue)
-            {
-                rowsPerPage = defaultRowsPerPage;
-            }
-
-            if (page < 1)
-            {
-                page = 1;
-            }
-
-            if (rowsPerPage < 1)
-            {
-                rowsPerPage = defaultRowsPerPage;
-            }
-        }
     }
 }

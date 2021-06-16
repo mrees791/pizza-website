@@ -1,0 +1,90 @@
+﻿@using PizzaWebsite.Models.ManageOrders
+@model ManageOrdersIndexViewModel
+@{
+    ViewBag.Title = "Search Stores";
+}
+<h2>@ViewBag.Title</h2>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "Employee")">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+    </ol>
+</nav>
+<hr />
+<div>
+    @using (Html.BeginForm("Index", "ManageStores", FormMethod.Get))
+    {
+        <input type="hidden" name="Page" value="1" />
+        @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
+        @Html.Label("StoreName", "Store Name")
+        @Html.TextBox("StoreName", Request["StoreName"], new { @class = "form-control" })
+        @Html.Label("PhoneNumber", "Phone Number")
+        @Html.TextBox("PhoneNumber", Request["PhoneNumber"], new { @class = "form-control" })
+        <input type="submit" value="Apply Search Filters" class="btn btn-primary" />
+    }
+</div>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.StoreVm.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StoreVm.StreetAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StoreVm.City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StoreVm.ZipCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StoreVm.PhoneNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StoreVm.IsActiveLocation)
+        </th>
+        @* Empty column for Manage Orders button. *@
+        <th></th>
+    </tr>
+    @foreach (StoreViewModel storeVm in Model.StoreVmList)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => storeVm.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => storeVm.StreetAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => storeVm.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => storeVm.ZipCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => storeVm.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => storeVm.IsActiveLocation)
+            </td>
+            <td>
+                <a href="@Url.Action("Orders")/@storeVm.Id?@(Request.QueryString)">
+                    <input type="button" value="Manage Orders" class="btn btn-primary" />
+                </a>
+            </td>
+        </tr>
+    }
+</table>
+<nav>
+    <ul id="managePagination" class="pagination">
+    </ul>
+</nav>
+@section Scripts {
+    <script type="text/javascript">
+        $(function() {
+            pizzaSiteNs.createPagination('#managePagination', @Model.PaginationVm.CurrentPage, @Model.PaginationVm.RowsPerPage, @Model.PaginationVm.TotalPages, @Model.PaginationVm.TotalNumberOfItems);
+        });
+    </script>
+}

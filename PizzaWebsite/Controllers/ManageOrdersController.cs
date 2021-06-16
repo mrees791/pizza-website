@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PizzaWebsite.Controllers.BaseControllers;
+using PizzaWebsite.Models.ManageOrders;
+using PizzaWebsite.Models.ViewModelServices;
 
 namespace PizzaWebsite.Controllers
 {
@@ -13,9 +15,25 @@ namespace PizzaWebsite.Controllers
     [Authorize(Roles = "Employee")]
     public class ManageOrdersController : BaseController
     {
-        public ActionResult Index()
+        private readonly CustomerOrderServices _customerOrderServices;
+
+        public ManageOrdersController()
         {
-            return View();
+            _customerOrderServices = new CustomerOrderServices();
+        }
+
+        public ActionResult Index(int? page, int? rowsPerPage)
+        {
+            ValidatePageQuery(ref page, ref rowsPerPage, 10);
+
+            // Load authorized store list.
+
+            ManageOrdersIndexViewModel model = new ManageOrdersIndexViewModel()
+            {
+
+            };
+
+            return View(model);
         }
     }
 }

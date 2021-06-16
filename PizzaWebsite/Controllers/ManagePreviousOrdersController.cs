@@ -29,15 +29,7 @@ namespace PizzaWebsite.Controllers
 
         public async Task<ActionResult> Index(int? page, int? rowsPerPage)
         {
-            if (!page.HasValue)
-            {
-                page = 1;
-            }
-
-            if (!rowsPerPage.HasValue)
-            {
-                rowsPerPage = 10;
-            }
+            ValidatePageQuery(ref page, ref rowsPerPage, 10);
 
             PreviousOrderSearch search = new PreviousOrderSearch
             {
