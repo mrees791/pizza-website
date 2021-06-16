@@ -60,7 +60,7 @@ namespace PizzaWebsite.Controllers
                 PaginationVm = paginationVm,
                 PreviousOrderVmList = previousOrderVmList
             };
-            return View(previousOrdersVm);
+            return View("PreviousOrderList", previousOrdersVm);
         }
 
         public async Task<ActionResult> PreviousOrder(int? id)

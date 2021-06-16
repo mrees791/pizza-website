@@ -21,5 +21,7 @@ namespace PizzaWebsite.Models.ManageOrders
         public string PhoneNumber { get; set; }
         [Display(Name = "Is Active")]
         public bool IsActiveLocation { get; set; }
+
+        public string ManageOrdersButtonHref { get; set; }
     }
 }

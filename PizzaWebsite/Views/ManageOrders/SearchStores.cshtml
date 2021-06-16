@@ -70,7 +70,7 @@
                 @Html.DisplayFor(modelItem => storeVm.IsActiveLocation)
             </td>
             <td>
-                <a href="@Url.Action("Orders")/@storeVm.Id?@(Request.QueryString)">
+                <a href="@storeVm.ManageOrdersButtonHref">
                     <input type="button" value="Manage Orders" class="btn btn-primary" />
                 </a>
             </td>

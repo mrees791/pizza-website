@@ -351,7 +351,7 @@
     <Content Include="Views\Shop\OrderExpired.cshtml" />
     <Content Include="Views\Shop\OrderConfirmed.cshtml" />
     <Content Include="Views\Shop\_CheckoutDeliveryInfo.cshtml" />
-    <Content Include="Views\ManagePreviousOrders\Index.cshtml" />
+    <Content Include="Views\ManagePreviousOrders\PreviousOrderList.cshtml" />
     <Content Include="Views\ManagePreviousOrders\PreviousOrder.cshtml" />
     <Content Include="Views\Shared\Carts\_CostSummary.cshtml" />
     <Content Include="Views\Shop\_OrderStatus.cshtml" />

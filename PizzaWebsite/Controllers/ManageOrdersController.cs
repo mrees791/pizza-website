@@ -55,6 +55,8 @@ namespace PizzaWebsite.Controllers
 
             foreach (StoreLocation store in storeList)
             {
+                string manageOrdersButtonHref = $"{Url.Action("Store")}/{store.Id}?{Request.QueryString}&OrdersPage=1&OrdersRowsPerPage=10";
+
                 storeVmList.Add(new StoreViewModel()
                 {
                     Id = store.Id,
@@ -63,7 +65,8 @@ namespace PizzaWebsite.Controllers
                     PhoneNumber = store.PhoneNumber,
                     StreetAddress = store.StreetAddress,
                     ZipCode = store.ZipCode,
-                    IsActiveLocation = store.IsActiveLocation
+                    IsActiveLocation = store.IsActiveLocation,
+                    ManageOrdersButtonHref = manageOrdersButtonHref
                 });
             }
 
@@ -103,7 +106,17 @@ namespace PizzaWebsite.Controllers
             };
             IEnumerable<CustomerOrder> customerOrderList =
                 await PizzaDb.GetPagedListAsync<CustomerOrder>(ordersPage.Value, ordersRowsPerPage.Value, "Id", SortOrder.Descending, searchFilter);
+            int totalPages = await PizzaDb.GetNumberOfPagesAsync<CustomerOrder>(ordersRowsPerPage.Value, searchFilter);
+            int totalNumberOfItems = await PizzaDb.GetNumberOfRecordsAsync<CustomerOrder>(searchFilter);
             // Create view models
+            PaginationViewModel paginationVm = new PaginationViewModel()
+            {
+                CurrentPage = ordersPage.Value,
+                RowsPerPage = ordersRowsPerPage.Value,
+                QueryString = Request.QueryString,
+                TotalNumberOfItems = totalNumberOfItems,
+                TotalPages = totalPages
+            };
             List<CustomerOrderViewModel> orderVmList = new List<CustomerOrderViewModel>();
             foreach (CustomerOrder customerOrder in customerOrderList)
             {
@@ -121,7 +134,8 @@ namespace PizzaWebsite.Controllers
             }
             StoreOrderListViewModel model = new StoreOrderListViewModel()
             {
-                CustomerOrderVmList = orderVmList
+                CustomerOrderVmList = orderVmList,
+                PaginationVm = paginationVm
             };
 
             return View("StoreOrderList", model);
@@ -138,7 +152,7 @@ namespace PizzaWebsite.Controllers
             {
                 Header = "Authorization Error",
                 ErrorMessage = $"You are not authorized to access store with ID {storeId}.",
-                ReturnUrlAction = $"{Url.Action("Index")}?page={Request["Page"]}&rowsPerPage={Request["RowsPerPage"]}",
+                ReturnUrlAction = $"{Url.Action("Index")}?Page={Request["Page"]}&RowsPerPage={Request["RowsPerPage"]}",
                 ShowReturnLink = true
             };
             return View("ErrorMessage", model);
@@ -150,7 +164,7 @@ namespace PizzaWebsite.Controllers
             {
                 Header = "Error",
                 ErrorMessage = $"Store with ID {storeId} does not exist.",
-                ReturnUrlAction = $"{Url.Action("Index")}?page={Request["Page"]}&rowsPerPage={Request["RowsPerPage"]}",
+                ReturnUrlAction = $"{Url.Action("Index")}?Page={Request["Page"]}&RowsPerPage={Request["RowsPerPage"]}",
                 ShowReturnLink = true
             };
             return View("ErrorMessage", model);
@@ -162,7 +176,7 @@ namespace PizzaWebsite.Controllers
             {
                 Header = "Error",
                 ErrorMessage = "Missing store ID.",
-                ReturnUrlAction = $"{Url.Action("Index")}?page={Request["Page"]}&rowsPerPage={Request["RowsPerPage"]}",
+                ReturnUrlAction = $"{Url.Action("Index")}?Page={Request["Page"]}&RowsPerPage={Request["RowsPerPage"]}",
                 ShowReturnLink = true
             };
             return View("ErrorMessage", model);

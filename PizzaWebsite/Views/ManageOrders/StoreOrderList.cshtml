@@ -1,5 +1,6 @@
-﻿@using PizzaWebsite.Models.ManageOrders
-@model SearchStoresViewModel
+﻿@using PizzaWebsite.Models
+@using PizzaWebsite.Models.ManageOrders
+@model StoreOrderListViewModel
 @{
     ViewBag.Title = "Orders";
 }
@@ -10,75 +11,61 @@
             <a href="@Url.Action("Index", "Employee")">Home</a>
         </li>
         <li class="breadcrumb-item">
-            <a href="@Url.Action("Index", "ManageOrders")?Page=@Request["Page"]&RowsPerPage=@Request["RowsPerPage"]">Search Stores</a>
+            <a href="@Url.Action("Index", "ManageOrders")?@Request.QueryString">Search Stores</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
     </ol>
 </nav>
 <hr />
 <div>
-    @using (Html.BeginForm("Index", "ManageOrders", FormMethod.Get))
+    @using (Html.BeginForm("Store", "ManageOrders", FormMethod.Get))
     {
-        <input type="hidden" name="Page" value="1" />
+        <input type="hidden" name="OrdersPage" value="1" />
+        @Html.Hidden("OrdersRowsPerPage", Request["OrdersRowsPerPage"])
+        @Html.Hidden("Page", Request["Page"])
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
-        @Html.Label("StoreName", "Store Name")
-        @Html.TextBox("StoreName", Request["StoreName"], new { @class = "form-control" })
-        @Html.Label("PhoneNumber", "Phone Number")
-        @Html.TextBox("PhoneNumber", Request["PhoneNumber"], new { @class = "form-control" })
+        @Html.Label("OrdersUserId", "User Id")
+        @Html.TextBox("OrdersUserId", Request["OrdersUserId"], new { @class = "form-control" })
         <input type="submit" value="Apply Search Filters" class="btn btn-primary" />
     }
 </div>
 <table class="table">
+    <thead>
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.StoreVm.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StoreVm.StreetAddress)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StoreVm.City)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StoreVm.ZipCode)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StoreVm.PhoneNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StoreVm.IsActiveLocation)
-        </th>
-        @* Empty column for Manage Orders button. *@
+        @* Table header for controls columns. *@
         <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerOrderVm.DateOfOrder)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerOrderVm.OrderType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerOrderVm.OrderTotal)
+        </th>
     </tr>
-    @foreach (StoreViewModel storeVm in Model.StoreVmList)
+    </thead>
+    <tbody>
+    @foreach (CustomerOrderViewModel orderVm in Model.CustomerOrderVmList)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => storeVm.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => storeVm.StreetAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => storeVm.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => storeVm.ZipCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => storeVm.PhoneNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => storeVm.IsActiveLocation)
-            </td>
-            <td>
-                <a href="@Url.Action("Orders")/@storeVm.Id?@(Request.QueryString)">
-                    <input type="button" value="Manage Orders" class="btn btn-primary" />
+                <a href="@Url.Action("ViewOrder")/@orderVm.Id?@(Request.QueryString)">
+                    <input type="button" value="View" class="btn btn-primary"/>
                 </a>
+            </td>
+            <td>
+                @Html.DisplayFor(model => orderVm.DateOfOrder)
+            </td>
+            <td>
+                @Html.DisplayFor(model => orderVm.OrderType)
+            </td>
+            <td>
+                @Html.DisplayFor(viewModel => orderVm.OrderTotal)
             </td>
         </tr>
     }
+    </tbody>
 </table>
 <nav>
     <ul id="managePagination" class="pagination">
