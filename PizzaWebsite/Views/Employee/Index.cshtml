@@ -10,6 +10,9 @@
     </ol>
 </nav>
 <ul class="list-group">
+    <li class="list-group-item">
+        <a href="@Url.Action("Index", "ManageOrders")?Page=1&RowsPerPage=10">Manage Orders</a>
+    </li>
     @if (Model.AuthorizedToManageMenu)
     {
         <li class="list-group-item">

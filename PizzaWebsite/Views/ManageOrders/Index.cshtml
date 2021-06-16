@@ -14,7 +14,7 @@
 </nav>
 <hr />
 <div>
-    @using (Html.BeginForm("Index", "ManageStores", FormMethod.Get))
+    @using (Html.BeginForm("Index", "ManageOrders", FormMethod.Get))
     {
         <input type="hidden" name="Page" value="1" />
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
