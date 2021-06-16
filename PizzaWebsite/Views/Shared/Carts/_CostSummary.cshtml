@@ -1,16 +1,16 @@
 ﻿@using PizzaWebsite.Models.Carts
 @model CostSummaryViewModel
-<table class="table">
-    <tr>
-        <td>Subtotal</td>
-        <td>@Model.Subtotal</td>
-    </tr>
-    <tr>
-        <td>Tax</td>
-        <td>@Model.Tax</td>
-    </tr>
-    <tr>
-        <td>Total</td>
-        <td>@Model.Total</td>
-    </tr>
-</table>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">Subtotal</div>
+        <div class="col-sm-6">@Model.Subtotal</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">Tax</div>
+        <div class="col-sm-6">@Model.Tax</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">Total</div>
+        <div class="col-sm-6">@Model.Total</div>
+    </div>
+</div>
