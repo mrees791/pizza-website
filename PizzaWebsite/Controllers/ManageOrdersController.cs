@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using DataLibrary.Models;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity;
 using PizzaWebsite.Controllers.BaseControllers;
 using PizzaWebsite.Models;
+using PizzaWebsite.Models.Carts;
 using PizzaWebsite.Models.ManageOrders;
 using PizzaWebsite.Models.ManageStores;
 using PizzaWebsite.Models.Services;
@@ -24,13 +27,14 @@ namespace PizzaWebsite.Controllers
     {
         private readonly CustomerOrderServices _customerOrderServices;
         private readonly StoreServices _storeServices;
+        private readonly CartServices _cartServices;
 
         public ManageOrdersController()
         {
             _customerOrderServices = new CustomerOrderServices();
             _storeServices = new StoreServices();
+            _cartServices = new CartServices();
         }
-        
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string storeName, string phoneNumber)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);
@@ -70,6 +74,98 @@ namespace PizzaWebsite.Controllers
             };
 
             return View("SearchStores", model);
+        }
+
+        public async Task<ActionResult> Store(int? id, int? ordersPage, int? ordersRowsPerPage, string userId)
+        {
+            if (!id.HasValue)
+            {
+                return MissingStoreIdErrorMessage();
+            }
+            StoreLocation store = await PizzaDb.GetAsync<StoreLocation>(id.Value);
+            if (store == null)
+            {
+                return StoreDoesNotExistErrorMessage(id.Value);
+            }
+            SiteUser currentUser = await GetCurrentUserAsync();
+            Employee currentEmployee = await PizzaDb.GetEmployeeAsync(currentUser);
+            bool isAuthorized = AuthorizedToAllStores() || await PizzaDb.Commands.IsEmployedAtLocationAsync(currentEmployee, store);
+            if (!isAuthorized)
+            {
+                return StoreAuthorizationErrorMessage(id.Value);
+            }
+            // Load paged orders list.
+            ValidatePageQuery(ref ordersPage, ref ordersRowsPerPage, 10);
+            StoreOrderFilter searchFilter = new StoreOrderFilter()
+            {
+                StoreId = id.Value,
+                UserId = userId
+            };
+            IEnumerable<CustomerOrder> customerOrderList =
+                await PizzaDb.GetPagedListAsync<CustomerOrder>(ordersPage.Value, ordersRowsPerPage.Value, "Id", SortOrder.Descending, searchFilter);
+            // Create view models
+            List<CustomerOrderViewModel> orderVmList = new List<CustomerOrderViewModel>();
+            foreach (CustomerOrder customerOrder in customerOrderList)
+            {
+                CartViewModel cartVm = await _cartServices.CreateViewModelAsync(customerOrder.CartId, PizzaDb, ListServices.DefaultQuantityList);
+                CustomerOrderViewModel customerOrderVm = new CustomerOrderViewModel()
+                {
+                    Id = customerOrder.Id,
+                    CartVm = cartVm,
+                    OrderType = customerOrder.GetOrderType(),
+                    OrderTotal = customerOrder.OrderTotal.ToString("C", CultureInfo.CurrentCulture),
+                    DateOfOrder =
+                        $"{customerOrder.DateOfOrder.ToShortDateString()} {customerOrder.DateOfOrder.ToShortTimeString()}"
+                };
+                orderVmList.Add(customerOrderVm);
+            }
+            StoreOrderListViewModel model = new StoreOrderListViewModel()
+            {
+                CustomerOrderVmList = orderVmList
+            };
+
+            return View("StoreOrderList", model);
+        }
+
+        private bool AuthorizedToAllStores()
+        {
+            return User.IsInRole("Admin") || User.IsInRole("Executive");
+        }
+
+        private ActionResult StoreAuthorizationErrorMessage(int storeId)
+        {
+            ErrorMessageViewModel model = new ErrorMessageViewModel
+            {
+                Header = "Authorization Error",
+                ErrorMessage = $"You are not authorized to access store with ID {storeId}.",
+                ReturnUrlAction = $"{Url.Action("Index")}?page={Request["Page"]}&rowsPerPage={Request["RowsPerPage"]}",
+                ShowReturnLink = true
+            };
+            return View("ErrorMessage", model);
+        }
+
+        private ActionResult StoreDoesNotExistErrorMessage(int storeId)
+        {
+            ErrorMessageViewModel model = new ErrorMessageViewModel
+            {
+                Header = "Error",
+                ErrorMessage = $"Store with ID {storeId} does not exist.",
+                ReturnUrlAction = $"{Url.Action("Index")}?page={Request["Page"]}&rowsPerPage={Request["RowsPerPage"]}",
+                ShowReturnLink = true
+            };
+            return View("ErrorMessage", model);
+        }
+
+        private ActionResult MissingStoreIdErrorMessage()
+        {
+            ErrorMessageViewModel model = new ErrorMessageViewModel
+            {
+                Header = "Error",
+                ErrorMessage = "Missing store ID.",
+                ReturnUrlAction = $"{Url.Action("Index")}?page={Request["Page"]}&rowsPerPage={Request["RowsPerPage"]}",
+                ShowReturnLink = true
+            };
+            return View("ErrorMessage", model);
         }
     }
 }

@@ -55,7 +55,7 @@ namespace DataLibrary.Models
             return rowsUpdated;
         }
 
-        public async Task<bool> IsEmployedAtLocation(Employee employee, StoreLocation storeLocation,
+        public async Task<bool> IsEmployedAtLocationAsync(Employee employee, StoreLocation storeLocation,
             IDbTransaction transaction = null)
         {
             return await _pizzaDb.GetEmployeeLocationAsync(employee, storeLocation, transaction) != null;

@@ -10,7 +10,6 @@ namespace PizzaWebsite.Models
     public class CustomerOrderViewModel
     {
         public int Id { get; set; }
-
         [Display(Name = "Date")]
         public string DateOfOrder { get; set; }
 

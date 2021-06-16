@@ -98,6 +98,7 @@
     <Compile Include="Models\QueryFilters\MenuPizzaToppingTypeFilter.cs" />
     <Compile Include="Models\QueryFilters\SiteUserFilter.cs" />
     <Compile Include="Models\QueryFilters\StoreLocationFilter.cs" />
+    <Compile Include="Models\QueryFilters\StoreOrderFilter.cs" />
     <Compile Include="Models\QuerySearches\DeliveryAddressSearch.cs" />
     <Compile Include="Models\QuerySearches\MenuItemSearch.cs" />
     <Compile Include="Models\QuerySearches\MenuPizzaSearch.cs" />

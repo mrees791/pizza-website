@@ -192,6 +192,8 @@
     <Compile Include="Models\DeliveryInfoViewModel.cs" />
     <Compile Include="Models\Geography\GeographyServices.cs" />
     <Compile Include="Models\ManageOrders\SearchStoresViewModel.cs" />
+    <Compile Include="Models\ManageOrders\StoreOrderListViewModel.cs" />
+    <Compile Include="Models\ManageOrders\StoreOrderViewModel.cs" />
     <Compile Include="Models\ManageOrders\StoreViewModel.cs" />
     <Compile Include="Models\Services\StoreServices.cs" />
     <Compile Include="Models\Shop\CheckoutAttributes\PhoneNumberRequiredIfDeliveryAttribute.cs" />
@@ -366,6 +368,7 @@
     <Content Include="Views\Shop\_CheckoutDeliveryFields.cshtml" />
     <Content Include="Views\ManageOrders\SearchStores.cshtml" />
     <Content Include="Views\Shared\_DeliveryInfo.cshtml" />
+    <Content Include="Views\ManageOrders\StoreOrderList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

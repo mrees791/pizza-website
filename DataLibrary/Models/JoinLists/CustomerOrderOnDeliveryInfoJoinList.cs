@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using DataLibrary.Models.JoinLists.BaseClasses;
+using DataLibrary.Models.QueryFilters;
+using DataLibrary.Models.Sql;
 using DataLibrary.Models.Tables;
 
 namespace DataLibrary.Models.JoinLists

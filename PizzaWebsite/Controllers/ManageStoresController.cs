@@ -68,7 +68,7 @@ namespace PizzaWebsite.Controllers
             // Authorized if the employee is both currently employed at that store and is a manager.
             if (User.IsInRole("Manager"))
             {
-                return await PizzaDb.Commands.IsEmployedAtLocation(employee, storeLocation);
+                return await PizzaDb.Commands.IsEmployedAtLocationAsync(employee, storeLocation);
             }
 
             return false;
@@ -431,7 +431,7 @@ namespace PizzaWebsite.Controllers
                 {
                     // Make sure employee isn't already employed at this location.
                     bool alreadyEmployedAtLocation =
-                        await PizzaDb.Commands.IsEmployedAtLocation(employee, storeLocation);
+                        await PizzaDb.Commands.IsEmployedAtLocationAsync(employee, storeLocation);
                     if (alreadyEmployedAtLocation)
                     {
                         ModelState.AddModelError("EmployeeId",
@@ -461,7 +461,7 @@ namespace PizzaWebsite.Controllers
                 else
                 {
                     // Make sure employee isn't already employed at this location.
-                    bool isEmployedAtLocation = await PizzaDb.Commands.IsEmployedAtLocation(employee, storeLocation);
+                    bool isEmployedAtLocation = await PizzaDb.Commands.IsEmployedAtLocationAsync(employee, storeLocation);
                     if (!isEmployedAtLocation)
                     {
                         ModelState.AddModelError("EmployeeId",
