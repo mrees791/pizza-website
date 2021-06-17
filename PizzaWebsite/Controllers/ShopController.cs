@@ -234,6 +234,8 @@ namespace PizzaWebsite.Controllers
                     return "Your order is ready for pickup.";
                 case OrderPhase.OutForDelivery:
                     return "Your order is out for delivery.";
+                case OrderPhase.Complete:
+                    return "Your order has been completed.";
             }
 
             return "Unable to get order status.";
@@ -247,7 +249,7 @@ namespace PizzaWebsite.Controllers
             if (order == null)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return Json($"Order with ID {order} does not exist.", MediaTypeNames.Text.Plain);
+                return Json($"Order with ID {orderId} does not exist.", MediaTypeNames.Text.Plain);
             }
 
             SiteUser user = await GetCurrentUserAsync();

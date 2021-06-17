@@ -34,7 +34,8 @@
 <table class="table">
     <thead>
         <tr>
-            @* Table header for controls columns. *@
+            @* Table headers for controls columns. *@
+            <th></th>
             <th></th>
             <th>
                 @Html.DisplayNameFor(model => model.StoreOrderVm.UserId)
@@ -61,6 +62,19 @@
                 <a href="@Url.Action("ViewOrder")/@orderVm.Id?@(Request.QueryString)">
                     <input type="button" value="View" class="btn btn-primary" />
                 </a>
+            </td>
+            <td>
+                <!-- ORDER STATUS SELECT LIST WILL GO HERE -->
+                @Html.DropDownListFor(model => orderVm.)
+            </td>
+            <td>
+                @Html.DropDownList("Status", new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity),
+                    new
+                    {
+                        @class = "form-control",
+                        id = cartItemVm.CartItemQuantitySelectId,
+                        name = "Quantity"
+                    })
             </td>
             <td>
                 @Html.DisplayFor(model => orderVm.UserId)

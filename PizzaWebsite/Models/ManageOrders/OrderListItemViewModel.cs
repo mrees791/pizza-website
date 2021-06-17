@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace PizzaWebsite.Models.ManageOrders
 {
-    public class StoreOrderViewModel
+    public class OrderListItemViewModel
     {
-        public string StoreSearchQueryString { get; set; }
         public CustomerOrderViewModel CustomerOrderVm { get; set; }
+        public IEnumerable<SelectListItem> OrderStatusListItems { get; set; }
+        public int SelectedOrderStatus { get; set; }
     }
 }

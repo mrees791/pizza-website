@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -119,13 +120,27 @@ namespace PizzaWebsite.Controllers
                 TotalNumberOfItems = totalNumberOfItems,
                 TotalPages = totalPages
             };
-            List<CustomerOrderViewModel> orderVmList = new List<CustomerOrderViewModel>();
+            List<OrderListItemViewModel> orderVmList = new List<OrderListItemViewModel>();
+            IEnumerable<SelectListItem> orderStatusDeliveryItems = CreateOrderStatusSelectListItems(true);
+            IEnumerable<SelectListItem> orderStatusPickupItems = CreateOrderStatusSelectListItems(false);
             foreach (CustomerOrder customerOrder in customerOrderList)
             {
                 CartViewModel cartVm = await _cartServices.CreateViewModelAsync(customerOrder.CartId, PizzaDb, ListServices.DefaultQuantityList);
                 CustomerOrderViewModel customerOrderVm = await _customerOrderServices.CreateViewModelAsync(false,
                     customerOrder, null, PizzaDb, ListServices.DefaultQuantityList);
-                orderVmList.Add(customerOrderVm);
+                OrderListItemViewModel listItemVm = new OrderListItemViewModel()
+                {
+                    CustomerOrderVm = customerOrderVm,
+
+                };
+                if (customerOrder.IsDelivery)
+                {
+                }
+                else
+                {
+
+                }
+                orderVmList.Add(listItemVm);
             }
             StoreOrderListViewModel model = new StoreOrderListViewModel()
             {
@@ -135,6 +150,82 @@ namespace PizzaWebsite.Controllers
             };
 
             return View("StoreOrderList", model);
+        }
+
+        private IEnumerable<SelectListItem> CreateOrderStatusSelectListItems(bool isDelivery)
+        {
+            List<SelectListItem> itemList = new List<SelectListItem>
+            {
+                GetOrderStatusSelectListItem(OrderPhase.OrderPlaced),
+                GetOrderStatusSelectListItem(OrderPhase.Prep),
+                GetOrderStatusSelectListItem(OrderPhase.Bake),
+                GetOrderStatusSelectListItem(OrderPhase.Box)
+            };
+
+            if (isDelivery)
+            {
+                itemList.Add(GetOrderStatusSelectListItem(OrderPhase.OutForDelivery));
+            }
+            else
+            {
+                itemList.Add(GetOrderStatusSelectListItem(OrderPhase.ReadyForPickup));
+            }
+
+            itemList.Add(GetOrderStatusSelectListItem(OrderPhase.Complete));
+
+            return itemList;
+        }
+
+
+        private SelectListItem GetOrderStatusSelectListItem(OrderPhase orderPhase)
+        {
+            switch (orderPhase)
+            {
+                case OrderPhase.OrderPlaced:
+                    return new SelectListItem()
+                    {
+                        Text = "Order Placed",
+                        Value = OrderPhase.OrderPlaced.ToString()
+                    };
+                case OrderPhase.Prep:
+                    return new SelectListItem()
+                    {
+                        Text = "Prepping",
+                        Value = OrderPhase.Prep.ToString()
+                    };
+                case OrderPhase.Bake:
+                    return new SelectListItem()
+                    {
+                        Text = "Baking",
+                        Value = OrderPhase.Bake.ToString()
+                    };
+                case OrderPhase.Box:
+                    return new SelectListItem()
+                    {
+                        Text = "Boxing",
+                        Value = OrderPhase.Box.ToString()
+                    };
+                case OrderPhase.ReadyForPickup:
+                    return new SelectListItem()
+                    {
+                        Text = "Ready for Pickup",
+                        Value = OrderPhase.ReadyForPickup.ToString()
+                    };
+                case OrderPhase.OutForDelivery:
+                    return new SelectListItem()
+                    {
+                        Text = "Out for Delivery",
+                        Value = OrderPhase.OutForDelivery.ToString()
+                    };
+                case OrderPhase.Complete:
+                    return new SelectListItem()
+                    {
+                        Text = "Complete",
+                        Value = OrderPhase.Complete.ToString()
+                    };
+            }
+
+            throw new Exception($"Unable to get order phase status for {orderPhase.ToString()}");
         }
 
         public async Task<ActionResult> ViewOrder(int? id)
@@ -167,7 +258,7 @@ namespace PizzaWebsite.Controllers
             CustomerOrderViewModel customerOrderVm = await _customerOrderServices.CreateViewModelAsync(true, customerOrder,
                 deliveryInfo, PizzaDb, ListServices.DefaultQuantityList);
 
-            StoreOrderViewModel model = new StoreOrderViewModel()
+            StoreOrderCartViewModel model = new StoreOrderCartViewModel()
             {
                 CustomerOrderVm = customerOrderVm,
                 StoreSearchQueryString = CreateStoreSearchQueryString()

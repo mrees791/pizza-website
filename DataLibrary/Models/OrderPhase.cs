@@ -7,6 +7,7 @@
         Bake,
         Box,
         ReadyForPickup,
-        OutForDelivery
+        OutForDelivery,
+        Complete
     }
 }

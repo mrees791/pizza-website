@@ -191,9 +191,10 @@
     <Compile Include="Models\CustomerOrderViewModel.cs" />
     <Compile Include="Models\DeliveryInfoViewModel.cs" />
     <Compile Include="Models\Geography\GeographyServices.cs" />
+    <Compile Include="Models\ManageOrders\OrderListItemViewModel.cs" />
     <Compile Include="Models\ManageOrders\SearchStoresViewModel.cs" />
     <Compile Include="Models\ManageOrders\StoreOrderListViewModel.cs" />
-    <Compile Include="Models\ManageOrders\StoreOrderViewModel.cs" />
+    <Compile Include="Models\ManageOrders\StoreOrderCartViewModel.cs" />
     <Compile Include="Models\ManageOrders\StoreViewModel.cs" />
     <Compile Include="Models\Services\StoreServices.cs" />
     <Compile Include="Models\Shop\CheckoutAttributes\PhoneNumberRequiredIfDeliveryAttribute.cs" />
