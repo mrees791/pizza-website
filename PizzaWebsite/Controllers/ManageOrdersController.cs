@@ -35,12 +35,13 @@ namespace PizzaWebsite.Controllers
             _storeServices = new StoreServices();
             _cartServices = new CartServices();
         }
-        public async Task<ActionResult> Index(int? page, int? rowsPerPage, string storeName, string phoneNumber)
+
+        public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name, string phoneNumber)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);
             StoreLocationFilter searchFilter = new StoreLocationFilter
             {
-                Name = storeName,
+                Name = name,
                 PhoneNumber = phoneNumber
             };
 
@@ -55,7 +56,7 @@ namespace PizzaWebsite.Controllers
 
             foreach (StoreLocation store in storeList)
             {
-                string manageOrdersButtonHref = $"{Url.Action("Store")}/{store.Id}?{Request.QueryString}&OrdersPage=1&OrdersRowsPerPage=10";
+                string manageOrdersButtonHref = $"{Url.Action("Store")}/{store.Id}?{CreateStoreSearchQueryString()}&OrdersPage=1&OrdersRowsPerPage=10";
 
                 storeVmList.Add(new StoreViewModel()
                 {
@@ -135,7 +136,8 @@ namespace PizzaWebsite.Controllers
             StoreOrderListViewModel model = new StoreOrderListViewModel()
             {
                 CustomerOrderVmList = orderVmList,
-                PaginationVm = paginationVm
+                PaginationVm = paginationVm,
+                StoreSearchQueryString = CreateStoreSearchQueryString()
             };
 
             return View("StoreOrderList", model);
@@ -146,13 +148,18 @@ namespace PizzaWebsite.Controllers
             return User.IsInRole("Admin") || User.IsInRole("Executive");
         }
 
+        private string CreateStoreSearchQueryString()
+        {
+            return $"Page={Request["Page"]}&RowsPerPage={Request["RowsPerPage"]}&Name={Request["Name"]}&PhoneNumber={Request["PhoneNumber"]}";
+        }
+
         private ActionResult StoreAuthorizationErrorMessage(int storeId)
         {
             ErrorMessageViewModel model = new ErrorMessageViewModel
             {
                 Header = "Authorization Error",
                 ErrorMessage = $"You are not authorized to access store with ID {storeId}.",
-                ReturnUrlAction = $"{Url.Action("Index")}?Page={Request["Page"]}&RowsPerPage={Request["RowsPerPage"]}",
+                ReturnUrlAction = $"{Url.Action("Index")}?{CreateStoreSearchQueryString()}",
                 ShowReturnLink = true
             };
             return View("ErrorMessage", model);
@@ -164,7 +171,7 @@ namespace PizzaWebsite.Controllers
             {
                 Header = "Error",
                 ErrorMessage = $"Store with ID {storeId} does not exist.",
-                ReturnUrlAction = $"{Url.Action("Index")}?Page={Request["Page"]}&RowsPerPage={Request["RowsPerPage"]}",
+                ReturnUrlAction = $"{Url.Action("Index")}?{CreateStoreSearchQueryString()}",
                 ShowReturnLink = true
             };
             return View("ErrorMessage", model);

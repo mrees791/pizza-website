@@ -11,7 +11,7 @@
             <a href="@Url.Action("Index", "Employee")">Home</a>
         </li>
         <li class="breadcrumb-item">
-            <a href="@Url.Action("Index", "ManageOrders")?@Request.QueryString">Search Stores</a>
+            <a href="@Url.Action("Index", "ManageOrders")?@Model.StoreSearchQueryString">Search Stores</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
     </ol>
@@ -20,10 +20,12 @@
 <div>
     @using (Html.BeginForm("Store", "ManageOrders", FormMethod.Get))
     {
-        <input type="hidden" name="OrdersPage" value="1" />
-        @Html.Hidden("OrdersRowsPerPage", Request["OrdersRowsPerPage"])
         @Html.Hidden("Page", Request["Page"])
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
+        @Html.Hidden("Name", Request["Name"])
+        @Html.Hidden("PhoneNumber", Request["PhoneNumber"])
+        <input type="hidden" name="OrdersPage" value="1" />
+        @Html.Hidden("OrdersRowsPerPage", Request["OrdersRowsPerPage"])
         @Html.Label("OrdersUserId", "User Id")
         @Html.TextBox("OrdersUserId", Request["OrdersUserId"], new { @class = "form-control" })
         <input type="submit" value="Apply Search Filters" class="btn btn-primary" />

@@ -7,6 +7,7 @@ using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using PizzaWebsite.Models.Geography;
+using PizzaWebsite.Models.Services;
 
 namespace PizzaWebsite.Controllers.BaseControllers
 {

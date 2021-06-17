@@ -18,8 +18,8 @@
     {
         <input type="hidden" name="Page" value="1" />
         @Html.Hidden("RowsPerPage", Request["RowsPerPage"])
-        @Html.Label("StoreName", "Store Name")
-        @Html.TextBox("StoreName", Request["StoreName"], new { @class = "form-control" })
+        @Html.Label("Name", "Store Name")
+        @Html.TextBox("Name", Request["Name"], new { @class = "form-control" })
         @Html.Label("PhoneNumber", "Phone Number")
         @Html.TextBox("PhoneNumber", Request["PhoneNumber"], new { @class = "form-control" })
         <input type="submit" value="Apply Search Filters" class="btn btn-primary" />
