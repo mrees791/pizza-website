@@ -131,7 +131,7 @@ namespace PizzaWebsite.Controllers
                 OrderListItemViewModel listItemVm = new OrderListItemViewModel()
                 {
                     CustomerOrderVm = customerOrderVm,
-
+                    SelectedOrderStatus = customerOrder.OrderPhase
                 };
                 if (customerOrder.IsDelivery)
                 {

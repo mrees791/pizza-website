@@ -13,13 +13,15 @@ namespace DataLibrary.Models.Tables
         public string UserId { get; set; }
         public int StoreId { get; set; }
         public int CartId { get; set; }
-        public bool IsCancelled { get; set; }
         public decimal OrderSubtotal { get; set; }
         public decimal OrderTax { get; set; }
         public decimal OrderTotal { get; set; }
-        public OrderPhase OrderPhase { get; set; }
-        public bool OrderCompleted { get; set; }
-        public DateTime DateOfOrder { get; set; }
+        public int OrderStatus { get; set; }
+        public DateTime DateOrderPlaced { get; set; }
+        public DateTime? DateOrderCompleted { get; set; }
+        public string CustomerFirstName { get; set; }
+        public string CustomerLastName { get; set; }
+        public string CustomerPhoneNumber { get; set; }
         public bool IsDelivery { get; set; }
         public int? DeliveryInfoId { get; set; }
 

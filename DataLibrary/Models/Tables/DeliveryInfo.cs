@@ -10,7 +10,6 @@ namespace DataLibrary.Models.Tables
     {
         [Key]
         public int Id { get; set; }
-        public DateTime DateOfDelivery { get; set; }
         public string DeliveryAddressType { get; set; }
         public string DeliveryAddressName { get; set; }
         public string DeliveryStreetAddress { get; set; }
