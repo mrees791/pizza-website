@@ -37,18 +37,18 @@
         @* Table header for controls columns. *@
         <th></th>
         <th>
-            @Html.DisplayNameFor(model => model.CustomerOrderVm.DateOfOrder)
+            @Html.DisplayNameFor(model => model.StoreOrderVm.DateOfOrder)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CustomerOrderVm.OrderType)
+            @Html.DisplayNameFor(model => model.StoreOrderVm.OrderType)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CustomerOrderVm.OrderTotal)
+            @Html.DisplayNameFor(model => model.StoreOrderVm.OrderTotal)
         </th>
     </tr>
     </thead>
     <tbody>
-    @foreach (CustomerOrderViewModel orderVm in Model.CustomerOrderVmList)
+    @foreach (CustomerOrderViewModel orderVm in Model.StoreOrderVmList)
     {
         <tr>
             <td>

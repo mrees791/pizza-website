@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using DataLibrary.Models;
+using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity;
@@ -122,25 +123,66 @@ namespace PizzaWebsite.Controllers
             foreach (CustomerOrder customerOrder in customerOrderList)
             {
                 CartViewModel cartVm = await _cartServices.CreateViewModelAsync(customerOrder.CartId, PizzaDb, ListServices.DefaultQuantityList);
-                CustomerOrderViewModel customerOrderVm = new CustomerOrderViewModel()
-                {
-                    Id = customerOrder.Id,
-                    CartVm = cartVm,
-                    OrderType = customerOrder.GetOrderType(),
-                    OrderTotal = customerOrder.OrderTotal.ToString("C", CultureInfo.CurrentCulture),
-                    DateOfOrder =
-                        $"{customerOrder.DateOfOrder.ToShortDateString()} {customerOrder.DateOfOrder.ToShortTimeString()}"
-                };
+                CustomerOrderViewModel customerOrderVm = await _customerOrderServices.CreateViewModelAsync(false,
+                    customerOrder, null, PizzaDb, ListServices.DefaultQuantityList);
                 orderVmList.Add(customerOrderVm);
             }
             StoreOrderListViewModel model = new StoreOrderListViewModel()
             {
-                CustomerOrderVmList = orderVmList,
+                StoreOrderVmList = orderVmList,
                 PaginationVm = paginationVm,
                 StoreSearchQueryString = CreateStoreSearchQueryString()
             };
 
             return View("StoreOrderList", model);
+        }
+
+        public async Task<ActionResult> ViewOrder(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return MissingOrderIdErrorMessage();
+            }
+
+            var joinList = new CustomerOrderOnDeliveryInfoJoinList();
+            await joinList.LoadFirstOrDefaultByCustomerOrderIdAsync(id.Value, PizzaDb);
+            Join<CustomerOrder, DeliveryInfo> orderJoin = joinList.Items.FirstOrDefault();
+            if (orderJoin == null)
+            {
+                return OrderDoesNotExistErrorMessage(id.Value);
+            }
+
+            CustomerOrder customerOrder = orderJoin.Table1;
+            DeliveryInfo deliveryInfo = orderJoin.Table2;
+            StoreLocation storeLocation = await PizzaDb.GetAsync<StoreLocation>(customerOrder.StoreId);
+            SiteUser currentUser = await GetCurrentUserAsync();
+            Employee currentEmployee = await PizzaDb.GetEmployeeAsync(currentUser);
+            bool isAuthorized = await AuthorizedToViewOrderAsync(customerOrder, currentEmployee, storeLocation);
+
+            if (!isAuthorized)
+            {
+                return OrderAuthorizationErrorMessage(id.Value);
+            }
+
+            CustomerOrderViewModel customerOrderVm = await _customerOrderServices.CreateViewModelAsync(true, customerOrder,
+                deliveryInfo, PizzaDb, ListServices.DefaultQuantityList);
+
+            StoreOrderViewModel model = new StoreOrderViewModel()
+            {
+                CustomerOrderVm = customerOrderVm,
+                StoreSearchQueryString = CreateStoreSearchQueryString()
+            };
+
+            return View("StoreOrder", model);
+        }
+
+        private async Task<bool> AuthorizedToViewOrderAsync(CustomerOrder customerOrder, Employee employee, StoreLocation storeLocation)
+        {
+            if (AuthorizedToAllStores())
+            {
+                return true;
+            }
+            return await PizzaDb.Commands.IsEmployedAtLocationAsync(employee, storeLocation);
         }
 
         private bool AuthorizedToAllStores()
@@ -183,7 +225,43 @@ namespace PizzaWebsite.Controllers
             {
                 Header = "Error",
                 ErrorMessage = "Missing store ID.",
-                ReturnUrlAction = $"{Url.Action("Index")}?Page={Request["Page"]}&RowsPerPage={Request["RowsPerPage"]}",
+                ReturnUrlAction = $"{Url.Action("Index")}?{CreateStoreSearchQueryString()}",
+                ShowReturnLink = true
+            };
+            return View("ErrorMessage", model);
+        }
+
+        private ActionResult MissingOrderIdErrorMessage()
+        {
+            ErrorMessageViewModel model = new ErrorMessageViewModel
+            {
+                Header = "Error",
+                ErrorMessage = "Missing order ID.",
+                ReturnUrlAction = $"{Url.Action("Index")}?{CreateStoreSearchQueryString()}",
+                ShowReturnLink = true
+            };
+            return View("ErrorMessage", model);
+        }
+
+        private ActionResult OrderDoesNotExistErrorMessage(int orderId)
+        {
+            ErrorMessageViewModel model = new ErrorMessageViewModel
+            {
+                Header = "Error",
+                ErrorMessage = $"Order with ID {orderId} does not exist.",
+                ReturnUrlAction = $"{Url.Action("Index")}?{CreateStoreSearchQueryString()}",
+                ShowReturnLink = true
+            };
+            return View("ErrorMessage", model);
+        }
+
+        private ActionResult OrderAuthorizationErrorMessage(int orderId)
+        {
+            ErrorMessageViewModel model = new ErrorMessageViewModel
+            {
+                Header = "Authorization Error",
+                ErrorMessage = $"You are not authorized to view order ID {orderId}.",
+                ReturnUrlAction = $"{Url.Action("Index")}?{CreateStoreSearchQueryString()}",
                 ShowReturnLink = true
             };
             return View("ErrorMessage", model);

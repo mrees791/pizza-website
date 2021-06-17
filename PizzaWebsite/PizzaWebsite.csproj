@@ -369,6 +369,7 @@
     <Content Include="Views\ManageOrders\SearchStores.cshtml" />
     <Content Include="Views\Shared\_DeliveryInfo.cshtml" />
     <Content Include="Views\ManageOrders\StoreOrderList.cshtml" />
+    <Content Include="Views\ManageOrders\StoreOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

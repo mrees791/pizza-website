@@ -12,12 +12,12 @@ namespace PizzaWebsite.Models
         public int Id { get; set; }
         [Display(Name = "Date")]
         public string DateOfOrder { get; set; }
-
         [Display(Name = "Type")]
         public string OrderType { get; set; }
-
         [Display(Name = "Total")]
         public string OrderTotal { get; set; }
+        public string UserId { get; set; }
+        public int StoreId { get; set; }
         public CartViewModel CartVm { get; set; }
         public DeliveryInfoViewModel DeliveryInfoVm { get; set; }
 

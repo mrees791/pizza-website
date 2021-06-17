@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.AccessControl;
 using System.Web;
 
 namespace PizzaWebsite.Models.ManageOrders
 {
-    public class StoreOrderViewModel : CustomerOrderViewModel
+    public class StoreOrderViewModel
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string StoreSearchQueryString { get; set; }
+        public CustomerOrderViewModel CustomerOrderVm { get; set; }
     }
 }

@@ -45,7 +45,9 @@ namespace PizzaWebsite.Models.ViewModelServices
                 OrderTotal = customerOrder.OrderTotal.ToString("C", CultureInfo.CurrentCulture),
                 OrderType = customerOrder.GetOrderType(),
                 CartVm = cartVm,
-                DeliveryInfoVm = deliveryInfoVm
+                DeliveryInfoVm = deliveryInfoVm,
+                StoreId = customerOrder.StoreId,
+                UserId = customerOrder.UserId
             };
         }
     }

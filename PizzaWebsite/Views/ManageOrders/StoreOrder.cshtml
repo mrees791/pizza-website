@@ -1,0 +1,33 @@
+﻿@using PizzaWebsite.Models
+@using PizzaWebsite.Models.ManageOrders
+@model StoreOrderViewModel
+@{
+    ViewBag.Title = "View Order";
+}
+<h2>@ViewBag.Title</h2>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "Employee")">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "ManageOrders")?@Model.StoreSearchQueryString">Search Stores</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Store", "ManageOrders")/@Model.CustomerOrderVm.StoreId?@Request.QueryString">Orders</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+    </ol>
+</nav>
+<hr />
+<h3>Date</h3>
+<p>@Model.CustomerOrderVm.DateOfOrder</p>
+<h3>Order Summary</h3>
+@Html.Partial("~/Views/Shared/Carts/_Cart.cshtml", Model.CustomerOrderVm.CartVm)
+@if (Model.CustomerOrderVm.IsDelivery())
+{
+    <h3>Delivery Info</h3>
+    @Html.Partial("~/Views/Shared/_DeliveryInfo.cshtml", Model.CustomerOrderVm.DeliveryInfoVm)
+}
+<h3>Cost Summary</h3>
+@Html.Partial("~/Views/Shared/Carts/_CostSummary.cshtml", Model.CustomerOrderVm.CartVm.CostSummaryVm)
