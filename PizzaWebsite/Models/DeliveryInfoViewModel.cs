@@ -7,7 +7,6 @@ namespace PizzaWebsite.Models
 {
     public class DeliveryInfoViewModel
     {
-        public string DeliveryDate { get; set; }
         public string AddressType { get; set; }
         public string AddressName { get; set; }
         public string StreetAddress { get; set; }

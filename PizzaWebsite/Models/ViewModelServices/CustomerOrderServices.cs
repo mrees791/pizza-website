@@ -32,16 +32,15 @@ namespace PizzaWebsite.Models.ViewModelServices
                     PhoneNumber = deliveryInfo.DeliveryPhoneNumber,
                     State = deliveryInfo.DeliveryState,
                     StreetAddress = deliveryInfo.DeliveryStreetAddress,
-                    ZipCode = deliveryInfo.DeliveryZipCode,
-                    DeliveryDate = $"{deliveryInfo.DateOfDelivery.ToShortDateString()} {deliveryInfo.DateOfDelivery.ToShortTimeString()}"
+                    ZipCode = deliveryInfo.DeliveryZipCode
                 };
             }
 
             return new CustomerOrderViewModel
             {
                 Id = customerOrder.Id,
-                DateOfOrder =
-                    $"{customerOrder.DateOfOrder.ToShortDateString()} {customerOrder.DateOfOrder.ToShortTimeString()}",
+                DateOrderPlaced =
+                    $"{customerOrder.DateOrderPlaced.ToShortDateString()} {customerOrder.DateOrderPlaced.ToShortTimeString()}",
                 OrderTotal = customerOrder.OrderTotal.ToString("C", CultureInfo.CurrentCulture),
                 OrderType = customerOrder.GetOrderType(),
                 CartVm = cartVm,

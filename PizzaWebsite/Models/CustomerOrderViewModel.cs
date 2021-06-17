@@ -11,7 +11,7 @@ namespace PizzaWebsite.Models
     {
         public int Id { get; set; }
         [Display(Name = "Date")]
-        public string DateOfOrder { get; set; }
+        public string DateOrderPlaced { get; set; }
         [Display(Name = "Type")]
         public string OrderType { get; set; }
         [Display(Name = "Total")]

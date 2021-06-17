@@ -1,6 +1,6 @@
 ﻿namespace DataLibrary.Models
 {
-    public enum OrderPhase
+    public enum OrderStatus
     {
         OrderPlaced,
         Prep,
@@ -8,6 +8,7 @@
         Box,
         ReadyForPickup,
         OutForDelivery,
-        Complete
+        Complete,
+        Cancelled
     }
 }

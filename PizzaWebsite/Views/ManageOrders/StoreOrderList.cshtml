@@ -50,12 +50,58 @@
                 @Html.DisplayNameFor(model => model.StoreOrderVm.OrderType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StoreOrderVm.OrderTotal)
+                @Url.Action("Index", "ManageOrders")
             </th>
         </tr>
     </thead>
     <tbody>
-    @foreach (CustomerOrderViewModel orderVm in Model.StoreOrderVmList)
+    @default
+#line hidden
+
+#line 26 "D:\Programming_Archive\PizzaWebsite\src\pizza-website\PizzaWebsite\Views\ManageOrders\StoreOrderList.cshtml"
+
+    }
+
+#line default
+#line hidden
+
+#line 27 "D:\Programming_Archive\PizzaWebsite\src\pizza-website\PizzaWebsite\Views\ManageOrders\StoreOrderList.cshtml"
+    __o = Html.DisplayNameFor(model => model.StoreOrderVm.UserId);
+
+
+#line default
+#line hidden
+
+#line 28 "D:\Programming_Archive\PizzaWebsite\src\pizza-website\PizzaWebsite\Views\ManageOrders\StoreOrderList.cshtml"
+           __o = Html.DisplayNameFor(model => model.StoreOrderVm.OrderCompleted);
+
+
+#line default
+#line hidden
+
+#line 29 "D:\Programming_Archive\PizzaWebsite\src\pizza-website\PizzaWebsite\Views\ManageOrders\StoreOrderList.cshtml"
+           __o = Html.DisplayNameFor(model => model.StoreOrderVm.DateOrderPlaced);
+
+
+#line default
+#line hidden
+
+#line 30 "D:\Programming_Archive\PizzaWebsite\src\pizza-website\PizzaWebsite\Views\ManageOrders\StoreOrderList.cshtml"
+           __o = Html.DisplayNameFor(model => model.StoreOrderVm.OrderType);
+
+
+#line default
+#line hidden
+
+#line 31 "D:\Programming_Archive\PizzaWebsite\src\pizza-website\PizzaWebsite\Views\ManageOrders\StoreOrderList.cshtml"
+           __o = Html.DisplayNameFor(model => model.StoreOrderVm.OrderTotal);
+
+
+#line default
+#line hidden
+
+#line 32 "D:\Programming_Archive\PizzaWebsite\src\pizza-website\PizzaWebsite\Views\ManageOrders\StoreOrderList.cshtml"
+    foreach (CustomerOrderViewModel orderVm in Model.StoreOrderVmList)
     {
         <tr>
             <td>

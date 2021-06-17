@@ -21,7 +21,7 @@
 </nav>
 <hr />
 <h3>Date</h3>
-<p>@Model.CustomerOrderVm.DateOfOrder</p>
+<p>@Model.CustomerOrderVm.DateOrderPlaced</p>
 <h3>Order Summary</h3>
 @Html.Partial("~/Views/Shared/Carts/_Cart.cshtml", Model.CustomerOrderVm.CartVm)
 @if (Model.CustomerOrderVm.IsDelivery())

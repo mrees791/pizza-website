@@ -63,10 +63,10 @@ namespace PizzaWebsite.Controllers
             CustomerOrder customerOrder = new CustomerOrder
             {
                 UserId = user.Id,
-                DateOfOrder = DateTime.Now,
+                DateOrderPlaced = DateTime.Now,
                 IsDelivery = model.IsDelivery(),
                 StoreId = model.SelectedStoreLocationId,
-                OrderPhase = OrderPhase.OrderPlaced,
+                OrderStatus = (int)OrderStatus.OrderPlaced,
                 OrderSubtotal = costSummary.Subtotal,
                 OrderTax = costSummary.Tax,
                 OrderTotal = costSummary.Total
@@ -79,7 +79,6 @@ namespace PizzaWebsite.Controllers
                 {
                     deliveryInfo = new DeliveryInfo
                     {
-                        DateOfDelivery = DateTime.Now,
                         DeliveryAddressName = model.DeliveryAddressName,
                         DeliveryAddressType = model.SelectedDeliveryAddressType,
                         DeliveryCity = model.DeliveryCity,
@@ -124,7 +123,6 @@ namespace PizzaWebsite.Controllers
 
                     deliveryInfo = new DeliveryInfo
                     {
-                        DateOfDelivery = DateTime.Now,
                         DeliveryAddressName = deliveryAddress.Name,
                         DeliveryAddressType = deliveryAddress.AddressType,
                         DeliveryCity = deliveryAddress.City,
@@ -218,23 +216,23 @@ namespace PizzaWebsite.Controllers
             return Json(formattedPrice);
         }
 
-        private string GetOrderStatusMessage(OrderPhase orderPhase)
+        private string GetOrderStatusMessage(OrderStatus orderStatus)
         {
-            switch (orderPhase)
+            switch (orderStatus)
             {
-                case OrderPhase.OrderPlaced:
+                case OrderStatus.OrderPlaced:
                     return "Your order has been placed.";
-                case OrderPhase.Prep:
+                case OrderStatus.Prep:
                     return "Your order is being prepared.";
-                case OrderPhase.Bake:
+                case OrderStatus.Bake:
                     return "Your order is being baked.";
-                case OrderPhase.Box:
+                case OrderStatus.Box:
                     return "Your order is being boxed.";
-                case OrderPhase.ReadyForPickup:
+                case OrderStatus.ReadyForPickup:
                     return "Your order is ready for pickup.";
-                case OrderPhase.OutForDelivery:
+                case OrderStatus.OutForDelivery:
                     return "Your order is out for delivery.";
-                case OrderPhase.Complete:
+                case OrderStatus.Complete:
                     return "Your order has been completed.";
             }
 
@@ -260,7 +258,7 @@ namespace PizzaWebsite.Controllers
                 return Json($"Current user does not own order with ID {orderId}.", MediaTypeNames.Text.Plain);
             }
 
-            string orderStatus = GetOrderStatusMessage(order.OrderPhase);
+            string orderStatus = GetOrderStatusMessage((OrderStatus)order.OrderStatus);
             return Json(orderStatus);
         }
 

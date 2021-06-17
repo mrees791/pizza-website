@@ -48,10 +48,11 @@ namespace DataLibrary.Models.JoinLists
         protected override string GetSqlJoinQuery(bool onlySelectFirst)
         {
             return $@"SELECT {SqlServices.CreateTopClause(onlySelectFirst)}
-                      c.Id, c.UserId, c.StoreId, c.CartId, c.IsCancelled, c.OrderSubtotal, c.OrderTax, c.OrderTotal, c.OrderPhase,
-                      c.OrderCompleted, c.DateOfOrder, c.IsDelivery, c.DeliveryInfoId,
-                      d.Id, d.DateOfDelivery, d.DeliveryAddressType, d.DeliveryAddressName,
-                      d.DeliveryStreetAddress, d.DeliveryCity, d.DeliveryState, d.DeliveryZipCode, d.DeliveryPhoneNumber
+                      c.Id, c.UserId, c.StoreId, c.CartId, c.OrderSubtotal, c.OrderTax, c.OrderTotal, c.OrderStatus,
+                      c.DateOrderPlaced, c.DateOrderCompleted, c.CustomerFirstName, c.CustomerLastName, c.CustomerPhoneNumber,
+                      c.IsDelivery, c.DeliveryInfoId,
+                      d.Id, d.DeliveryAddressType, d.DeliveryAddressName, d.DeliveryStreetAddress, d.DeliveryCity,
+                      d.DeliveryState, d.DeliveryZipCode, d.DeliveryPhoneNumber
                       FROM CustomerOrder c
                       LEFT JOIN DeliveryInfo d
                       ON c.DeliveryInfoId = d.Id";

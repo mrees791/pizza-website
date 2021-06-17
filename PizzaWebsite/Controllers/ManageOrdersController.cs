@@ -131,7 +131,7 @@ namespace PizzaWebsite.Controllers
                 OrderListItemViewModel listItemVm = new OrderListItemViewModel()
                 {
                     CustomerOrderVm = customerOrderVm,
-                    SelectedOrderStatus = customerOrder.OrderPhase
+                    SelectedOrderStatus = (int)customerOrder.OrderStatus
                 };
                 if (customerOrder.IsDelivery)
                 {
@@ -156,76 +156,76 @@ namespace PizzaWebsite.Controllers
         {
             List<SelectListItem> itemList = new List<SelectListItem>
             {
-                GetOrderStatusSelectListItem(OrderPhase.OrderPlaced),
-                GetOrderStatusSelectListItem(OrderPhase.Prep),
-                GetOrderStatusSelectListItem(OrderPhase.Bake),
-                GetOrderStatusSelectListItem(OrderPhase.Box)
+                GetOrderStatusSelectListItem(OrderStatus.OrderPlaced),
+                GetOrderStatusSelectListItem(OrderStatus.Prep),
+                GetOrderStatusSelectListItem(OrderStatus.Bake),
+                GetOrderStatusSelectListItem(OrderStatus.Box)
             };
 
             if (isDelivery)
             {
-                itemList.Add(GetOrderStatusSelectListItem(OrderPhase.OutForDelivery));
+                itemList.Add(GetOrderStatusSelectListItem(OrderStatus.OutForDelivery));
             }
             else
             {
-                itemList.Add(GetOrderStatusSelectListItem(OrderPhase.ReadyForPickup));
+                itemList.Add(GetOrderStatusSelectListItem(OrderStatus.ReadyForPickup));
             }
 
-            itemList.Add(GetOrderStatusSelectListItem(OrderPhase.Complete));
+            itemList.Add(GetOrderStatusSelectListItem(OrderStatus.Complete));
 
             return itemList;
         }
 
 
-        private SelectListItem GetOrderStatusSelectListItem(OrderPhase orderPhase)
+        private SelectListItem GetOrderStatusSelectListItem(OrderStatus orderStatus)
         {
-            switch (orderPhase)
+            switch (orderStatus)
             {
-                case OrderPhase.OrderPlaced:
+                case OrderStatus.OrderPlaced:
                     return new SelectListItem()
                     {
                         Text = "Order Placed",
-                        Value = OrderPhase.OrderPlaced.ToString()
+                        Value = OrderStatus.OrderPlaced.ToString()
                     };
-                case OrderPhase.Prep:
+                case OrderStatus.Prep:
                     return new SelectListItem()
                     {
                         Text = "Prepping",
-                        Value = OrderPhase.Prep.ToString()
+                        Value = OrderStatus.Prep.ToString()
                     };
-                case OrderPhase.Bake:
+                case OrderStatus.Bake:
                     return new SelectListItem()
                     {
                         Text = "Baking",
-                        Value = OrderPhase.Bake.ToString()
+                        Value = OrderStatus.Bake.ToString()
                     };
-                case OrderPhase.Box:
+                case OrderStatus.Box:
                     return new SelectListItem()
                     {
                         Text = "Boxing",
-                        Value = OrderPhase.Box.ToString()
+                        Value = OrderStatus.Box.ToString()
                     };
-                case OrderPhase.ReadyForPickup:
+                case OrderStatus.ReadyForPickup:
                     return new SelectListItem()
                     {
                         Text = "Ready for Pickup",
-                        Value = OrderPhase.ReadyForPickup.ToString()
+                        Value = OrderStatus.ReadyForPickup.ToString()
                     };
-                case OrderPhase.OutForDelivery:
+                case OrderStatus.OutForDelivery:
                     return new SelectListItem()
                     {
                         Text = "Out for Delivery",
-                        Value = OrderPhase.OutForDelivery.ToString()
+                        Value = OrderStatus.OutForDelivery.ToString()
                     };
-                case OrderPhase.Complete:
+                case OrderStatus.Complete:
                     return new SelectListItem()
                     {
                         Text = "Complete",
-                        Value = OrderPhase.Complete.ToString()
+                        Value = OrderStatus.Complete.ToString()
                     };
             }
 
-            throw new Exception($"Unable to get order phase status for {orderPhase.ToString()}");
+            throw new Exception($"Unable to get order phase status for {orderStatus.ToString()}");
         }
 
         public async Task<ActionResult> ViewOrder(int? id)

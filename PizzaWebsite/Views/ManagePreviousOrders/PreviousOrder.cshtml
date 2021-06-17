@@ -9,7 +9,7 @@
     </a>
 </div>
 <h3>Date</h3>
-<p>@Model.DateOfOrder</p>
+<p>@Model.DateOrderPlaced</p>
 <h3>Order Summary</h3>
 @Html.Partial("~/Views/Shared/Carts/_Cart.cshtml", Model.CartVm)
 @if (Model.IsDelivery())

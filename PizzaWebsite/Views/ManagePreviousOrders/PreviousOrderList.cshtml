@@ -24,13 +24,13 @@ else
             @* Table header for controls columns. *@
             <th></th>
             <th>
-                @Html.DisplayNameFor(model => model.PreviousOrderViewModel.DateOfOrder)
+                @Html.DisplayNameFor(model => model.PreviousOrderViewModel.DateOrder)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PreviousOrderViewModel.OrderType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PreviousOrderViewModel.OrderTotal)
+                @Html.DisplayNameFor(model => model.PreviousOrderViewModel.OrderType)
             </th>
         </tr>
         </thead>
@@ -50,7 +50,7 @@ else
                     </a>
                 </td>
                 <td>
-                    @Html.DisplayFor(model => prevOrderVm.DateOfOrder)
+                    @Html.DisplayFor(model => prevOrderVm.DateOrderPlaced)
                 </td>
                 <td>
                     @Html.DisplayFor(model => prevOrderVm.OrderType)

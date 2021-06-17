@@ -105,7 +105,7 @@
     <Compile Include="Models\QuerySearches\PreviousOrderSearch.cs" />
     <Compile Include="Models\QuerySearches\StoreLocationSearch.cs" />
     <Compile Include="Models\Record.cs" />
-    <Compile Include="Models\OrderPhase.cs" />
+    <Compile Include="Models\OrderStatus.cs" />
     <Compile Include="Models\PizzaDatabase.cs" />
     <Compile Include="Models\PizzaDatabaseCommands.cs" />
     <Compile Include="Models\PizzaTopping.cs" />
