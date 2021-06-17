@@ -20,6 +20,8 @@ namespace PizzaWebsite.Models
         public string UserId { get; set; }
         [Display(Name = "Store ID")]
         public int StoreId { get; set; }
+        [Display(Name = "Order Completed")]
+        public bool OrderCompleted { get; set; }
         public CartViewModel CartVm { get; set; }
         public DeliveryInfoViewModel DeliveryInfoVm { get; set; }
 

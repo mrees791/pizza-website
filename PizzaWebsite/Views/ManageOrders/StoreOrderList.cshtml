@@ -40,6 +40,9 @@
                 @Html.DisplayNameFor(model => model.StoreOrderVm.UserId)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.StoreOrderVm.OrderCompleted)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.StoreOrderVm.DateOfOrder)
             </th>
             <th>
@@ -61,6 +64,9 @@
             </td>
             <td>
                 @Html.DisplayFor(model => orderVm.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(model => orderVm.OrderCompleted)
             </td>
             <td>
                 @Html.DisplayFor(model => orderVm.DateOfOrder)
