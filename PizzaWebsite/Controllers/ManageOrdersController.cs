@@ -81,7 +81,7 @@ namespace PizzaWebsite.Controllers
             return View("SearchStores", model);
         }
 
-        public async Task<ActionResult> Store(int? id, int? ordersPage, int? ordersRowsPerPage, string userId)
+        public async Task<ActionResult> Store(int? id, int? ordersPage, int? ordersRowsPerPage, string ordersUserId)
         {
             if (!id.HasValue)
             {
@@ -104,7 +104,7 @@ namespace PizzaWebsite.Controllers
             StoreOrderFilter searchFilter = new StoreOrderFilter()
             {
                 StoreId = id.Value,
-                UserId = userId
+                UserId = ordersUserId
             };
             IEnumerable<CustomerOrder> customerOrderList =
                 await PizzaDb.GetPagedListAsync<CustomerOrder>(ordersPage.Value, ordersRowsPerPage.Value, "Id", SortOrder.Descending, searchFilter);
