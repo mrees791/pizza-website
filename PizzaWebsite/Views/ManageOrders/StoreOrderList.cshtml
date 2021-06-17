@@ -38,104 +38,36 @@
             <th></th>
             <th></th>
             <th>
-                @Html.DisplayNameFor(model => model.StoreOrderVm.UserId)
+                @Html.DisplayNameFor(model => model.OrderVm.UserId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StoreOrderVm.OrderCompleted)
+                @Html.DisplayNameFor(model => model.OrderVm.DateOrderPlaced)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StoreOrderVm.DateOfOrder)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StoreOrderVm.OrderType)
-            </th>
-            <th>
-                @Url.Action("Index", "ManageOrders")
+                @Html.DisplayNameFor(model => model.OrderVm.OrderType)
             </th>
         </tr>
     </thead>
     <tbody>
-    @default
-#line hidden
-
-#line 26 "D:\Programming_Archive\PizzaWebsite\src\pizza-website\PizzaWebsite\Views\ManageOrders\StoreOrderList.cshtml"
-
-    }
-
-#line default
-#line hidden
-
-#line 27 "D:\Programming_Archive\PizzaWebsite\src\pizza-website\PizzaWebsite\Views\ManageOrders\StoreOrderList.cshtml"
-    __o = Html.DisplayNameFor(model => model.StoreOrderVm.UserId);
-
-
-#line default
-#line hidden
-
-#line 28 "D:\Programming_Archive\PizzaWebsite\src\pizza-website\PizzaWebsite\Views\ManageOrders\StoreOrderList.cshtml"
-           __o = Html.DisplayNameFor(model => model.StoreOrderVm.OrderCompleted);
-
-
-#line default
-#line hidden
-
-#line 29 "D:\Programming_Archive\PizzaWebsite\src\pizza-website\PizzaWebsite\Views\ManageOrders\StoreOrderList.cshtml"
-           __o = Html.DisplayNameFor(model => model.StoreOrderVm.DateOrderPlaced);
-
-
-#line default
-#line hidden
-
-#line 30 "D:\Programming_Archive\PizzaWebsite\src\pizza-website\PizzaWebsite\Views\ManageOrders\StoreOrderList.cshtml"
-           __o = Html.DisplayNameFor(model => model.StoreOrderVm.OrderType);
-
-
-#line default
-#line hidden
-
-#line 31 "D:\Programming_Archive\PizzaWebsite\src\pizza-website\PizzaWebsite\Views\ManageOrders\StoreOrderList.cshtml"
-           __o = Html.DisplayNameFor(model => model.StoreOrderVm.OrderTotal);
-
-
-#line default
-#line hidden
-
-#line 32 "D:\Programming_Archive\PizzaWebsite\src\pizza-website\PizzaWebsite\Views\ManageOrders\StoreOrderList.cshtml"
-    foreach (CustomerOrderViewModel orderVm in Model.StoreOrderVmList)
+    @foreach (OrderListItemViewModel orderVm in Model.OrderListItemVmList)
     {
         <tr>
             <td>
-                <a href="@Url.Action("ViewOrder")/@orderVm.Id?@(Request.QueryString)">
+                <a href="@Url.Action("ViewOrder")/@orderVm.CustomerOrderVm.Id?@(Request.QueryString)">
                     <input type="button" value="View" class="btn btn-primary" />
                 </a>
             </td>
             <td>
                 <!-- ORDER STATUS SELECT LIST WILL GO HERE -->
-                @Html.DropDownListFor(model => orderVm.)
             </td>
             <td>
-                @Html.DropDownList("Status", new SelectList(cartItemVm.QuantityList, cartItemVm.Quantity),
-                    new
-                    {
-                        @class = "form-control",
-                        id = cartItemVm.CartItemQuantitySelectId,
-                        name = "Quantity"
-                    })
+                @Html.DisplayFor(model => orderVm.CustomerOrderVm.UserId)
             </td>
             <td>
-                @Html.DisplayFor(model => orderVm.UserId)
+                @Html.DisplayFor(model => orderVm.CustomerOrderVm.DateOrderPlaced)
             </td>
             <td>
-                @Html.DisplayFor(model => orderVm.OrderCompleted)
-            </td>
-            <td>
-                @Html.DisplayFor(model => orderVm.DateOfOrder)
-            </td>
-            <td>
-                @Html.DisplayFor(model => orderVm.OrderType)
-            </td>
-            <td>
-                @Html.DisplayFor(viewModel => orderVm.OrderTotal)
+                @Html.DisplayFor(model => orderVm.CustomerOrderVm.OrderType)
             </td>
         </tr>
     }

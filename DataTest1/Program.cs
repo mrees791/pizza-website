@@ -3,28 +3,35 @@ using DataLibrary.Models.JoinLists;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
-using DataLibrary.Models.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataLibrary.Models.Services;
 
 namespace DataTest1
 {
     public class Program
     {
+
+        public readonly string AdminUserName = "mrees791@gmail.com";
+        private readonly ListServices _listServices;
+
         public static async Task Main(string[] args)
         {
             Program program = new Program();
             await program.StartAsync();
         }
 
-        public readonly string AdminUserName = "mrees791@gmail.com";
+        public Program()
+        {
+            _listServices = new ListServices();
+        }
 
         public async Task StartAsync()
         {
-            // This can only be ran after creating the databse and creating a user with username mrees791
+            // This can only be ran after creating the database and creating a user with username mrees791
             //await InitializeExampleDbAsync();
 
             //TestCustomerOrderJoin();
@@ -140,7 +147,6 @@ namespace DataTest1
                 DeliveryAddress address1 = await pizzaDb.GetAsync<DeliveryAddress>(deliveryAddressId);
                 DeliveryInfo deliveryInfo = new DeliveryInfo()
                 {
-                    DateOfDelivery = new DateTime(9999, 12, 31),
                     DeliveryAddressName = address1.Name,
                     DeliveryAddressType = address1.AddressType,
                     DeliveryCity = address1.City,
@@ -153,12 +159,10 @@ namespace DataTest1
                 CustomerOrder order1 = new CustomerOrder()
                 {
                     CartId = 2,
-                    DateOfOrder = DateTime.Now,
+                    DateOrderPlaced = DateTime.Now,
                     DeliveryInfoId = null,
-                    IsCancelled = false,
                     IsDelivery = false,
-                    OrderCompleted = false,
-                    OrderPhase = OrderPhase.Order_Placed,
+                    OrderStatus = (int)OrderStatus.OrderPlaced,
                     OrderSubtotal = 5.00m,
                     OrderTax = 1.00m,
                     OrderTotal = 6.00m,
@@ -169,17 +173,16 @@ namespace DataTest1
                 CustomerOrder order2 = new CustomerOrder()
                 {
                     CartId = 2,
-                    DateOfOrder = DateTime.Now,
+                    DateOrderPlaced = DateTime.Now,
+                    DateOrderCompleted = DateTime.Now.AddMinutes(55.0),
                     DeliveryInfoId = deliveryInfo.Id,
-                    IsCancelled = false,
                     IsDelivery = true,
-                    OrderCompleted = false,
-                    OrderPhase = OrderPhase.Order_Placed,
+                    OrderStatus = (int)OrderStatus.Complete,
                     OrderSubtotal = 5.00m,
                     OrderTax = 1.00m,
                     OrderTotal = 6.00m,
                     StoreId = 1,
-                    UserId = AdminUserName,
+                    UserId = AdminUserName
                 };
 
                 int orderPairs = orderAmount / 2;
@@ -227,10 +230,10 @@ namespace DataTest1
         {
             using (PizzaDatabase pizzaDb = new PizzaDatabase())
             {
-                var categoryList = ListUtility.GetPizzaCategoryList();
-                var cheeseAmountList = ListUtility.GetCheeseAmountList();
-                var sauceAmountList = ListUtility.GetSauceAmountList();
-                var toppingAmountList = ListUtility.GetToppingAmountList();
+                var categoryList = _listServices.PizzaCategoryList;
+                var cheeseAmountList = _listServices.CheeseAmountList;
+                var sauceAmountList = _listServices.SauceAmountList;
+                var toppingAmountList = _listServices.ToppingAmountList;
 
                 var toppingTypes = await pizzaDb.GetListAsync<MenuPizzaToppingType>();
 
@@ -281,7 +284,7 @@ namespace DataTest1
                     PizzaName = "Pepperoni",
                     Description = "Classic pepperoni pizza!",
                     SauceAmount = "Regular",
-                    Toppings = pepperoniToppings,
+                    ToppingList = pepperoniToppings,
                     SortOrder = 1,
                     MenuPizzaCheeseId = 1,
                     MenuPizzaCrustFlavorId = 1,
@@ -296,7 +299,7 @@ namespace DataTest1
                     PizzaName = "Mushroom",
                     Description = "Classic mushroom pizza!",
                     SauceAmount = "Regular",
-                    Toppings = pepperoniToppings,
+                    ToppingList = pepperoniToppings,
                     SortOrder = 1,
                     MenuPizzaCheeseId = 1,
                     MenuPizzaCrustFlavorId = 1,
@@ -311,7 +314,7 @@ namespace DataTest1
                     PizzaName = "Supreme",
                     Description = "A delicious pizza with pepperoni and mushrooms.",
                     SauceAmount = "Regular",
-                    Toppings = supremeToppings,
+                    ToppingList = supremeToppings,
                     SortOrder = 1,
                     MenuPizzaCheeseId = 1,
                     MenuPizzaCrustFlavorId = 1,
@@ -566,7 +569,7 @@ namespace DataTest1
                     Size = "Medium"
                 };
 
-                cartPizza.Toppings.Add(pepperoniTopping);
+                cartPizza.ToppingList.Add(pepperoniTopping);
 
                 return cartPizza;
             }
@@ -649,7 +652,6 @@ namespace DataTest1
                 SiteRole adminRole = await pizzaDb.GetSiteRoleByNameAsync("Admin");
                 SiteRole executiveRole = await pizzaDb.GetSiteRoleByNameAsync("Executive");
 
-
                 if (employeeRole == null)
                 {
                     employeeRole = new SiteRole()
@@ -691,6 +693,7 @@ namespace DataTest1
 
                 if (!isAdmin)
                 {
+                    await pizzaDb.Commands.AddNewEmployeeAsync("ADMIN", false, acctUser);
                     await pizzaDb.Commands.AddUserToRoleAsync(acctUser, adminRole);
                 }
             }

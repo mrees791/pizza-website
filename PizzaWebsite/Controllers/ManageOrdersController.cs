@@ -30,12 +30,16 @@ namespace PizzaWebsite.Controllers
         private readonly CustomerOrderServices _customerOrderServices;
         private readonly StoreServices _storeServices;
         private readonly CartServices _cartServices;
+        private readonly IEnumerable<SelectListItem> _orderStatusDeliveryItems;
+        private readonly IEnumerable<SelectListItem> _orderStatusPickupItems;
 
         public ManageOrdersController()
         {
             _customerOrderServices = new CustomerOrderServices();
             _storeServices = new StoreServices();
             _cartServices = new CartServices();
+            _orderStatusDeliveryItems = CreateOrderStatusSelectListItems(true);
+            _orderStatusPickupItems = CreateOrderStatusSelectListItems(false);
         }
 
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name, string phoneNumber)
@@ -121,8 +125,6 @@ namespace PizzaWebsite.Controllers
                 TotalPages = totalPages
             };
             List<OrderListItemViewModel> orderVmList = new List<OrderListItemViewModel>();
-            IEnumerable<SelectListItem> orderStatusDeliveryItems = CreateOrderStatusSelectListItems(true);
-            IEnumerable<SelectListItem> orderStatusPickupItems = CreateOrderStatusSelectListItems(false);
             foreach (CustomerOrder customerOrder in customerOrderList)
             {
                 CartViewModel cartVm = await _cartServices.CreateViewModelAsync(customerOrder.CartId, PizzaDb, ListServices.DefaultQuantityList);
@@ -131,25 +133,29 @@ namespace PizzaWebsite.Controllers
                 OrderListItemViewModel listItemVm = new OrderListItemViewModel()
                 {
                     CustomerOrderVm = customerOrderVm,
-                    SelectedOrderStatus = (int)customerOrder.OrderStatus
+                    SelectedOrderStatus = customerOrder.OrderStatus,
+                    OrderStatusListItems = GetOrderStatusSelectListItems(customerOrder.IsDelivery)
                 };
-                if (customerOrder.IsDelivery)
-                {
-                }
-                else
-                {
-
-                }
                 orderVmList.Add(listItemVm);
             }
             StoreOrderListViewModel model = new StoreOrderListViewModel()
             {
-                StoreOrderVmList = orderVmList,
+                OrderListItemVmList = orderVmList,
                 PaginationVm = paginationVm,
                 StoreSearchQueryString = CreateStoreSearchQueryString()
             };
 
             return View("StoreOrderList", model);
+        }
+
+        private IEnumerable<SelectListItem> GetOrderStatusSelectListItems(bool isDelivery)
+        {
+            if (isDelivery)
+            {
+                return _orderStatusDeliveryItems;
+            }
+
+            return _orderStatusPickupItems;
         }
 
         private IEnumerable<SelectListItem> CreateOrderStatusSelectListItems(bool isDelivery)
