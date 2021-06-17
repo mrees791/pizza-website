@@ -82,7 +82,7 @@
 @section Scripts {
     <script type="text/javascript">
         $(function() {
-            pizzaSiteNs.createPagination('#managePagination', @Model.PaginationVm.CurrentPage, @Model.PaginationVm.RowsPerPage, @Model.PaginationVm.TotalPages, @Model.PaginationVm.TotalNumberOfItems);
+            pizzaSiteNs.createPaginationCustomized('#managePagination', @Model.PaginationVm.CurrentPage, @Model.PaginationVm.RowsPerPage, @Model.PaginationVm.TotalPages, @Model.PaginationVm.TotalNumberOfItems, 'OrdersPage');
         });
     </script>
 }

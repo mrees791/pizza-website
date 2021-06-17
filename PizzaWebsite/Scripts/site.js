@@ -8,7 +8,7 @@ const pizzaSiteNs = {
             contentType: "application/json"
         });
     },
-    createPagination: (paginationSelector, currentPage, rowsPerPage, totalPages, totalNumberOfItems) => {
+    createPaginationCustomized: (paginationSelector, currentPage, rowsPerPage, totalPages, totalNumberOfItems, pageUrlParameter) => {
         var maxPages = 5;
         var isOnLastPage = currentPage === totalPages;
         var isOnFirstPage = currentPage === 1;
@@ -46,7 +46,7 @@ const pizzaSiteNs = {
                     function(type) { // Gets called for each character of "format" and returns a HTML representation
                         var page = this.value;
                         const params = new URLSearchParams(window.location.search);
-                        params.set("Page", page);
+                        params.set(pageUrlParameter, page);
                         var hrefValue = `${location.pathname}?${params.toString()}`;
 
                         switch (type) {
@@ -83,7 +83,8 @@ const pizzaSiteNs = {
                             if (isOnFirstPage) {
                                 return `<li class="page-item disabled"><a class="page-link" href="#" aria-disabled="true">First</a></li>`;
                             } else {
-                                return `<li class="page-item"><a class="page-link" href="${hrefValue}">First</a></li>`;
+                                return `<li class="page-item"><a class="page-link" href="${hrefValue
+                                    }">First</a></li>`;
                             }
                         }
                         case "last": // ]
@@ -91,12 +92,16 @@ const pizzaSiteNs = {
                             if (isOnLastPage) {
                                 return `<li class="page-item disabled"><a class="page-link" href="#" aria-disabled="true">Last</a></li>`;
                             } else {
-                                return `<li class="page-item"><a class="page-link" href="${hrefValue}">Last</a></li>`;
+                                return `<li class="page-item"><a class="page-link" href="${hrefValue
+                                    }">Last</a></li>`;
                             }
                         }
 
                         }
                     }
-            });
+                });
+    },
+    createPagination: (paginationSelector, currentPage, rowsPerPage, totalPages, totalNumberOfItems) => {
+        pizzaSiteNs.createPaginationCustomized(paginationSelector, currentPage, rowsPerPage, totalPages, totalNumberOfItems, 'Page');
     }
 };
