@@ -26,26 +26,29 @@
         @Html.Hidden("PhoneNumber", Request["PhoneNumber"])
         <input type="hidden" name="OrdersPage" value="1" />
         @Html.Hidden("OrdersRowsPerPage", Request["OrdersRowsPerPage"])
-        @Html.Label("OrdersUserId", "User Id")
+        @Html.Label("OrdersUserId", "User ID")
         @Html.TextBox("OrdersUserId", Request["OrdersUserId"], new { @class = "form-control" })
         <input type="submit" value="Apply Search Filters" class="btn btn-primary" />
     }
 </div>
 <table class="table">
     <thead>
-    <tr>
-        @* Table header for controls columns. *@
-        <th></th>
-        <th>
-            @Html.DisplayNameFor(model => model.StoreOrderVm.DateOfOrder)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StoreOrderVm.OrderType)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StoreOrderVm.OrderTotal)
-        </th>
-    </tr>
+        <tr>
+            @* Table header for controls columns. *@
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.StoreOrderVm.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StoreOrderVm.DateOfOrder)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StoreOrderVm.OrderType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StoreOrderVm.OrderTotal)
+            </th>
+        </tr>
     </thead>
     <tbody>
     @foreach (CustomerOrderViewModel orderVm in Model.StoreOrderVmList)
@@ -53,8 +56,11 @@
         <tr>
             <td>
                 <a href="@Url.Action("ViewOrder")/@orderVm.Id?@(Request.QueryString)">
-                    <input type="button" value="View" class="btn btn-primary"/>
+                    <input type="button" value="View" class="btn btn-primary" />
                 </a>
+            </td>
+            <td>
+                @Html.DisplayFor(model => orderVm.UserId)
             </td>
             <td>
                 @Html.DisplayFor(model => orderVm.DateOfOrder)

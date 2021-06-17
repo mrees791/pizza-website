@@ -16,7 +16,9 @@ namespace PizzaWebsite.Models
         public string OrderType { get; set; }
         [Display(Name = "Total")]
         public string OrderTotal { get; set; }
+        [Display(Name = "User ID")]
         public string UserId { get; set; }
+        [Display(Name = "Store ID")]
         public int StoreId { get; set; }
         public CartViewModel CartVm { get; set; }
         public DeliveryInfoViewModel DeliveryInfoVm { get; set; }
