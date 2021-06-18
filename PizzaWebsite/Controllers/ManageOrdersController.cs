@@ -353,6 +353,10 @@ namespace PizzaWebsite.Controllers
 
             // Update record
             customerOrder.OrderStatus = orderStatus;
+            if ((OrderStatus) orderStatus == OrderStatus.Complete)
+            {
+                customerOrder.DateOrderCompleted = DateTime.Now;
+            }
             int rowsUpdated = await PizzaDb.UpdateAsync(customerOrder);
 
             if (rowsUpdated == 0)
