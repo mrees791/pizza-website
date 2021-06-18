@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Mime;
 using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using System.Web;
@@ -297,6 +299,70 @@ namespace PizzaWebsite.Controllers
         private string CreateStoreSearchQueryString()
         {
             return $"Page={Request["Page"]}&RowsPerPage={Request["RowsPerPage"]}&Name={Request["Name"]}&PhoneNumber={Request["PhoneNumber"]}";
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateOrderStatusAjax(int customerOrderId, int orderStatus)
+        {
+            Response.StatusCode = (int)HttpStatusCode.OK;
+
+            SiteUser currentUser = await GetCurrentUserAsync();
+            if (currentUser == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Current user cannot be found.",
+                    MediaTypeNames.Text.Plain);
+            }
+
+            CustomerOrder customerOrder = await PizzaDb.GetAsync<CustomerOrder>(customerOrderId);
+
+            if (customerOrder == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Order with ID {customerOrderId} does not exist.",
+                    MediaTypeNames.Text.Plain);
+            }
+
+            StoreLocation store = await PizzaDb.GetAsync<StoreLocation>(customerOrder.StoreId);
+
+            if (store == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Store with ID {customerOrder.StoreId} does not exist.",
+                    MediaTypeNames.Text.Plain);
+            }
+
+            Employee currentEmployee = await PizzaDb.GetEmployeeAsync(currentUser);
+
+            if (currentEmployee == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"User is not an employee.",
+                    MediaTypeNames.Text.Plain);
+            }
+
+            bool authorized = await AuthorizedToManageStoreOrders(currentEmployee, store);
+
+            if (!authorized)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"{currentEmployee.Id} is not authorized to manage order ID {customerOrder.Id}.",
+                    MediaTypeNames.Text.Plain);
+            }
+
+            customerOrder.OrderStatus = orderStatus;
+
+            int rowsUpdated = await PizzaDb.UpdateAsync(customerOrder);
+
+            if (rowsUpdated == 0)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"0 rows updated when updating order {customerOrder.Id}.",
+                    MediaTypeNames.Text.Plain);
+            }
+
+            string responseText = $"{rowsUpdated} records updated.";
+            return Json(responseText, MediaTypeNames.Text.Plain);
         }
 
         private ActionResult StoreAuthorizationErrorMessage(int storeId)
