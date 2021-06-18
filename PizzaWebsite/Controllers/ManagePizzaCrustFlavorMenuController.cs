@@ -54,11 +54,7 @@ namespace PizzaWebsite.Controllers
                 Id = record.Id,
                 AvailableForPurchase = record.AvailableForPurchase,
                 Description = record.Description,
-                HasMenuIcon = record.HasMenuIcon,
-                HasPizzaBuilderImage = record.HasPizzaBuilderImage,
                 Name = record.Name,
-                MenuIconFile = record.MenuIconFile,
-                PizzaBuilderImageFile = record.PizzaBuilderImageFile,
                 SortOrder = record.SortOrder
             });
         }
@@ -70,11 +66,7 @@ namespace PizzaWebsite.Controllers
                 Id = model.Id,
                 AvailableForPurchase = model.AvailableForPurchase,
                 Description = model.Description,
-                HasMenuIcon = model.HasMenuIcon,
-                HasPizzaBuilderImage = model.HasPizzaBuilderImage,
                 Name = model.Name,
-                MenuIconFile = model.MenuIconFile,
-                PizzaBuilderImageFile = model.PizzaBuilderImageFile,
                 SortOrder = model.SortOrder
             };
         }

@@ -40,11 +40,6 @@ namespace PizzaWebsite.Models.ManageMenus
         [Display(Name = "Description")]
         [MaxLength(512)]
         public string Description { get; set; }
-
-        public bool HasMenuIcon { get; set; }
-        public string MenuIconFile { get; set; }
-        public bool HasPizzaBuilderImage { get; set; }
-        public string PizzaBuilderImageFile { get; set; }
         public IEnumerable<string> ToppingCategoryList { get; set; }
 
         public bool IsNewRecord()

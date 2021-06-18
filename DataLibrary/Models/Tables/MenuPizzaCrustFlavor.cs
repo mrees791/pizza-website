@@ -14,10 +14,6 @@ namespace DataLibrary.Models.Tables
         public bool AvailableForPurchase { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public bool HasMenuIcon { get; set; }
-        public string MenuIconFile { get; set; }
-        public bool HasPizzaBuilderImage { get; set; }
-        public string PizzaBuilderImageFile { get; set; }
 
         public override dynamic GetId()
         {

@@ -29,7 +29,6 @@ namespace PizzaWebsite.Models.ManageMenus
         [Display(Name = "Description")]
         [MaxLength(512)]
         public string Description { get; set; }
-
         public IEnumerable<string> CategoryList { get; set; }
 
         public bool IsNewRecord()

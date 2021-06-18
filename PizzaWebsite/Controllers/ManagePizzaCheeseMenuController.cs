@@ -53,11 +53,7 @@ namespace PizzaWebsite.Controllers
                 SortOrder = record.SortOrder,
                 AvailableForPurchase = record.AvailableForPurchase,
                 Description = record.Description,
-                HasMenuIcon = record.HasMenuIcon,
-                HasPizzaBuilderImage = record.HasPizzaBuilderImage,
-                MenuIconFile = record.MenuIconFile,
                 Name = record.Name,
-                PizzaBuilderImageFile = record.PizzaBuilderImageFile,
                 PriceLight = record.PriceLight,
                 PriceRegular = record.PriceRegular,
                 PriceExtra = record.PriceExtra
@@ -72,11 +68,7 @@ namespace PizzaWebsite.Controllers
                 SortOrder = model.SortOrder,
                 AvailableForPurchase = model.AvailableForPurchase,
                 Description = model.Description,
-                HasMenuIcon = model.HasMenuIcon,
-                HasPizzaBuilderImage = model.HasPizzaBuilderImage,
-                MenuIconFile = model.MenuIconFile,
                 Name = model.Name,
-                PizzaBuilderImageFile = model.PizzaBuilderImageFile,
                 PriceLight = model.PriceLight,
                 PriceRegular = model.PriceRegular,
                 PriceExtra = model.PriceExtra

@@ -36,11 +36,6 @@ namespace PizzaWebsite.Models.ManageMenus
         [MaxLength(512)]
         public string Description { get; set; }
 
-        public bool HasMenuIcon { get; set; }
-        public string MenuIconFile { get; set; }
-        public bool HasPizzaBuilderImage { get; set; }
-        public string PizzaBuilderImageFile { get; set; }
-
         public bool IsNewRecord()
         {
             return Id == 0;

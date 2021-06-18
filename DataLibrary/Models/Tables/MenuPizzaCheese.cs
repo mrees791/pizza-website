@@ -17,10 +17,6 @@ namespace DataLibrary.Models.Tables
         public decimal PriceRegular { get; set; }
         public decimal PriceExtra { get; set; }
         public string Description { get; set; }
-        public bool HasMenuIcon { get; set; }
-        public string MenuIconFile { get; set; }
-        public bool HasPizzaBuilderImage { get; set; }
-        public string PizzaBuilderImageFile { get; set; }
 
         public override dynamic GetId()
         {
