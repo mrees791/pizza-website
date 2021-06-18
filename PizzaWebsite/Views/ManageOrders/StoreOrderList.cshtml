@@ -61,7 +61,7 @@
                 </td>
                 <td>
                     @Html.DropDownListFor(model => orderVm.SelectedOrderStatus, new SelectList(orderVm.OrderStatusListItems, "Value", "Text", orderVm.SelectedOrderStatus),
-                        new {@class = "form-control"})
+                        new { @class = "form-control", id = orderVm.OrderStatusSelectId })
                 </td>
                 <td>
                     @Html.DisplayFor(model => orderVm.CustomerOrderVm.UserId)
@@ -83,7 +83,28 @@
 @section Scripts {
     <script type="text/javascript">
         $(function() {
-            pizzaSiteNs.createPaginationCustomized('#managePagination', @Model.PaginationVm.CurrentPage, @Model.PaginationVm.RowsPerPage, @Model.PaginationVm.TotalPages, @Model.PaginationVm.TotalNumberOfItems, 'OrdersPage');
+            pizzaSiteNs.createPaginationCustomized('#managePagination', @Model.PaginationVm.CurrentPage, @Model.PaginationVm.RowsPerPage, @Model.PaginationVm.TotalPages,
+                @Model.PaginationVm.TotalNumberOfItems, 'OrdersPage');
         });
     </script>
+    @* Order status controls needed for each order list item. *@
+    @foreach (OrderListItemViewModel orderVm in Model.OrderListItemVmList)
+    {
+        <script type="text/javascript">
+            $(function() {
+                var $statusSelect = $('#@orderVm.OrderStatusSelectId');
+                var orderId = @orderVm.CustomerOrderVm.Id;
+                $statusSelect.on("change",
+                    function() {
+                        var status = $statusSelect.val();
+                        var params = { customerOrderId: orderId, orderStatus: status };
+                        pizzaSiteNs.ajaxCall('/ManageOrders/UpdateOrderStatusAjax', JSON.stringify(params), 'POST').fail(function(response) {
+                                console.log(response);
+                            })
+                            .done(function(response) {
+                            });
+                    });
+            });
+        </script>
+    }
 }

@@ -13,5 +13,7 @@ namespace PizzaWebsite.Models.ManageOrders
         public IEnumerable<SelectListItem> OrderStatusListItems { get; set; }
         [Display(Name = "Status")]
         public int SelectedOrderStatus { get; set; }
+
+        public string OrderStatusSelectId { get; set; }
     }
 }

@@ -136,7 +136,8 @@ namespace PizzaWebsite.Controllers
                 {
                     CustomerOrderVm = customerOrderVm,
                     SelectedOrderStatus = customerOrder.OrderStatus,
-                    OrderStatusListItems = GetOrderStatusSelectListItems(customerOrder.IsDelivery)
+                    OrderStatusListItems = GetOrderStatusSelectListItems(customerOrder.IsDelivery),
+                    OrderStatusSelectId = $"orderStatusSelect-{customerOrder.Id}"
                 };
                 orderVmList.Add(listItemVm);
             }
@@ -337,7 +338,7 @@ namespace PizzaWebsite.Controllers
             if (currentEmployee == null)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json($"User is not an employee.",
+                return Json($"Employee ID cannot be found for user with ID {currentUser.Id}.",
                     MediaTypeNames.Text.Plain);
             }
 
@@ -350,8 +351,8 @@ namespace PizzaWebsite.Controllers
                     MediaTypeNames.Text.Plain);
             }
 
+            // Update record
             customerOrder.OrderStatus = orderStatus;
-
             int rowsUpdated = await PizzaDb.UpdateAsync(customerOrder);
 
             if (rowsUpdated == 0)
