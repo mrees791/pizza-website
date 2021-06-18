@@ -234,6 +234,8 @@ namespace PizzaWebsite.Controllers
                     return "Your order is out for delivery.";
                 case OrderStatus.Complete:
                     return "Your order has been completed.";
+                case OrderStatus.Cancelled:
+                    return "Your order was cancelled.";
             }
 
             return "Unable to get order status.";

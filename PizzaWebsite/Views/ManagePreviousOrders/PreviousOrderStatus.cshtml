@@ -9,11 +9,17 @@
         <input type="button" value="Back" class="btn btn-primary"/>
     </a>
 </div>
-@Html.Partial("~/Views/Shop/_OrderStatus.cshtml", Model)
+<div id="orderStatusSection">
+    <p id="orderStatusText"></p>
+</div>
 @section Scripts {
     <script type="text/javascript">
-        $(function() {
-            pizzaSiteOrderStatusNs.updateOrderStatus(@Model.CustomerOrderId);
+        function updateOrderStatus() {
+            var orderId = @Model.CustomerOrderId;
+            pizzaSiteOrderStatusNs.updateOrderStatusText(orderId);
+        }
+        $(function () {
+            updateOrderStatus();
         });
     </script>
 }

@@ -355,7 +355,6 @@
     <Content Include="Views\ManagePreviousOrders\PreviousOrderList.cshtml" />
     <Content Include="Views\ManagePreviousOrders\PreviousOrder.cshtml" />
     <Content Include="Views\Shared\Carts\_CostSummary.cshtml" />
-    <Content Include="Views\Shop\_OrderStatus.cshtml" />
     <Content Include="Views\Shop\OrderStatus.cshtml" />
     <Content Include="Views\ManagePreviousOrders\PreviousOrderStatus.cshtml" />
     <Content Include="Views\Shop\CurrentOrderStatus.cshtml" />
