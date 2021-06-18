@@ -192,49 +192,49 @@ namespace PizzaWebsite.Controllers
                     return new SelectListItem()
                     {
                         Text = "Order Placed",
-                        Value = OrderStatus.OrderPlaced.ToString()
+                        Value = $"{(int)OrderStatus.OrderPlaced}"
                     };
                 case OrderStatus.Prep:
                     return new SelectListItem()
                     {
                         Text = "Prepping",
-                        Value = OrderStatus.Prep.ToString()
+                        Value = $"{(int)OrderStatus.Prep}"
                     };
                 case OrderStatus.Bake:
                     return new SelectListItem()
                     {
                         Text = "Baking",
-                        Value = OrderStatus.Bake.ToString()
+                        Value = $"{(int)OrderStatus.Bake}"
                     };
                 case OrderStatus.Box:
                     return new SelectListItem()
                     {
                         Text = "Boxing",
-                        Value = OrderStatus.Box.ToString()
+                        Value = $"{(int)OrderStatus.Box}"
                     };
                 case OrderStatus.ReadyForPickup:
                     return new SelectListItem()
                     {
                         Text = "Ready for Pickup",
-                        Value = OrderStatus.ReadyForPickup.ToString()
+                        Value = $"{(int)OrderStatus.ReadyForPickup}"
                     };
                 case OrderStatus.OutForDelivery:
                     return new SelectListItem()
                     {
                         Text = "Out for Delivery",
-                        Value = OrderStatus.OutForDelivery.ToString()
+                        Value = $"{(int)OrderStatus.OutForDelivery}"
                     };
                 case OrderStatus.Complete:
                     return new SelectListItem()
                     {
                         Text = "Complete",
-                        Value = OrderStatus.Complete.ToString()
+                        Value = $"{(int)OrderStatus.Complete}"
                     };
                 case OrderStatus.Cancelled:
                     return new SelectListItem()
                     {
                         Text = "Cancelled",
-                        Value = OrderStatus.Cancelled.ToString()
+                        Value = $"{(int)OrderStatus.Cancelled}"
                     };
             }
 

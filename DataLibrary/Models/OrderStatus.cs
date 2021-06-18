@@ -2,13 +2,13 @@
 {
     public enum OrderStatus
     {
-        OrderPlaced,
-        Prep,
-        Bake,
-        Box,
-        ReadyForPickup,
-        OutForDelivery,
-        Complete,
-        Cancelled
+        OrderPlaced = 0,
+        Prep = 1,
+        Bake = 2,
+        Box = 3,
+        ReadyForPickup = 4,
+        OutForDelivery = 5,
+        Complete = 6,
+        Cancelled = 7
     }
 }
