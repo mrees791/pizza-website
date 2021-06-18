@@ -1,17 +1,23 @@
-﻿@model PizzaWebsite.Models.Shop.OrderStatusViewModel
-
+﻿@using PizzaWebsite.Models.Shop
+@model OrderStatusViewModel
 @{
     ViewBag.Title = "Order Status";
 }
-
-<h2>Order Status</h2>
-
-@Html.Partial("~/Views/Shop/_OrderStatus.cshtml", Model)
-
+<h2>@ViewBag.Title</h2>
+<div id="orderStatusSection">
+    <p id="orderStatusText"></p>
+</div>
 @section Scripts {
     <script type="text/javascript">
-        $(function() {
-            pizzaSiteOrderStatusNs.updateOrderStatus(@Model.CustomerOrderId);
+        function updateOrderStatus() {
+            var orderId = @Model.CustomerOrderId;
+            pizzaSiteOrderStatusNs.updateOrderStatusText(orderId);
+        }
+        $(function () {
+            setInterval(() => {
+                updateOrderStatus();
+            }, 1000);
+            updateOrderStatus();
         });
     </script>
 }

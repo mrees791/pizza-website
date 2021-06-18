@@ -19,6 +19,9 @@
             pizzaSiteOrderStatusNs.updateOrderStatusText(orderId);
         }
         $(function () {
+            setInterval(() => {
+                updateOrderStatus();
+            }, 1000);
             updateOrderStatus();
         });
     </script>
