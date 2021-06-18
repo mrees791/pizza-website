@@ -99,7 +99,7 @@ namespace PizzaWebsite.Controllers
             }
             SiteUser currentUser = await GetCurrentUserAsync();
             Employee currentEmployee = await PizzaDb.GetEmployeeAsync(currentUser);
-            bool isAuthorized = AuthorizedToAllStores() || await PizzaDb.Commands.IsEmployedAtLocationAsync(currentEmployee, store);
+            bool isAuthorized = await AuthorizedToManageStoreOrders(currentEmployee, store);
             if (!isAuthorized)
             {
                 return StoreAuthorizationErrorMessage(id.Value);
@@ -259,9 +259,13 @@ namespace PizzaWebsite.Controllers
             CustomerOrder customerOrder = orderJoin.Table1;
             DeliveryInfo deliveryInfo = orderJoin.Table2;
             StoreLocation storeLocation = await PizzaDb.GetAsync<StoreLocation>(customerOrder.StoreId);
+            if (storeLocation == null)
+            {
+                return StoreDoesNotExistErrorMessage(customerOrder.StoreId);
+            }
             SiteUser currentUser = await GetCurrentUserAsync();
             Employee currentEmployee = await PizzaDb.GetEmployeeAsync(currentUser);
-            bool isAuthorized = await AuthorizedToViewOrderAsync(customerOrder, currentEmployee, storeLocation);
+            bool isAuthorized = await AuthorizedToManageStoreOrders(currentEmployee, storeLocation);
 
             if (!isAuthorized)
             {
@@ -280,18 +284,14 @@ namespace PizzaWebsite.Controllers
             return View("StoreOrder", model);
         }
 
-        private async Task<bool> AuthorizedToViewOrderAsync(CustomerOrder customerOrder, Employee employee, StoreLocation storeLocation)
-        {
-            if (AuthorizedToAllStores())
-            {
-                return true;
-            }
-            return await PizzaDb.Commands.IsEmployedAtLocationAsync(employee, storeLocation);
-        }
-
         private bool AuthorizedToAllStores()
         {
             return User.IsInRole("Admin") || User.IsInRole("Executive");
+        }
+
+        private async Task<bool> AuthorizedToManageStoreOrders(Employee employee, StoreLocation store)
+        {
+            return AuthorizedToAllStores() || await PizzaDb.Commands.IsEmployedAtLocationAsync(employee, store);
         }
 
         private string CreateStoreSearchQueryString()
