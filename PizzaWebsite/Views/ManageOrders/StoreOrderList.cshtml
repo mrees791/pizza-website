@@ -36,7 +36,9 @@
         <tr>
             @* Table headers for controls columns. *@
             <th></th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderListItemVm.SelectedOrderStatus)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.OrderVm.UserId)
             </th>
@@ -49,28 +51,29 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (OrderListItemViewModel orderVm in Model.OrderListItemVmList)
-    {
-        <tr>
-            <td>
-                <a href="@Url.Action("ViewOrder")/@orderVm.CustomerOrderVm.Id?@(Request.QueryString)">
-                    <input type="button" value="View" class="btn btn-primary" />
-                </a>
-            </td>
-            <td>
-                <!-- ORDER STATUS SELECT LIST WILL GO HERE -->
-            </td>
-            <td>
-                @Html.DisplayFor(model => orderVm.CustomerOrderVm.UserId)
-            </td>
-            <td>
-                @Html.DisplayFor(model => orderVm.CustomerOrderVm.DateOrderPlaced)
-            </td>
-            <td>
-                @Html.DisplayFor(model => orderVm.CustomerOrderVm.OrderType)
-            </td>
-        </tr>
-    }
+        @foreach (OrderListItemViewModel orderVm in Model.OrderListItemVmList)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("ViewOrder")/@orderVm.CustomerOrderVm.Id?@(Request.QueryString)">
+                        <input type="button" value="View" class="btn btn-primary" />
+                    </a>
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => orderVm.SelectedOrderStatus, new SelectList(orderVm.OrderStatusListItems, "Value", "Text", orderVm.SelectedOrderStatus),
+                        new {@class = "form-control"})
+                </td>
+                <td>
+                    @Html.DisplayFor(model => orderVm.CustomerOrderVm.UserId)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => orderVm.CustomerOrderVm.DateOrderPlaced)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => orderVm.CustomerOrderVm.OrderType)
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 <nav>

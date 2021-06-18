@@ -162,6 +162,7 @@ namespace PizzaWebsite.Controllers
         {
             List<SelectListItem> itemList = new List<SelectListItem>
             {
+                GetOrderStatusSelectListItem(OrderStatus.Cancelled),
                 GetOrderStatusSelectListItem(OrderStatus.OrderPlaced),
                 GetOrderStatusSelectListItem(OrderStatus.Prep),
                 GetOrderStatusSelectListItem(OrderStatus.Bake),
@@ -228,6 +229,12 @@ namespace PizzaWebsite.Controllers
                     {
                         Text = "Complete",
                         Value = OrderStatus.Complete.ToString()
+                    };
+                case OrderStatus.Cancelled:
+                    return new SelectListItem()
+                    {
+                        Text = "Cancelled",
+                        Value = OrderStatus.Cancelled.ToString()
                     };
             }
 

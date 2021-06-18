@@ -9,6 +9,7 @@ namespace PizzaWebsite.Models.ManageOrders
     public class StoreOrderListViewModel
     {
         public CustomerOrderViewModel OrderVm { get; set; }
+        public OrderListItemViewModel OrderListItemVm { get; set; }
         public IEnumerable<OrderListItemViewModel> OrderListItemVmList { get; set; }
         public PaginationViewModel PaginationVm { get; set; }
         public string StoreSearchQueryString { get; set; }
