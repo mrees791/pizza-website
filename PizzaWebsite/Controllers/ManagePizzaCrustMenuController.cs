@@ -53,10 +53,27 @@ namespace PizzaWebsite.Controllers
             {
                 return MissingIdErrorMessage();
             }
-
+            MenuPizzaCrust record = await PizzaDb.GetAsync<MenuPizzaCrust>(id.Value);
+            if (record == null)
+            {
+                return InvalidIdErrorMessage(id.Value);
+            }
+            ManageMenuIconViewModel menuIconVm = new ManageMenuIconViewModel()
+            {
+                Description = @"This is the icon that the user will click on when choosing their crust in the pizza builder.
+                                The icon should show the top half of the pizza's crust. The size of the icon should be 100x50 pixels.",
+                ImageUrl = DirectoryServices.GetMenuIconFile(record)
+            };
+            ManagePizzaBuilderImageViewModel pizzaBuilderImageVm = new ManagePizzaBuilderImageViewModel()
+            {
+                Description = @"This is the image that will be shown when the user is building their pizza.
+                                It should be an image of only the pizza crust. The size should be 250x250 pixels.",
+                ImageUrl = DirectoryServices.GetPizzaBuilderImageFile(record)
+            };
             ManagePizzaMenuImagesViewModel model = new ManagePizzaMenuImagesViewModel()
             {
-
+                ManageMenuIconVm = menuIconVm,
+                ManagePizzaBuilderImageVm = pizzaBuilderImageVm
             };
 
             return View(model);

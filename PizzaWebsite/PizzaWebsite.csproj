@@ -199,6 +199,7 @@
     <Compile Include="Models\ManageOrders\StoreOrderListViewModel.cs" />
     <Compile Include="Models\ManageOrders\StoreOrderCartViewModel.cs" />
     <Compile Include="Models\ManageOrders\StoreViewModel.cs" />
+    <Compile Include="Models\Services\DirectoryServices.cs" />
     <Compile Include="Models\Services\StoreServices.cs" />
     <Compile Include="Models\Shop\CheckoutAttributes\PhoneNumberRequiredIfDeliveryAttribute.cs" />
     <Compile Include="Models\Shop\CheckoutAttributes\RequiredIfDeliveryAttribute.cs" />
@@ -379,7 +380,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Images\Menu\Categories\" />
+    <Folder Include="Images\Menu\PizzaCrust\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

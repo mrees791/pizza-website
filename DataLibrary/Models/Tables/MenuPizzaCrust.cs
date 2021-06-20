@@ -9,7 +9,6 @@ namespace DataLibrary.Models.Tables
     {
         [Key]
         public int Id { get; set; }
-
         public int SortOrder { get; set; }
         public bool AvailableForPurchase { get; set; }
         public string Name { get; set; }

@@ -15,6 +15,7 @@ namespace PizzaWebsite.Controllers.BaseControllers
     {
         private GeographyServices _geographyServices;
         private ListServices _listServices;
+        private DirectoryServices _directoryServices;
         private PizzaDatabase _pizzaDb;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -23,6 +24,12 @@ namespace PizzaWebsite.Controllers.BaseControllers
         {
             get => _listServices ?? new ListServices();
             private set => _listServices = value;
+        }
+
+        public DirectoryServices DirectoryServices
+        {
+            get => _directoryServices ?? new DirectoryServices();
+            private set => _directoryServices = value;
         }
 
         public PizzaDatabase PizzaDb

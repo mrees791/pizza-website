@@ -12,7 +12,6 @@ namespace PizzaWebsite.Models.ManageMenus
 
         [HiddenInput(DisplayValue = false)]
         public int SortOrder { get; set; }
-
         [Required]
         [Display(Name = "Name")]
         [MaxLength(100)]
