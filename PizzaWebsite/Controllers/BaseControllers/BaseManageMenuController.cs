@@ -45,7 +45,6 @@ namespace PizzaWebsite.Controllers.BaseControllers
             {
                 return View("Manage", model);
             }
-
             await PizzaDb.InsertAsync(ViewModelToRecord(model));
             ConfirmationViewModel confirmationModel = new ConfirmationViewModel
             {
@@ -57,7 +56,15 @@ namespace PizzaWebsite.Controllers.BaseControllers
 
         public async Task<ActionResult> Edit(int? id)
         {
+            if (!id.HasValue)
+            {
+                return MissingIdErrorMessage();
+            }
             TRecord record = await PizzaDb.GetAsync<TRecord>(id.Value);
+            if (record == null)
+            {
+                return InvalidIdErrorMessage(id.Value);
+            }
             TViewModel model = await RecordToViewModelAsync(record);
             return View("Manage", model);
         }
@@ -70,14 +77,42 @@ namespace PizzaWebsite.Controllers.BaseControllers
             {
                 return View("Manage", model);
             }
-
-            await PizzaDb.UpdateAsync(ViewModelToRecord(model));
+            int rowsAffected = await PizzaDb.UpdateAsync(ViewModelToRecord(model));
+            if (rowsAffected == 0)
+            {
+                ModelState.AddModelError("", "Unable to update record.");
+                return View("Manage", model);
+            }
             ConfirmationViewModel confirmationModel = new ConfirmationViewModel
             {
                 ConfirmationMessage = $"Your changes to {modelName} have been confirmed.",
                 ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}"
             };
             return View("CreateEditConfirmation", confirmationModel);
+        }
+
+        protected ActionResult MissingIdErrorMessage()
+        {
+            ErrorMessageViewModel model = new ErrorMessageViewModel
+            {
+                Header = "Error",
+                ErrorMessage = "Missing ID.",
+                ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}",
+                ShowReturnLink = true
+            };
+            return View("ErrorMessage", model);
+        }
+
+        protected ActionResult InvalidIdErrorMessage(int id)
+        {
+            ErrorMessageViewModel model = new ErrorMessageViewModel
+            {
+                Header = "Error",
+                ErrorMessage = $"Record with ID {id} could not be found.",
+                ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}",
+                ShowReturnLink = true
+            };
+            return View("ErrorMessage", model);
         }
 
         protected abstract Task<TViewModel> RecordToViewModelAsync(TRecord record);

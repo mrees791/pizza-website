@@ -3,6 +3,8 @@ using System.Web.Mvc;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Controllers.BaseControllers;
+using PizzaWebsite.Models;
+using PizzaWebsite.Models.ManageMenuImages;
 using PizzaWebsite.Models.ManageMenus;
 
 namespace PizzaWebsite.Controllers
@@ -43,6 +45,21 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> Edit(ManageMenuPizzaCrustViewModel model)
         {
             return await Edit(model, model.Name);
+        }
+
+        public async Task<ActionResult> ManageImages(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return MissingIdErrorMessage();
+            }
+
+            ManagePizzaMenuImagesViewModel model = new ManagePizzaMenuImagesViewModel()
+            {
+
+            };
+
+            return View(model);
         }
 
         protected override async Task<ManageMenuPizzaCrustViewModel> RecordToViewModelAsync(MenuPizzaCrust record)

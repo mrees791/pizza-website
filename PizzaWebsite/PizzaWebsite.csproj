@@ -191,6 +191,9 @@
     <Compile Include="Models\CustomerOrderViewModel.cs" />
     <Compile Include="Models\DeliveryInfoViewModel.cs" />
     <Compile Include="Models\Geography\GeographyServices.cs" />
+    <Compile Include="Models\ManageMenuImages\ManageMenuIconViewModel.cs" />
+    <Compile Include="Models\ManageMenuImages\ManagePizzaBuilderImageViewModel.cs" />
+    <Compile Include="Models\ManageMenuImages\ManagePizzaMenuImagesViewModel.cs" />
     <Compile Include="Models\ManageOrders\OrderListItemViewModel.cs" />
     <Compile Include="Models\ManageOrders\SearchStoresViewModel.cs" />
     <Compile Include="Models\ManageOrders\StoreOrderListViewModel.cs" />
@@ -370,9 +373,13 @@
     <Content Include="Views\Shared\_DeliveryInfo.cshtml" />
     <Content Include="Views\ManageOrders\StoreOrderList.cshtml" />
     <Content Include="Views\ManageOrders\StoreOrder.cshtml" />
+    <Content Include="Views\Shared\ManageMenuImages\_ManageMenuIcon.cshtml" />
+    <Content Include="Views\ManagePizzaCrustMenu\ManageImages.cshtml" />
+    <Content Include="Views\Shared\ManageMenuImages\_ManagePizzaBuilderImage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\Menu\Categories\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

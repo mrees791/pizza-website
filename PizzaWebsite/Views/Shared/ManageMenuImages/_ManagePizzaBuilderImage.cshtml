@@ -1,0 +1,11 @@
+﻿@using PizzaWebsite.Models.ManageMenuImages
+@model ManagePizzaBuilderImageViewModel
+<h3>Pizza Builder Image</h3>
+<div>
+    <img src="@Model.ImageUrl" alt="No Image" style="width: 100px; height: 50px;" />
+    <p>@Model.Description</p>
+</div>
+<div>
+    <input id="pizzaBuilderImageBrowseButton" type="button" value="Browse..." />
+    <input id="pizzaBuilderResetButton" type="button" value="Reset" />
+</div>

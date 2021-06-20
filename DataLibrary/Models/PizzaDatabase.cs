@@ -405,23 +405,23 @@ namespace DataLibrary.Models
 
         public async Task<int> UpdateAsync(Record record)
         {
-            int rowsUpdated = 0;
+            int rowsAffected = 0;
 
             if (record.UpdateRequiresTransaction())
             {
                 using (IDbTransaction transaction = Connection.BeginTransaction())
                 {
-                    rowsUpdated = await record.UpdateAsync(this,
+                    rowsAffected = await record.UpdateAsync(this,
                         transaction);
                     transaction.Commit();
                 }
             }
             else
             {
-                rowsUpdated = await record.UpdateAsync(this);
+                rowsAffected = await record.UpdateAsync(this);
             }
 
-            return rowsUpdated;
+            return rowsAffected;
         }
 
         public async Task<int> DeleteByIdAsync<TRecord>(object id, IDbTransaction transaction = null)
