@@ -45,7 +45,12 @@ namespace PizzaWebsite.Controllers.BaseControllers
             {
                 return View("Manage", model);
             }
-            await PizzaDb.InsertAsync(ViewModelToRecord(model));
+            int id = await PizzaDb.InsertAsync(ViewModelToRecord(model));
+            if (id == 0)
+            {
+                ModelState.AddModelError("", "Unable to insert record.");
+                return View("Manage", model);
+            }
             ConfirmationViewModel confirmationModel = new ConfirmationViewModel
             {
                 ConfirmationMessage = $"{modelName} has been added to the database.",
