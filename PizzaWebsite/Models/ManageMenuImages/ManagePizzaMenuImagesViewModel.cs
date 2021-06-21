@@ -7,7 +7,6 @@ namespace PizzaWebsite.Models.ManageMenuImages
 {
     public class ManagePizzaMenuImagesViewModel
     {
-        public ManageMenuIconViewModel ManageMenuIconVm { get; set; }
-        public ManagePizzaBuilderImageViewModel ManagePizzaBuilderImageVm { get; set; }
+        public int Id { get; set; }
     }
 }

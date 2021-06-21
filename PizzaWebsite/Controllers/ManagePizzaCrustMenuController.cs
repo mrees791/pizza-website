@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
@@ -58,25 +60,63 @@ namespace PizzaWebsite.Controllers
             {
                 return InvalidIdErrorMessage(id.Value);
             }
+
+            /*UploadMenuImageViewModel menuIconUploadVm = new UploadMenuImageViewModel()
+            {
+                Id = id.Value
+            };
             ManageMenuIconViewModel menuIconVm = new ManageMenuIconViewModel()
             {
                 Description = @"This is the icon that the user will click on when choosing their crust in the pizza builder.
                                 The icon should show the top half of the pizza's crust. The size of the icon should be 100x50 pixels.",
-                ImageUrl = DirectoryServices.GetMenuIconFile(record)
+                ImageUrl = DirectoryServices.GetMenuIconFile(record),
+                
             };
-            ManagePizzaBuilderImageViewModel pizzaBuilderImageVm = new ManagePizzaBuilderImageViewModel()
+            /*ManagePizzaBuilderImageViewModel pizzaBuilderImageVm = new ManagePizzaBuilderImageViewModel()
             {
                 Description = @"This is the image that will be shown when the user is building their pizza.
                                 It should be an image of only the pizza crust. The size should be 250x250 pixels.",
                 ImageUrl = DirectoryServices.GetPizzaBuilderImageFile(record)
-            };
-            ManagePizzaMenuImagesViewModel model = new ManagePizzaMenuImagesViewModel()
+            };*/
+            /*ManageMenuImagesViewModel model = new ManageMenuImagesViewModel()
             {
                 ManageMenuIconVm = menuIconVm,
-                ManagePizzaBuilderImageVm = pizzaBuilderImageVm
+            };*/
+            ManagePizzaMenuImagesViewModel model = new ManagePizzaMenuImagesViewModel()
+            {
+                Id = id.Value
             };
 
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UploadMenuIconFile()
+        {
+            int id = 0;
+            bool validId = int.TryParse(Request["id"], out id);
+            if (!validId)
+            {
+                return Json($"Invalid ID {Request["id"]}");
+            }
+            HttpFileCollectionBase files = Request.Files;
+            if (files.Count == 0)
+            {
+                return Json("No files found in request.");
+            }
+            if (files.Count > 1)
+            {
+                return Json("There can only be one file in the request.");
+            }
+            HttpPostedFileBase file = files[0];
+            if (file == null)
+            {
+                return Json("Null file error.");
+            }
+            MenuPizzaCrust record = await PizzaDb.GetAsync<MenuPizzaCrust>(id);
+            string fullPath = Server.MapPath(DirectoryServices.GetMenuIconFile(record));
+            file.SaveAs(fullPath);
+            return Json("File uploaded successfully.");
         }
 
         protected override async Task<ManageMenuPizzaCrustViewModel> RecordToViewModelAsync(MenuPizzaCrust record)

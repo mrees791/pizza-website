@@ -1,4 +1,5 @@
-﻿@using PizzaWebsite.Models.ManageMenuImages
+﻿@using System.Collections.Specialized
+@using PizzaWebsite.Models.ManageMenuImages
 @model ManagePizzaMenuImagesViewModel
 @{
     ViewBag.Title = "Menu Images";
@@ -19,5 +20,41 @@
     </ol>
 </nav>
 <hr />
-@Html.Partial("~/Views/Shared/ManageMenuImages/_ManageMenuIcon.cshtml", Model.ManageMenuIconVm)
-@Html.Partial("~/Views/Shared/ManageMenuImages/_ManagePizzaBuilderImage.cshtml", Model.ManagePizzaBuilderImageVm)
+@* Upload Menu Icon *@
+<input id="fileUpload1" type="file" />
+<input id="btnUpload" type="button" value="Upload" />
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var id = @Model.Id;
+            $('#btnUpload').click(function() {
+                // Check if FormData is available in browser.
+                if (window.FormData == undefined) {
+                    console.log('FormData is not supported. You must update your browser.');
+                } else {
+                    var fileUpload = $('#fileUpload1').get(0);
+                    var fileList = fileUpload.files;
+                    var file = fileList[0];
+                    var fileData = new FormData();
+                    fileData.append('id', id);
+                    fileData.append(file.name, file);
+
+                    $.ajax({
+                        url: '/ManagePizzaCrustMenu/UploadMenuIconFile',
+                        type: 'POST',
+                        contentType: false,
+                        processData: false,
+                        data: fileData,
+                        success: function (result) {
+                            console.log(result);
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}
+@* Reset Button *@

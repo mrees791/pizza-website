@@ -4,12 +4,15 @@ using DataLibrary.Models;
 using DataLibrary.Models.Sql;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Models;
+using PizzaWebsite.Models.Services;
 
 namespace PizzaWebsite.Controllers.BaseControllers
 {
     public abstract class BaseManageWebsiteController<TRecord> : BaseController
         where TRecord : Record
     {
+        private ImageServices _imageServices;
+
         protected async Task<IEnumerable<TRecord>> LoadPagedRecordsAsync(int page, int rowsPerPage,
             string orderByColumn, SortOrder sortOrder,
             WhereClauseBase whereClauseBase, PizzaDatabase pizzaDb, PaginationViewModel paginationVm)
@@ -32,6 +35,12 @@ namespace PizzaWebsite.Controllers.BaseControllers
         protected async Task<Employee> GetCurrentEmployeeAsync()
         {
             return await PizzaDb.GetEmployeeAsync(await GetCurrentUserAsync());
+        }
+
+        protected ImageServices ImageServices
+        {
+            get => _imageServices ?? new ImageServices();
+            private set => _imageServices = value;
         }
     }
 }
