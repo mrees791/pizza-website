@@ -192,12 +192,12 @@
     <Compile Include="Models\DeliveryInfoViewModel.cs" />
     <Compile Include="Models\Geography\GeographyServices.cs" />
     <Compile Include="Models\ManageMenuImages\ManagePizzaMenuImagesViewModel.cs" />
-    <Compile Include="Models\ManageMenuImages\UploadMenuImageViewModel.cs" />
     <Compile Include="Models\ManageOrders\OrderListItemViewModel.cs" />
     <Compile Include="Models\ManageOrders\SearchStoresViewModel.cs" />
     <Compile Include="Models\ManageOrders\StoreOrderListViewModel.cs" />
     <Compile Include="Models\ManageOrders\StoreOrderCartViewModel.cs" />
     <Compile Include="Models\ManageOrders\StoreViewModel.cs" />
+    <Compile Include="Models\MenuImageType.cs" />
     <Compile Include="Models\Services\DirectoryServices.cs" />
     <Compile Include="Models\Services\ImageServices.cs" />
     <Compile Include="Models\Services\StoreServices.cs" />

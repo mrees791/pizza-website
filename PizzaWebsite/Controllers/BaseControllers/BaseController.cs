@@ -86,6 +86,26 @@ namespace PizzaWebsite.Controllers.BaseControllers
             }
         }
 
+        [HttpPost]
+        protected HttpPostedFileBase GetPostedImageFile()
+        {
+            HttpFileCollectionBase files = Request.Files;
+            if (files.Count == 0)
+            {
+                throw new Exception("No files found in request.");
+            }
+            if (files.Count > 1)
+            {
+                throw new Exception("There can only be one file in the request.");
+            }
+            HttpPostedFileBase file = files[0];
+            if (file == null)
+            {
+                throw new Exception("files[0] is null.");
+            }
+            return file;
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

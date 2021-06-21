@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -12,8 +13,7 @@ using PizzaWebsite.Models.ManageMenus;
 namespace PizzaWebsite.Controllers
 {
     [Authorize(Roles = "Admin,Executive")]
-    public class
-        ManagePizzaCrustMenuController : BaseManageMenuController<MenuPizzaCrust, ManageMenuPizzaCrustViewModel>
+    public class ManagePizzaCrustMenuController : BaseManageMenuController<MenuPizzaCrust, ManageMenuPizzaCrustViewModel>
     {
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
@@ -69,7 +69,7 @@ namespace PizzaWebsite.Controllers
             {
                 Description = @"This is the icon that the user will click on when choosing their crust in the pizza builder.
                                 The icon should show the top half of the pizza's crust. The size of the icon should be 100x50 pixels.",
-                ImageUrl = DirectoryServices.GetMenuIconFile(record),
+                ImageUrl = DirectoryServices.GetMenuImageFile(record),
                 
             };
             /*ManagePizzaBuilderImageViewModel pizzaBuilderImageVm = new ManagePizzaBuilderImageViewModel()
@@ -88,35 +88,6 @@ namespace PizzaWebsite.Controllers
             };
 
             return View(model);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> UploadMenuIconFile()
-        {
-            int id = 0;
-            bool validId = int.TryParse(Request["id"], out id);
-            if (!validId)
-            {
-                return Json($"Invalid ID {Request["id"]}");
-            }
-            HttpFileCollectionBase files = Request.Files;
-            if (files.Count == 0)
-            {
-                return Json("No files found in request.");
-            }
-            if (files.Count > 1)
-            {
-                return Json("There can only be one file in the request.");
-            }
-            HttpPostedFileBase file = files[0];
-            if (file == null)
-            {
-                return Json("Null file error.");
-            }
-            MenuPizzaCrust record = await PizzaDb.GetAsync<MenuPizzaCrust>(id);
-            string fullPath = Server.MapPath(DirectoryServices.GetMenuIconFile(record));
-            file.SaveAs(fullPath);
-            return Json("File uploaded successfully.");
         }
 
         protected override async Task<ManageMenuPizzaCrustViewModel> RecordToViewModelAsync(MenuPizzaCrust record)
