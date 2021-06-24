@@ -12,7 +12,7 @@ using PizzaWebsite.Models.Employees;
 namespace PizzaWebsite.Controllers.BaseControllers
 {
     public abstract class BaseManageMenuController<TRecord, TViewModel> : BaseManageWebsiteController<TRecord>
-        where TRecord : Record, new()
+        where TRecord : MenuCategoryRecord, new()
         where TViewModel : class, new()
     {
         protected async Task<ActionResult> Index(int page, int rowsPerPage, string orderByColumn,
