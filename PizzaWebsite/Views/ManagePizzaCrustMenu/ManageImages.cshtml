@@ -23,17 +23,9 @@
 @* todo: Finish upload and reset buttons for menu icons and pizza builder icons. *@
 
 @* Testing file upload functionality here. *@
-<!-- The file upload form used as target for the file upload widget -->
-<form id="fileupload"
-      action="https://jquery-file-upload.appspot.com/"
-      method="POST"
-      enctype="multipart/form-data">
-    <!-- Redirect browsers with JavaScript disabled to the origin page -->
-    <noscript>
-        <input type="hidden"
-               name="redirect"
-               value="https://blueimp.github.io/jQuery-File-Upload/" />
-    </noscript>
+@using (Html.BeginForm("UploadImageTest", "ManagePizzaCrustMenu", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
     <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
     <div class="row fileupload-buttonbar">
         <div class="col-lg-7">
@@ -77,6 +69,6 @@
     <table role="presentation" class="table table-striped">
         <tbody class="files"></tbody>
     </table>
-</form>
+}
 @* Upload Menu Icon *@
 @* Reset Button *@

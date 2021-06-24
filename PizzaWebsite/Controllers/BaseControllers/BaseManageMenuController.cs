@@ -99,6 +99,15 @@ namespace PizzaWebsite.Controllers.BaseControllers
             return View("CreateEditConfirmation", confirmationModel);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UploadImageTest()
+        {
+            HttpFileCollectionBase files = Request.Files;
+
+            return RedirectToAction("Index");
+        }
+
         protected ActionResult MissingIdErrorMessage()
         {
             ErrorMessageViewModel model = new ErrorMessageViewModel
