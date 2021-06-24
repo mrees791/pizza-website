@@ -5,7 +5,7 @@ using Dapper;
 namespace DataLibrary.Models.Tables
 {
     [Table("MenuPizzaSauce")]
-    public class MenuPizzaSauce : Record
+    public class MenuPizzaSauce : MenuCategoryRecord
     {
         [Key]
         public int Id { get; set; }
@@ -21,6 +21,11 @@ namespace DataLibrary.Models.Tables
         public override dynamic GetId()
         {
             return Id;
+        }
+
+        public override MenuCategory GetMenuCategoryType()
+        {
+            return MenuCategory.PizzaSauce;
         }
 
         internal override async Task<dynamic> InsertAsync(PizzaDatabase pizzaDb, IDbTransaction transaction = null)

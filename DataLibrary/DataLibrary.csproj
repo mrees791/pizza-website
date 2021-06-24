@@ -88,6 +88,8 @@
     <Compile Include="Models\JoinLists\EmployeeLocationOnStoreLocationJoinList.cs" />
     <Compile Include="Models\JoinLists\EmployeeOnEmployeeLocationJoinList.cs" />
     <Compile Include="Models\JoinLists\BaseClasses\JoinListBase.cs" />
+    <Compile Include="Models\MenuCategory.cs" />
+    <Compile Include="Models\MenuCategoryRecord.cs" />
     <Compile Include="Models\OrderBy.cs" />
     <Compile Include="Models\QueryFilters\EmployeeFilter.cs" />
     <Compile Include="Models\QueryFilters\MenuPizzaFilter.cs" />

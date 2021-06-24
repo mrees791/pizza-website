@@ -9,7 +9,6 @@ namespace DataLibrary.Models.Tables
     {
         [Key]
         public int Id { get; set; }
-
         public int MenuPizzaId { get; set; }
         public string ToppingHalf { get; set; }
         public string ToppingAmount { get; set; }
