@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Web;
+using DataLibrary.Models;
 using DataLibrary.Models.Tables;
 
 namespace PizzaWebsite.Models.Services
@@ -16,29 +17,32 @@ namespace PizzaWebsite.Models.Services
         public readonly string PizzaCrustFlavorMenuImageDir = "~/Images/Menu/PizzaCrustFlavor/";
         public readonly string PizzaToppingMenuImageDir = "~/Images/Menu/PizzaTopping/";
 
-        public string GetMenuImageUrl(MenuPizzaTopping record, MenuImageType imageType)
+        public string GetMenuImageUrl(int id, MenuCategory menuCategory, MenuImageType imageType)
         {
-            return $"{PizzaToppingMenuImageDir}{CreateMenuImageFileName(record.Id, imageType)}";
+            string dir = GetMenuCategoryImageDirectory(menuCategory);
+            string fileName = CreateMenuImageFileName(id, imageType);
+            return $"{dir}{fileName}";
         }
 
-        public string GetMenuImageUrl(MenuPizzaCrustFlavor record, MenuImageType imageType)
+        private string GetMenuCategoryImageDirectory(MenuCategory menuCategory)
         {
-            return $"{PizzaCrustFlavorMenuImageDir}{CreateMenuImageFileName(record.Id, imageType)}";
-        }
+            switch (menuCategory)
+            {
+                case MenuCategory.Pizza:
+                    return PizzaSauceMenuImageDir;
+                case MenuCategory.PizzaCheese:
+                    return PizzaCheeseMenuImageDir;
+                case MenuCategory.PizzaCrust:
+                    return PizzaCrustMenuImageDir;
+                case MenuCategory.PizzaCrustFlavor:
+                    return PizzaCrustFlavorMenuImageDir;
+                case MenuCategory.PizzaSauce:
+                    return PizzaSauceMenuImageDir;
+                case MenuCategory.PizzaToppingType:
+                    return PizzaToppingMenuImageDir;
+            }
 
-        public string GetMenuImageUrl(MenuPizzaCheese record, MenuImageType imageType)
-        {
-            return $"{PizzaCheeseMenuImageDir}{CreateMenuImageFileName(record.Id, imageType)}";
-        }
-
-        public string GetMenuImageUrl(MenuPizzaSauce record, MenuImageType imageType)
-        {
-            return $"{PizzaSauceMenuImageDir}{CreateMenuImageFileName(record.Id, imageType)}";
-        }
-
-        public string GetMenuImageUrl(MenuPizzaCrust record, MenuImageType imageType)
-        {
-            return $"{PizzaCrustMenuImageDir}{CreateMenuImageFileName(record.Id, imageType)}";
+            throw new Exception($"Unable to get image directory for {menuCategory.ToString()}");
         }
 
         private string CreateMenuImageFileName(int id, MenuImageType imageType)
@@ -50,7 +54,7 @@ namespace PizzaWebsite.Models.Services
                 case MenuImageType.PizzaBuilderImage:
                     return $"{id}-pb.jpg";
             }
-            throw new Exception($"Unable to create menu image file name for {id}.");
+            throw new Exception($"Unable to create menu image file name for {id}. Image type: {imageType.ToString()}");
         }
     }
 }
