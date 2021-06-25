@@ -8,6 +8,7 @@ using DataLibrary.Models;
 using DataLibrary.Models.Sql;
 using PizzaWebsite.Models;
 using PizzaWebsite.Models.Employees;
+using PizzaWebsite.Models.ManageMenuImages;
 
 namespace PizzaWebsite.Controllers.BaseControllers
 {
@@ -97,6 +98,26 @@ namespace PizzaWebsite.Controllers.BaseControllers
                 ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}"
             };
             return View("CreateEditConfirmation", confirmationModel);
+        }
+
+        public async Task<ActionResult> UploadMenuIcon(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return MissingIdErrorMessage();
+            }
+            TRecord record = await PizzaDb.GetAsync<TRecord>(id.Value);
+            if (record == null)
+            {
+                return InvalidIdErrorMessage(id.Value);
+            }
+
+            UploadMenuIconViewModel model = new UploadMenuIconViewModel()
+            {
+                Id = id.Value
+            };
+
+            return View(model);
         }
 
         [HttpPost]

@@ -192,6 +192,7 @@
     <Compile Include="Models\DeliveryInfoViewModel.cs" />
     <Compile Include="Models\Geography\GeographyServices.cs" />
     <Compile Include="Models\ManageMenuImages\ManagePizzaMenuImagesViewModel.cs" />
+    <Compile Include="Models\ManageMenuImages\UploadMenuIconViewModel.cs" />
     <Compile Include="Models\ManageOrders\OrderListItemViewModel.cs" />
     <Compile Include="Models\ManageOrders\SearchStoresViewModel.cs" />
     <Compile Include="Models\ManageOrders\StoreOrderListViewModel.cs" />
@@ -453,6 +454,8 @@
     <Content Include="Views\ManageOrders\StoreOrderList.cshtml" />
     <Content Include="Views\ManageOrders\StoreOrder.cshtml" />
     <Content Include="Views\ManagePizzaCrustMenu\ManageImages.cshtml" />
+    <Content Include="Views\Shared\_UploadImage.cshtml" />
+    <Content Include="Views\ManagePizzaCrustMenu\UploadMenuIcon.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
