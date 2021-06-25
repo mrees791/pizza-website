@@ -22,7 +22,7 @@
     </ol>
 </nav>
 <hr />
-@using (Html.BeginForm("UploadImageTest", "ManagePizzaCrustMenu", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("UploadMenuIcon", "ManagePizzaCrustMenu", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Id)

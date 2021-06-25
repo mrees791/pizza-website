@@ -119,14 +119,9 @@ namespace PizzaWebsite.Controllers.BaseControllers
 
             return View(model);
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UploadImageTest()
+        
+        protected void UploadImageTest(HttpPostedFileBase file)
         {
-            HttpFileCollectionBase files = Request.Files;
-
-            return RedirectToAction("Index");
         }
 
         protected ActionResult MissingIdErrorMessage()
