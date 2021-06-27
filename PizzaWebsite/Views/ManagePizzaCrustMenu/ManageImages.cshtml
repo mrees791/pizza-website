@@ -23,5 +23,5 @@
 @* todo: Finish upload and reset buttons for menu icons and pizza builder icons. *@
 <div>
     <img src="@Model.MenuIconUrl" alt="Missing Menu Icon" style="display: block;"/>
-    @* Upload Menu Icon button*@
+    <a href="@Url.Action("UploadMenuIcon", "ManagePizzaCrustMenu")/@Model.Id?@Request.QueryString">Upload Menu Icon</a>
 </div>

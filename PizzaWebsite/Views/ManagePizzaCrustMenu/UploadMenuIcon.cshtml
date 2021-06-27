@@ -22,7 +22,11 @@
     </ol>
 </nav>
 <hr />
+<<<<<<< HEAD
 @using (Html.BeginForm("UploadImageTest", "ManagePizzaCrustMenu", FormMethod.Post, new { enctype = "multipart/form-data" }))
+=======
+@using (Html.BeginForm("UploadMenuIcon", "ManagePizzaCrustMenu", FormMethod.Post, new { enctype = "multipart/form-data" }))
+>>>>>>> parent of 7332311 (Uninstalled jQuery File Upload plugin and removed all references to it.)
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Id)

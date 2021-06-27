@@ -24,6 +24,16 @@ namespace PizzaWebsite
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Scripts/bootstrap.js"));
 
+            // jQuery File Upload scripts
+            bundles.Add(new ScriptBundle("~/bundles/jqueryplugins").Include(
+                "~/Scripts/jQuery.FileUpload/jquery.fileupload.js",
+                "~/Scripts/jQuery.FileUpload/jquery.fileupload-*"));
+
+            // jQuery File Upload CSS
+            bundles.Add(new StyleBundle("~/Content/css").Include(
+                "~/Content/jQuery.FileUpload/css/jquery.fileupload.css",
+                "~/Content/jQuery.FileUpload/css/jquery.fileupload-ui.css"));
+
             // Site scripts
             bundles.Add(new ScriptBundle("~/bundles/site").Include(
                 "~/Scripts/site.js",

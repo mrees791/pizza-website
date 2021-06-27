@@ -90,6 +90,22 @@ namespace PizzaWebsite.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UploadMenuIcon(UploadMenuIconViewModel uploadMenuIconVm)
+        {
+            /*HttpFileCollectionBase files = Request.Files;
+
+            UploadImageTest(files[0]);*/
+
+            ManagePizzaMenuImagesViewModel model = new ManagePizzaMenuImagesViewModel()
+            {
+                Id = uploadMenuIconVm.Id
+            };
+
+            return RedirectToAction($"ManageImages?{Request.QueryString}", model);
+        }
+
         protected override async Task<ManageMenuPizzaCrustViewModel> RecordToViewModelAsync(MenuPizzaCrust record)
         {
             return await Task.FromResult(new ManageMenuPizzaCrustViewModel
