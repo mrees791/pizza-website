@@ -100,35 +100,6 @@ namespace PizzaWebsite.Controllers.BaseControllers
             return View("CreateEditConfirmation", confirmationModel);
         }
 
-        public async Task<ActionResult> UploadMenuIcon(int? id)
-        {
-            if (!id.HasValue)
-            {
-                return MissingIdErrorMessage();
-            }
-            TRecord record = await PizzaDb.GetAsync<TRecord>(id.Value);
-            if (record == null)
-            {
-                return InvalidIdErrorMessage(id.Value);
-            }
-
-            UploadMenuIconViewModel model = new UploadMenuIconViewModel()
-            {
-                Id = id.Value
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UploadImageTest()
-        {
-            HttpFileCollectionBase files = Request.Files;
-
-            return RedirectToAction("Index");
-        }
-
         protected ActionResult MissingIdErrorMessage()
         {
             ErrorMessageViewModel model = new ErrorMessageViewModel

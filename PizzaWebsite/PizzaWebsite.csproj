@@ -192,7 +192,6 @@
     <Compile Include="Models\DeliveryInfoViewModel.cs" />
     <Compile Include="Models\Geography\GeographyServices.cs" />
     <Compile Include="Models\ManageMenuImages\ManagePizzaMenuImagesViewModel.cs" />
-    <Compile Include="Models\ManageMenuImages\UploadMenuIconViewModel.cs" />
     <Compile Include="Models\ManageOrders\OrderListItemViewModel.cs" />
     <Compile Include="Models\ManageOrders\SearchStoresViewModel.cs" />
     <Compile Include="Models\ManageOrders\StoreOrderListViewModel.cs" />
