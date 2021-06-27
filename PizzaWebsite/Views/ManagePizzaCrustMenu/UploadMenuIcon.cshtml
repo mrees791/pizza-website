@@ -1,0 +1,30 @@
+﻿@using PizzaWebsite.Models.ManageMenuImages
+@model UploadMenuIconViewModel
+@{
+    ViewBag.Title = "Upload Menu Icon";
+}
+<h2>@ViewBag.Title</h2>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "Employee")">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "ManageMenu")">Manage Menu</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "ManagePizzaCrustMenu")?@Request.QueryString">Manage Pizza Crust Menu</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("ManageImages", "ManagePizzaCrustMenu")/@Model.Id?@Request.QueryString">Manage Images</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+    </ol>
+</nav>
+<hr />
+@using (Html.BeginForm("UploadImageTest", "ManagePizzaCrustMenu", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    @Html.Partial("~/Views/Shared/_UploadImage.cshtml")
+}
