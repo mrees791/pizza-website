@@ -455,7 +455,6 @@
     <Content Include="Views\ManageOrders\StoreOrder.cshtml" />
     <Content Include="Views\ManagePizzaCrustMenu\ManageImages.cshtml" />
     <Content Include="Views\Shared\_UploadImage.cshtml" />
-    <Content Include="Views\ManagePizzaCrustMenu\UploadMenuIcon.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
