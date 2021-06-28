@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -98,6 +100,44 @@ namespace PizzaWebsite.Controllers.BaseControllers
                 ReturnUrlAction = $"{Url.Action("Index")}?{Request.QueryString}"
             };
             return View("CreateEditConfirmation", confirmationModel);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UploadMenuIconAjax(int id)
+        {
+            Response.StatusCode = (int)HttpStatusCode.OK;
+
+            // todo: Finish
+            // Make sure file exists.
+            // Validate image file dimensions.
+
+            HttpPostedFileBase file = Request.Files[0];
+
+            // Make sure record exists.
+            TRecord record = await PizzaDb.GetAsync<TRecord>(id);
+
+            if (record == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Menu item with ID {id} does not exist.",
+                    MediaTypeNames.Text.Plain);
+            }
+
+            string filePath = Server.MapPath(DirectoryServices.GetMenuImageUrl(id, record.GetMenuCategoryType(), MenuImageType.MenuIcon));
+
+            try
+            {
+                file.SaveAs(filePath);
+            }
+            catch (NotImplementedException e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"NotImplementedException occured for file.",
+                    MediaTypeNames.Text.Plain);
+            }
+
+            string message = "File uploaded successfully.";
+            return Json(message);
         }
 
         protected ActionResult MissingIdErrorMessage()

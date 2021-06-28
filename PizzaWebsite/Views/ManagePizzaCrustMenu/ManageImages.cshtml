@@ -23,6 +23,26 @@
 @* todo: Finish upload and reset buttons for menu icons and pizza builder icons. *@
 <div>
     <img src="@Model.MenuIconUrl" alt="Missing Menu Icon" style="display: block;" />
+    <div id="drop-area">
+        <h3>Drag and Drop Files Here</h3>
+        <input type="file" title="Click to add Files">
+    </div>
     @*
         <a href="@Url.Action("UploadMenuIcon", "ManagePizzaCrustMenu")/@Model.Id?@Request.QueryString">Upload Menu Icon</a>*@
 </div>
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $("#drop-area").dmUploader({
+                url: '@Url.Action("UploadMenuIcon", "ManagePizzaCrustMenu")',
+                //... More settings here...
+
+                onInit: function(){
+                    console.log('Callback: Plugin initialized');
+                }
+
+                // ... More callbacks
+            });
+        });
+    </script>
+}
