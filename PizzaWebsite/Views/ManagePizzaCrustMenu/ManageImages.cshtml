@@ -25,15 +25,4 @@
     <img src="@Model.MenuIconUrl" alt="Missing Menu Icon" style="display: block;" />
     @*
         <a href="@Url.Action("UploadMenuIcon", "ManagePizzaCrustMenu")/@Model.Id?@Request.QueryString">Upload Menu Icon</a>*@
-    <input id="fileupload" type="file" name="files[]">
 </div>
-
-@section Scripts {
-    <script type="text/javascript">
-        $(function () {
-            $('#fileupload').fileupload({
-                url: '@Url.Action("UploadMenuIcon", "ManagePizzaCrustMenu")'
-            });
-        });
-    </script>
-}
