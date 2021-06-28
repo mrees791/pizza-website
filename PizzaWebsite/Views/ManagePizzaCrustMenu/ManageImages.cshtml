@@ -34,11 +34,11 @@
     <script type="text/javascript">
         $(function () {
             $("#drop-area").dmUploader({
-                url: '@Url.Action("UploadMenuIcon", "ManagePizzaCrustMenu")',
+                url: '@Url.Action("UploadMenuIconAjax", "ManagePizzaCrustMenu")/@Model.Id',
                 //... More settings here...
 
                 onInit: function(){
-                    console.log('Callback: Plugin initialized');
+                    //console.log('Callback: Plugin initialized');
                 }
 
                 // ... More callbacks
