@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Controllers.BaseControllers;
+using PizzaWebsite.Models.ManageMenuImages;
 using PizzaWebsite.Models.ManageMenus;
 
 namespace PizzaWebsite.Controllers
@@ -12,6 +13,15 @@ namespace PizzaWebsite.Controllers
         ManagePizzaCrustFlavorMenuController : BaseManageMenuController<MenuPizzaCrustFlavor,
             ManageMenuPizzaCrustFlavorViewModel>
     {
+        public ManagePizzaCrustFlavorMenuController()
+        {
+            PizzaBuilderIconValidation = new MenuImageValidation()
+            {
+                RequiredWidth = 100,
+                RequiredHeight = 50
+            };
+        }
+
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);

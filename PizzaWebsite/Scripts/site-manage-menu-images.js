@@ -4,11 +4,11 @@ const pizzaSiteManageMenuImageNs = {
         var imgSrc = $img.attr('src');
         $img.attr('src', imgSrc + '?dateTime=' + new Date().getTime());
     },
-    initializeManageMenuIconSection: (actionUrl) => {
-        var $menuIconImg = $('#menuIcon');
-        var $menuIconError = $('#menuIconError');
-        var $menuIconDropArea = $('#menuIconDropArea');
-        $menuIconDropArea.dmUploader({
+    initializeManagePizzaBuilderIconSection: (actionUrl) => {
+        pizzaSiteManageMenuImageNs.initializeManageMenuImageSection(actionUrl, $('#pizzaBuilderIcon'), $('#pizzaBuilderIconError'), $('#pizzaBuilderIconDropArea'))
+    },
+    initializeManageMenuImageSection: (actionUrl, $iconImg, $iconErrorMessage, $iconDropArea) => {
+        $iconDropArea.dmUploader({
             url: actionUrl,
             onInit: function () { },
             onNewFile: function (id, file) { },
@@ -16,13 +16,13 @@ const pizzaSiteManageMenuImageNs = {
             onUploadProgress: function (id, percent) { },
             onUploadSuccess: function (id, data) {
                 console.log(data);
-                $menuIconError.hide();
-                pizzaSiteManageMenuImageNs.updateImageElement($menuIconImg);
+                $iconErrorMessage.hide();
+                pizzaSiteManageMenuImageNs.updateImageElement($iconImg);
             },
             onUploadError: function (id, xhr, status, errorThrown) {
                 console.log(xhr);
-                $menuIconError.text(xhr.responseText.replaceAll('"', ''));
-                $menuIconError.show();
+                $iconErrorMessage.text(xhr.responseText.replaceAll('"', ''));
+                $iconErrorMessage.show();
             }
         });
     }

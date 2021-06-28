@@ -15,6 +15,15 @@ namespace PizzaWebsite.Controllers
     [Authorize(Roles = "Admin,Executive")]
     public class ManagePizzaCrustMenuController : BaseManageMenuController<MenuPizzaCrust, ManageMenuPizzaCrustViewModel>
     {
+        public ManagePizzaCrustMenuController()
+        {
+            PizzaBuilderIconValidation = new MenuImageValidation()
+            {
+                RequiredWidth = 150,
+                RequiredHeight = 100
+            };
+        }
+
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
         {
             ValidatePageQuery(ref page, ref rowsPerPage, 10);
@@ -60,34 +69,14 @@ namespace PizzaWebsite.Controllers
             {
                 return InvalidIdErrorMessage(id.Value);
             }
-
-            /*UploadMenuImageViewModel menuIconUploadVm = new UploadMenuImageViewModel()
-            {
-                Id = id.Value
-            };
-            ManageMenuIconViewModel menuIconVm = new ManageMenuIconViewModel()
-            {
-                Description = @"This is the icon that the user will click on when choosing their crust in the pizza builder.
-                                The icon should show the top half of the pizza's crust. The size of the icon should be 100x50 pixels.",
-                ImageUrl = DirectoryServices.GetMenuImageFile(record),
-                
-            };
-            /*ManagePizzaBuilderImageViewModel pizzaBuilderImageVm = new ManagePizzaBuilderImageViewModel()
-            {
-                Description = @"This is the image that will be shown when the user is building their pizza.
-                                It should be an image of only the pizza crust. The size should be 250x250 pixels.",
-                ImageUrl = DirectoryServices.GetPizzaBuilderImageFile(record)
-            };*/
-            /*ManageMenuImagesViewModel model = new ManageMenuImagesViewModel()
-            {
-                ManageMenuIconVm = menuIconVm,
-            };*/
-            ManagePizzaMenuImagesViewModel model = new ManagePizzaMenuImagesViewModel()
+            ManagePizzaMenuIngredientImagesViewModel model = new ManagePizzaMenuIngredientImagesViewModel()
             {
                 Id = id.Value,
-                MenuIconUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.MenuIcon)
+                PizzaBuilderIconUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.PizzaBuilderImage),
+                PizzaBuilderIconDescription = $@"This is the image that will be shown when the user is building their pizza.
+                                                It should be an image of only the pizza crust.
+                                                The size should be {PizzaBuilderIconValidation.RequiredWidth}x{PizzaBuilderIconValidation.RequiredHeight} pixels."
             };
-
             return View(model);
         }
 

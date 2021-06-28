@@ -5,10 +5,10 @@ using System.Web;
 
 namespace PizzaWebsite.Models.ManageMenuImages
 {
-    public class ManagePizzaMenuImagesViewModel
+    public class ManagePizzaMenuIngredientImagesViewModel
     {
         public int Id { get; set; }
-        public string MenuIconUrl { get; set; }
+        public string PizzaBuilderIconDescription { get; set; }
         public string PizzaBuilderIconUrl { get; set; }
     }
 }

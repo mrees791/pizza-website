@@ -18,6 +18,15 @@ namespace PizzaWebsite.Controllers.BaseControllers
         where TRecord : MenuCategoryRecord, new()
         where TViewModel : class, new()
     {
+        protected MenuImageValidation MenuIconValidation;
+        protected MenuImageValidation PizzaBuilderIconValidation;
+
+        protected BaseManageMenuController()
+        {
+            MenuIconValidation = new MenuImageValidation();
+            PizzaBuilderIconValidation = new MenuImageValidation();
+        }
+
         protected async Task<ActionResult> Index(int page, int rowsPerPage, string orderByColumn,
             WhereClauseBase whereClauseBase)
         {
@@ -105,26 +114,61 @@ namespace PizzaWebsite.Controllers.BaseControllers
         [HttpPost]
         public async Task<ActionResult> UploadMenuIconAjax(int id)
         {
+            return await UploadMenuImageAjax(id, MenuIconValidation, MenuImageType.MenuIcon);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UploadPizzaBuilderIconAjax(int id)
+        {
+            return await UploadMenuImageAjax(id, PizzaBuilderIconValidation, MenuImageType.PizzaBuilderImage);
+        }
+
+        // todo: Finish
+        [HttpPost]
+        protected async Task<ActionResult> UploadMenuImageAjax(int id, MenuImageValidation validation, MenuImageType imageType)
+        {
             Response.StatusCode = (int)HttpStatusCode.OK;
-
-            // todo: Finish
-            // Make sure file exists.
-            // Validate image file dimensions.
-
-            HttpPostedFileBase file = Request.Files[0];
-
-            // Make sure record exists.
+            if (Request.Files.Count == 0)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"No files were in the request object.",
+                    MediaTypeNames.Text.Plain);
+            }
             TRecord record = await PizzaDb.GetAsync<TRecord>(id);
-
             if (record == null)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json($"Menu item with ID {id} does not exist.",
                     MediaTypeNames.Text.Plain);
             }
-
-            string filePath = Server.MapPath(DirectoryServices.GetMenuImageUrl(id, record.GetMenuCategoryType(), MenuImageType.MenuIcon));
-
+            HttpPostedFileBase file = Request.Files[0];
+            if (file == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Request file at index 0 is null.",
+                    MediaTypeNames.Text.Plain);
+            }
+            // Validate image file dimensions.
+            bool validImageDimensions = true;
+            string imageDimensionsErrorMessage = string.Empty;
+            System.Drawing.Image image = System.Drawing.Image.FromStream(file.InputStream);
+            if (image.Width != validation.RequiredWidth)
+            {
+                validImageDimensions = false;
+                imageDimensionsErrorMessage += $"Image width must be {validation.RequiredWidth} px. ";
+            }
+            if (image.Height != validation.RequiredHeight)
+            {
+                validImageDimensions = false;
+                imageDimensionsErrorMessage += $"Image height must be {validation.RequiredHeight} px. ";
+            }
+            if (!validImageDimensions)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(imageDimensionsErrorMessage,
+                    MediaTypeNames.Text.Plain);
+            }
+            string filePath = Server.MapPath(DirectoryServices.GetMenuImageUrl(id, record.GetMenuCategoryType(), imageType));
             try
             {
                 file.SaveAs(filePath);
@@ -135,9 +179,7 @@ namespace PizzaWebsite.Controllers.BaseControllers
                 return Json($"NotImplementedException occured for file.",
                     MediaTypeNames.Text.Plain);
             }
-
-            string message = "File uploaded successfully.";
-            return Json(message);
+            return Json("File uploaded successfully.");
         }
 
         protected ActionResult MissingIdErrorMessage()
