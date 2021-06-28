@@ -84,7 +84,8 @@ namespace PizzaWebsite.Controllers
             };*/
             ManagePizzaMenuImagesViewModel model = new ManagePizzaMenuImagesViewModel()
             {
-                Id = id.Value
+                Id = id.Value,
+                MenuIconUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.MenuIcon)
             };
 
             return View(model);

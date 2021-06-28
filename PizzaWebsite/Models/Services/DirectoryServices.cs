@@ -11,11 +11,11 @@ namespace PizzaWebsite.Models.Services
 {
     public class DirectoryServices
     {
-        public readonly string PizzaSauceMenuImageDir = "~/Images/Menu/PizzaSauce/";
-        public readonly string PizzaCheeseMenuImageDir = "~/Images/Menu/PizzaCheese/";
-        public readonly string PizzaCrustMenuImageDir = "~/Images/Menu/PizzaCrust/";
-        public readonly string PizzaCrustFlavorMenuImageDir = "~/Images/Menu/PizzaCrustFlavor/";
-        public readonly string PizzaToppingMenuImageDir = "~/Images/Menu/PizzaTopping/";
+        public readonly string PizzaSauceMenuImageDir = "/Content/Images/Menu/PizzaSauce/";
+        public readonly string PizzaCheeseMenuImageDir = "/Content/Images/Menu/PizzaCheese/";
+        public readonly string PizzaCrustMenuImageDir = "/Content/Images/Menu/PizzaCrust/";
+        public readonly string PizzaCrustFlavorMenuImageDir = "/Content/Images/Menu/PizzaCrustFlavor/";
+        public readonly string PizzaToppingMenuImageDir = "/Content/Images/Menu/PizzaTopping/";
 
         public string GetMenuImageUrl(int id, MenuCategory menuCategory, MenuImageType imageType)
         {
