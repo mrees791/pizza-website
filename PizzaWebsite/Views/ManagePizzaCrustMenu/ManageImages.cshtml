@@ -20,32 +20,11 @@
     </ol>
 </nav>
 <hr />
-@* todo: Finish upload and reset buttons for menu icons and pizza builder icons. *@
-<div>
-    <img id="menuIcon" src="@Model.MenuIconUrl" alt="Missing Menu Icon" style="display: block;" />
-    <div id="drop-area">
-        <h3>Drag and Drop Files Here</h3>
-        <input type="file" title="Click to add Files">
-    </div>
-</div>
+@Html.Partial("~/Views/Shared/ManageMenuImages/_MenuIconForm.cshtml")
 @section Scripts {
     <script type="text/javascript">
-        $(function() {
-            var $menuIconImg = $('#menuIcon');
-            $("#drop-area").dmUploader({
-                url: '@Url.Action("UploadMenuIconAjax", "ManagePizzaCrustMenu")/@Model.Id',
-                onInit: function() {},
-                onNewFile: function (id, file) { },
-                onBeforeUpload: function (id) { },
-                onUploadProgress: function(id, percent) {},
-                onUploadSuccess: function (id, data) {
-                    console.log(data);
-                    pizzaSiteManageMenuImageNs.updateImageElement($menuIconImg);
-                },
-                onUploadError: function(id, xhr, status, errorThrown) {
-                    console.log(errorThrown);
-                }
-            });
+        $(function () {
+            pizzaSiteManageMenuImageNs.initializeManageMenuIconSection('@Url.Action("UploadMenuIconAjax", "ManagePizzaCrustMenu")/@Model.Id');
         });
     </script>
 }
