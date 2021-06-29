@@ -149,7 +149,18 @@ namespace PizzaWebsite.Controllers.BaseControllers
                     MediaTypeNames.Text.Plain);
             }
             // Validate image file.
-
+            if (file.ContentLength > 1000000)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"File size cannot exceed 1 megabyte.",
+                    MediaTypeNames.Text.Plain);
+            }
+            if (file.ContentType != "image/jpeg")
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Mime type must be image/jpeg.",
+                    MediaTypeNames.Text.Plain);
+            }
             // Validate image file dimensions.
             bool validImageDimensions = true;
             string imageDimensionsErrorMessage = string.Empty;
