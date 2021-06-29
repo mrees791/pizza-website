@@ -148,6 +148,8 @@ namespace PizzaWebsite.Controllers.BaseControllers
                 return Json($"Request file at index 0 is null.",
                     MediaTypeNames.Text.Plain);
             }
+            // Validate image file.
+
             // Validate image file dimensions.
             bool validImageDimensions = true;
             string imageDimensionsErrorMessage = string.Empty;

@@ -11,7 +11,7 @@ const pizzaSiteManageMenuImageNs = {
         $iconDropArea.dmUploader({
             url: actionUrl,
             maxFileSize: 1000000,
-            extFilter: ['jpg'],
+            extFilter: ['jpg', 'jpeg'],
             allowedTypes: 'image/jpeg',
             onInit: function () { },
             onNewFile: function (id, file) { },
@@ -40,7 +40,7 @@ const pizzaSiteManageMenuImageNs = {
                 $iconErrorMessage.show();
             },
             onFileExtError: function (file) {
-                var errorMessage = 'File extension must be jpg.';
+                var errorMessage = 'File extension must be jpg or jpeg.';
                 console.log(errorMessage);
                 $iconErrorMessage.text(errorMessage);
                 $iconErrorMessage.show();
