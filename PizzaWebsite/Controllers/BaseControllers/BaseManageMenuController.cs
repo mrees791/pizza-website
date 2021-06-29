@@ -118,7 +118,7 @@ namespace PizzaWebsite.Controllers.BaseControllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> UploadPizzaBuilderIconAjax(int id)
+        public async Task<ActionResult> UploadPizzaBuilderImageAjax(int id)
         {
             return await UploadMenuImageAjax(id, PizzaBuilderIconValidation, MenuImageType.PizzaBuilderImage);
         }

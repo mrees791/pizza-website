@@ -1,0 +1,20 @@
+﻿@* Functionality requires a JavaScript call to pizzaSiteManageMenuImageNs.initializeManagePizzaBuilderImageSection *@
+@using PizzaWebsite.Models.ManageMenuImages
+@model ManagePizzaMenuIngredientImagesViewModel
+<div>
+    <h3>Pizza Builder Image</h3>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+                <img id="pizzaBuilderImage" src="@Model.PizzaBuilderImageUrl" alt="Missing Pizza Builder Image" />
+            </div>
+            <div class="col-sm-2">
+                <p>@Model.PizzaBuilderImageDescription</p>
+            </div>
+        </div>
+    </div>
+    <div id="pizzaBuilderImageDropArea">
+        <input type="file" title="Upload File...">
+        <p id="pizzaBuilderImageError" class="text-danger" style="display: none;"></p>
+    </div>
+</div>

@@ -1,5 +1,4 @@
-﻿@using System.Collections.Specialized
-@using PizzaWebsite.Models.ManageMenuImages
+﻿@using PizzaWebsite.Models.ManageMenuImages
 @model ManagePizzaMenuIngredientImagesViewModel
 @{
     ViewBag.Title = "Manage Images";
@@ -20,11 +19,13 @@
     </ol>
 </nav>
 <hr />
-@Html.Partial("~/Views/Shared/ManageMenuImages/_PizzaBuilderIconForm.cshtml", Model)
+@Html.Partial("~/Views/Shared/ManageMenuImages/_MenuIconForm.cshtml", Model)
+@*@Html.Partial("~/Views/Shared/ManageMenuImages/_PizzaBuilderImageForm.cshtml", Model)*@
 @section Scripts {
     <script type="text/javascript">
         $(function () {
-            pizzaSiteManageMenuImageNs.initializeManagePizzaBuilderIconSection('@Url.Action("UploadPizzaBuilderIconAjax", "ManagePizzaCrustMenu")/@Model.Id');
+            pizzaSiteManageMenuImageNs.initializeManageMenuIconSection('@Url.Action("UploadMenuIconAjax", "ManagePizzaCrustMenu")/@Model.Id');
+            @*pizzaSiteManageMenuImageNs.initializeManagePizzaBuilderImageSection('@Url.Action("UploadPizzaBuilderImageAjax", "ManagePizzaCrustMenu")/@Model.Id');*@
         });
     </script>
 }

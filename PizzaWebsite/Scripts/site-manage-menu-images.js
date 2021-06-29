@@ -4,8 +4,11 @@ const pizzaSiteManageMenuImageNs = {
         var imgSrc = $img.attr('src');
         $img.attr('src', imgSrc + '?dateTime=' + new Date().getTime());
     },
-    initializeManagePizzaBuilderIconSection: (actionUrl) => {
-        pizzaSiteManageMenuImageNs.initializeManageMenuImageSection(actionUrl, $('#pizzaBuilderIcon'), $('#pizzaBuilderIconError'), $('#pizzaBuilderIconDropArea'))
+    initializeManageMenuIconSection: (actionUrl) => {
+        pizzaSiteManageMenuImageNs.initializeManageMenuImageSection(actionUrl, $('#menuIcon'), $('#menuIconError'), $('#menuIconDropArea'))
+    },
+    initializeManagePizzaBuilderImageSection: (actionUrl) => {
+        pizzaSiteManageMenuImageNs.initializeManageMenuImageSection(actionUrl, $('#pizzaBuilderImage'), $('#pizzaBuilderImageError'), $('#pizzaBuilderImageDropArea'))
     },
     initializeManageMenuImageSection: (actionUrl, $iconImg, $iconErrorMessage, $iconDropArea) => {
         $iconDropArea.dmUploader({

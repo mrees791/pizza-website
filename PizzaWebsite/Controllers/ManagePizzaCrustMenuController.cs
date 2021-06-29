@@ -17,11 +17,10 @@ namespace PizzaWebsite.Controllers
     {
         public ManagePizzaCrustMenuController()
         {
-            PizzaBuilderIconValidation = new MenuImageValidation()
-            {
-                RequiredWidth = 150,
-                RequiredHeight = 100
-            };
+            MenuIconValidation.RequiredWidth = 100;
+            MenuIconValidation.RequiredHeight = 100;
+            PizzaBuilderIconValidation.RequiredWidth = 100;
+            PizzaBuilderIconValidation.RequiredHeight = 100;
         }
 
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
@@ -69,13 +68,16 @@ namespace PizzaWebsite.Controllers
             {
                 return InvalidIdErrorMessage(id.Value);
             }
+            // todo: Finish
             ManagePizzaMenuIngredientImagesViewModel model = new ManagePizzaMenuIngredientImagesViewModel()
             {
                 Id = id.Value,
-                PizzaBuilderIconUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.PizzaBuilderImage),
-                PizzaBuilderIconDescription = $@"This is the image that will be shown when the user is building their pizza.
+                MenuIconUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.MenuIcon),
+                MenuIconDescription = "(Menu icon description)"
+                /*PizzaBuilderImageUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.PizzaBuilderImage),
+                PizzaBuilderImageDescription = $@"This is the image that will be shown when the user is building their pizza.
                                                 It should be an image of only the pizza crust.
-                                                The size should be {PizzaBuilderIconValidation.RequiredWidth}x{PizzaBuilderIconValidation.RequiredHeight} pixels."
+                                                The size should be {PizzaBuilderIconValidation.RequiredWidth}x{PizzaBuilderIconValidation.RequiredHeight} pixels."*/
             };
             return View(model);
         }
