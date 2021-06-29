@@ -25,6 +25,7 @@ _UpgradeReport_Files/
 bin/
 obj/
 TestResults/
+PizzaWebsite/Content/Images
 ###################
 # Web publish log #
 ###################
