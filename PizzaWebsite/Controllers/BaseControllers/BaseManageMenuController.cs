@@ -181,9 +181,9 @@ namespace PizzaWebsite.Controllers.BaseControllers
                 return Json(imageDimensionsErrorMessage,
                     MediaTypeNames.Text.Plain);
             }
-            string filePath = Server.MapPath(DirectoryServices.GetMenuImageUrl(id, record.GetMenuCategoryType(), imageType));
             try
             {
+                string filePath = Server.MapPath(DirectoryServices.GetMenuImageUrl(id, record.GetMenuCategoryType(), imageType));
                 file.SaveAs(filePath);
             }
             catch (NotImplementedException e)
