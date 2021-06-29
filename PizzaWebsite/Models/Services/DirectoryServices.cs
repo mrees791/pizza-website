@@ -50,9 +50,9 @@ namespace PizzaWebsite.Models.Services
             switch (imageType)
             {
                 case MenuImageType.MenuIcon:
-                    return $"{id}-mi.jpg";
+                    return $"{id}-mi.webp";
                 case MenuImageType.PizzaBuilderImage:
-                    return $"{id}-pb.jpg";
+                    return $"{id}-pb.webp";
             }
             throw new Exception($"Unable to create menu image file name for {id}. Image type: {imageType.ToString()}");
         }

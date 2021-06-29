@@ -14,8 +14,8 @@ const pizzaSiteManageMenuImageNs = {
         $iconDropArea.dmUploader({
             url: actionUrl,
             maxFileSize: 1000000,
-            extFilter: ['jpg', 'jpeg'],
-            allowedTypes: 'image/jpeg',
+            extFilter: ['webp'],
+            allowedTypes: 'image/webp',
             onInit: function () { },
             onNewFile: function (id, file) { },
             onBeforeUpload: function (id) { },
@@ -31,7 +31,7 @@ const pizzaSiteManageMenuImageNs = {
                 $iconErrorMessage.show();
             },
             onFileTypeError: function (file) {
-                var errorMessage = 'Mime type must be image/jpeg.';
+                var errorMessage = 'Mime type must be image/webp.';
                 console.log(errorMessage);
                 $iconErrorMessage.text(errorMessage);
                 $iconErrorMessage.show();
@@ -43,7 +43,7 @@ const pizzaSiteManageMenuImageNs = {
                 $iconErrorMessage.show();
             },
             onFileExtError: function (file) {
-                var errorMessage = 'File extension must be jpg or jpeg.';
+                var errorMessage = 'File extension must be webp.';
                 console.log(errorMessage);
                 $iconErrorMessage.text(errorMessage);
                 $iconErrorMessage.show();

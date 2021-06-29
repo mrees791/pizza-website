@@ -149,22 +149,34 @@ namespace PizzaWebsite.Controllers.BaseControllers
                     MediaTypeNames.Text.Plain);
             }
             // Validate image file.
+            // todo: Implement validation for webp.
             if (file.ContentLength > 1000000)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json($"File size cannot exceed 1 megabyte.",
                     MediaTypeNames.Text.Plain);
             }
-            if (file.ContentType != "image/jpeg")
+            if (file.ContentType != "image/webp")
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json($"Mime type must be image/jpeg.",
+                return Json($"Mime type must be image/webp.",
                     MediaTypeNames.Text.Plain);
             }
             // Validate image file dimensions.
             bool validImageDimensions = true;
             string imageDimensionsErrorMessage = string.Empty;
-            System.Drawing.Image image = System.Drawing.Image.FromStream(file.InputStream);
+            System.Drawing.Image image = null;
+            try
+            {
+                image = System.Drawing.Image.FromStream(file.InputStream);
+            }
+            catch (ArgumentException e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Argument exception occured when trying to read the file input stream.",
+                    MediaTypeNames.Text.Plain);
+            }
+            
             if (image.Width != validation.RequiredWidth)
             {
                 validImageDimensions = false;
