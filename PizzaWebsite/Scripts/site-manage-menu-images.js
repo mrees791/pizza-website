@@ -10,6 +10,9 @@ const pizzaSiteManageMenuImageNs = {
     initializeManageMenuImageSection: (actionUrl, $iconImg, $iconErrorMessage, $iconDropArea) => {
         $iconDropArea.dmUploader({
             url: actionUrl,
+            maxFileSize: 1000000,
+            extFilter: ['jpg'],
+            allowedTypes: 'image/jpeg',
             onInit: function () { },
             onNewFile: function (id, file) { },
             onBeforeUpload: function (id) { },
@@ -22,6 +25,24 @@ const pizzaSiteManageMenuImageNs = {
             onUploadError: function (id, xhr, status, errorThrown) {
                 console.log(xhr);
                 $iconErrorMessage.text(xhr.responseText.replaceAll('"', ''));
+                $iconErrorMessage.show();
+            },
+            onFileTypeError: function (file) {
+                var errorMessage = 'Mime type must be image/jpeg.';
+                console.log(errorMessage);
+                $iconErrorMessage.text(errorMessage);
+                $iconErrorMessage.show();
+            },
+            onFileSizeError: function (file) {
+                var errorMessage = 'File size cannot exceed 1 megabyte.';
+                console.log(errorMessage);
+                $iconErrorMessage.text(errorMessage);
+                $iconErrorMessage.show();
+            },
+            onFileExtError: function (file) {
+                var errorMessage = 'File extension must be jpg.';
+                console.log(errorMessage);
+                $iconErrorMessage.text(errorMessage);
                 $iconErrorMessage.show();
             }
         });
