@@ -39,7 +39,8 @@ namespace PizzaWebsite
                 "~/Scripts/site-checkout.js",
                 "~/Scripts/site-manage-addresses.js",
                 "~/Scripts/site-order-status.js",
-                "~/Scripts/site-manage-menu-images.js"));
+                "~/Scripts/site-manage-menu-images.js",
+                "~/Scripts/site-pizza-builder.js"));
 
             // Site CSS
             bundles.Add(new StyleBundle("~/Content/css").Include(

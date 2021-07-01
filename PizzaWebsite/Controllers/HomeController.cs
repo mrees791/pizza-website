@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 
 namespace PizzaWebsite.Controllers
 {
@@ -20,6 +21,12 @@ namespace PizzaWebsite.Controllers
         {
             ViewBag.Message = "Your contact page.";
 
+            return View();
+        }
+
+        // todo: Remove after pizza builder is complete.
+        public ActionResult PizzaBuilderTest()
+        {
             return View();
         }
     }

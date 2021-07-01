@@ -361,6 +361,7 @@
     <Content Include="Scripts\site-manage-menu-images.js" />
     <Content Include="Scripts\site-order-status.js" />
     <Content Include="Scripts\site-manage-addresses.js" />
+    <Content Include="Scripts\site-pizza-builder.js" />
     <Content Include="Scripts\site.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -452,10 +453,12 @@
     <Content Include="Views\Shared\_UploadImage.cshtml" />
     <Content Include="Views\Shared\ManageMenuImages\_PizzaBuilderImageForm.cshtml" />
     <Content Include="Views\Shared\ManageMenuImages\_MenuIconForm.cshtml" />
+    <Content Include="Views\Home\PizzaBuilderTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Images\Menu\PizzaCrust\" />
+    <Folder Include="Content\Images\PizzaBuilderTest\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
