@@ -3,10 +3,27 @@
     ViewBag.Title = "Pizza Builder Test";
 }
 <h2>Pizza Builder Test</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <div id="pizza-builder-image-section">
+                <img src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp"/>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div id="pizza-builder-menu-section">
+                @for (int i = 0; i < 50; i++)
+                {
+                    <p>Example text</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts {
     <script type="text/javascript">
         $(function () {
-            pizzaSitePizzaBuilderNs.testAlert();
+            //pizzaSitePizzaBuilderNs.testAlert();
         });
     </script>
 }
