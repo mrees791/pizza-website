@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Net;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
 using DataLibrary.Models;
 using DataLibrary.Models.Sql;
 using PizzaWebsite.Models;
@@ -165,24 +166,29 @@ namespace PizzaWebsite.Controllers.BaseControllers
             // Validate image file dimensions.
             bool validImageDimensions = true;
             string imageDimensionsErrorMessage = string.Empty;
-            System.Drawing.Image image = null;
+            /*Bitmap bmp = null;
             try
             {
-                image = System.Drawing.Image.FromStream(file.InputStream);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    await file.InputStream.CopyToAsync(ms);
+                    var data = ms.ToArray();
+                    bmp = decoder.DecodeFromBytes(data, data.Length);
+                }
             }
-            catch (ArgumentException e)
+            catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json($"Argument exception occured when trying to read the file input stream.",
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return Json($"Exception occured when trying to read the file input stream.",
                     MediaTypeNames.Text.Plain);
-            }
-            
-            if (image.Width != validation.RequiredWidth)
+            }*/
+            // todo: Validate webp file dimensions.
+            /*if (bmp.Width != validation.RequiredWidth)
             {
                 validImageDimensions = false;
                 imageDimensionsErrorMessage += $"Image width must be {validation.RequiredWidth} px. ";
             }
-            if (image.Height != validation.RequiredHeight)
+            if (bmp.Height != validation.RequiredHeight)
             {
                 validImageDimensions = false;
                 imageDimensionsErrorMessage += $"Image height must be {validation.RequiredHeight} px. ";
@@ -192,7 +198,7 @@ namespace PizzaWebsite.Controllers.BaseControllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json(imageDimensionsErrorMessage,
                     MediaTypeNames.Text.Plain);
-            }
+            }*/
             try
             {
                 string filePath = Server.MapPath(DirectoryServices.GetMenuImageUrl(id, record.GetMenuCategoryType(), imageType));

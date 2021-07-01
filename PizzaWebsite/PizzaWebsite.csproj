@@ -45,9 +45,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Imazen.WebP, Version=10.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Imazen.WebP.10.0.1\lib\net45\Imazen.WebP.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Configuration.ConfigurationBuilders.Base, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Configuration.ConfigurationBuilders.Base.2.0.0\lib\Net471\Microsoft.Configuration.ConfigurationBuilders.Base.dll</HintPath>
     </Reference>
@@ -55,6 +52,11 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Security.Permissions, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Permissions.4.6.0\lib\net461\System.Security.Permissions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -203,7 +205,7 @@
     <Compile Include="Models\ManageOrders\StoreViewModel.cs" />
     <Compile Include="Models\MenuImageType.cs" />
     <Compile Include="Models\Services\DirectoryServices.cs" />
-    <Compile Include="Models\Services\ImageServices.cs" />
+    <Compile Include="Models\Services\MediaServices.cs" />
     <Compile Include="Models\Services\StoreServices.cs" />
     <Compile Include="Models\Shop\CheckoutAttributes\PhoneNumberRequiredIfDeliveryAttribute.cs" />
     <Compile Include="Models\Shop\CheckoutAttributes\RequiredIfDeliveryAttribute.cs" />
