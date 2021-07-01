@@ -43,3 +43,6 @@ img.manage-menu-image {
 #pizza-builder-menu-section {
     background-color: lightsteelblue;
 }
+.pizza-builder-fixed-image-section {
+    position: fixed;
+}
