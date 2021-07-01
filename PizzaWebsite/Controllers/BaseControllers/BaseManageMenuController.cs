@@ -150,7 +150,6 @@ namespace PizzaWebsite.Controllers.BaseControllers
                     MediaTypeNames.Text.Plain);
             }
             // Validate image file.
-            // todo: Implement validation for webp.
             if (file.ContentLength > 1000000)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -163,42 +162,37 @@ namespace PizzaWebsite.Controllers.BaseControllers
                 return Json($"Mime type must be image/webp.",
                     MediaTypeNames.Text.Plain);
             }
-            // Validate image file dimensions.
-            bool validImageDimensions = true;
-            string imageDimensionsErrorMessage = string.Empty;
-            /*Bitmap bmp = null;
             try
             {
-                using (MemoryStream ms = new MemoryStream())
+                // Validate image file dimensions.
+                using (Bitmap bmp = MediaServices.DecodeWebp(file.InputStream))
                 {
-                    await file.InputStream.CopyToAsync(ms);
-                    var data = ms.ToArray();
-                    bmp = decoder.DecodeFromBytes(data, data.Length);
+                    bool validImageDimensions = true;
+                    string imageDimensionsErrorMessage = string.Empty;
+                    if (bmp.Width != validation.RequiredWidth)
+                    {
+                        validImageDimensions = false;
+                        imageDimensionsErrorMessage += $"Image width must be {validation.RequiredWidth} px. ";
+                    }
+                    if (bmp.Height != validation.RequiredHeight)
+                    {
+                        validImageDimensions = false;
+                        imageDimensionsErrorMessage += $"Image height must be {validation.RequiredHeight} px. ";
+                    }
+                    if (!validImageDimensions)
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        return Json(imageDimensionsErrorMessage,
+                            MediaTypeNames.Text.Plain);
+                    }
                 }
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return Json($"Exception occured when trying to read the file input stream.",
-                    MediaTypeNames.Text.Plain);
-            }*/
-            // todo: Validate webp file dimensions.
-            /*if (bmp.Width != validation.RequiredWidth)
-            {
-                validImageDimensions = false;
-                imageDimensionsErrorMessage += $"Image width must be {validation.RequiredWidth} px. ";
-            }
-            if (bmp.Height != validation.RequiredHeight)
-            {
-                validImageDimensions = false;
-                imageDimensionsErrorMessage += $"Image height must be {validation.RequiredHeight} px. ";
-            }
-            if (!validImageDimensions)
-            {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json(imageDimensionsErrorMessage,
+                return Json($"An error occured while attempting to decode the webp file.",
                     MediaTypeNames.Text.Plain);
-            }*/
+            }
             try
             {
                 string filePath = Server.MapPath(DirectoryServices.GetMenuImageUrl(id, record.GetMenuCategoryType(), imageType));
@@ -207,7 +201,7 @@ namespace PizzaWebsite.Controllers.BaseControllers
             catch (NotImplementedException e)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json($"NotImplementedException occured for file.",
+                return Json($"NotImplementedException occured for webp file. Could not save file.",
                     MediaTypeNames.Text.Plain);
             }
             return Json("File uploaded successfully.");

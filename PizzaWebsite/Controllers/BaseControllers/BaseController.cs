@@ -15,6 +15,7 @@ namespace PizzaWebsite.Controllers.BaseControllers
 {
     public abstract class BaseController : Controller
     {
+        private MediaServices _mediaServices;
         private GeographyServices _geographyServices;
         private ListServices _listServices;
         private DirectoryServices _directoryServices;
@@ -56,6 +57,12 @@ namespace PizzaWebsite.Controllers.BaseControllers
         {
             get => _geographyServices ?? new GeographyServices();
             private set => _geographyServices = value;
+        }
+
+        protected MediaServices MediaServices
+        {
+            get => _mediaServices ?? new MediaServices();
+            private set => _mediaServices = value;
         }
 
         protected async Task<SiteUser> GetCurrentUserAsync()

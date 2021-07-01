@@ -17,7 +17,7 @@ namespace PizzaWebsite.Controllers
     {
         public ManagePizzaCrustMenuController()
         {
-            MenuIconValidation.RequiredWidth = 100;
+            MenuIconValidation.RequiredWidth = 150;
             MenuIconValidation.RequiredHeight = 100;
             PizzaBuilderIconValidation.RequiredWidth = 100;
             PizzaBuilderIconValidation.RequiredHeight = 100;

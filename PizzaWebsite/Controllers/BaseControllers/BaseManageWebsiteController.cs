@@ -11,8 +11,6 @@ namespace PizzaWebsite.Controllers.BaseControllers
     public abstract class BaseManageWebsiteController<TRecord> : BaseController
         where TRecord : Record
     {
-        private MediaServices _mediaServices;
-
         protected async Task<IEnumerable<TRecord>> LoadPagedRecordsAsync(int page, int rowsPerPage,
             string orderByColumn, SortOrder sortOrder,
             WhereClauseBase whereClauseBase, PizzaDatabase pizzaDb, PaginationViewModel paginationVm)
@@ -35,12 +33,6 @@ namespace PizzaWebsite.Controllers.BaseControllers
         protected async Task<Employee> GetCurrentEmployeeAsync()
         {
             return await PizzaDb.GetEmployeeAsync(await GetCurrentUserAsync());
-        }
-
-        protected MediaServices ImageServices
-        {
-            get => _mediaServices ?? new MediaServices();
-            private set => _mediaServices = value;
         }
     }
 }
