@@ -17,10 +17,10 @@ namespace PizzaWebsite.Controllers
     {
         public ManagePizzaCrustMenuController()
         {
-            MenuIconValidation.RequiredWidth = 150;
+            MenuIconValidation.RequiredWidth = 100;
             MenuIconValidation.RequiredHeight = 100;
-            PizzaBuilderIconValidation.RequiredWidth = 100;
-            PizzaBuilderIconValidation.RequiredHeight = 100;
+            PizzaBuilderImageValidation.RequiredWidth = 525;
+            PizzaBuilderImageValidation.RequiredHeight = 525;
         }
 
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
@@ -68,16 +68,14 @@ namespace PizzaWebsite.Controllers
             {
                 return InvalidIdErrorMessage(id.Value);
             }
-            // todo: Finish
+            // todo: Finish menu icon and pizza builder image descriptions for this model.
             ManagePizzaMenuIngredientImagesViewModel model = new ManagePizzaMenuIngredientImagesViewModel()
             {
                 Id = id.Value,
                 MenuIconUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.MenuIcon),
-                MenuIconDescription = "(Menu icon description)"
-                /*PizzaBuilderImageUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.PizzaBuilderImage),
-                PizzaBuilderImageDescription = $@"This is the image that will be shown when the user is building their pizza.
-                                                It should be an image of only the pizza crust.
-                                                The size should be {PizzaBuilderIconValidation.RequiredWidth}x{PizzaBuilderIconValidation.RequiredHeight} pixels."*/
+                MenuIconDescription = "(Menu icon description)",
+                PizzaBuilderImageUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.PizzaBuilderImage),
+                PizzaBuilderImageDescription = "(Pizza builder image description)"
             };
             return View(model);
         }

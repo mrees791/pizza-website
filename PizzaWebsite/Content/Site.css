@@ -25,3 +25,9 @@ textarea { max-width: 280px; }
 /* Pizza builder topping */
 
 .pb-topping { }
+
+/* Manage menu images */
+img.manage-menu-image {
+    padding: 5px;
+    display: block;
+}

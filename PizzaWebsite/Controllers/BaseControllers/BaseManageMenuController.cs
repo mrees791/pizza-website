@@ -20,12 +20,12 @@ namespace PizzaWebsite.Controllers.BaseControllers
         where TViewModel : class, new()
     {
         protected MenuImageValidation MenuIconValidation;
-        protected MenuImageValidation PizzaBuilderIconValidation;
+        protected MenuImageValidation PizzaBuilderImageValidation;
 
         protected BaseManageMenuController()
         {
             MenuIconValidation = new MenuImageValidation();
-            PizzaBuilderIconValidation = new MenuImageValidation();
+            PizzaBuilderImageValidation = new MenuImageValidation();
         }
 
         protected async Task<ActionResult> Index(int page, int rowsPerPage, string orderByColumn,
@@ -121,7 +121,7 @@ namespace PizzaWebsite.Controllers.BaseControllers
         [HttpPost]
         public async Task<ActionResult> UploadPizzaBuilderImageAjax(int id)
         {
-            return await UploadMenuImageAjax(id, PizzaBuilderIconValidation, MenuImageType.PizzaBuilderImage);
+            return await UploadMenuImageAjax(id, PizzaBuilderImageValidation, MenuImageType.PizzaBuilderImage);
         }
 
         // todo: Finish

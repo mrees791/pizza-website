@@ -13,7 +13,7 @@ namespace PizzaWebsite.Controllers
     {
         public ManagePizzaCheeseMenuController()
         {
-            PizzaBuilderIconValidation = new MenuImageValidation()
+            PizzaBuilderImageValidation = new MenuImageValidation()
             {
                 RequiredWidth = 100,
                 RequiredHeight = 50
