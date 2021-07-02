@@ -10,7 +10,8 @@
         <div class="row">
             <div class="col-sm-3 hidden-xs">
                 <div id="pizza-builder-image-section">
-                    <div id="crust-layer">
+                    @* We should not load all images at once. *@
+                    @*<div id="crust-layer">
                         <img src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp" menu-id="1" />
                         <img src="~/Content/Images/PizzaBuilderTest/Crust/pan-pb.webp" menu-id="2" />
                         <img src="~/Content/Images/PizzaBuilderTest/Crust/stuffed-pb.webp" menu-id="3" />
@@ -26,11 +27,29 @@
                         <div menu-id="1">
                             <img src="~/Content/Images/PizzaBuilderTest/Topping/pepperoni-pb.webp"/>
                         </div>
+                    </div>*@
+                    <div id="crust-layer">
+                        <img id="crust-layer-img" src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp" />
+                    </div>
+                    <div id="sauce-layer">
+                        <img src="~/Content/Images/PizzaBuilderTest/Sauce/marinara-pb.webp" />
+                    </div>
+                    <div id="topping-layer">
+                        <div menu-id="1">
+                            <img src="~/Content/Images/PizzaBuilderTest/Topping/pepperoni-pb.webp"/>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-sm-9 col-xs-12">
                 <div id="pizza-builder-menu-section">
+                    <fieldset id="crust-fieldset">
+                        <legend>Crust</legend>
+                        <input type="radio" id="crust-1" name="crustGroup" value="1" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp" checked />
+                        <label for="crust-1">Hand Tossed</label>
+                        <input type="radio" id="crust-2" name="crustGroup" value="2" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/thin-pb.webp" />
+                        <label for="crust-2">Thin</label>
+                    </fieldset>
                     <div id="test-div-length">
                         @for (int i = 1; i <= 50; i++)
                         {
