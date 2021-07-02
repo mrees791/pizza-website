@@ -1,4 +1,6 @@
 ﻿@* todo: Remove test view, test action, and test images after implementation is finished. *@
+@using PizzaWebsite.Models
+@model PizzaBuilderTestViewModel
 @{
     ViewBag.Title = "Pizza Builder Test";
 }
@@ -32,11 +34,9 @@
             </div>
             <div class="col-sm-9 col-xs-12">
                 <div id="pizza-builder-menu-section">
-                    @* Testing tall div elements *@
-                    @for (int i = 1; i <= 50; i++)
-                    {
-                        <p>@i</p>
-                    }
+                    <select id="crust-select">
+                        <option menu-id="1" pb-img-src="@Model.HandTossedPizzaBuilderImgSrc" selected>Hand Tossed</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -46,6 +46,7 @@
     <script type="text/javascript">
         $(function () {
             pizzaSitePizzaBuilderNs.initializePizzaBuilder();
+            pizzaSitePizzaBuilderNs.updatePizzaBuilderCanvas();
         });
     </script>
 }

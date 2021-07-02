@@ -207,6 +207,7 @@
     <Compile Include="Models\ManageOrders\StoreOrderCartViewModel.cs" />
     <Compile Include="Models\ManageOrders\StoreViewModel.cs" />
     <Compile Include="Models\MenuImageType.cs" />
+    <Compile Include="Models\PizzaBuilderTestViewModel.cs" />
     <Compile Include="Models\Services\DirectoryServices.cs" />
     <Compile Include="Models\Services\MediaServices.cs" />
     <Compile Include="Models\Services\StoreServices.cs" />

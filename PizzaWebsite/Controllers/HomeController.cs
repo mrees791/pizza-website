@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using PizzaWebsite.Models;
 
 namespace PizzaWebsite.Controllers
 {
@@ -27,7 +28,11 @@ namespace PizzaWebsite.Controllers
         // todo: Remove after pizza builder is complete.
         public ActionResult PizzaBuilderTest()
         {
-            return View();
+            PizzaBuilderTestViewModel model = new PizzaBuilderTestViewModel()
+            {
+                HandTossedPizzaBuilderImgSrc = Server.MapPath("~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp")
+            };
+            return View(model);
         }
     }
 }
