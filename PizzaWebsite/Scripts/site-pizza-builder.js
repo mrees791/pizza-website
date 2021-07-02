@@ -1,5 +1,15 @@
 ﻿// Namespace for pizza builder view scripts
 const pizzaSitePizzaBuilderNs = {
+    updateCrustLayer: () => {
+        var $crustFieldset = $('#crust-fieldset');
+        var $crustImg = $('#crust-layer-img');
+        var $selectedInput = $crustFieldset.find(':checked');
+        var selectedCrustImgSrc = $selectedInput.attr('pb-img-src');
+        $crustImg.attr('src', selectedCrustImgSrc);
+    },
+    updateAllLayers: () => {
+        pizzaSitePizzaBuilderNs.updateCrustLayer();
+    },
     initializePizzaBuilder: () => {
         var $mainNavbar = $('#main-navbar');
         var $pizzaBuilder = $('#pizza-builder');
@@ -19,11 +29,10 @@ const pizzaSitePizzaBuilderNs = {
 
         // test crust fieldset
         var $crustFieldset = $('#crust-fieldset');
-        var $crustImg = $('#crust-layer-img');
         $crustFieldset.change(function () {
-            var $selectedInput = $crustFieldset.find(':checked');
-            var selectedCrustImgSrc = $selectedInput.attr('pb-img-src');
-            $crustImg.attr('src', selectedCrustImgSrc);
+            pizzaSitePizzaBuilderNs.updateCrustLayer();
         });
+
+        pizzaSitePizzaBuilderNs.updateAllLayers();
     }
 };
