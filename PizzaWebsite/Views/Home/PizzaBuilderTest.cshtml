@@ -24,17 +24,19 @@
                     </div>
                     <div id="topping-layer">
                         <div menu-id="1">
-                            <img src="~/Content/Images/PizzaBuilderTest/Topping/pepperoni-pb.webp" class="regular-topping"/>
+                            <img src="~/Content/Images/PizzaBuilderTest/Topping/pepperoni-pb.webp"/>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-sm-9 col-xs-12">
                 <div id="pizza-builder-menu-section">
-                    @for (int i = 1; i <= 50; i++)
-                    {
-                        <p>@i</p>
-                    }
+                    <div id="test-div-length">
+                        @for (int i = 1; i <= 50; i++)
+                        {
+                            <p>@i</p>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
@@ -44,7 +46,6 @@
     <script type="text/javascript">
         $(function () {
             pizzaSitePizzaBuilderNs.initializePizzaBuilder();
-            pizzaSitePizzaBuilderNs.updatePizzaBuilderCanvas();
         });
     </script>
 }
