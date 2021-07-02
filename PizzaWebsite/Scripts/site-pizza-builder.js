@@ -4,6 +4,7 @@ const pizzaSitePizzaBuilderNs = {
         var $mainNavbar = $('#main-navbar');
         var $pizzaBuilder = $('#pizza-builder');
         var $imageSection = $('#pizza-builder-image-section');
+        var $pbCanvas = $('#pizza-builder-canvas');
 
         $(window).scroll(function () {
             var currentTop = $(document).scrollTop();
