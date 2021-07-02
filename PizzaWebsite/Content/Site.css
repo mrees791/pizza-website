@@ -34,11 +34,15 @@ img.manage-menu-image {
 
 /* Pizza builder */
 #pizza-builder-image-section {
-    background-color: pink;
-}
-#pizza-builder-image-section img {
     width: 100%;
     height: 100%;
+}
+#crust-layer {
+}
+#pizza-builder-image-section img {
+    background-color: pink;
+    width: 100%;
+    position: absolute;
 }
 #pizza-builder-menu-section {
     background-color: lightsteelblue;

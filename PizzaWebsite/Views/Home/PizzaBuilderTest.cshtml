@@ -8,14 +8,19 @@
         <div class="row">
             <div class="col-sm-3 hidden-xs">
                 <div id="pizza-builder-image-section">
-                    <img src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp"/>
+                    <div id="crust-layer">
+                        <img src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp" menu-id="1" />
+                        <img src="~/Content/Images/PizzaBuilderTest/Crust/pan-pb.webp" menu-id="2" />
+                        <img src="~/Content/Images/PizzaBuilderTest/Crust/stuffed-pb.webp" menu-id="3" />
+                        <img src="~/Content/Images/PizzaBuilderTest/Crust/thin-pb.webp" menu-id="4" />
+                    </div>
                 </div>
             </div>
             <div class="col-sm-9 col-xs-12">
                 <div id="pizza-builder-menu-section">
-                    @for (int i = 0; i < 50; i++)
+                    @for (int i = 1; i <= 50; i++)
                     {
-                        <p>menu</p>
+                        <p>@i</p>
                     }
                 </div>
             </div>
