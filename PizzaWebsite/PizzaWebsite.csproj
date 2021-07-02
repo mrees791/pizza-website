@@ -388,6 +388,9 @@
     <None Include="Content\Images\PizzaBuilderTest\Sauce\parmesan-pb.webp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Content\Images\PizzaBuilderTest\Topping\pepperoni-pb.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
