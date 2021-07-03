@@ -78,10 +78,20 @@ namespace PizzaWebsite.Controllers
                 ErrorMessageId = "menuIconError",
                 ImageId = "menuIcon"
             };
+            UploadMenuImageFormViewModel pizzaBuilderImageVm = new UploadMenuImageFormViewModel()
+            {
+                Name = "Pizza Builder Image",
+                Description = $"This is the image that will be shown on the crust layer of the pizza builder. The dimensions must be {PizzaBuilderImageValidation.RequiredWidth}x{PizzaBuilderImageValidation.RequiredHeight}.",
+                ImageUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.PizzaBuilderImage),
+                DropAreaId = "pizzaBuilderImageDropArea",
+                ErrorMessageId = "pizzaBuilderImageError",
+                ImageId = "pizzaBuilderImage"
+            };
             ManagePizzaMenuIngredientImagesViewModel model = new ManagePizzaMenuIngredientImagesViewModel()
             {
                 Id = id.Value,
-                MenuIconVm = menuIconVm
+                MenuIconVm = menuIconVm,
+                PizzaBuilderImageVm = pizzaBuilderImageVm
             };
             return View(model);
         }
