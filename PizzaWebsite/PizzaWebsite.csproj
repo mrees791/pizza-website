@@ -504,10 +504,15 @@
     <Content Include="Views\ManagePizzaCrustMenu\ManageImages.cshtml" />
     <Content Include="Views\Home\PizzaBuilderTest.cshtml" />
     <Content Include="Views\Shared\ManageMenuImages\_UploadMenuImageForm.cshtml" />
+    <Content Include="Views\ManagePizzaSauceMenu\ManageImages.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Images\Menu\PizzaCheese\" />
+    <Folder Include="Content\Images\Menu\PizzaCrustFlavor\" />
     <Folder Include="Content\Images\Menu\PizzaCrust\" />
+    <Folder Include="Content\Images\Menu\PizzaSauce\" />
+    <Folder Include="Content\Images\Menu\PizzaTopping\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

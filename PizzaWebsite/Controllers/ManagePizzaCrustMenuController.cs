@@ -68,7 +68,6 @@ namespace PizzaWebsite.Controllers
             {
                 return InvalidIdErrorMessage(id.Value);
             }
-            // todo: Finish menu icon and pizza builder image descriptions for this model.
             UploadMenuImageFormViewModel menuIconVm = new UploadMenuImageFormViewModel()
             {
                 Name = "Menu Icon",
@@ -90,6 +89,7 @@ namespace PizzaWebsite.Controllers
             ManagePizzaMenuIngredientImagesViewModel model = new ManagePizzaMenuIngredientImagesViewModel()
             {
                 Id = id.Value,
+                ViewTitle = $"Manage Images - {record.Name}",
                 MenuIconVm = menuIconVm,
                 PizzaBuilderImageVm = pizzaBuilderImageVm
             };

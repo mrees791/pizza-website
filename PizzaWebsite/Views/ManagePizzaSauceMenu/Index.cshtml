@@ -41,6 +41,8 @@
         </th>
         @* Empy column for Edit button. *@
         <th></th>
+        @* Empy column for Manage Images button. *@
+        <th></th>
     </tr>
     @foreach (ManageMenuPizzaSauceViewModel item in Model.ItemViewModelList)
     {
@@ -54,6 +56,11 @@
             <td>
                 <a href="@Url.Action("Edit")/@item.Id?@(Request.QueryString)">
                     <input type="button" value="Edit" class="btn btn-primary"/>
+                </a>
+            </td>
+            <td>
+                <a href="@Url.Action("ManageImages")/@item.Id?@(Request.QueryString)">
+                    <input type="button" value="Manage Images" class="btn btn-primary"/>
                 </a>
             </td>
         </tr>

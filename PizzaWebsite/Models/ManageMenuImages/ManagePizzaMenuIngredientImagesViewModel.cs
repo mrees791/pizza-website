@@ -8,6 +8,7 @@ namespace PizzaWebsite.Models.ManageMenuImages
 {
     public class ManagePizzaMenuIngredientImagesViewModel
     {
+        public string ViewTitle { get; set; }
         public int Id { get; set; }
         public UploadMenuImageFormViewModel MenuIconVm { get; set; }
         public UploadMenuImageFormViewModel PizzaBuilderImageVm { get; set; }

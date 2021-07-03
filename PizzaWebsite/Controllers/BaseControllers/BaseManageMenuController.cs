@@ -193,15 +193,23 @@ namespace PizzaWebsite.Controllers.BaseControllers
                 return Json($"An error occured while attempting to decode the webp file.",
                     MediaTypeNames.Text.Plain);
             }
+
             try
             {
-                string filePath = Server.MapPath(DirectoryServices.GetMenuImageUrl(id, record.GetMenuCategoryType(), imageType));
+                string filePath =
+                    Server.MapPath(DirectoryServices.GetMenuImageUrl(id, record.GetMenuCategoryType(), imageType));
                 file.SaveAs(filePath);
             }
             catch (NotImplementedException e)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
                 return Json($"NotImplementedException occured for webp file. Could not save file.",
+                    MediaTypeNames.Text.Plain);
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Exception occured for webp file. Could not save file.",
                     MediaTypeNames.Text.Plain);
             }
             return Json("File uploaded successfully.");
