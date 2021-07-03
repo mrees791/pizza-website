@@ -69,13 +69,19 @@ namespace PizzaWebsite.Controllers
                 return InvalidIdErrorMessage(id.Value);
             }
             // todo: Finish menu icon and pizza builder image descriptions for this model.
+            UploadMenuImageFormViewModel menuIconVm = new UploadMenuImageFormViewModel()
+            {
+                Name = "Menu Icon",
+                Description = $"This is the icon the user will click on when creating their pizza in the pizza builder. The dimensions must be {MenuIconValidation.RequiredWidth}x{MenuIconValidation.RequiredHeight}.",
+                ImageUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.MenuIcon),
+                DropAreaId = "menuIconDropArea",
+                ErrorMessageId = "menuIconError",
+                ImageId = "menuIcon"
+            };
             ManagePizzaMenuIngredientImagesViewModel model = new ManagePizzaMenuIngredientImagesViewModel()
             {
                 Id = id.Value,
-                MenuIconUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.MenuIcon),
-                MenuIconDescription = "(Menu icon description)",
-                PizzaBuilderImageUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.PizzaBuilderImage),
-                PizzaBuilderImageDescription = "(Pizza builder image description)"
+                MenuIconVm = menuIconVm
             };
             return View(model);
         }

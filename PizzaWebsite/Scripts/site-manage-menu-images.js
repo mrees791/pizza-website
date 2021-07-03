@@ -4,14 +4,11 @@ const pizzaSiteManageMenuImageNs = {
         var imgSrc = $img.attr('src');
         $img.attr('src', imgSrc + '?dateTime=' + new Date().getTime());
     },
-    initializeManageMenuIconSection: (actionUrl) => {
-        pizzaSiteManageMenuImageNs.initializeManageMenuImageSection(actionUrl, $('#menuIcon'), $('#menuIconError'), $('#menuIconDropArea'))
-    },
-    initializeManagePizzaBuilderImageSection: (actionUrl) => {
-        pizzaSiteManageMenuImageNs.initializeManageMenuImageSection(actionUrl, $('#pizzaBuilderImage'), $('#pizzaBuilderImageError'), $('#pizzaBuilderImageDropArea'))
-    },
-    initializeManageMenuImageSection: (actionUrl, $iconImg, $iconErrorMessage, $iconDropArea) => {
-        $iconDropArea.dmUploader({
+    initializeUploadSection: (actionUrl, imageId, errorMessageId, dropAreaId) => {
+        var $imageElement = $(imageId);
+        var $errorMessage = $(errorMessageId);
+        var $dropArea = $(dropAreaId);
+        $dropArea.dmUploader({
             url: actionUrl,
             maxFileSize: 1000000,
             extFilter: ['webp'],
@@ -22,31 +19,31 @@ const pizzaSiteManageMenuImageNs = {
             onUploadProgress: function (id, percent) { },
             onUploadSuccess: function (id, data) {
                 console.log(data);
-                $iconErrorMessage.hide();
-                pizzaSiteManageMenuImageNs.updateImageElement($iconImg);
+                $errorMessage.hide();
+                pizzaSiteManageMenuImageNs.updateImageElement($imageElement);
             },
             onUploadError: function (id, xhr, status, errorThrown) {
                 console.log(xhr);
-                $iconErrorMessage.text(xhr.responseText.replaceAll('"', ''));
-                $iconErrorMessage.show();
+                $errorMessage.text(xhr.responseText.replaceAll('"', ''));
+                $errorMessage.show();
             },
             onFileTypeError: function (file) {
                 var errorMessage = 'Mime type must be image/webp.';
                 console.log(errorMessage);
-                $iconErrorMessage.text(errorMessage);
-                $iconErrorMessage.show();
+                $errorMessage.text(errorMessage);
+                $errorMessage.show();
             },
             onFileSizeError: function (file) {
                 var errorMessage = 'File size cannot exceed 1 megabyte.';
                 console.log(errorMessage);
-                $iconErrorMessage.text(errorMessage);
-                $iconErrorMessage.show();
+                $errorMessage.text(errorMessage);
+                $errorMessage.show();
             },
             onFileExtError: function (file) {
                 var errorMessage = 'File extension must be webp.';
                 console.log(errorMessage);
-                $iconErrorMessage.text(errorMessage);
-                $iconErrorMessage.show();
+                $errorMessage.text(errorMessage);
+                $errorMessage.show();
             }
         });
     }

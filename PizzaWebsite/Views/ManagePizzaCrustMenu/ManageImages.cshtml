@@ -19,13 +19,12 @@
     </ol>
 </nav>
 <hr />
-@Html.Partial("~/Views/Shared/ManageMenuImages/_MenuIconForm.cshtml", Model)
-@Html.Partial("~/Views/Shared/ManageMenuImages/_PizzaBuilderImageForm.cshtml", Model)
+@Html.Partial("~/Views/Shared/ManageMenuImages/_UploadMenuImageForm.cshtml", Model.MenuIconVm)
 @section Scripts {
     <script type="text/javascript">
         $(function () {
-            pizzaSiteManageMenuImageNs.initializeManageMenuIconSection('@Url.Action("UploadMenuIconAjax", "ManagePizzaCrustMenu")/@Model.Id');
-            pizzaSiteManageMenuImageNs.initializeManagePizzaBuilderImageSection('@Url.Action("UploadPizzaBuilderImageAjax", "ManagePizzaCrustMenu")/@Model.Id');
+            pizzaSiteManageMenuImageNs.initializeUploadSection('@Url.Action("UploadMenuIconAjax", "ManagePizzaCrustMenu")/@Model.Id',
+                @Model.MenuIconVm.ImageId, @Model.MenuIconVm.ErrorMessageId, @Model.MenuIconVm.DropAreaId);
         });
     </script>
 }

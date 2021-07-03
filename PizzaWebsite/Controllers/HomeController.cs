@@ -28,11 +28,7 @@ namespace PizzaWebsite.Controllers
         // todo: Remove after pizza builder is complete.
         public ActionResult PizzaBuilderTest()
         {
-            PizzaBuilderTestViewModel model = new PizzaBuilderTestViewModel()
-            {
-                HandTossedPizzaBuilderImgSrc = Server.MapPath("~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp")
-            };
-            return View(model);
+            return View();
         }
     }
 }
