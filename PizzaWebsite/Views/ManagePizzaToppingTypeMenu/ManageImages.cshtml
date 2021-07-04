@@ -23,17 +23,28 @@
 @Html.Partial("~/Views/Shared/ManageMenuImages/_UploadMenuImageForm.cshtml", Model.PizzaBuilderImageVm)
 @Html.Partial("~/Views/Shared/ManageMenuImages/_UploadMenuImageForm.cshtml", Model.PizzaBuilderLeftImageVm)
 @Html.Partial("~/Views/Shared/ManageMenuImages/_UploadMenuImageForm.cshtml", Model.PizzaBuilderRightImageVm)
+@Html.Partial("~/Views/Shared/ManageMenuImages/_UploadMenuImageForm.cshtml", Model.PizzaBuilderExtraImageVm)
+@Html.Partial("~/Views/Shared/ManageMenuImages/_UploadMenuImageForm.cshtml", Model.PizzaBuilderExtraLeftImageVm)
+@Html.Partial("~/Views/Shared/ManageMenuImages/_UploadMenuImageForm.cshtml", Model.PizzaBuilderExtraRightImageVm)
 @section Scripts {
     <script type="text/javascript">
         $(function () {
             pizzaSiteManageMenuImageNs.initializeUploadSection('@Url.Action("UploadMenuIconAjax", "ManagePizzaToppingTypeMenu")/@Model.Id',
                 @Model.MenuIconVm.ImageId, @Model.MenuIconVm.ErrorMessageId, @Model.MenuIconVm.DropAreaId);
+
             pizzaSiteManageMenuImageNs.initializeUploadSection('@Url.Action("UploadPizzaBuilderImageAjax", "ManagePizzaToppingTypeMenu")/@Model.Id',
                 @Model.PizzaBuilderImageVm.ImageId, @Model.PizzaBuilderImageVm.ErrorMessageId, @Model.PizzaBuilderImageVm.DropAreaId);
             pizzaSiteManageMenuImageNs.initializeUploadSection('@Url.Action("UploadPizzaBuilderLeftImageAjax", "ManagePizzaToppingTypeMenu")/@Model.Id',
                 @Model.PizzaBuilderLeftImageVm.ImageId, @Model.PizzaBuilderLeftImageVm.ErrorMessageId, @Model.PizzaBuilderLeftImageVm.DropAreaId);
             pizzaSiteManageMenuImageNs.initializeUploadSection('@Url.Action("UploadPizzaBuilderRightImageAjax", "ManagePizzaToppingTypeMenu")/@Model.Id',
                 @Model.PizzaBuilderRightImageVm.ImageId, @Model.PizzaBuilderRightImageVm.ErrorMessageId, @Model.PizzaBuilderRightImageVm.DropAreaId);
+
+            pizzaSiteManageMenuImageNs.initializeUploadSection('@Url.Action("UploadPizzaBuilderExtraImageAjax", "ManagePizzaToppingTypeMenu")/@Model.Id',
+                @Model.PizzaBuilderExtraImageVm.ImageId, @Model.PizzaBuilderExtraImageVm.ErrorMessageId, @Model.PizzaBuilderExtraImageVm.DropAreaId);
+            pizzaSiteManageMenuImageNs.initializeUploadSection('@Url.Action("UploadPizzaBuilderExtraLeftImageAjax", "ManagePizzaToppingTypeMenu")/@Model.Id',
+                @Model.PizzaBuilderExtraLeftImageVm.ImageId, @Model.PizzaBuilderExtraLeftImageVm.ErrorMessageId, @Model.PizzaBuilderExtraLeftImageVm.DropAreaId);
+            pizzaSiteManageMenuImageNs.initializeUploadSection('@Url.Action("UploadPizzaBuilderExtraRightImageAjax", "ManagePizzaToppingTypeMenu")/@Model.Id',
+                @Model.PizzaBuilderExtraRightImageVm.ImageId, @Model.PizzaBuilderExtraRightImageVm.ErrorMessageId, @Model.PizzaBuilderExtraRightImageVm.DropAreaId);
         });
     </script>
 }

@@ -85,7 +85,7 @@ namespace PizzaWebsite.Controllers
             };
             UploadMenuImageFormViewModel pizzaBuilderLeftImageVm = new UploadMenuImageFormViewModel()
             {
-                Name = "Pizza Builder Left Image",
+                Name = "Pizza Builder Image (Left Half)",
                 Description = $"This will be shown when the user only wants their topping on the left half of the pizza. The dimensions must be {PizzaBuilderImageValidation.RequiredWidth}x{PizzaBuilderImageValidation.RequiredHeight}.",
                 ImageUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.PizzaBuilderLeft),
                 DropAreaId = "pizzaBuilderLeftImageDropArea",
@@ -94,12 +94,40 @@ namespace PizzaWebsite.Controllers
             };
             UploadMenuImageFormViewModel pizzaBuilderRightImageVm = new UploadMenuImageFormViewModel()
             {
-                Name = "Pizza Builder Right Image",
+                Name = "Pizza Builder Image (Right Half)",
                 Description = $"This will be shown when the user only wants their topping on the right half of the pizza. The dimensions must be {PizzaBuilderImageValidation.RequiredWidth}x{PizzaBuilderImageValidation.RequiredHeight}.",
                 ImageUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.PizzaBuilderRight),
                 DropAreaId = "pizzaBuilderRightImageDropArea",
                 ErrorMessageId = "pizzaBuilderRightImageError",
                 ImageId = "pizzaBuilderRightImage"
+            };
+
+            UploadMenuImageFormViewModel pizzaBuilderExtraImageVm = new UploadMenuImageFormViewModel()
+            {
+                Name = "Pizza Builder Image (Extra)",
+                Description = $"This is the image that will be shown when the user wants an extra topping. The dimensions must be {PizzaBuilderImageValidation.RequiredWidth}x{PizzaBuilderImageValidation.RequiredHeight}.",
+                ImageUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.PizzaBuilderExtra),
+                DropAreaId = "pizzaBuilderExtraImageDropArea",
+                ErrorMessageId = "pizzaBuilderExtraImageError",
+                ImageId = "pizzaBuilderExtraImage"
+            };
+            UploadMenuImageFormViewModel pizzaBuilderExtraLeftImageVm = new UploadMenuImageFormViewModel()
+            {
+                Name = "Pizza Builder Image (Extra, Left Half)",
+                Description = $"This will be shown when the user wants an extra topping on the left half of their pizza. The dimensions must be {PizzaBuilderImageValidation.RequiredWidth}x{PizzaBuilderImageValidation.RequiredHeight}.",
+                ImageUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.PizzaBuilderExtraLeft),
+                DropAreaId = "pizzaBuilderExtraLeftImageDropArea",
+                ErrorMessageId = "pizzaBuilderExtraLeftImageError",
+                ImageId = "pizzaBuilderExtraLeftImage"
+            };
+            UploadMenuImageFormViewModel pizzaBuilderExtraRightImageVm = new UploadMenuImageFormViewModel()
+            {
+                Name = "Pizza Builder Image (Extra, Right Half)",
+                Description = $"This will be shown when the user wants an extra topping on the right half of their pizza. The dimensions must be {PizzaBuilderImageValidation.RequiredWidth}x{PizzaBuilderImageValidation.RequiredHeight}.",
+                ImageUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.PizzaBuilderExtraRight),
+                DropAreaId = "pizzaBuilderExtraRightImageDropArea",
+                ErrorMessageId = "pizzaBuilderExtraRightImageError",
+                ImageId = "pizzaBuilderExtraRightImage"
             };
             ManagePizzaMenuToppingImagesViewModel model = new ManagePizzaMenuToppingImagesViewModel()
             {
@@ -108,7 +136,10 @@ namespace PizzaWebsite.Controllers
                 MenuIconVm = menuIconVm,
                 PizzaBuilderImageVm = pizzaBuilderImageVm,
                 PizzaBuilderLeftImageVm = pizzaBuilderLeftImageVm,
-                PizzaBuilderRightImageVm = pizzaBuilderRightImageVm
+                PizzaBuilderRightImageVm = pizzaBuilderRightImageVm,
+                PizzaBuilderExtraImageVm = pizzaBuilderExtraImageVm,
+                PizzaBuilderExtraLeftImageVm = pizzaBuilderExtraLeftImageVm,
+                PizzaBuilderExtraRightImageVm = pizzaBuilderExtraRightImageVm
             };
             return View(model);
         }
