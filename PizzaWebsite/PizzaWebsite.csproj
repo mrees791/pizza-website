@@ -505,6 +505,7 @@
     <Content Include="Views\Home\PizzaBuilderTest.cshtml" />
     <Content Include="Views\Shared\ManageMenuImages\_UploadMenuImageForm.cshtml" />
     <Content Include="Views\ManagePizzaSauceMenu\ManageImages.cshtml" />
+    <Content Include="Views\ManagePizzaCheeseMenu\ManageImages.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
