@@ -11,6 +11,7 @@ namespace PizzaWebsite.Models.Services
 {
     public class DirectoryServices
     {
+        public readonly string PizzaMenuImageDir = "/Content/Images/Menu/Pizza/";
         public readonly string PizzaSauceMenuImageDir = "/Content/Images/Menu/PizzaSauce/";
         public readonly string PizzaCheeseMenuImageDir = "/Content/Images/Menu/PizzaCheese/";
         public readonly string PizzaCrustMenuImageDir = "/Content/Images/Menu/PizzaCrust/";
@@ -29,7 +30,7 @@ namespace PizzaWebsite.Models.Services
             switch (menuCategory)
             {
                 case MenuCategory.Pizza:
-                    return PizzaSauceMenuImageDir;
+                    return PizzaMenuImageDir;
                 case MenuCategory.PizzaCheese:
                     return PizzaCheeseMenuImageDir;
                 case MenuCategory.PizzaCrust:
