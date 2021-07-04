@@ -15,11 +15,6 @@ namespace PizzaWebsite.Controllers
     {
         public ManagePizzaToppingTypeMenuController()
         {
-            PizzaBuilderImageValidation = new MenuImageValidation()
-            {
-                RequiredWidth = 100,
-                RequiredHeight = 50
-            };
         }
 
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)

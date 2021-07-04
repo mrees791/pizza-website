@@ -17,10 +17,6 @@ namespace PizzaWebsite.Controllers
     {
         public ManagePizzaCrustMenuController()
         {
-            MenuIconValidation.RequiredWidth = 100;
-            MenuIconValidation.RequiredHeight = 100;
-            PizzaBuilderImageValidation.RequiredWidth = 525;
-            PizzaBuilderImageValidation.RequiredHeight = 525;
         }
 
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
