@@ -21,6 +21,8 @@
 <hr />
 @Html.Partial("~/Views/Shared/ManageMenuImages/_UploadMenuImageForm.cshtml", Model.MenuIconVm)
 @Html.Partial("~/Views/Shared/ManageMenuImages/_UploadMenuImageForm.cshtml", Model.PizzaBuilderImageVm)
+@Html.Partial("~/Views/Shared/ManageMenuImages/_UploadMenuImageForm.cshtml", Model.PizzaBuilderLeftImageVm)
+@Html.Partial("~/Views/Shared/ManageMenuImages/_UploadMenuImageForm.cshtml", Model.PizzaBuilderRightImageVm)
 @section Scripts {
     <script type="text/javascript">
         $(function () {
@@ -28,6 +30,10 @@
                 @Model.MenuIconVm.ImageId, @Model.MenuIconVm.ErrorMessageId, @Model.MenuIconVm.DropAreaId);
             pizzaSiteManageMenuImageNs.initializeUploadSection('@Url.Action("UploadPizzaBuilderImageAjax", "ManagePizzaToppingTypeMenu")/@Model.Id',
                 @Model.PizzaBuilderImageVm.ImageId, @Model.PizzaBuilderImageVm.ErrorMessageId, @Model.PizzaBuilderImageVm.DropAreaId);
+            pizzaSiteManageMenuImageNs.initializeUploadSection('@Url.Action("UploadPizzaBuilderLeftImageAjax", "ManagePizzaToppingTypeMenu")/@Model.Id',
+                @Model.PizzaBuilderLeftImageVm.ImageId, @Model.PizzaBuilderLeftImageVm.ErrorMessageId, @Model.PizzaBuilderLeftImageVm.DropAreaId);
+            pizzaSiteManageMenuImageNs.initializeUploadSection('@Url.Action("UploadPizzaBuilderRightImageAjax", "ManagePizzaToppingTypeMenu")/@Model.Id',
+                @Model.PizzaBuilderRightImageVm.ImageId, @Model.PizzaBuilderRightImageVm.ErrorMessageId, @Model.PizzaBuilderRightImageVm.DropAreaId);
         });
     </script>
 }

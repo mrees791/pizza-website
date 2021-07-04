@@ -132,6 +132,36 @@ namespace PizzaWebsite.Controllers.BaseControllers
             return await UploadMenuImageAjax(id, PizzaBuilderImageValidation, MenuImageType.PizzaBuilder);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> UploadPizzaBuilderLeftImageAjax(int id)
+        {
+            return await UploadMenuImageAjax(id, PizzaBuilderImageValidation, MenuImageType.PizzaBuilderLeft);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UploadPizzaBuilderRightImageAjax(int id)
+        {
+            return await UploadMenuImageAjax(id, PizzaBuilderImageValidation, MenuImageType.PizzaBuilderRight);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UploadPizzaBuilderExtraImageAjax(int id)
+        {
+            return await UploadMenuImageAjax(id, PizzaBuilderImageValidation, MenuImageType.PizzaBuilderExtra);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UploadPizzaBuilderExtraLeftImageAjax(int id)
+        {
+            return await UploadMenuImageAjax(id, PizzaBuilderImageValidation, MenuImageType.PizzaBuilderExtraLeft);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UploadPizzaBuilderExtraRightImageAjax(int id)
+        {
+            return await UploadMenuImageAjax(id, PizzaBuilderImageValidation, MenuImageType.PizzaBuilderExtraRight);
+        }
+
         // todo: Finish
         [HttpPost]
         protected async Task<ActionResult> UploadMenuImageAjax(int id, MenuImageValidation validation, MenuImageType imageType)

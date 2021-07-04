@@ -83,12 +83,32 @@ namespace PizzaWebsite.Controllers
                 ErrorMessageId = "pizzaBuilderImageError",
                 ImageId = "pizzaBuilderImage"
             };
+            UploadMenuImageFormViewModel pizzaBuilderLeftImageVm = new UploadMenuImageFormViewModel()
+            {
+                Name = "Pizza Builder Left Image",
+                Description = $"This will be shown when the user only wants their topping on the left half of the pizza. The dimensions must be {PizzaBuilderImageValidation.RequiredWidth}x{PizzaBuilderImageValidation.RequiredHeight}.",
+                ImageUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.PizzaBuilderLeft),
+                DropAreaId = "pizzaBuilderLeftImageDropArea",
+                ErrorMessageId = "pizzaBuilderLeftImageError",
+                ImageId = "pizzaBuilderLeftImage"
+            };
+            UploadMenuImageFormViewModel pizzaBuilderRightImageVm = new UploadMenuImageFormViewModel()
+            {
+                Name = "Pizza Builder Right Image",
+                Description = $"This will be shown when the user only wants their topping on the right half of the pizza. The dimensions must be {PizzaBuilderImageValidation.RequiredWidth}x{PizzaBuilderImageValidation.RequiredHeight}.",
+                ImageUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.PizzaBuilderRight),
+                DropAreaId = "pizzaBuilderRightImageDropArea",
+                ErrorMessageId = "pizzaBuilderRightImageError",
+                ImageId = "pizzaBuilderRightImage"
+            };
             ManagePizzaMenuToppingImagesViewModel model = new ManagePizzaMenuToppingImagesViewModel()
             {
                 Id = id.Value,
                 ViewTitle = $"Manage Images - {record.Name}",
                 MenuIconVm = menuIconVm,
-                PizzaBuilderImageVm = pizzaBuilderImageVm
+                PizzaBuilderImageVm = pizzaBuilderImageVm,
+                PizzaBuilderLeftImageVm = pizzaBuilderLeftImageVm,
+                PizzaBuilderRightImageVm = pizzaBuilderRightImageVm
             };
             return View(model);
         }
