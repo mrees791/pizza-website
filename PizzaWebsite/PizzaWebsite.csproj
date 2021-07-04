@@ -517,6 +517,7 @@
     <Folder Include="Content\Images\Menu\PizzaCrust\" />
     <Folder Include="Content\Images\Menu\PizzaSauce\" />
     <Folder Include="Content\Images\Menu\PizzaTopping\" />
+    <Folder Include="Content\Images\Menu\Pizza\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
