@@ -75,6 +75,7 @@ namespace PizzaWebsite.Controllers
                 {
                     Id = menuPizza.Id,
                     Name = menuPizza.PizzaName,
+                    MenuIconUrl = DirectoryServices.GetMenuImageUrl(menuPizza.Id, menuPizza.GetMenuCategoryType(), MenuImageType.MenuIcon),
                     QuantityList = quantityList,
                     SelectedQuantity = 1,
                     SizeList = sizeList,
