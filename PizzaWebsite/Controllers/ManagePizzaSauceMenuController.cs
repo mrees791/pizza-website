@@ -75,7 +75,7 @@ namespace PizzaWebsite.Controllers
             {
                 Name = "Pizza Builder Image",
                 Description = $"This is the image that will be shown on the sauce layer of the pizza builder. The dimensions must be {PizzaBuilderImageValidation.RequiredWidth}x{PizzaBuilderImageValidation.RequiredHeight}.",
-                ImageUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.PizzaBuilderImage),
+                ImageUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.PizzaBuilder),
                 DropAreaId = "pizzaBuilderImageDropArea",
                 ErrorMessageId = "pizzaBuilderImageError",
                 ImageId = "pizzaBuilderImage"

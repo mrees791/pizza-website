@@ -7,6 +7,12 @@ namespace PizzaWebsite.Models
 {
     public enum MenuImageType
     {
-        MenuIcon, PizzaBuilderImage
+        MenuIcon,
+        PizzaBuilder,
+        PizzaBuilderLeft,
+        PizzaBuilderRight,
+        PizzaBuilderExtra,
+        PizzaBuilderExtraLeft,
+        PizzaBuilderExtraRight
     }
 }

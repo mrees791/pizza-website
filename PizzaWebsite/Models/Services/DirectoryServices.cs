@@ -51,8 +51,18 @@ namespace PizzaWebsite.Models.Services
             {
                 case MenuImageType.MenuIcon:
                     return $"{id}-mi.webp";
-                case MenuImageType.PizzaBuilderImage:
+                case MenuImageType.PizzaBuilder:
                     return $"{id}-pb.webp";
+                case MenuImageType.PizzaBuilderLeft:
+                    return $"{id}-pbl.webp";
+                case MenuImageType.PizzaBuilderRight:
+                    return $"{id}-pbr.webp";
+                case MenuImageType.PizzaBuilderExtra:
+                    return $"{id}-pbe.webp";
+                case MenuImageType.PizzaBuilderExtraLeft:
+                    return $"{id}-pbel.webp";
+                case MenuImageType.PizzaBuilderExtraRight:
+                    return $"{id}-pber.webp";
             }
             throw new Exception($"Unable to create menu image file name for {id}. Image type: {imageType.ToString()}");
         }
