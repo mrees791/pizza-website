@@ -24,8 +24,16 @@ namespace PizzaWebsite.Controllers.BaseControllers
 
         protected BaseManageMenuController()
         {
-            MenuIconValidation = new MenuImageValidation();
-            PizzaBuilderImageValidation = new MenuImageValidation();
+            MenuIconValidation = new MenuImageValidation()
+            {
+                RequiredWidth = 100,
+                RequiredHeight = 100
+            };
+            PizzaBuilderImageValidation = new MenuImageValidation()
+            {
+                RequiredWidth = 525,
+                RequiredHeight = 525
+            };
         }
 
         protected async Task<ActionResult> Index(int page, int rowsPerPage, string orderByColumn,

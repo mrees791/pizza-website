@@ -506,6 +506,7 @@
     <Content Include="Views\Shared\ManageMenuImages\_UploadMenuImageForm.cshtml" />
     <Content Include="Views\ManagePizzaSauceMenu\ManageImages.cshtml" />
     <Content Include="Views\ManagePizzaCheeseMenu\ManageImages.cshtml" />
+    <Content Include="Views\ManagePizzaCrustFlavorMenu\ManageImages.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

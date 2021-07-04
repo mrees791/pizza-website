@@ -1,0 +1,30 @@
+﻿@using PizzaWebsite.Models.ManageMenuImages
+@model ManagePizzaMenuIngredientImagesViewModel
+@{
+    ViewBag.Title = Model.ViewTitle;
+}
+<h2>@Model.ViewTitle</h2>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "Employee")">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "ManageMenu")">Manage Menu</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index", "ManagePizzaCrustFlavorMenu")?@Request.QueryString">Manage Pizza Crust Flavor Menu</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.ViewTitle</li>
+    </ol>
+</nav>
+<hr />
+@Html.Partial("~/Views/Shared/ManageMenuImages/_UploadMenuImageForm.cshtml", Model.MenuIconVm)
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            pizzaSiteManageMenuImageNs.initializeUploadSection('@Url.Action("UploadMenuIconAjax", "ManagePizzaCrustFlavorMenu")/@Model.Id',
+                @Model.MenuIconVm.ImageId, @Model.MenuIconVm.ErrorMessageId, @Model.MenuIconVm.DropAreaId);
+        });
+    </script>
+}
