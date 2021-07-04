@@ -7,6 +7,8 @@ using DataLibrary.Models.QueryFilters;
 using DataLibrary.Models.QuerySearches;
 using DataLibrary.Models.Tables;
 using PizzaWebsite.Controllers.BaseControllers;
+using PizzaWebsite.Models;
+using PizzaWebsite.Models.ManageMenuImages;
 using PizzaWebsite.Models.ManageMenus;
 using PizzaWebsite.Models.PizzaBuilders;
 
@@ -20,6 +22,8 @@ namespace PizzaWebsite.Controllers
         public ManagePizzaMenuController()
         {
             _pizzaBuilderServices = new PizzaBuilderServices();
+            MenuIconValidation.RequiredWidth = 175;
+            MenuIconValidation.RequiredHeight = 203;
         }
 
         public async Task<ActionResult> Index(int? page, int? rowsPerPage, string name)
@@ -61,6 +65,35 @@ namespace PizzaWebsite.Controllers
         public async Task<ActionResult> Edit(ManageMenuPizzaViewModel model)
         {
             return await Edit(model, model.Name);
+        }
+
+        public async Task<ActionResult> ManageImages(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return MissingIdErrorMessage();
+            }
+            MenuPizza record = await PizzaDb.GetAsync<MenuPizza>(id.Value);
+            if (record == null)
+            {
+                return InvalidIdErrorMessage(id.Value);
+            }
+            UploadMenuImageFormViewModel menuIconVm = new UploadMenuImageFormViewModel()
+            {
+                Name = "Menu Icon",
+                Description = $"This is the icon the user will see in the pizza menu. The dimensions must be {MenuIconValidation.RequiredWidth}x{MenuIconValidation.RequiredHeight}.",
+                ImageUrl = DirectoryServices.GetMenuImageUrl(record.Id, record.GetMenuCategoryType(), MenuImageType.MenuIcon),
+                DropAreaId = "menuIconDropArea",
+                ErrorMessageId = "menuIconError",
+                ImageId = "menuIcon"
+            };
+            ManageMenuImagesViewModel model = new ManageMenuImagesViewModel()
+            {
+                Id = id.Value,
+                ViewTitle = $"Manage Images - {record.PizzaName}",
+                MenuIconVm = menuIconVm
+            };
+            return View(model);
         }
 
         protected override async Task<ManageMenuPizzaViewModel> RecordToViewModelAsync(MenuPizza record)
