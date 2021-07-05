@@ -7,12 +7,26 @@ const pizzaSitePizzaBuilderNs = {
         var selectedCrustImgSrc = $selectedInput.attr('pb-img-src');
         $crustImg.attr('src', selectedCrustImgSrc);
     },
-    updateSauceLayer: () => {
+    updateSauceAmount: () => {
+        var $sauceAmountFieldset = $('#sauce-amount-fieldset');
+        var $sauceImg = $('#sauce-layer-img');
+        var $selectedAmountInput = $sauceAmountFieldset.find(':checked');
+        if ($selectedAmountInput.attr('value') === 'none') {
+            $sauceImg.addClass('none-selected');
+        } else {
+            $sauceImg.removeClass('none-selected');
+        }
+    },
+    updateSauceImage: () => {
         var $sauceFieldset = $('#sauce-fieldset');
         var $sauceImg = $('#sauce-layer-img');
-        var $selectedInput = $sauceFieldset.find(':checked');
-        var selectedSauceImgSrc = $selectedInput.attr('pb-img-src');
+        var $selectedSauceInput = $sauceFieldset.find(':checked');
+        var selectedSauceImgSrc = $selectedSauceInput.attr('pb-img-src');
         $sauceImg.attr('src', selectedSauceImgSrc);
+    },
+    updateSauceLayer: () => {
+        pizzaSitePizzaBuilderNs.updateSauceImage();
+        pizzaSitePizzaBuilderNs.updateSauceAmount();
     },
     updateAllLayers: () => {
         pizzaSitePizzaBuilderNs.updateCrustLayer();
@@ -45,7 +59,11 @@ const pizzaSitePizzaBuilderNs = {
         });
         var $sauceFieldset = $('#sauce-fieldset');
         $sauceFieldset.change(function () {
-            pizzaSitePizzaBuilderNs.updateSauceLayer();
+            pizzaSitePizzaBuilderNs.updateSauceImage();
+        });
+        var $sauceAmountFieldset = $('#sauce-amount-fieldset');
+        $sauceAmountFieldset.change(function () {
+            pizzaSitePizzaBuilderNs.updateSauceAmount();
         });
 
         pizzaSitePizzaBuilderNs.updateAllLayers();

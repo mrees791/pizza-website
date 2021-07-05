@@ -11,6 +11,9 @@
 #pizza-builder-menu-section {
     background-color: lightsteelblue;
 }
+#pizza-builder-image-section .none-selected {
+    visibility: hidden;
+}
 /* Radio button controls. */
 .pb-menu-icon {
     width: 100%;
