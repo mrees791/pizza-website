@@ -7,8 +7,16 @@ const pizzaSitePizzaBuilderNs = {
         var selectedCrustImgSrc = $selectedInput.attr('pb-img-src');
         $crustImg.attr('src', selectedCrustImgSrc);
     },
+    updateSauceLayer: () => {
+        var $sauceFieldset = $('#sauce-fieldset');
+        var $sauceImg = $('#sauce-layer-img');
+        var $selectedInput = $sauceFieldset.find(':checked');
+        var selectedSauceImgSrc = $selectedInput.attr('pb-img-src');
+        $sauceImg.attr('src', selectedSauceImgSrc);
+    },
     updateAllLayers: () => {
         pizzaSitePizzaBuilderNs.updateCrustLayer();
+        pizzaSitePizzaBuilderNs.updateSauceLayer();
     },
     initializeFixedScrollBuilder: () => {
         var $mainNavbar = $('#main-navbar');
@@ -35,6 +43,11 @@ const pizzaSitePizzaBuilderNs = {
         $crustFieldset.change(function () {
             pizzaSitePizzaBuilderNs.updateCrustLayer();
         });
+        var $sauceFieldset = $('#sauce-fieldset');
+        $sauceFieldset.change(function () {
+            pizzaSitePizzaBuilderNs.updateSauceLayer();
+        });
+
         pizzaSitePizzaBuilderNs.updateAllLayers();
     }
 };

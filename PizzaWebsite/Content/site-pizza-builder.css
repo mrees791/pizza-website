@@ -48,4 +48,3 @@
 #pizza-builder-menu-section [type=radio]:checked + div.text-only {
     border-color: red;
 }
-/* Checked */
