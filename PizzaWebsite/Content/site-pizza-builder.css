@@ -21,22 +21,31 @@
 #pizza-builder-menu-section label {
     cursor: pointer;
 }
+#pizza-builder-menu-section i {
+    display: block;
+    text-align: center;
+}
 #pizza-builder-menu-section [type=radio] {
     position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
 }
-#pizza-builder-menu-section [type=radio] + div {
+#pizza-builder-menu-section [type=radio] + div.pb-menu-icon {
     border-style: solid;
     border-color: darkgray;
     border-width: 0px 0px 3px 0px;
 }
-#pizza-builder-menu-section i {
-    display: block;
-    text-align: center;
-}
-/* Checked */
-#pizza-builder-menu-section [type=radio]:checked + div {
+#pizza-builder-menu-section [type=radio]:checked + div.pb-menu-icon {
     border-color: red;
 }
+#pizza-builder-menu-section [type=radio] + div.text-only {
+    border-style: solid;
+    border-color: darkgray;
+    border-width: 1px;
+    border-radius: 3px;
+}
+#pizza-builder-menu-section [type=radio]:checked + div.text-only {
+    border-color: red;
+}
+/* Checked */

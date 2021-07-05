@@ -47,20 +47,41 @@
                 </div>
                 <fieldset id="crust-fieldset" class="row">
                     <label class="col-xs-3 col-sm-4 col-md-3">
-                        <input type="radio" id="crust-1" name="crustGroup" value="1" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp" checked />
+                        <input type="radio" id="crust-1" name="crustGroup" value="1" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp" checked/>
                         <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/Crust/hand-tossed-mi.webp')"></div>
-                        <i>HAND TOSSED</i>
+                        <i>Hand Tossed</i>
                     </label>
                     <label class="col-xs-3 col-sm-4 col-md-3">
-                        <input type="radio" id="crust-2" name="crustGroup" value="2" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/thin-pb.webp" checked />
+                        <input type="radio" id="crust-2" name="crustGroup" value="2" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/thin-pb.webp"/>
                         <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/Crust/thin-mi.webp')"></div>
-                        <i>THIN</i>
+                        <i>Thin</i>
                     </label>
-                    @*<legend>Crust</legend>
-                    <input type="radio" id="crust-1" name="crustGroup" value="1" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp" checked />
-                    <label for="crust-1">Hand Tossed</label>*@
-                    @*<input type="radio" id="crust-2" name="crustGroup" value="2" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/thin-pb.webp" />
-                    <label for="crust-2">Thin</label>*@
+                </fieldset>
+                <div class="row">
+                    <h3 class="col-xs-12">Size</h3>
+                </div>
+                <fieldset id="size-fieldset" class="row">
+                    <label class="col-xs-12 col-sm-4">
+                        <input type="radio" name="sizeGroup" value="large" checked />
+                        <div class="text-only">
+                            <i>Large</i>
+                            <i>8 Slices</i>
+                        </div>
+                    </label>
+                    <label class="col-xs-12 col-sm-4">
+                        <input type="radio" name="sizeGroup" value="large" />
+                        <div class="text-only">
+                            <i>Medium</i>
+                            <i>8 Slices</i>
+                        </div>
+                    </label>
+                    <label class="col-xs-12 col-sm-4">
+                        <input type="radio" name="sizeGroup" value="large" />
+                        <div class="text-only">
+                            <i>Small</i>
+                            <i>6 Slices</i>
+                        </div>
+                    </label>
                 </fieldset>
             </div>
         </div>
