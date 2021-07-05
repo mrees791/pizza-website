@@ -344,6 +344,18 @@
     <Content Include="Content\site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Content\Images\PizzaBuilderTest\Cheese\regular-cheese-mi.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Images\PizzaBuilderTest\Cheese\regular-cheese-pb.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Images\PizzaBuilderTest\Cheese\spicy-cheese-mi.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Images\PizzaBuilderTest\Cheese\spicy-cheese-pb.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Images\PizzaBuilderTest\Crust\hand-tossed-mi.webp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
