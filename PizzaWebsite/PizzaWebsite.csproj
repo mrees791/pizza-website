@@ -356,6 +356,15 @@
     <None Include="Content\Images\PizzaBuilderTest\Cheese\spicy-cheese-pb.webp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Content\Images\PizzaBuilderTest\CrustFlavor\garlic-mi.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Images\PizzaBuilderTest\CrustFlavor\none-mi.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Images\PizzaBuilderTest\CrustFlavor\parmesan-mi.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Images\PizzaBuilderTest\Crust\hand-tossed-mi.webp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
