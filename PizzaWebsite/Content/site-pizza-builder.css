@@ -9,7 +9,6 @@
     position: absolute;
 }
 #pizza-builder-menu-section {
-    background-color: lightsteelblue;
 }
 #pizza-builder-image-section .none-selected {
     visibility: hidden;
@@ -45,7 +44,7 @@
 #pizza-builder-menu-section [type=radio] + div.text-only {
     border-style: solid;
     border-color: darkgray;
-    border-width: 1px;
+    border-width: 2px;
     border-radius: 3px;
 }
 #pizza-builder-menu-section [type=radio]:checked + div.text-only {
