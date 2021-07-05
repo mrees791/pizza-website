@@ -24,6 +24,16 @@ const pizzaSitePizzaBuilderNs = {
         var selectedSauceImgSrc = $selectedSauceInput.attr('pb-img-src');
         $sauceImg.attr('src', selectedSauceImgSrc);
     },
+    updateCheeseImage: () => {
+        var $cheeseFieldset = $('#cheese-fieldset');
+        var $cheeseImg = $('#cheese-layer-img');
+        var $selectedCheeseInput = $cheeseFieldset.find(':checked');
+        var selectedCheeseImgSrc = $selectedCheeseInput.attr('pb-img-src');
+        $cheeseImg.attr('src', selectedCheeseImgSrc);
+    },
+    updateCheeseLayer: () => {
+        pizzaSitePizzaBuilderNs.updateCheeseImage();
+    },
     updateSauceLayer: () => {
         pizzaSitePizzaBuilderNs.updateSauceImage();
         pizzaSitePizzaBuilderNs.updateSauceAmount();
@@ -31,6 +41,7 @@ const pizzaSitePizzaBuilderNs = {
     updateAllLayers: () => {
         pizzaSitePizzaBuilderNs.updateCrustLayer();
         pizzaSitePizzaBuilderNs.updateSauceLayer();
+        pizzaSitePizzaBuilderNs.updateCheeseLayer();
     },
     initializeFixedScrollBuilder: () => {
         var $mainNavbar = $('#main-navbar');
@@ -64,6 +75,10 @@ const pizzaSitePizzaBuilderNs = {
         var $sauceAmountFieldset = $('#sauce-amount-fieldset');
         $sauceAmountFieldset.change(function () {
             pizzaSitePizzaBuilderNs.updateSauceAmount();
+        });
+        var $cheeseFieldset = $('#cheese-fieldset');
+        $cheeseFieldset.change(function () {
+            pizzaSitePizzaBuilderNs.updateCheeseImage();
         });
 
         pizzaSitePizzaBuilderNs.updateAllLayers();
