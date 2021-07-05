@@ -14,7 +14,8 @@ namespace PizzaWebsite
                 "~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryplugins").Include(
-                "~/Scripts/jquery.paging.js"));
+                "~/Scripts/jquery.paging.js",
+                "~/Scripts/jquery.dm-uploader.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
@@ -23,10 +24,6 @@ namespace PizzaWebsite
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Scripts/bootstrap.js"));
-
-            // jQuery DM Uploader scripts
-            bundles.Add(new ScriptBundle("~/bundles/jqueryplugins").Include(
-                "~/Scripts/jquery.dm-uploader.js"));
 
             // jQuery DM Uploader CSS
             bundles.Add(new StyleBundle("~/Content/css").Include(
