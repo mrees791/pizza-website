@@ -15,7 +15,8 @@ const pizzaSitePizzaBuilderNs = {
         var $pizzaBuilder = $('#pizza-builder');
         var $imageSection = $('#pizza-builder-image-section');
 
-        $(window).scroll(function () {
+        // Disabled fixed pizza builder image.
+        /*$(window).scroll(function () {
             var currentTop = $(document).scrollTop();
             var pbOffset = $pizzaBuilder.offset().top;
             var navbarHeight = $mainNavbar.height();
@@ -25,7 +26,7 @@ const pizzaSitePizzaBuilderNs = {
             } else {
                 $imageSection.css('margin-top', 0);
             }
-        });
+        });*/
 
         // test crust fieldset
         var $crustFieldset = $('#crust-fieldset');

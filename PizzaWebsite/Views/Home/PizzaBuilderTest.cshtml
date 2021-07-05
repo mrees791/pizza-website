@@ -6,7 +6,7 @@
 <div id="pizza-builder">
     <div class="container">
         <div class="row">
-            <div class="col-sm-3 hidden-xs">
+            <div class="col-sm-6 hidden-xs">
                 <div id="pizza-builder-image-section">
                     @* We should not load all images at once. *@
                     @*<div id="crust-layer">
@@ -41,32 +41,27 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-9 col-xs-12">
-                <div id="pizza-builder-menu-section">
-                    <fieldset id="crust-fieldset">
-                        <label>
-                            <input type="radio" id="crust-1" name="crustGroup" value="1" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp" checked />
-                            <img class="menu-icon" src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-mi.webp" />
-                            <i>HAND TOSSED</i>
-                        </label>
-                        <label>
-                            <input type="radio" id="crust-2" name="crustGroup" value="2" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/thin-pb.webp" checked />
-                            <img class="menu-icon" src="~/Content/Images/PizzaBuilderTest/Crust/thin-mi.webp" />
-                            <i>THIN</i>
-                        </label>
-                        @*<legend>Crust</legend>
-                        <input type="radio" id="crust-1" name="crustGroup" value="1" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp" checked />
-                        <label for="crust-1">Hand Tossed</label>*@
-                        @*<input type="radio" id="crust-2" name="crustGroup" value="2" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/thin-pb.webp" />
-                        <label for="crust-2">Thin</label>*@
-                    </fieldset>
-                    <div id="test-div-length">
-                        @for (int i = 1; i <= 50; i++)
-                        {
-                            <p>@i</p>
-                        }
-                    </div>
+            <div id="pizza-builder-menu-section" class="col-sm-6 col-xs-12 container">
+                <div class="row">
+                    <h3 class="col-xs-12">Crust</h3>
                 </div>
+                <fieldset id="crust-fieldset" class="row">
+                    <label class="col-xs-3">
+                        <input type="radio" id="crust-1" name="crustGroup" value="1" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp" checked />
+                        <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/Crust/hand-tossed-mi.webp')"></div>
+                        <i>HAND TOSSED</i>
+                    </label>
+                    <label class="col-xs-3">
+                        <input type="radio" id="crust-2" name="crustGroup" value="2" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/thin-pb.webp" checked />
+                        <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/Crust/thin-mi.webp')"></div>
+                        <i>THIN</i>
+                    </label>
+                    @*<legend>Crust</legend>
+                    <input type="radio" id="crust-1" name="crustGroup" value="1" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp" checked />
+                    <label for="crust-1">Hand Tossed</label>*@
+                    @*<input type="radio" id="crust-2" name="crustGroup" value="2" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/thin-pb.webp" />
+                    <label for="crust-2">Thin</label>*@
+                </fieldset>
             </div>
         </div>
     </div>
