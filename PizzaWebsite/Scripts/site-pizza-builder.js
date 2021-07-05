@@ -7,6 +7,13 @@ const pizzaSitePizzaBuilderNs = {
         var selectedCrustImgSrc = $selectedInput.attr('pb-img-src');
         $crustImg.attr('src', selectedCrustImgSrc);
     },
+    updateSauceImage: () => {
+        var $sauceFieldset = $('#sauce-fieldset');
+        var $sauceImg = $('#sauce-layer-img');
+        var $selectedSauceInput = $sauceFieldset.find(':checked');
+        var selectedSauceImgSrc = $selectedSauceInput.attr('pb-img-src');
+        $sauceImg.attr('src', selectedSauceImgSrc);
+    },
     updateSauceAmount: () => {
         var $sauceAmountFieldset = $('#sauce-amount-fieldset');
         var $sauceImg = $('#sauce-layer-img');
@@ -17,13 +24,6 @@ const pizzaSitePizzaBuilderNs = {
             $sauceImg.removeClass('none-selected');
         }
     },
-    updateSauceImage: () => {
-        var $sauceFieldset = $('#sauce-fieldset');
-        var $sauceImg = $('#sauce-layer-img');
-        var $selectedSauceInput = $sauceFieldset.find(':checked');
-        var selectedSauceImgSrc = $selectedSauceInput.attr('pb-img-src');
-        $sauceImg.attr('src', selectedSauceImgSrc);
-    },
     updateCheeseImage: () => {
         var $cheeseFieldset = $('#cheese-fieldset');
         var $cheeseImg = $('#cheese-layer-img');
@@ -31,8 +31,19 @@ const pizzaSitePizzaBuilderNs = {
         var selectedCheeseImgSrc = $selectedCheeseInput.attr('pb-img-src');
         $cheeseImg.attr('src', selectedCheeseImgSrc);
     },
+    updateCheeseAmount: () => {
+        var $cheeseAmountFieldset = $('#cheese-amount-fieldset');
+        var $cheeseImg = $('#cheese-layer-img');
+        var $selectedAmountInput = $cheeseAmountFieldset.find(':checked');
+        if ($selectedAmountInput.attr('value') === 'none') {
+            $cheeseImg.addClass('none-selected');
+        } else {
+            $cheeseImg.removeClass('none-selected');
+        }
+    },
     updateCheeseLayer: () => {
         pizzaSitePizzaBuilderNs.updateCheeseImage();
+        pizzaSitePizzaBuilderNs.updateCheeseAmount();
     },
     updateSauceLayer: () => {
         pizzaSitePizzaBuilderNs.updateSauceImage();
@@ -79,6 +90,10 @@ const pizzaSitePizzaBuilderNs = {
         var $cheeseFieldset = $('#cheese-fieldset');
         $cheeseFieldset.change(function () {
             pizzaSitePizzaBuilderNs.updateCheeseImage();
+        });
+        var $cheeseAmountFieldset = $('#cheese-amount-fieldset');
+        $cheeseAmountFieldset.change(function () {
+            pizzaSitePizzaBuilderNs.updateCheeseAmount();
         });
 
         pizzaSitePizzaBuilderNs.updateAllLayers();
