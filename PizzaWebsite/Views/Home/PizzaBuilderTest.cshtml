@@ -6,7 +6,7 @@
 <div id="pizza-builder">
     <div class="container">
         <div class="row">
-            <div class="col-sm-6 hidden-xs">
+            <div class="hidden-xs col-sm-6">
                 <div id="pizza-builder-image-section">
                     @* We should not load all images at once. *@
                     @*<div id="crust-layer">
@@ -41,17 +41,17 @@
                     </div>
                 </div>
             </div>
-            <div id="pizza-builder-menu-section" class="col-sm-6 col-xs-12 container">
+            <div id="pizza-builder-menu-section" class="col-xs-12 col-sm-6 container">
                 <div class="row">
                     <h3 class="col-xs-12">Crust</h3>
                 </div>
                 <fieldset id="crust-fieldset" class="row">
-                    <label class="col-xs-3">
+                    <label class="col-xs-3 col-sm-4 col-md-3">
                         <input type="radio" id="crust-1" name="crustGroup" value="1" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp" checked />
                         <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/Crust/hand-tossed-mi.webp')"></div>
                         <i>HAND TOSSED</i>
                     </label>
-                    <label class="col-xs-3">
+                    <label class="col-xs-3 col-sm-4 col-md-3">
                         <input type="radio" id="crust-2" name="crustGroup" value="2" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/thin-pb.webp" checked />
                         <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/Crust/thin-mi.webp')"></div>
                         <i>THIN</i>
