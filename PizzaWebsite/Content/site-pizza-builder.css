@@ -19,13 +19,9 @@
     background-size: 100% auto;
 }
 .pb-menu-section {
-    width: 100%;
 }
 .pb-menu-section label {
     cursor: pointer;
-}
-.pb-menu-section label.text-only {
-    padding: 1px;
 }
 .pb-menu-section i {
     display: block;
