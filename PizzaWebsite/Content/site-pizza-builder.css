@@ -8,11 +8,11 @@
     width: 100%;
     position: absolute;
 }
-#pizza-builder-menu-section {
-    background-color: lightsteelblue;
-}
 #pizza-builder-image-section .none-selected {
     visibility: hidden;
+}
+label.text-only-label {
+    padding: 1px;
 }
 /* Radio button controls. */
 .pb-menu-icon {
