@@ -8,6 +8,9 @@
     width: 100%;
     position: absolute;
 }
+#pizza-builder-menu-section {
+    background-color: lightsteelblue;
+}
 #pizza-builder-image-section .none-selected {
     visibility: hidden;
 }
