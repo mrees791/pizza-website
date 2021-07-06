@@ -8,8 +8,6 @@
     width: 100%;
     position: absolute;
 }
-#pizza-builder-menu-section {
-}
 #pizza-builder-image-section .none-selected {
     visibility: hidden;
 }
@@ -20,33 +18,36 @@
     background-repeat: no-repeat;
     background-size: 100% auto;
 }
-#pizza-builder-menu-section label {
+.pb-menu-section {
+    width: 100%;
+}
+.pb-menu-section label {
     cursor: pointer;
 }
-#pizza-builder-menu-section i {
+.pb-menu-section i {
     display: block;
     text-align: center;
 }
-#pizza-builder-menu-section [type=radio] {
+.pb-menu-section [type=radio] {
     position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
 }
-#pizza-builder-menu-section [type=radio] + div.pb-menu-icon {
+.pb-menu-section [type=radio] + div.pb-menu-icon {
     border-style: solid;
     border-color: darkgray;
     border-width: 0px 0px 3px 0px;
 }
-#pizza-builder-menu-section [type=radio]:checked + div.pb-menu-icon {
+.pb-menu-section [type=radio]:checked + div.pb-menu-icon {
     border-color: red;
 }
-#pizza-builder-menu-section [type=radio] + div.text-only {
+.pb-menu-section [type=radio] + div.text-only {
     border-style: solid;
     border-color: darkgray;
     border-width: 2px;
     border-radius: 3px;
 }
-#pizza-builder-menu-section [type=radio]:checked + div.text-only {
+.pb-menu-section [type=radio]:checked + div.text-only {
     border-color: red;
 }
