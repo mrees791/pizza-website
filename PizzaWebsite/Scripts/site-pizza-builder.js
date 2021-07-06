@@ -74,6 +74,10 @@ const pizzaSitePizzaBuilderNs = {
     initializePizzaBuilder: () => {
         // Disabled fixed scroll image.
         // pizzaSitePizzaBuilderNs.initializeFixedScrollBuilder();
+        var $tabs = $('#menu-tabs');
+        $tabs.tabs({
+            collapsible: false
+        });
 
         var $crustFieldset = $('#crust-fieldset');
         $crustFieldset.change(function () {
