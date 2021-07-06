@@ -11,10 +11,27 @@
 #pizza-builder-image-section .none-selected {
     visibility: hidden;
 }
+#pb-tabs {
+    text-align: center;
+    font-size: 1.35em;
+}
+.tab {
+    border: 0;
+    color: black;
+    background-color: lightgray;
+    font-weight: 200;
+    padding: 0.5em;
+    border-color: black;
+    border-style: solid;
+    border-width: 0 0 1px 0;
+}
+.selected-tab {
+    background-color: white;
+    border-width: 1px 1px 0 1px;
+}
 label.text-only-label {
     padding: 1px;
 }
-/* Radio button controls. */
 .pb-menu-icon {
     width: 100%;
     height: 50px;
