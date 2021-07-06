@@ -22,6 +22,10 @@ input,
 select,
 textarea { max-width: 280px; }
 
+.no-padding {
+    padding: 0;
+}
+
 /* Manage menu images */
 img.manage-menu-image {
     padding: 5px;
