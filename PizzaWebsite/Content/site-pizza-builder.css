@@ -44,7 +44,7 @@
 .pb-menu-section [type=radio] + div.text-only {
     border-style: solid;
     border-color: darkgray;
-    border-width: 2px;
+    border-width: 1px;
     border-radius: 3px;
 }
 .pb-menu-section [type=radio]:checked + div.text-only {
