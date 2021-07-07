@@ -413,7 +413,25 @@
     <None Include="Content\Images\PizzaBuilderTest\Sauce\parmesan-pb.webp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Content\Images\PizzaBuilderTest\Topping\pepperoni-mi.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Images\PizzaBuilderTest\Topping\pepperoni-pb.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Images\PizzaBuilderTest\Topping\pepperoni-pbe.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Images\PizzaBuilderTest\Topping\pepperoni-pbel.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Images\PizzaBuilderTest\Topping\pepperoni-pber.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Images\PizzaBuilderTest\Topping\pepperoni-pbl.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Images\PizzaBuilderTest\Topping\pepperoni-pbr.webp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
