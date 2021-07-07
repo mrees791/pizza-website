@@ -51,11 +51,16 @@
             <div class="col-xs-12 col-sm-6">
                 <div id="pb-tabs" class="container-fluid">
                     <div class="row equal">
-                        <button class="col-xs-12 col-sm-6 tab selected-tab">Crust, Sauce, and Cheese</button>
-                        <button class="col-xs-12 col-sm-6 tab">Toppings</button>
+                        <button id="tab-button-crust-sauce-cheese" class="col-xs-12 col-sm-6 tab selected-tab">Crust, Sauce, and Cheese</button>
+                        <button id="tab-button-topping" class="col-xs-12 col-sm-6 tab">Toppings</button>
                     </div>
                 </div>
-                <div class="container-fluid pb-menu-section">
+                @* Topping menu *@
+                <div id="pb-topping-menu" class="container-fluid pb-menu-section" style="display: none;">
+                    <div>Toppings go here.</div>
+                </div>
+                @* Crust, sauce, cheese menu *@
+                <div id="pb-crust-sauce-cheese-menu" class="container-fluid pb-menu-section" style="display: none;">
                     <fieldset id="crust-fieldset" class="row equal">
                         <legend class="col-xs-12">Crust</legend>
                         <label class="col-xs-3 col-sm-4 col-md-3">

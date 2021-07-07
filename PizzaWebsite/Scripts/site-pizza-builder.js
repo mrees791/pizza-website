@@ -71,6 +71,18 @@ const pizzaSitePizzaBuilderNs = {
             }
         });
     },
+    showToppingMenu: () => {
+        var $toppingMenu = $('#pb-topping-menu');
+        var $crustSauceCheeseMenu = $('#pb-crust-sauce-cheese-menu');
+        $crustSauceCheeseMenu.css('display', 'none');
+        $toppingMenu.css('display', 'block');
+    },
+    showCrustSauceCheeseMenu: () => {
+        var $toppingMenu = $('#pb-topping-menu');
+        var $crustSauceCheeseMenu = $('#pb-crust-sauce-cheese-menu');
+        $toppingMenu.css('display', 'none');
+        $crustSauceCheeseMenu.css('display', 'block');
+    },
     initializePizzaBuilder: () => {
         // Disabled fixed scroll image.
         // pizzaSitePizzaBuilderNs.initializeFixedScrollBuilder();
@@ -95,7 +107,19 @@ const pizzaSitePizzaBuilderNs = {
         $cheeseAmountFieldset.change(function () {
             pizzaSitePizzaBuilderNs.updateCheeseAmount();
         });
-
+        var $crustSauceCheeseButton = $('#tab-button-crust-sauce-cheese');
+        $crustSauceCheeseButton.click(function () {
+            $toppingButton.removeClass('selected-tab');
+            $crustSauceCheeseButton.addClass('selected-tab');
+            pizzaSitePizzaBuilderNs.showCrustSauceCheeseMenu();
+        });
+        var $toppingButton = $('#tab-button-topping');
+        $toppingButton.click(function () {
+            $crustSauceCheeseButton.removeClass('selected-tab');
+            $toppingButton.addClass('selected-tab');
+            pizzaSitePizzaBuilderNs.showToppingMenu();
+        })
+        pizzaSitePizzaBuilderNs.showCrustSauceCheeseMenu();
         pizzaSitePizzaBuilderNs.updateAllLayers();
     }
 };
