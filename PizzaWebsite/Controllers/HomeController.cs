@@ -30,11 +30,5 @@ namespace PizzaWebsite.Controllers
         {
             return View();
         }
-
-        // todo: Remove
-        public ActionResult StyleTest()
-        {
-            return View();
-        }
     }
 }

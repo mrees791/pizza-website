@@ -1,4 +1,6 @@
-﻿body {
+﻿@import "../bootstrap/_functions";
+@import "../bootstrap/_variables";
+body {
     padding-bottom: 20px;
     padding-top: 70px;
 }
