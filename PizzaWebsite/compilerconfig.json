@@ -1,14 +1,14 @@
 ﻿[
   {
     "outputFile": "Content/site.css",
-    "inputFile": "Content/site.scss"
+    "inputFile": "Content/scss/site.scss"
   },
   {
     "outputFile": "Content/site-pizza-builder.css",
-    "inputFile": "Content/site-pizza-builder.scss"
+    "inputFile": "Content/scss/site-pizza-builder.scss"
   },
   {
-    "outputFile": "Content/bootstrap/bootstrap.css",
+    "outputFile": "Content/bootstrap.css",
     "inputFile": "Content/bootstrap/bootstrap.scss"
   }
 ]
