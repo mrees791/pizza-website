@@ -551,6 +551,7 @@
     <Content Include="Views\ManagePizzaCrustFlavorMenu\ManageImages.cshtml" />
     <Content Include="Views\ManagePizzaToppingTypeMenu\ManageImages.cshtml" />
     <Content Include="Views\ManagePizzaMenu\ManageImages.cshtml" />
+    <Content Include="Views\Home\StyleTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
