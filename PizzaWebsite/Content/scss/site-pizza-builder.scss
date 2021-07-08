@@ -1,1 +1,7 @@
-﻿
+﻿@import "../bootstrap/_functions";
+@import "../bootstrap/_variables";
+#pizza-builder-image-section {
+    img {
+        width: 100%;
+    }
+}
