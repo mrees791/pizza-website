@@ -6,5 +6,9 @@
   {
     "outputFile": "Content/site-pizza-builder.css",
     "inputFile": "Content/site-pizza-builder.scss"
+  },
+  {
+    "outputFile": "Content/bootstrap/bootstrap.css",
+    "inputFile": "Content/bootstrap/bootstrap.scss"
   }
 ]
