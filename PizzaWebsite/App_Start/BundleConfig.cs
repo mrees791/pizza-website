@@ -25,8 +25,8 @@ namespace PizzaWebsite
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                 "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                "~/Scripts/bootstrap.js"));
+            /*bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+                "~/Scripts/bootstrap.js"));*/
 
             bundles.Add(new ScriptBundle("~/bundles/site").Include(
                 "~/Scripts/site.js",
@@ -52,7 +52,7 @@ namespace PizzaWebsite
               "~/Content/themes/base/jquery.ui.theme.css"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Content/bootstrap.css",
+                //"~/Content/bootstrap.css",
                 "~/Content/jQuery.FileUpload/css/jquery.dm-uploader.css",
                 "~/Content/site.css",
                 "~/Content/site-pizza-builder.css"));
