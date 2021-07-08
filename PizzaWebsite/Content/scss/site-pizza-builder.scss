@@ -1,7 +1,11 @@
 ﻿@import "../bootstrap/_functions";
 @import "../bootstrap/_variables";
 #pizza-builder-image-section {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
     img {
         width: 100%;
+        position: absolute;
     }
 }

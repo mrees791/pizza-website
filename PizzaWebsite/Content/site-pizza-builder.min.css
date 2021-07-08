@@ -1,1 +1,1 @@
-﻿#pizza-builder-image-section img{width:100%;}
+﻿#pizza-builder-image-section{position:relative;width:100%;padding-bottom:100%;}#pizza-builder-image-section img{width:100%;position:absolute;}
