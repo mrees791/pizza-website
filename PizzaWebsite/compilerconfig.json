@@ -1,0 +1,10 @@
+﻿[
+  {
+    "outputFile": "Content/site.css",
+    "inputFile": "Content/site.scss"
+  },
+  {
+    "outputFile": "Content/site-pizza-builder.css",
+    "inputFile": "Content/site-pizza-builder.scss"
+  }
+]
