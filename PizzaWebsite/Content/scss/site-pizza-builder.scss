@@ -1,6 +1,11 @@
 ﻿@import "../bootstrap/_functions";
 @import "../bootstrap/_variables";
+@import "../bootstrap/_mixins";
 $menu-border-color: $gray-200;
+$tab-font-color: $gray-500;
+$tab-bg-color: $gray-600;
+$tab-font-color-selected: $gray-900;
+$tab-bg-color-selected: $gray-200;
 $menu-image-border-color: $gray-300;
 $menu-image-border-color-selected: $red-400;
 $menu-text-input-border-color: $gray-400;
@@ -13,6 +18,25 @@ $menu-text-input-border-color-selected: $red-400;
         width: 100%;
         position: absolute;
     }
+}
+#pb-tabs {
+    button.tab {
+        color: $tab-font-color;
+        background-color: $tab-bg-color;
+        border-color: $menu-border-color;
+        border: none;
+        font-size: 1.3em;
+        padding: 0.25em;
+        font-weight: 400;
+    }
+
+    button.selected-tab {
+        color: $tab-font-color-selected;
+        background-color: $tab-bg-color-selected;
+    }
+}
+#pb-menu-container {
+    border: 1px solid $menu-border-color;
 }
 .pb-menu-section {
     .pb-menu-icon {
@@ -38,14 +62,13 @@ $menu-text-input-border-color-selected: $red-400;
     fieldset, legend {
         border-color: $menu-border-color;
         border-style: solid;
+        border-width: 0 0 1px;
     }
 
     fieldset {
-        border-width: 0 1px 1px 1px;
     }
 
     legend {
-        border-width: 0 0 1px 0;
     }
 
     [type=radio] {
@@ -74,5 +97,18 @@ $menu-text-input-border-color-selected: $red-400;
 
     [type=radio]:checked + div.text-only {
         border-color: $menu-text-input-border-color-selected;
+    }
+}
+@include media-breakpoint-up(sm) {
+    #pb-tabs {
+        button.tab {
+            color: $tab-font-color;
+            background-color: $tab-bg-color;
+        }
+
+        button.selected-tab {
+            color: $tab-font-color-selected;
+            background-color: transparent;
+        }
     }
 }
