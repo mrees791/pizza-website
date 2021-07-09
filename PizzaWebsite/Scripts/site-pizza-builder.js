@@ -86,21 +86,39 @@ const pizzaSitePizzaBuilderNs = {
     initializeToppingMenu: () => {
         $('.topping-row').each(function () {
             var $toppingRow = $(this);
+            var $toppingControls = $toppingRow.children('.topping-controls');
             var $clickableToppingRow = $toppingRow.children('.clickable-topping-row');
+            var $amountFieldset = $toppingControls.children('.amount-fieldset');
 
             $clickableToppingRow.click(function () {
-                if ($toppingRow.hasClass('is-selected')) {
-                    $toppingRow.removeClass('is-selected')
+                if ($toppingRow.hasClass('is-active')) {
+                    $toppingRow.removeClass('is-active')
                 } else {
-                    $toppingRow.addClass('is-selected');
+                    $toppingRow.addClass('is-active');
                 }
                 pizzaSitePizzaBuilderNs.updateToppingRowControls($toppingRow);
             });
+
+            $amountFieldset.change(function () {
+                pizzaSitePizzaBuilderNs.updateToppingRowSelectedAmount($toppingRow);
+            });
         });
+    },
+    updateToppingRowSelectedAmount: ($toppingRow) => {
+        var $toppingControls = $toppingRow.children('.topping-controls');
+        var $amountFieldset = $toppingControls.children('.amount-fieldset');
+        var inputGroupName = $amountFieldset.attr('input-group-name');
+        var checkedValue = $('input[name="' + inputGroupName + '"]:checked').val();
+
+        if (checkedValue === 'none') {
+            $toppingRow.removeClass('topping-is-selected');
+        } else {
+            $toppingRow.addClass('topping-is-selected');
+        }
     },
     updateToppingRowControls: ($toppingRow) => {
         var $toppingControls = $toppingRow.children('.topping-controls');
-        if ($toppingRow.hasClass('is-selected')) {
+        if ($toppingRow.hasClass('is-active')) {
             $toppingControls.slideDown();
         } else {
             $toppingControls.slideUp();
@@ -109,6 +127,11 @@ const pizzaSitePizzaBuilderNs = {
     updateAllToppingRowsControls: () => {
         $('.topping-row').each(function () {
             pizzaSitePizzaBuilderNs.updateToppingRowControls($(this));
+        });
+    },
+    updateAllToppingRowSelectedAmounts: () => {
+        $('.topping-row').each(function () {
+            pizzaSitePizzaBuilderNs.updateToppingRowSelectedAmount($(this));
         });
     },
     initializePizzaBuilder: () => {
@@ -151,6 +174,7 @@ const pizzaSitePizzaBuilderNs = {
         pizzaSitePizzaBuilderNs.updateAllLayers();
         pizzaSitePizzaBuilderNs.initializeToppingMenu();
 
+        pizzaSitePizzaBuilderNs.updateAllToppingRowSelectedAmounts();
         pizzaSitePizzaBuilderNs.updateAllToppingRowsControls();
     }
 };
