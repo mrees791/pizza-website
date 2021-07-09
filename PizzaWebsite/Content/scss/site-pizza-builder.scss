@@ -14,9 +14,14 @@ $menu-text-input-border-color-selected: $red-400;
     position: relative;
     width: 100%;
     padding-bottom: 100%;
+
     img {
         width: 100%;
         position: absolute;
+    }
+
+    .none-selected {
+        visibility: hidden;
     }
 }
 #pb-tabs {

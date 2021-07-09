@@ -5,6 +5,8 @@
   #pizza-builder-image-section img {
     width: 100%;
     position: absolute; }
+  #pizza-builder-image-section .none-selected {
+    visibility: hidden; }
 
 #pb-tabs button.tab {
   color: #adb5bd;

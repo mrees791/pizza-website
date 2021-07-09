@@ -21,13 +21,6 @@
                         <img src="~/Content/Images/PizzaBuilderTest/Topping/pepperoni-pb.webp"/>
                     </div>
                 <div>*@
-                @*
-                <div id="crust-layer">
-                    <img id="crust-layer-img" src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp" />
-                </div>
-                <div id="sauce-layer">
-                    <img id="sauce-layer-img" src="~/Content/Images/PizzaBuilderTest/Sauce/marinara-pb.webp" />
-                </div>*@
             </div>
         </div>
         <div id="pb-menu-container" class="col-12 col-sm-6">
@@ -86,53 +79,50 @@
                         </div>
                     </label>
                 </fieldset>
-            </div>
-            @*
-            <div id="pb-crust-sauce-cheese-menu" class="pb-menu-section" style="display: none;">
                 <fieldset id="sauce-fieldset" class="row equal">
-                    <legend class="col-xs-12">Sauce</legend>
-                    <label class="col-xs-3 col-sm-4 col-md-3">
+                    <legend class="col-12">Sauce</legend>
+                    <label class="col-3 col-sm-4 col-md-3">
                         <input type="radio" id="sauce-1" name="sauceGroup" value="1" pb-img-src="~/Content/Images/PizzaBuilderTest/Sauce/marinara-pb.webp" checked />
                         <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/Sauce/marinara-mi.webp')"></div>
                         <i>Marinara</i>
                     </label>
-                    <label class="col-xs-3 col-sm-4 col-md-3">
+                    <label class="col-3 col-sm-4 col-md-3">
                         <input type="radio" id="sauce-2" name="sauceGroup" value="2" pb-img-src="~/Content/Images/PizzaBuilderTest/Sauce/buffalo-pb.webp" />
                         <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/Sauce/buffalo-mi.webp')"></div>
                         <i>Buffalo</i>
                     </label>
-                    <label class="col-xs-3 col-sm-4 col-md-3">
+                    <label class="col-3 col-sm-4 col-md-3">
                         <input type="radio" id="sauce-3" name="sauceGroup" value="3" pb-img-src="~/Content/Images/PizzaBuilderTest/Sauce/bbq-pb.webp" />
                         <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/Sauce/bbq-mi.webp')"></div>
                         <i>BBQ</i>
                     </label>
-                    <label class="col-xs-3 col-sm-4 col-md-3">
+                    <label class="col-3 col-sm-4 col-md-3">
                         <input type="radio" id="sauce-4" name="sauceGroup" value="4" pb-img-src="~/Content/Images/PizzaBuilderTest/Sauce/parmesan-pb.webp" />
                         <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/Sauce/parmesan-mi.webp')"></div>
                         <i>Parmesan</i>
                     </label>
                 </fieldset>
                 <fieldset id="sauce-amount-fieldset" class="row equal">
-                    <legend class="col-xs-12">Amount</legend>
-                    <label class="col-xs-12 col-sm-3 text-only-label">
+                    <legend class="col-12">Amount</legend>
+                    <label class="col-12 col-sm-3 text-only-label">
                         <input type="radio" name="sauceAmountGroup" value="extra" />
                         <div class="text-only">
                             <i>Extra</i>
                         </div>
                     </label>
-                    <label class="col-xs-12 col-sm-3 text-only-label">
+                    <label class="col-12 col-sm-3 text-only-label">
                         <input type="radio" name="sauceAmountGroup" value="regular" checked />
                         <div class="text-only">
                             <i>Regular</i>
                         </div>
                     </label>
-                    <label class="col-xs-12 col-sm-3 text-only-label">
+                    <label class="col-12 col-sm-3 text-only-label">
                         <input type="radio" name="sauceAmountGroup" value="light" />
                         <div class="text-only">
                             <i>Light</i>
                         </div>
                     </label>
-                    <label class="col-xs-12 col-sm-3 text-only-label">
+                    <label class="col-12 col-sm-3 text-only-label">
                         <input type="radio" name="sauceAmountGroup" value="none" />
                         <div class="text-only">
                             <i>None</i>
@@ -140,39 +130,39 @@
                     </label>
                 </fieldset>
                 <fieldset id="cheese-fieldset" class="row equal">
-                    <legend class="col-xs-12">Cheese</legend>
-                    <label class="col-xs-3 col-sm-4 col-md-3">
+                    <legend class="col-12">Cheese</legend>
+                    <label class="col-3 col-sm-4 col-md-3">
                         <input type="radio" id="cheese-1" name="cheeseGroup" value="1" pb-img-src="~/Content/Images/PizzaBuilderTest/Cheese/regular-cheese-pb.webp" checked />
                         <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/Cheese/regular-cheese-mi.webp')"></div>
                         <i>Regular Cheese</i>
                     </label>
-                    <label class="col-xs-3 col-sm-4 col-md-3">
+                    <label class="col-3 col-sm-4 col-md-3">
                         <input type="radio" id="cheese-2" name="cheeseGroup" value="2" pb-img-src="~/Content/Images/PizzaBuilderTest/Cheese/spicy-cheese-pb.webp" />
                         <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/Cheese/spicy-cheese-mi.webp')"></div>
                         <i>Spicy Cheese</i>
                     </label>
                 </fieldset>
                 <fieldset id="cheese-amount-fieldset" class="row equal">
-                    <legend class="col-xs-12">Amount</legend>
-                    <label class="col-xs-12 col-sm-3 text-only-label">
+                    <legend class="col-12">Amount</legend>
+                    <label class="col-12 col-sm-3 text-only-label">
                         <input type="radio" name="cheeseAmountGroup" value="extra" />
                         <div class="text-only">
                             <i>Extra</i>
                         </div>
                     </label>
-                    <label class="col-xs-12 col-sm-3 text-only-label">
+                    <label class="col-12 col-sm-3 text-only-label">
                         <input type="radio" name="cheeseAmountGroup" value="regular" checked />
                         <div class="text-only">
                             <i>Regular</i>
                         </div>
                     </label>
-                    <label class="col-xs-12 col-sm-3 text-only-label">
+                    <label class="col-12 col-sm-3 text-only-label">
                         <input type="radio" name="cheeseAmountGroup" value="light" />
                         <div class="text-only">
                             <i>Light</i>
                         </div>
                     </label>
-                    <label class="col-xs-12 col-sm-3 text-only-label">
+                    <label class="col-12 col-sm-3 text-only-label">
                         <input type="radio" name="cheeseAmountGroup" value="none" />
                         <div class="text-only">
                             <i>None</i>
@@ -180,18 +170,18 @@
                     </label>
                 </fieldset>
                 <fieldset id="crust-flavor-fieldset" class="row equal">
-                    <legend class="col-xs-12">Crust Flavor</legend>
-                    <label class="col-xs-3 col-sm-4 col-md-3">
+                    <legend class="col-12">Crust Flavor</legend>
+                    <label class="col-3 col-sm-4 col-md-3">
                         <input type="radio" id="crust-flavor-1" name="crustFlavorGroup" value="1" checked />
                         <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/CrustFlavor/none-mi.webp')"></div>
                         <i>None</i>
                     </label>
-                    <label class="col-xs-3 col-sm-4 col-md-3">
+                    <label class="col-3 col-sm-4 col-md-3">
                         <input type="radio" id="crust-flavor-2" name="crustFlavorGroup" value="2" />
                         <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/CrustFlavor/garlic-mi.webp')"></div>
                         <i>Garlic</i>
                     </label>
-                    <label class="col-xs-3 col-sm-4 col-md-3">
+                    <label class="col-3 col-sm-4 col-md-3">
                         <input type="radio" id="crust-flavor-3" name="crustFlavorGroup" value="3" />
                         <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/CrustFlavor/parmesan-mi.webp')"></div>
                         <i>Parmesan</i>
@@ -199,8 +189,7 @@
                 </fieldset>
             </div>
         </div>
-            *@
-        </div>
+    </div>
 </div>
 @section Scripts {
     <script type="text/javascript">
