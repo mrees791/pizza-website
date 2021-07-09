@@ -30,6 +30,9 @@
   background-repeat: no-repeat;
   background-size: 100% auto; }
 
+.pb-menu-section .clickable-topping-row {
+  cursor: pointer; }
+
 .pb-menu-section label {
   cursor: pointer; }
 

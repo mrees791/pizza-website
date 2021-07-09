@@ -51,6 +51,10 @@ $menu-text-input-border-color-selected: $red-400;
         background-size: 100% auto;
     }
 
+    .clickable-topping-row {
+        cursor: pointer;
+    }
+
     label {
         cursor: pointer;
     }

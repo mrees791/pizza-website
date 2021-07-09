@@ -16,11 +16,12 @@
                 <div id="cheese-layer">
                     <img id="cheese-layer-img" />
                 </div>
-                @*<div id="topping-layer">
-                    <div menu-id="1">
-                        <img src="~/Content/Images/PizzaBuilderTest/Topping/pepperoni-pb.webp"/>
+                @* todo: Finish topping pizza builder image. *@
+                <div id="topping-layer">
+                    <div id="topping-pepperoni">
+                        <img class="topping-pb" src="~/Content/Images/PizzaBuilderTest/Topping/pepperoni-pb.webp" />
                     </div>
-                <div>*@
+                </div>
             </div>
         </div>
         <div id="pb-menu-container" class="col-12 col-sm-6">
@@ -29,7 +30,35 @@
                 <button id="tab-button-topping" class="col-12 col-sm-6 tab">Toppings</button>
             </div>
             <div id="pb-topping-menu" class="pb-menu-section" style="display: none;">
-                <div>TOPPINGS</div>
+                <h3>Meats</h3>
+                <div class="row topping-row">
+                    <div class="col-12 row clickable-topping-row">
+                        <img class="col-3" src="~/Content/Images/PizzaBuilderTest/Topping/pepperoni-mi.webp" />
+                        <div class="col-9">Pepperoni</div>
+                    </div>
+                    <div class="col-12 topping-controls" style="display: none;">
+                        <fieldset id="pepperoni-amount-fieldset" class="row">
+                            <label class="col-4 text-only-label">
+                                <input type="radio" name="pepperoniToppingAmountGroup" value="extra" />
+                                <div class="text-only">
+                                    <i>Extra</i>
+                                </div>
+                            </label>
+                            <label class="col-4 text-only-label">
+                                <input type="radio" name="pepperoniToppingAmountGroup" value="regular" />
+                                <div class="text-only">
+                                    <i>Regular</i>
+                                </div>
+                            </label>
+                            <label class="col-4 text-only-label">
+                                <input type="radio" name="pepperoniToppingAmountGroup" value="none" checked />
+                                <div class="text-only">
+                                    <i>None</i>
+                                </div>
+                            </label>
+                        </fieldset>
+                    </div>
+                </div>
             </div>
             <div id="pb-crust-sauce-cheese-menu" class="pb-menu-section" style="display: none;">
                 <fieldset id="crust-fieldset" class="row equal">

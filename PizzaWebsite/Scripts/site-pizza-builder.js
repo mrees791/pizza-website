@@ -83,6 +83,34 @@ const pizzaSitePizzaBuilderNs = {
         $toppingMenu.css('display', 'none');
         $crustSauceCheeseMenu.css('display', 'block');
     },
+    initializeToppingMenu: () => {
+        $('.topping-row').each(function () {
+            var $toppingRow = $(this);
+            var $clickableToppingRow = $toppingRow.children('.clickable-topping-row');
+
+            $clickableToppingRow.click(function () {
+                if ($toppingRow.hasClass('is-selected')) {
+                    $toppingRow.removeClass('is-selected')
+                } else {
+                    $toppingRow.addClass('is-selected');
+                }
+                pizzaSitePizzaBuilderNs.updateToppingRowControls($toppingRow);
+            });
+        });
+    },
+    updateToppingRowControls: ($toppingRow) => {
+        var $toppingControls = $toppingRow.children('.topping-controls');
+        if ($toppingRow.hasClass('is-selected')) {
+            $toppingControls.slideDown();
+        } else {
+            $toppingControls.slideUp();
+        }
+    },
+    updateAllToppingRowsControls: () => {
+        $('.topping-row').each(function () {
+            pizzaSitePizzaBuilderNs.updateToppingRowControls($(this));
+        });
+    },
     initializePizzaBuilder: () => {
         // Disabled fixed scroll image.
         // pizzaSitePizzaBuilderNs.initializeFixedScrollBuilder();
@@ -121,5 +149,8 @@ const pizzaSitePizzaBuilderNs = {
         })
         pizzaSitePizzaBuilderNs.showCrustSauceCheeseMenu();
         pizzaSitePizzaBuilderNs.updateAllLayers();
+        pizzaSitePizzaBuilderNs.initializeToppingMenu();
+
+        pizzaSitePizzaBuilderNs.updateAllToppingRowsControls();
     }
 };
