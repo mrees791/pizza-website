@@ -1,5 +1,10 @@
 ﻿@import "../bootstrap/_functions";
 @import "../bootstrap/_variables";
+$menu-border-color: $gray-200;
+$menu-image-border-color: $gray-300;
+$menu-image-border-color-selected: $red-400;
+$menu-text-input-border-color: $gray-400;
+$menu-text-input-border-color-selected: $red-400;
 #pizza-builder-image-section {
     position: relative;
     width: 100%;
@@ -30,15 +35,16 @@
         text-align: center;
     }
 
-    fieldset {
-        border-color: #d9d9d9;
+    fieldset, legend {
+        border-color: $menu-border-color;
         border-style: solid;
+    }
+
+    fieldset {
         border-width: 0 1px 1px 1px;
     }
 
     legend {
-        border-color: #d9d9d9;
-        border-style: solid;
         border-width: 0 0 1px 0;
     }
 
@@ -51,22 +57,22 @@
 
     [type=radio] + div.pb-menu-icon {
         border-style: solid;
-        border-color: darkgray;
-        border-width: 0px 0px 3px 0px;
+        border-color: $menu-image-border-color;
+        border-width: 0px 0px 4px 0px;
     }
 
     [type=radio]:checked + div.pb-menu-icon {
-        border-color: red;
+        border-color: $menu-image-border-color-selected;
     }
 
     [type=radio] + div.text-only {
         border-style: solid;
-        border-color: darkgray;
+        border-color: $menu-text-input-border-color;
         border-width: 1px;
         border-radius: 3px;
     }
 
     [type=radio]:checked + div.text-only {
-        border-color: red;
+        border-color: $menu-text-input-border-color-selected;
     }
 }
