@@ -35,6 +35,10 @@
                 <button id="tab-button-crust-sauce-cheese" class="col-12 col-sm-6 tab selected-tab">Crust, Sauce, and Cheese</button>
                 <button id="tab-button-topping" class="col-12 col-sm-6 tab">Toppings</button>
             </div>
+            <!-- Topping menu -->
+            <div id="pb-topping-menu" class="pb-menu-section" style="display: none;">
+                <p>TOPPINGS</p>
+            </div>
             <div id="pb-crust-sauce-cheese-menu" class="pb-menu-section" style="display: none;">
                 <fieldset id="crust-fieldset" class="row">
                     <legend class="col-12">Crust</legend>
@@ -61,39 +65,7 @@
                 </fieldset>
             </div>
             @*
-        <div class="col-xs-12 col-sm-6">
-            <div id="pb-tabs" class="row equal">
-                <button id="tab-button-crust-sauce-cheese" class="col-xs-12 col-sm-6 tab selected-tab">Crust, Sauce, and Cheese</button>
-                <button id="tab-button-topping" class="col-xs-12 col-sm-6 tab">Toppings</button>
-            </div>
-            <!-- Topping menu -->
-            <div id="pb-topping-menu" class="pb-menu-section" style="display: none;">
-            </div>
-            <!-- Crust, sauce, cheese menu -->
             <div id="pb-crust-sauce-cheese-menu" class="pb-menu-section" style="display: none;">
-                <fieldset id="crust-fieldset" class="row equal">
-                    <legend class="col-xs-12">Crust</legend>
-                    <label class="col-xs-3 col-sm-4 col-md-3">
-                        <input type="radio" id="crust-1" name="crustGroup" value="1" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/hand-tossed-pb.webp" checked />
-                        <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/Crust/hand-tossed-mi.webp')"></div>
-                        <i>Hand Tossed</i>
-                    </label>
-                    <label class="col-xs-3 col-sm-4 col-md-3">
-                        <input type="radio" id="crust-2" name="crustGroup" value="2" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/thin-pb.webp" />
-                        <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/Crust/thin-mi.webp')"></div>
-                        <i>Thin</i>
-                    </label>
-                    <label class="col-xs-3 col-sm-4 col-md-3">
-                        <input type="radio" id="crust-3" name="crustGroup" value="3" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/stuffed-pb.webp" />
-                        <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/Crust/stuffed-mi.webp')"></div>
-                        <i>Extra Thick</i>
-                    </label>
-                    <label class="col-xs-3 col-sm-4 col-md-3">
-                        <input type="radio" id="crust-4" name="crustGroup" value="4" pb-img-src="~/Content/Images/PizzaBuilderTest/Crust/pan-pb.webp" />
-                        <div class="pb-menu-icon" style="background-image: url('/Content/Images/PizzaBuilderTest/Crust/pan-mi.webp')"></div>
-                        <i>Super Pan</i>
-                    </label>
-                </fieldset>
                 <fieldset id="size-fieldset" class="row equal">
                     <legend class="col-xs-12">Size</legend>
                     <label class="col-xs-12 col-sm-4 text-only-label">
