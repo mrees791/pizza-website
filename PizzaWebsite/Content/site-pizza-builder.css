@@ -15,6 +15,9 @@
 .pb-menu-section label {
   cursor: pointer; }
 
+.pb-menu-section label.text-only-label {
+  padding: 1px; }
+
 .pb-menu-section i {
   display: block;
   text-align: center; }
