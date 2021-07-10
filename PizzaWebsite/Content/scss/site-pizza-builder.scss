@@ -2,6 +2,8 @@
 @import "../bootstrap/_variables";
 @import "../bootstrap/_mixins";
 $menu-border-color: $gray-200;
+$checked-topping-symbol-color: $gray-100;
+$checked-topping-symbol-bg-color: $red-500;
 $tab-font-color: $gray-500;
 $tab-bg-color: $gray-600;
 $tab-font-color-selected: $gray-900;
@@ -10,6 +12,26 @@ $menu-image-border-color: $gray-300;
 $menu-image-border-color-selected: $red-400;
 $menu-text-input-border-color: $gray-400;
 $menu-text-input-border-color-selected: $red-400;
+.checked-topping-symbol {
+    font-size: 1.5em;
+    position: absolute;
+    display: none;
+
+    i {
+    }
+
+    .check-symbol {
+        color: $checked-topping-symbol-color;
+        background-color: $checked-topping-symbol-bg-color;
+        border-radius: 50%;
+        padding: 0.1em;
+    }
+}
+.topping-is-selected {
+    .checked-topping-symbol {
+        display: block;
+    }
+}
 #pizza-builder-image-section {
     position: relative;
     width: 100%;

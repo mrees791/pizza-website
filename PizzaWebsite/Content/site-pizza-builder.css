@@ -1,4 +1,17 @@
-﻿#pizza-builder-image-section {
+﻿.checked-topping-symbol {
+  font-size: 1.5em;
+  position: absolute;
+  display: none; }
+  .checked-topping-symbol .check-symbol {
+    color: #f8f9fa;
+    background-color: #dc3545;
+    border-radius: 50%;
+    padding: 0.1em; }
+
+.topping-is-selected .checked-topping-symbol {
+  display: block; }
+
+#pizza-builder-image-section {
   position: relative;
   width: 100%;
   padding-bottom: 100%; }

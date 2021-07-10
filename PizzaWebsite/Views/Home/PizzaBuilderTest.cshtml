@@ -33,9 +33,14 @@
                 <h3>Meats</h3>
                 <div class="row topping-row">
                     @* Checkbox goes here. *@
-                    <div class="col-12 row clickable-topping-row">
-                        <img class="col-3" src="~/Content/Images/PizzaBuilderTest/Topping/pepperoni-mi.webp" />
-                        <div class="col-9">Pepperoni</div>
+                    <div class="clickable-topping-row">
+                        <div class="checked-topping-symbol">
+                            <i class="fa fa-check check-symbol"></i>
+                        </div>
+                        <div class="row">
+                            <img class="col-3" src="~/Content/Images/PizzaBuilderTest/Topping/pepperoni-mi.webp" />
+                            <div class="col-9">Pepperoni</div>
+                        </div>
                     </div>
                     <div class="col-12 topping-controls" style="display: none;">
                         <fieldset class="row amount-fieldset" input-group-name="pepperoniToppingAmountGroup">
