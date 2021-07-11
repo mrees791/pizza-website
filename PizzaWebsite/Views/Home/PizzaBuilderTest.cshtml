@@ -32,7 +32,7 @@
             </div>
             <div id="pb-topping-menu" class="pb-menu-section" style="display: none;">
                 <h3>Meats</h3>
-                <div id="topping-menu-row-1" class="row topping-row">
+                <div id="topping-menu-row-1" class="row topping-row" topping-id="1">
                     @* Checkbox goes here. *@
                     <div class="clickable-topping-row">
                         <div class="checked-topping-symbol">
@@ -251,9 +251,6 @@
     <script type="text/javascript">
         $(function () {
             pizzaSitePizzaBuilderNs.initializePizzaBuilder();
-
-            // testing. todo: Remove
-            pizzaSitePizzaBuilderNs.updatePizzaBuilderTopping(1);
         });
     </script>
 }

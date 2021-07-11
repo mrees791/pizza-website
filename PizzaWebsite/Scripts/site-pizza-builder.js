@@ -86,9 +86,11 @@ const pizzaSitePizzaBuilderNs = {
     initializeToppingMenu: () => {
         $('.topping-row').each(function () {
             var $toppingRow = $(this);
+            var toppingId = $toppingRow.attr('topping-id');
             var $toppingControls = $toppingRow.children('.topping-controls');
             var $clickableToppingRow = $toppingRow.children('.clickable-topping-row');
             var $amountFieldset = $toppingControls.children('.amount-fieldset');
+            var $halfFieldset = $toppingControls.children('.half-fieldset');
 
             $clickableToppingRow.click(function () {
                 if ($toppingRow.hasClass('is-active')) {
@@ -101,7 +103,14 @@ const pizzaSitePizzaBuilderNs = {
 
             $amountFieldset.change(function () {
                 pizzaSitePizzaBuilderNs.updateToppingRowSelectedAmount($toppingRow);
+                pizzaSitePizzaBuilderNs.updatePizzaBuilderToppingImage(toppingId);
             });
+            $halfFieldset.change(function () {
+                pizzaSitePizzaBuilderNs.updatePizzaBuilderToppingImage(toppingId);
+            });
+
+            pizzaSitePizzaBuilderNs.updateToppingRowControls($toppingRow);
+            pizzaSitePizzaBuilderNs.updateToppingRowSelectedAmount($toppingRow);
         });
     },
     updateToppingRowSelectedAmount: ($toppingRow) => {
@@ -124,30 +133,9 @@ const pizzaSitePizzaBuilderNs = {
             $toppingControls.slideUp();
         }
     },
-    updateAllToppingRowsControls: () => {
-        $('.topping-row').each(function () {
-            pizzaSitePizzaBuilderNs.updateToppingRowControls($(this));
-        });
-    },
-    updateAllToppingRowSelectedAmounts: () => {
-        $('.topping-row').each(function () {
-            pizzaSitePizzaBuilderNs.updateToppingRowSelectedAmount($(this));
-        });
-    },
-    updatePizzaBuilderTopping: (id) => {
-        // todo: Remove testing
-        console.log('Starting GetMenuImageUrlAjax test.');
-        var params = { id: id, menuCategory: 'PizzaToppingType', imageType: 'PizzaBuilderLeft' };
-        pizzaSiteNs.ajaxCall("/Home/GetMenuImageUrlAjax", JSON.stringify(params), "POST").fail(function (response) {
-            console.log(response);
-        }).done(function (response) {
-            console.log(response);
-        });
-
-        /*var imgSrc = '';
-
+    updatePizzaBuilderToppingImage: (id) => {
         var $toppingLayer = $('#topping-layer-' + id);
-        var $pbToppingImg = $pbToppingDiv.children('img');
+        var $pbToppingImg = $toppingLayer.children('img').first();
         var $toppingMenuRow = $('#topping-menu-row-' + id);
 
         var $amountFieldset = $toppingMenuRow.find('.amount-fieldset');
@@ -159,33 +147,48 @@ const pizzaSitePizzaBuilderNs = {
         var selectedAmount = $selectedAmountInput.attr('value');
         var selectedHalf = $selectedHalfInput.attr('value');
 
-        if (selectedAmount != 'none') {
+        if (selectedAmount === 'none') {
+            $pbToppingImg.css('display', 'none');
+        } else {
             var imageType = '';
 
             if (selectedAmount === 'regular') {
                 if (selectedHalf === 'left') {
-                    imageType = 'MenuImageType.PizzaBuilderLeft';
+                    imageType = 'PizzaBuilderLeft';
                 } else if (selectedHalf === 'right') {
-                    imageType = 'MenuImageType.PizzaBuilderRight';
+                    imageType = 'PizzaBuilderRight';
                 } else if (selectedHalf === 'whole') {
-                    imageType = 'MenuImageType.PizzaBuilder';
+                    imageType = 'PizzaBuilder';
                 } else {
                     console.log('Invalid selected half: ' + selectedHalf);
                 }
+            } else if (selectedAmount === 'extra') {
+                if (selectedHalf === 'left') {
+                    imageType = 'PizzaBuilderExtraLeft';
+                } else if (selectedHalf === 'right') {
+                    imageType = 'PizzaBuilderExtraRight';
+                } else if (selectedHalf === 'whole') {
+                    imageType = 'PizzaBuilderExtra';
+                } else {
+                    console.log('Invalid selected half: ' + selectedHalf);
+                }
+            } else {
+                console.log('Invalid selected amount: ' + selectedAmount);
             }
 
             if (imageType != '') {
-                var params = { id: id, menuCategory: 'MenuCategory.PizzaToppingType', imageType: imageType };
+                var params = { id: id, menuCategory: 'PizzaToppingType', imageType: imageType };
                 // todo: change this to correct controller.
                 pizzaSiteNs.ajaxCall("/Home/GetMenuImageUrlAjax", JSON.stringify(params), "POST").fail(function (response) {
                     console.log(response);
+                    $pbToppingImg.css('display', 'none');
                 }).done(function (response) {
-                    imgSrc = response;
+                    var imgSrc = response.replaceAll('"', '');
+                    $pbToppingImg.attr('src', imgSrc);
+                    $pbToppingImg.css('display', 'block');
                 });
             }
         }
-
-        $pbToppingImg.attr('src', imgSrc);*/
     },
     initializePizzaBuilder: () => {
         // Disabled fixed scroll image.
@@ -225,9 +228,11 @@ const pizzaSitePizzaBuilderNs = {
         })
         pizzaSitePizzaBuilderNs.showCrustSauceCheeseMenu();
         pizzaSitePizzaBuilderNs.updateAllLayers();
+
         pizzaSitePizzaBuilderNs.initializeToppingMenu();
 
-        pizzaSitePizzaBuilderNs.updateAllToppingRowSelectedAmounts();
-        pizzaSitePizzaBuilderNs.updateAllToppingRowsControls();
+        //pizzaSitePizzaBuilderNs.updateAllToppingRowSelectedAmounts();
+        //pizzaSitePizzaBuilderNs.updateAllToppingRowsControls();
+        //pizzaSitePizzaBuilderNs.initializeAllToppingRows();
     }
 };
