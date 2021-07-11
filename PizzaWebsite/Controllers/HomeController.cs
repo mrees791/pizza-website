@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Web.Mvc;
+using PizzaWebsite.Controllers.BaseControllers;
 using PizzaWebsite.Models;
 
 namespace PizzaWebsite.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public ActionResult Index()
         {
@@ -30,5 +31,7 @@ namespace PizzaWebsite.Controllers
         {
             return View();
         }
+
+
     }
 }

@@ -135,8 +135,57 @@ const pizzaSitePizzaBuilderNs = {
         });
     },
     updatePizzaBuilderTopping: (id) => {
-        //var $toppingDiv = $('topping-' + id);
-        //var $toppingImg = $
+        // todo: Remove testing
+        console.log('Starting GetMenuImageUrlAjax test.');
+        var params = { id: id, menuCategory: 'PizzaToppingType', imageType: 'PizzaBuilderLeft' };
+        pizzaSiteNs.ajaxCall("/Home/GetMenuImageUrlAjax", JSON.stringify(params), "POST").fail(function (response) {
+            console.log(response);
+        }).done(function (response) {
+            console.log(response);
+        });
+
+        /*var imgSrc = '';
+
+        var $toppingLayer = $('#topping-layer-' + id);
+        var $pbToppingImg = $pbToppingDiv.children('img');
+        var $toppingMenuRow = $('#topping-menu-row-' + id);
+
+        var $amountFieldset = $toppingMenuRow.find('.amount-fieldset');
+        var $halfFieldset = $toppingMenuRow.find('.half-fieldset');
+
+        var $selectedAmountInput = $amountFieldset.find(':checked');
+        var $selectedHalfInput = $halfFieldset.find(':checked');
+
+        var selectedAmount = $selectedAmountInput.attr('value');
+        var selectedHalf = $selectedHalfInput.attr('value');
+
+        if (selectedAmount != 'none') {
+            var imageType = '';
+
+            if (selectedAmount === 'regular') {
+                if (selectedHalf === 'left') {
+                    imageType = 'MenuImageType.PizzaBuilderLeft';
+                } else if (selectedHalf === 'right') {
+                    imageType = 'MenuImageType.PizzaBuilderRight';
+                } else if (selectedHalf === 'whole') {
+                    imageType = 'MenuImageType.PizzaBuilder';
+                } else {
+                    console.log('Invalid selected half: ' + selectedHalf);
+                }
+            }
+
+            if (imageType != '') {
+                var params = { id: id, menuCategory: 'MenuCategory.PizzaToppingType', imageType: imageType };
+                // todo: change this to correct controller.
+                pizzaSiteNs.ajaxCall("/Home/GetMenuImageUrlAjax", JSON.stringify(params), "POST").fail(function (response) {
+                    console.log(response);
+                }).done(function (response) {
+                    imgSrc = response;
+                });
+            }
+        }
+
+        $pbToppingImg.attr('src', imgSrc);*/
     },
     initializePizzaBuilder: () => {
         // Disabled fixed scroll image.

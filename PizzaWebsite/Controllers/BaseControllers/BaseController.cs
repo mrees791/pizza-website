@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -8,6 +10,7 @@ using DataLibrary.Models.Services;
 using DataLibrary.Models.Tables;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using PizzaWebsite.Models;
 using PizzaWebsite.Models.Geography;
 using PizzaWebsite.Models.Services;
 
@@ -94,23 +97,28 @@ namespace PizzaWebsite.Controllers.BaseControllers
         }
 
         [HttpPost]
-        protected HttpPostedFileBase GetPostedImageFile()
+        public ActionResult GetMenuImageUrlAjax(int id, string menuCategory, string imageType)
         {
-            HttpFileCollectionBase files = Request.Files;
-            if (files.Count == 0)
+            Response.StatusCode = (int)HttpStatusCode.OK;
+            MenuCategory menuCategoryEnum = 0;
+            bool validMenuCategory = Enum.TryParse(menuCategory, out menuCategoryEnum);
+
+            if (!validMenuCategory)
             {
-                throw new Exception("No files found in request.");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Invalid menu category: {menuCategory}", MediaTypeNames.Text.Plain);
             }
-            if (files.Count > 1)
+
+            MenuImageType imageTypeEnum = 0;
+            bool validImageType = Enum.TryParse(imageType, out imageTypeEnum);
+            if (!validImageType)
             {
-                throw new Exception("There can only be one file in the request.");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json($"Invalid menu image type: {imageType}", MediaTypeNames.Text.Plain);
             }
-            HttpPostedFileBase file = files[0];
-            if (file == null)
-            {
-                throw new Exception("files[0] is null.");
-            }
-            return file;
+
+            string url = DirectoryServices.GetMenuImageUrl(id, menuCategoryEnum, imageTypeEnum);
+            return Json(url, MediaTypeNames.Text.Plain);
         }
 
         protected override void Dispose(bool disposing)

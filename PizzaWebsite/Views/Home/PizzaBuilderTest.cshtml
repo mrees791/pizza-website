@@ -18,7 +18,7 @@
                 </div>
                 @* todo: Finish topping pizza builder image. *@
                 <div id="topping-layer">
-                    <div id="topping-1">
+                    <div id="topping-layer-1">
                         @*<img class="topping-pb" src="~/Content/Images/PizzaBuilderTest/Topping/pepperoni-pb.webp" />*@
                         <img />
                     </div>
@@ -32,7 +32,7 @@
             </div>
             <div id="pb-topping-menu" class="pb-menu-section" style="display: none;">
                 <h3>Meats</h3>
-                <div class="row topping-row">
+                <div id="topping-menu-row-1" class="row topping-row">
                     @* Checkbox goes here. *@
                     <div class="clickable-topping-row">
                         <div class="checked-topping-symbol">
@@ -64,7 +64,7 @@
                                 </div>
                             </label>
                         </fieldset>
-                        <fieldset class="row" input-group-name="topping-half-group-1">
+                        <fieldset class="row half-fieldset" input-group-name="topping-half-group-1">
                             <label class="col-4 text-only-label">
                                 <input type="radio" name="topping-half-group-1" value="left" />
                                 <div class="text-only">
@@ -251,6 +251,9 @@
     <script type="text/javascript">
         $(function () {
             pizzaSitePizzaBuilderNs.initializePizzaBuilder();
+
+            // testing. todo: Remove
+            pizzaSitePizzaBuilderNs.updatePizzaBuilderTopping(1);
         });
     </script>
 }
