@@ -134,6 +134,10 @@ const pizzaSitePizzaBuilderNs = {
             pizzaSitePizzaBuilderNs.updateToppingRowSelectedAmount($(this));
         });
     },
+    updatePizzaBuilderTopping: (id) => {
+        //var $toppingDiv = $('topping-' + id);
+        //var $toppingImg = $
+    },
     initializePizzaBuilder: () => {
         // Disabled fixed scroll image.
         // pizzaSitePizzaBuilderNs.initializeFixedScrollBuilder();
