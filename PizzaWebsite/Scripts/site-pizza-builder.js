@@ -104,6 +104,7 @@ const pizzaSitePizzaBuilderNs = {
             $amountFieldset.change(function () {
                 pizzaSitePizzaBuilderNs.updateToppingRowSelectedAmount($toppingRow);
                 pizzaSitePizzaBuilderNs.updatePizzaBuilderToppingImage(toppingId);
+                pizzaSitePizzaBuilderNs.updateToppingRowControls($toppingRow);
             });
             $halfFieldset.change(function () {
                 pizzaSitePizzaBuilderNs.updatePizzaBuilderToppingImage(toppingId);
@@ -120,6 +121,9 @@ const pizzaSitePizzaBuilderNs = {
         var checkedValue = $('input[name="' + inputGroupName + '"]:checked').val();
 
         if (checkedValue === 'none') {
+            // todo: Set selected half back to whole.
+
+            $toppingRow.removeClass('is-active');
             $toppingRow.removeClass('topping-is-selected');
         } else {
             $toppingRow.addClass('topping-is-selected');
@@ -227,12 +231,8 @@ const pizzaSitePizzaBuilderNs = {
             pizzaSitePizzaBuilderNs.showToppingMenu();
         })
         pizzaSitePizzaBuilderNs.showCrustSauceCheeseMenu();
+
         pizzaSitePizzaBuilderNs.updateAllLayers();
-
         pizzaSitePizzaBuilderNs.initializeToppingMenu();
-
-        //pizzaSitePizzaBuilderNs.updateAllToppingRowSelectedAmounts();
-        //pizzaSitePizzaBuilderNs.updateAllToppingRowsControls();
-        //pizzaSitePizzaBuilderNs.initializeAllToppingRows();
     }
 };
